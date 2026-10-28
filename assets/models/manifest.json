@@ -1,0 +1,369 @@
+{
+ "horncinder": {
+  "file": "models/trellis/horncinder.glb",
+  "yaw": 0,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "shellmund": {
+  "file": "models/trellis/shellmund.glb",
+  "yaw": 3.142,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "kitsuneva": {
+  "file": "models/trellis/kitsuneva.glb",
+  "yaw": 0.785,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "duneBearer": {
+  "file": "models/duneBearer.glb",
+  "yaw": 0,
+  "scale": 2.1,
+  "kind": "boss"
+ },
+ "knight": {
+  "file": "models/knight.glb",
+  "yaw": 0,
+  "scale": 0.8,
+  "kind": "human"
+ },
+ "skarnwolf": {
+  "file": "models/skarnwolf.glb",
+  "yaw": 0.3,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "vespera": {
+  "file": "models/vespera.glb",
+  "yaw": 1.4,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "glimmerkoi": {
+  "file": "models/glimmerkoi.glb",
+  "yaw": 0.2,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "mossmaw": {
+  "file": "models/mossmaw.glb",
+  "yaw": 0.4,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "nightveil": {
+  "file": "models/nightveil.glb",
+  "yaw": 1.97,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "emberlamb": {
+  "file": "models/emberlamb.glb",
+  "yaw": 0.4,
+  "scale": 0.95,
+  "kind": "creature"
+ },
+ "skyrend": {
+  "file": "models/skyrend.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "volthorn": {
+  "file": "models/volthorn.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "brinegrave": {
+  "file": "models/brinegrave.glb",
+  "yaw": 0.6,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "bulwyrm": {
+  "file": "models/bulwyrm.glb",
+  "yaw": 1.571,
+  "scale": 1.3,
+  "kind": "creature"
+ },
+ "rotfang": {
+  "file": "models/rotfang.glb",
+  "yaw": 0.2,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "stillgaze": {
+  "file": "models/stillgaze.glb",
+  "yaw": 0.3,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "crushjaw": {
+  "file": "models/crushjaw.glb",
+  "yaw": -1.571,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "zephyrra": {
+  "file": "models/zephyrra.glb",
+  "yaw": 0.4,
+  "scale": 0.85,
+  "kind": "creature"
+ },
+ "duskcoil": {
+  "file": "models/duskcoil.glb",
+  "yaw": 0.4,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "atlacrab": {
+  "file": "models/atlacrab.glb",
+  "yaw": 1.571,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "solenne": {
+  "file": "models/solenne.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "kappadeep": {
+  "file": "models/kappadeep.glb",
+  "yaw": 1.571,
+  "scale": 1.3,
+  "kind": "creature"
+ },
+ "smolderhead": {
+  "file": "models/smolderhead.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "pyrewisp": {
+  "file": "models/pyrewisp.glb",
+  "yaw": 1.571,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "mawdeep": {
+  "file": "models/mawdeep.glb",
+  "yaw": 1.571,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "auroracorn": {
+  "file": "models/auroracorn.glb",
+  "yaw": 0.2,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "lumoth": {
+  "file": "models/lumoth.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "sunkenhorn": {
+  "file": "models/sunkenhorn.glb",
+  "yaw": 1.571,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "bramblehoof": {
+  "file": "models/bramblehoof.glb",
+  "yaw": 0.5,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "pipeSlug": {
+  "file": "models/pipeSlug.glb",
+  "yaw": 1.571,
+  "scale": 0.6,
+  "kind": "enemy"
+ },
+ "inkImp": {
+  "file": "models/inkImp.glb",
+  "yaw": 1.571,
+  "scale": 0.6,
+  "kind": "enemy"
+ },
+ "cellarRatKing": {
+  "file": "models/cellarRatKing.glb",
+  "yaw": 1.571,
+  "scale": 0.8,
+  "kind": "enemy"
+ },
+ "dustWisp": {
+  "file": "models/dustWisp.glb",
+  "yaw": 1.571,
+  "scale": 0.65,
+  "kind": "enemy"
+ },
+ "gelatinCubeMimic": {
+  "file": "models/gelatinCubeMimic.glb",
+  "yaw": 1.571,
+  "scale": 0.8,
+  "kind": "enemy"
+ },
+ "sandstitchJackal": {
+  "file": "models/sandstitchJackal.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "glassAdder": {
+  "file": "models/glassAdder.glb",
+  "yaw": 1.571,
+  "scale": 0.7,
+  "kind": "enemy"
+ },
+ "dustwingImp": {
+  "file": "models/dustwingImp.glb",
+  "yaw": 1.571,
+  "scale": 0.7,
+  "kind": "enemy"
+ },
+ "mirageCat": {
+  "file": "models/mirageCat.glb",
+  "yaw": 0.2,
+  "scale": 0.8,
+  "kind": "enemy"
+ },
+ "dripWraith": {
+  "file": "models/dripWraith.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "boneCrab": {
+  "file": "models/boneCrab.glb",
+  "yaw": 1.571,
+  "scale": 0.8,
+  "kind": "enemy"
+ },
+ "cisternEel": {
+  "file": "models/cisternEel.glb",
+  "yaw": 2.4,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "mossGolem": {
+  "file": "models/mossGolem.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "cinderlizardHound": {
+  "file": "models/cinderlizardHound.glb",
+  "yaw": 0.3,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "duneScorpionKnight": {
+  "file": "models/duneScorpionKnight.glb",
+  "yaw": 1.571,
+  "scale": 1.2,
+  "kind": "enemy"
+ },
+ "sunScarabSwarm": {
+  "file": "models/sunScarabSwarm.glb",
+  "yaw": 1.571,
+  "scale": 0.8,
+  "kind": "enemy"
+ },
+ "saltHarpy": {
+  "file": "models/saltHarpy.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "dustSphinxCub": {
+  "file": "models/dustSphinxCub.glb",
+  "yaw": 0.3,
+  "scale": 0.8,
+  "kind": "enemy"
+ },
+ "quarryboundGargoyle": {
+  "file": "models/quarryboundGargoyle.glb",
+  "yaw": 0.6,
+  "scale": 1.1,
+  "kind": "enemy"
+ },
+ "slagImp": {
+  "file": "models/slagImp.glb",
+  "yaw": 1.571,
+  "scale": 0.65,
+  "kind": "enemy"
+ },
+ "basaltSkin": {
+  "file": "models/basaltSkin.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "mirrorBeetle": {
+  "file": "models/mirrorBeetle.glb",
+  "yaw": 1.571,
+  "scale": 0.85,
+  "kind": "enemy"
+ },
+ "mazeBat": {
+  "file": "models/mazeBat.glb",
+  "yaw": 1.571,
+  "scale": 0.8,
+  "kind": "enemy"
+ },
+ "boneBullCalf": {
+  "file": "models/boneBullCalf.glb",
+  "yaw": 1.571,
+  "scale": 0.95,
+  "kind": "enemy"
+ },
+ "emberScorpion": {
+  "file": "models/emberScorpion.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "raidShieldbearer": {
+  "file": "models/raidShieldbearer.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human"
+ },
+ "raidSlinger": {
+  "file": "models/raidSlinger.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human"
+ },
+ "raidTorchbearer": {
+  "file": "models/raidTorchbearer.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human"
+ },
+ "raidSpearman": {
+  "file": "models/raidSpearman.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human"
+ },
+ "raidArcher": {
+  "file": "models/raidArcher.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human"
+ },
+ "raidOptioKarvan": {
+  "file": "models/raidOptioKarvan.glb",
+  "yaw": 1.571,
+  "scale": 1.2,
+  "kind": "boss",
+  "human": true
+ }
+}

@@ -1,0 +1,605 @@
+{
+ "academyHall": {
+  "w": 190,
+  "h": 200,
+  "kind": "big"
+ },
+ "libraryHall": {
+  "w": 150,
+  "h": 165,
+  "kind": "big"
+ },
+ "whiteHouse": {
+  "w": 108,
+  "h": 125,
+  "kind": "big"
+ },
+ "bellTower": {
+  "w": 86,
+  "h": 200,
+  "kind": "big"
+ },
+ "labHouse": {
+  "w": 176,
+  "h": 155,
+  "kind": "big"
+ },
+ "lampQuillInn": {
+  "w": 140,
+  "h": 150,
+  "kind": "big"
+ },
+ "shopHouse": {
+  "w": 119,
+  "h": 125,
+  "kind": "big"
+ },
+ "whiteGate": {
+  "w": 150,
+  "h": 198,
+  "kind": "gate"
+ },
+ "lampPost": {
+  "w": 23,
+  "h": 112,
+  "kind": "tall",
+  "fire": [
+   0,
+   -100,
+   0.7
+  ]
+ },
+ "fountain": {
+  "w": 99,
+  "h": 92,
+  "kind": "round"
+ },
+ "whiteColumn": {
+  "w": 52,
+  "h": 124,
+  "kind": "tall"
+ },
+ "scholarStatue": {
+  "w": 53,
+  "h": 124,
+  "kind": "round"
+ },
+ "bookStall": {
+  "w": 130,
+  "h": 112,
+  "kind": "big"
+ },
+ "scholarBanner": {
+  "w": 53,
+  "h": 144,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "oliveTree": {
+  "w": 92,
+  "h": 104,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "stoneBench": {
+  "w": 66,
+  "h": 59,
+  "kind": "round"
+ },
+ "leakPipe": {
+  "w": 47,
+  "h": 112,
+  "kind": "tall"
+ },
+ "crateStack": {
+  "w": 69,
+  "h": 66,
+  "kind": "round"
+ },
+ "jarShelf": {
+  "w": 74,
+  "h": 112,
+  "kind": "big"
+ },
+ "cellarPillar": {
+  "w": 56,
+  "h": 124,
+  "kind": "tall"
+ },
+ "candleStand": {
+  "w": 26,
+  "h": 52,
+  "kind": "tall",
+  "fire": [
+   0,
+   -44,
+   0.6
+  ]
+ },
+ "emptyCage": {
+  "w": 57,
+  "h": 72,
+  "kind": "round"
+ },
+ "pipeRun": {
+  "w": 124,
+  "h": 110,
+  "kind": "round"
+ },
+ "puddle": {
+  "w": 84,
+  "h": 45,
+  "kind": "flat"
+ },
+ "glassSpire": {
+  "w": 89,
+  "h": 104,
+  "kind": "round"
+ },
+ "glassShard": {
+  "w": 51,
+  "h": 46,
+  "kind": "flat"
+ },
+ "deadTree": {
+  "w": 93,
+  "h": 104,
+  "kind": "tall"
+ },
+ "builderDoorBuried": {
+  "w": 132,
+  "h": 134,
+  "kind": "big"
+ },
+ "sandBoulder": {
+  "w": 66,
+  "h": 66,
+  "kind": "round"
+ },
+ "camelBones": {
+  "w": 92,
+  "h": 69,
+  "kind": "flat"
+ },
+ "cairn": {
+  "w": 51,
+  "h": 72,
+  "kind": "tall",
+  "sway": 0.03
+ },
+ "glassDune": {
+  "w": 86,
+  "h": 56,
+  "kind": "round"
+ },
+ "tent": {
+  "w": 129,
+  "h": 100,
+  "kind": "big"
+ },
+ "reedInn": {
+  "w": 183,
+  "h": 150,
+  "kind": "big"
+ },
+ "hayBales": {
+  "w": 72,
+  "h": 64,
+  "kind": "round"
+ },
+ "trough": {
+  "w": 84,
+  "h": 61,
+  "kind": "round"
+ },
+ "cart": {
+  "w": 114,
+  "h": 97,
+  "kind": "big"
+ },
+ "camel": {
+  "w": 116,
+  "h": 92,
+  "kind": "round"
+ },
+ "campfire": {
+  "w": 54,
+  "h": 52,
+  "kind": "round",
+  "fire": [
+   0,
+   -22,
+   0.9
+  ]
+ },
+ "reedFence": {
+  "w": 96,
+  "h": 101,
+  "kind": "round"
+ },
+ "builderPillar": {
+  "w": 63,
+  "h": 144,
+  "kind": "tall"
+ },
+ "builderDoor": {
+  "w": 123,
+  "h": 154,
+  "kind": "big"
+ },
+ "builderConduit": {
+  "w": 112,
+  "h": 108,
+  "kind": "round"
+ },
+ "poolStatue": {
+  "w": 75,
+  "h": 124,
+  "kind": "round"
+ },
+ "sluiceWheel": {
+  "w": 97,
+  "h": 92,
+  "kind": "round"
+ },
+ "lightStele": {
+  "w": 50,
+  "h": 112,
+  "kind": "tall",
+  "fire": [
+   0,
+   -60,
+   0.5
+  ]
+ },
+ "skyStoneShard": {
+  "w": 119,
+  "h": 134,
+  "kind": "big"
+ },
+ "vaultRubble": {
+  "w": 72,
+  "h": 67,
+  "kind": "flat"
+ },
+ "amberHouse": {
+  "w": 144,
+  "h": 134,
+  "kind": "big"
+ },
+ "amberDomeHouse": {
+  "w": 127,
+  "h": 144,
+  "kind": "big"
+ },
+ "guildHall": {
+  "w": 157,
+  "h": 172,
+  "kind": "big"
+ },
+ "amberStall": {
+  "w": 92,
+  "h": 112,
+  "kind": "big"
+ },
+ "menagerieWagon": {
+  "w": 176,
+  "h": 147,
+  "kind": "big"
+ },
+ "dateCrate": {
+  "w": 72,
+  "h": 65,
+  "kind": "round"
+ },
+ "amberWell": {
+  "w": 66,
+  "h": 92,
+  "kind": "round"
+ },
+ "terracottaJars": {
+  "w": 66,
+  "h": 62,
+  "kind": "round"
+ },
+ "redPillar": {
+  "w": 83,
+  "h": 124,
+  "kind": "round"
+ },
+ "redMass": {
+  "w": 144,
+  "h": 118,
+  "kind": "big"
+ },
+ "mineCart": {
+  "w": 84,
+  "h": 89,
+  "kind": "round"
+ },
+ "scaffoldCrane": {
+  "w": 122,
+  "h": 164,
+  "kind": "big"
+ },
+ "blockStack": {
+  "w": 84,
+  "h": 76,
+  "kind": "round"
+ },
+ "toolRack": {
+  "w": 87,
+  "h": 82,
+  "kind": "round"
+ },
+ "saltCrystal": {
+  "w": 56,
+  "h": 62,
+  "kind": "round"
+ },
+ "oreHeap": {
+  "w": 84,
+  "h": 60,
+  "kind": "round"
+ },
+ "firePit": {
+  "w": 84,
+  "h": 72,
+  "kind": "round",
+  "fire": [
+   0,
+   -20,
+   1.2
+  ]
+ },
+ "obsidianSpike": {
+  "w": 92,
+  "h": 104,
+  "kind": "round"
+ },
+ "glassCluster": {
+  "w": 70,
+  "h": 66,
+  "kind": "round"
+ },
+ "steamVent": {
+  "w": 52,
+  "h": 52,
+  "kind": "round"
+ },
+ "burntTree": {
+  "w": 105,
+  "h": 112,
+  "kind": "tall"
+ },
+ "slagPile": {
+  "w": 72,
+  "h": 53,
+  "kind": "round"
+ },
+ "ashBrazier": {
+  "w": 38,
+  "h": 62,
+  "kind": "tall",
+  "fire": [
+   0,
+   -50,
+   0.9
+  ]
+ },
+ "hornSkull": {
+  "w": 104,
+  "h": 79,
+  "kind": "round"
+ },
+ "boneWall": {
+  "w": 104,
+  "h": 88,
+  "kind": "big"
+ },
+ "ribArch": {
+  "w": 119,
+  "h": 124,
+  "kind": "big"
+ },
+ "skullPile": {
+  "w": 76,
+  "h": 65,
+  "kind": "round"
+ },
+ "bonePillar": {
+  "w": 43,
+  "h": 112,
+  "kind": "tall"
+ },
+ "hornGate": {
+  "w": 144,
+  "h": 129,
+  "kind": "gate"
+ },
+ "bullSkullAltar": {
+  "w": 80,
+  "h": 92,
+  "kind": "round"
+ },
+ "spineArc": {
+  "w": 104,
+  "h": 92,
+  "kind": "round"
+ },
+ "boneBrazier": {
+  "w": 53,
+  "h": 76,
+  "kind": "tall",
+  "fire": [
+   0,
+   -62,
+   0.9
+  ]
+ },
+ "lighthouse": {
+  "w": 123,
+  "h": 280,
+  "kind": "big"
+ },
+ "crates": {
+  "w": 61,
+  "h": 58,
+  "kind": "round"
+ },
+ "netRack": {
+  "w": 88,
+  "h": 92,
+  "kind": "round"
+ },
+ "harborHouse": {
+  "w": 127,
+  "h": 134,
+  "kind": "big"
+ },
+ "anchor": {
+  "w": 70,
+  "h": 66,
+  "kind": "round"
+ },
+ "harborShip": {
+  "w": 250,
+  "h": 249,
+  "kind": "big"
+ },
+ "craneHoist": {
+  "w": 138,
+  "h": 154,
+  "kind": "big"
+ },
+ "pierLamp": {
+  "w": 46,
+  "h": 104,
+  "kind": "tall",
+  "fire": [
+   0,
+   -92,
+   0.7
+  ]
+ },
+ "harborInn": {
+  "w": 153,
+  "h": 146,
+  "kind": "big"
+ },
+ "fishStall": {
+  "w": 88,
+  "h": 104,
+  "kind": "big"
+ },
+ "customsHouse": {
+  "w": 124,
+  "h": 152,
+  "kind": "big"
+ },
+ "dockWarehouse": {
+  "w": 204,
+  "h": 186,
+  "kind": "big"
+ },
+ "bollards": {
+  "w": 62,
+  "h": 49,
+  "kind": "round"
+ },
+ "fishBarrels": {
+  "w": 62,
+  "h": 54,
+  "kind": "round"
+ },
+ "rowboatMoored": {
+  "w": 104,
+  "h": 76,
+  "kind": "round"
+ },
+ "sailorTent": {
+  "w": 105,
+  "h": 92,
+  "kind": "big"
+ },
+ "npcVillagerM": {
+  "w": 22,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcVillagerF": {
+  "w": 28,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcGuard": {
+  "w": 21,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcTraveler": {
+  "w": 25,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcChild": {
+  "w": 19,
+  "h": 40,
+  "kind": "npc"
+ },
+ "npcDunmar": {
+  "w": 40,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcSailor": {
+  "w": 23,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcTrader": {
+  "w": 40,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcKarvan": {
+  "w": 20,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcRedScholar": {
+  "w": 21,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcDockhand": {
+  "w": 28,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcHooded": {
+  "w": 24,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcFisher": {
+  "w": 35,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcGranny": {
+  "w": 29,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcLegionGuard": {
+  "w": 36,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcMazeKeeper": {
+  "w": 33,
+  "h": 50,
+  "kind": "npc"
+ }
+}
