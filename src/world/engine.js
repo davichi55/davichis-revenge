@@ -161,6 +161,7 @@
       mk("glow", 96, 96, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,170,70,0.9)"); g.addColorStop(0.35, "rgba(255,120,30,0.35)"); g.addColorStop(1, "rgba(255,100,20,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       mk("glowBlue", 96, 96, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(140,210,255,0.9)"); g.addColorStop(0.35, "rgba(80,150,255,0.35)"); g.addColorStop(1, "rgba(60,120,255,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       mk("glowGold", 96, 96, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,230,120,0.95)"); g.addColorStop(0.35, "rgba(255,200,60,0.4)"); g.addColorStop(1, "rgba(255,180,40,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
+      mk("exitArrow", 22, 16, ctx => { ctx.strokeStyle = "rgba(255,236,160,1)"; ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.beginPath(); ctx.moveTo(3, 13); ctx.lineTo(11, 4); ctx.lineTo(19, 13); ctx.stroke(); });
       mk("light", 256, 256, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 4, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(0.55, "rgba(255,255,255,0.7)"); g.addColorStop(1, "rgba(255,255,255,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       mk("vignette", 960, 540, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, h * 0.38, w / 2, h / 2, w * 0.62); g.addColorStop(0, "rgba(14,6,20,0)"); g.addColorStop(1, "rgba(14,6,20,0.72)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       const bird = up => ctx => { ctx.fillStyle = "#1c1218"; ctx.fillRect(4, 3, 2, 3); if (up) { ctx.fillRect(1, 1, 3, 1); ctx.fillRect(0, 0, 1, 1); ctx.fillRect(6, 1, 3, 1); ctx.fillRect(9, 0, 1, 1); } else { ctx.fillRect(1, 3, 3, 1); ctx.fillRect(0, 4, 1, 1); ctx.fillRect(6, 3, 3, 1); ctx.fillRect(9, 4, 1, 1); } };
@@ -303,6 +304,15 @@
         this.blockRect(c.x - 14, c.y - 6, c.x + 14, c.y); const rec = Object.assign({ s, sh, on: true }, c); this.chests.push(rec);
         if (c.show !== undefined || c.hide !== undefined) this.conds.push({ cnd: { show: c.show, hide: c.hide }, objs: [s, sh], rec });
       }
+      // exits glow and point the way out, so entrances are easy to spot (Danny 2026-10-29)
+      for (const e of this.exits) {
+        const [x, y, w, h] = e.rect, cx = x + w / 2, cy = y + h / 2, out = e.push ? [-e.push[0], -e.push[1]] : null;
+        e.glow = this.add.image(cx, cy, "glowGold").setBlendMode(Phaser.BlendModes.ADD).setDepth(2).setDisplaySize(w + 90, h + 90);
+        e.core = this.add.image(cx, cy, "glowGold").setBlendMode(Phaser.BlendModes.ADD).setDepth(2).setDisplaySize(w + 20, h + 20);
+        e.arrow = out ? this.add.image(cx, cy, "exitArrow").setBlendMode(Phaser.BlendModes.ADD).setDepth(9500).setRotation(Math.atan2(out[0], -out[1])).setScale(1.5) : null;
+        e.out = out; e.ph = Math.random() * 6; e.on = true;
+        this.conds.push({ cnd: { show: e.show, hide: e.hide }, objs: [e.glow, e.core, e.arrow], rec: e });
+      }
       for (const g of R.gather || []) {
         const col = g.color || "gold", tex = col === "blue" ? "glowBlue" : "glowGold", glow = this.add.image(g.x, g.y - 4, tex).setBlendMode(Phaser.BlendModes.ADD).setDepth(g.y).setScale(0.5).setAlpha(0.7), star = this.add.image(g.x, g.y - 10, "star").setScale(2).setDepth(g.y + 1);
         const rec = Object.assign({ glow, star, on: true, ph: Math.random() * 6 }, g); this.gathers.push(rec);
@@ -424,6 +434,7 @@
       const fl = 1 + Math.sin(time * 0.011) * 0.03; this.lightImg.setOrigin(0.5, 0.5);
       stamp(this.pos.x, this.pos.y - 20, d.radius * fl, 1);
       for (const f of this.fires) if (f.glow.visible && f.x > v.x - 160 && f.x < v.right + 160 && f.y > v.y - 160 && f.y < v.bottom + 160) stamp(f.x, f.y, (d.fireRadius || 120) * f.k * (1 + Math.sin(time * 0.017 + f.ph) * 0.06), 0.95);
+      for (const e of this.exits || []) if (e.on && e.glow) stamp(e.rect[0] + e.rect[2] / 2, e.rect[1] + e.rect[3] / 2, Math.max(e.rect[2], e.rect[3]) * 0.6 + 30, 0.7);
       for (const l of this.R.lights || []) if (l[0] > v.x - 200 && l[0] < v.right + 200 && l[1] > v.y - 200 && l[1] < v.bottom + 200) stamp(l[0], l[1], l[2] || 100, l[3] || 0.8);
     }
 
@@ -660,6 +671,11 @@
       const wf = Math.floor(time / 140) % 2, R = this.R;
       for (const b of this.birds) { b.x += b.vx * dt; b.y += (b.vy + Math.sin(time * 0.001 + b.ph) * 8) * dt; if (b.x < -60) b.x = R.w + 60; if (b.x > R.w + 60) b.x = -60; if (b.y < 40) b.vy = Math.abs(b.vy); if (b.y > R.h - 40) b.vy = -Math.abs(b.vy); b.s.setPosition(Math.round(b.x), Math.round(b.y - 90)).setTexture("bird" + wf).setFlipX(b.vx < 0); b.sh.setPosition(Math.round(b.x + 20), Math.round(b.y)); }
       for (const f of this.flies) { f.s.setPosition(Math.round(f.hx + Math.sin(time * 0.0011 + f.ph) * 34 + Math.sin(time * 0.0027 + f.ph) * 10), Math.round(f.hy + Math.sin(time * 0.0017 + f.ph * 2) * 18)).setDepth(f.s.y + 40); f.s.setTexture((f.alt ? "bfly0" : "bfly2").replace(/\d/, d => (+d + (Math.floor(time / 110 + f.ph * 7) % 2)) + "")); }
+      for (const e of this.exits) if (e.on && e.glow) {
+        const pu = 0.5 + 0.5 * Math.sin(time * 0.003 + e.ph), [x, y, w, h] = e.rect; e.glow.setAlpha(0.55 + 0.4 * pu); e.core.setAlpha(0.35 + 0.5 * pu);
+        if (time > (e.nextMote || 0) && Math.abs(x + w / 2 - this.pos.x) < 700 && Math.abs(y + h / 2 - this.pos.y) < 450) { e.nextMote = time + 220; const m = this.add.image(x + Math.random() * w, y + h * (0.3 + Math.random() * 0.7), "star").setBlendMode(Phaser.BlendModes.ADD).setDepth(9400).setScale(1.2).setAlpha(0.9); this.tweens.add({ targets: m, y: m.y - 26 - Math.random() * 16, alpha: 0, duration: 1100, onComplete: () => m.destroy() }); }
+        if (e.arrow) { const k = 6 + pu * 8, cx = Math.min(Math.max(x + w / 2 - e.out[0] * k, 14), R.w - 14), cy = Math.min(Math.max(y + h / 2 - e.out[1] * k, 14), R.h - 14); e.arrow.setPosition(Math.round(cx), Math.round(cy)).setAlpha(0.55 + 0.45 * pu); }
+      }
       for (const g of this.gathers) if (!g.done && g.on) { const pu = 0.5 + 0.5 * Math.sin(time * 0.004 + g.ph); g.glow.setAlpha(0.35 + 0.4 * pu).setScale(0.45 + 0.15 * pu); g.star.setAlpha(0.5 + 0.5 * pu).setY(g.y - 10 - pu * 4); }
       // wandering townspeople
       for (const n of this.npcs) if (n.P && n.on && n.s && !(this.busy && Math.hypot(this.pos.x - n.x, this.pos.y - n.y) < 90)) {
