@@ -24,7 +24,7 @@
     const res = await F.fight([F.mkEnemy("raidShieldbearer", 3, " A"), F.mkEnemy("raidSlinger", 3, " B")], { intro: "Imperial raiders cut you off!" });
     F.music("dunes");
     if (res === "win") await UI.say([["hero", "(Tower shields. The blows slide off them. Spells would bite deeper.)"], ["narr", "You note it in the Field Journal: Raid Shieldbearer, Raid Slinger."]]);
-    UI.toast("Walk on to Sandpiper Rest.");
+    
   };
   S.chest["dunes.chest1"] = async F => {
     if (F.f("c.dunes1")) return; F.set("c.dunes1"); F.give("sunwater", 2); F.gold(25);
@@ -36,7 +36,6 @@
     if (F.f("sp.seen")) return; F.set("sp.seen");
     F.music("oasis");
     await UI.say([["narr", "Dawn. Sandpiper Rest: a ring of reed huts around a well, a shaded caravanserai, camels asleep in rows. Nobody has heard about Orun yet."]]);
-    UI.toast("Towns have no fights. Inns heal everyone, and the game saves on arrival.");
     F.set("pro.sawTown");
   };
   S.talk.sandpiper = {

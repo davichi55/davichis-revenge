@@ -13,8 +13,8 @@ const Menus = (() => {
     const dropList = Object.entries(drops).map(([n, c]) => `${esc(n)} x${c}`).join(", ") || "nothing this time";
     body.innerHTML = `<h3>Rewards</h3><div class="row"><div class="g">Experience<small>every creature in the party${G.collection.length ? " (and the wagon at a share)" : ""}</small></div><b>+${xp} XP</b></div>
       <div class="row"><div class="g">Kakal</div><b>+${g}</b></div><div class="row"><div class="g">Drops<small>${dropList}</small></div></div>
-      ${ups.length ? `<h3 style="margin-top:14px">Level up!</h3>` + ups.map(u => `<div class="row"><div class="g">${esc(u.u.name)} reached level ${u.level}<small>+3 stat points to spend (Menu > Party)${u.learned && u.learned.length ? `. <span style="color:#f2c14e">New move: ${u.learned.map(esc).join(", ")}!</span>` : ""}</small></div></div>`).join("") : ""}`;
-    if (ups.length) UI.toast("Level up! Spend points in Menu > Party", 2600);
+      ${ups.length ? `<h3 style="margin-top:14px">Level up!</h3>` + ups.map(u => `<div class="row"><div class="g">${esc(u.u.name)} reached level ${u.level}<small>+3 stat points${u.learned && u.learned.length ? `. <span style="color:#f2c14e">New move: ${u.learned.map(esc).join(", ")}!</span>` : ""}</small></div></div>`).join("") : ""}`;
+    if (ups.length) UI.toast("Level up!", 2600);
   }, { closeLabel: "Continue (Enter)", gold, keys: (e, api) => { if (e.key === "Enter" || e.key === " ") api.close(); } });
 
   // ---------- shop ----------
@@ -118,7 +118,7 @@ const Menus = (() => {
         body.innerHTML = h;
       } else {
         const v = G.vol || (G.vol = { music: 0.7, sfx: 0.8 });
-        body.innerHTML = foot + `<div class="row"><div class="g">Save game<small>${Flow.locked ? "Not during a scene." : "Saves right here. The game also saves in towns and at inns."}</small></div><button class="b" data-sys="save" ${Flow.locked ? "disabled" : ""}>Save</button></div>
+        body.innerHTML = foot + `<div class="row"><div class="g">Save game<small>${Flow.locked ? "Not during a scene." : ""}</small></div><button class="b" data-sys="save" ${Flow.locked ? "disabled" : ""}>Save</button></div>
           <div class="row"><div class="g">Battle speed<small>Animations in fights.</small></div><button class="b" data-sys="speed">${SPEEDS[G.speed].name}</button></div>
           <div class="row"><div class="g">Music volume</div><button class="b" data-sys="mv-">-</button><b>${Math.round(v.music * 100)}%</b><button class="b" data-sys="mv+">+</button></div>
           <div class="row"><div class="g">Sound effects volume</div><button class="b" data-sys="sv-">-</button><b>${Math.round(v.sfx * 100)}%</b><button class="b" data-sys="sv+">+</button></div>

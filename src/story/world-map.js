@@ -37,7 +37,7 @@
   S.gather.duneclawShard = S.gather["quarry.shards"];
   // ----- Cinderglass Flats -----
   S.chest.g12_cinderSerpentPit = S.chest["flats.chest"];
-  const emb = n => async F => { F.set("g.ember" + n); F.give("cinderglassEmber", 5); F.sfx("fire"); await UI.say([["narr", "You rake the fire-pit with a bone ladle. Five Cinderglass Embers glow in the cold sand."]]); if (F.matCount("cinderglassEmber") >= 10) UI.toast("Kindle can be unlocked in the Skill Book (Menu > Items)."); };
+  const emb = n => async F => { F.set("g.ember" + n); F.give("cinderglassEmber", 5); F.sfx("fire"); await UI.say([["narr", "You rake the fire-pit with a bone ladle. Five Cinderglass Embers glow in the cold sand."]]); if (F.matCount("cinderglassEmber") >= 10) UI.toast("New in the Skill Book: Kindle."); };
   const plm = n => async F => { F.set("g.plume" + n); F.give("cinderPlume", 5); await UI.say([["narr", "A warm feather in the glass. Then another. Five Cinder Plumes."]]); };
   S.gather.cinderglassEmber1 = emb(1); S.gather.cinderglassEmber2 = emb(2); S.gather.cinderPlume1 = plm(1); S.gather.cinderPlume2 = plm(2);
   Tr.flatsPool = async F => { await UI.say([["narr", "A hidden pool, warm as milk. At the bottom, curled in its own tails, a fox of red fire sleeps."], ["hero", "(Not mine to take. Not mine to wake.)"]]); if (!F.f("pool.seen")) { F.set("pool.seen"); G.best.fireFox = { seen: 1, beaten: 0 }; await UI.say([["narr", "You note the fox in the Journal and leave quietly."]]); } };

@@ -38,7 +38,7 @@ function partyScreen(startAt = 0) {
     } else {
       const slot = u.slot && Data.BOOK[u.slot];
       main = note + `<h3>Off-style move</h3><div style="color:#b7a58a;margin-bottom:8px">One move from the Skill Book can ride along in this slot. It costs the normal amount but has none of the style's bonus effects.</div>
-        <div class="row"><div class="g">${slot ? esc(slot.n) : "Empty"}<small>${slot ? esc(slot.d) : "Unlock moves in Menu > Items > Skill Book."}</small></div><button class="b" data-skill="1">${slot ? "Change" : "Equip"}</button></div>`
+        <div class="row"><div class="g">${slot ? esc(slot.n) : "Empty"}<small>${slot ? esc(slot.d) : "Nothing equipped."}</small></div><button class="b" data-skill="1">${slot ? "Change" : "Equip"}</button></div>`
         + (slot && !(Core.MOVES && Core.MOVES[slot.move]) ? `<div style="color:#ff6b57;font-size:14px">The battle rules do not know this move yet; it will start working when they do.</div>` : "");
     }
     body.innerHTML = `<div style="display:grid;grid-template-columns:250px 1fr;gap:18px">${list}<div>${head}${main}</div></div>`;

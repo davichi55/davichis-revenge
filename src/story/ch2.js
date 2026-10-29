@@ -41,7 +41,7 @@
           ["dunmar", "The cells here open with keys, old keys from the old dungeons. Bring me one and I can free one of my cages. Their creatures are as good as your own."],
           ["dunmar", "There's a story about a bull in the walls under this oasis. Old Mazeheart waits down the stair in the maze, if you dare."],
         ]);
-        UI.toast("The Menagerie Wagon is here. Use Menu > Party to swap creatures.");
+        UI.toast("The Menagerie Wagon is here.");
       } else if (F.item("keyK1")) {
         await UI.say([["dunmar", "A bone key! Look at it. Cold as a grave. Right, hold the lantern."]]);
         F.take("keyK1", 1); F.set("k1.freed"); F.questDone("bellow");
@@ -52,7 +52,6 @@
           ["bramblehoof", "Bark remembers. You opened the door, small iron one. ...I will walk with you, when you need a horn."],
           ["dunmar", "Bramblehoof, a forest guardian. The wild clans lost him to the lab. Freeing him will not be forgotten."],
         ]);
-        await UI.say([["hero", "(He is as strong as the others. He waits at the wagon until I swap him in: Menu, Party, Swap.)"]]);
       } else await UI.say([["dunmar", F.f("k1.freed") ? "Bramblehoof is out and grumbling about the sand. Good. More keys will turn up, lad." : "Any keys yet? No? Well. The oasis is full of stories."]]);
     },
     pell: async F => {
@@ -83,16 +82,16 @@
       if (!F.f("mazeheart.talked")) {
         F.set("mazeheart.talked"); F.quest("bellow", 0);
         await UI.say([["mazeheart", "Old bones hear old bones. There is a labyrinth under the oasis wall, and in it a bull bellows when the wind is right."], ["mazeheart", "The bellowing leads on. Follow the louder side, and the maze lets you through."]]);
-        UI.toast("The Bone Maze is open on the Amber Wells map.");
+        UI.toast("The Bone Maze is open.");
       } else await UI.say([["mazeheart", "Follow the bellowing. Louder is closer."]]);
     },
   };
 
   // ---------- quarry, flats ----------
   S.chest["quarry.chest"] = async F => S.gearChest(F, "quarry.chest", "G20");
-  S.gather["quarry.shards"] = async F => { F.set("g.quarry"); F.give("duneclawShard", 6); F.sfx("coin"); await UI.say([["narr", "A shard pile at the bottom of the pit. You fill your satchel with Duneclaw Shards."]]); if (F.matCount("duneclawShard") >= 10) UI.toast("You can unlock Ram Strike in the Skill Book (Menu > Items)."); };
+  S.gather["quarry.shards"] = async F => { F.set("g.quarry"); F.give("duneclawShard", 6); F.sfx("coin"); await UI.say([["narr", "A shard pile at the bottom of the pit. You fill your satchel with Duneclaw Shards."]]); if (F.matCount("duneclawShard") >= 10) UI.toast("New in the Skill Book: Ram Strike."); };
   S.chest["flats.chest"] = async F => S.gearChest(F, "flats.chest", "G12");
-  S.gather["flats.embers"] = async F => { F.set("g.flats"); F.give("cinderglassEmber", 10); F.sfx("fire"); await UI.say([["narr", "You rake the fire-pits with a bone ladle. Ten Cinderglass Embers glow in the cold sand."]]); UI.toast("Kindle can be unlocked in the Skill Book (Menu > Items)."); };
+  S.gather["flats.embers"] = async F => { F.set("g.flats"); F.give("cinderglassEmber", 10); F.sfx("fire"); await UI.say([["narr", "You rake the fire-pits with a bone ladle. Ten Cinderglass Embers glow in the cold sand."]]); UI.toast("New in the Skill Book: Kindle."); };
   S.gather["flats.plume"] = async F => { F.set("g.plume"); F.give("cinderPlume", 5); await UI.say([["narr", "A warm feather by the water. Then another. Five Cinder Plumes."]]); };
   S.trigger["flats.pool"] = async F => {
     if (F.f("pool.seen")) { await UI.say([["narr", "The pool is still. The fire-fox sleeps."]]); return; }
