@@ -35,7 +35,7 @@
   const MODEL_YAW = -Math.PI / 2;                   // models face +x
   // built-in model sources (used when the manifest has nothing for the id): [file under assets/models, extra turn so the model faces its opponent]
   const SRC = { horncinder: ["trellis/horncinder.glb", 0], shellmund: ["trellis/shellmund.glb", Math.PI], kitsuneva: ["trellis/kitsuneva.glb", Math.PI / 4],
-    scorpion: ["trellis/scorpion.glb", Math.PI / 2], jackal: ["trellis/jackal.glb", Math.PI / 2], legion: ["trellis/legion.glb", 1.27], duneBearer: ["duneBearer.glb", 0], knight: ["knight.glb", 0] };
+    scorpion: ["trellis/scorpion.glb", Math.PI / 2], jackal: ["trellis/jackal.glb", Math.PI / 2], legion: ["trellis/legion.glb", 1.27], duneBearer: ["duneBearer.glb", 0], knight: ["dreadKnight.glb", 0] };   // the hero (dread knight, 2026-10-30)
   const RIGGED = new Set(["duneBearer", "knight"]);
   const KIND_H = { creature: 2.9, enemy: 2.6, boss: 5.6, human: 2.9 };
   const HEIGHT = { knight: 2.3, duneBearer: 6.2, scorpion: 2.0, jackal: 2.1, legion: 2.9, raidOptioKarvan: 3.4 };

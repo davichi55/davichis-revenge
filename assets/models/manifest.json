@@ -24,7 +24,7 @@
   "kind": "boss"
  },
  "knight": {
-  "file": "models/knight.glb",
+  "file": "models/dreadKnight.glb",
   "yaw": 0,
   "scale": 0.8,
   "kind": "human"

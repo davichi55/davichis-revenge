@@ -26,6 +26,8 @@
   function pathNearest(P, x, y) { let best = 0, bd = 1e9; for (let i = 0; i < P.p.length - 1; i++) { const a = P.p[i], b = P.p[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy || 1, t = clamp(((x - a[0]) * dx + (y - a[1]) * dy) / l2, 0, 1), d = Math.hypot(x - a[0] - t * dx, y - a[1] - t * dy); if (d < bd) { bd = d; best = P.cum[i] + t * Math.sqrt(l2); } } return best; }
 
   // ---------- sprite catalogue: where each key lives, and how it behaves by default ----------
+  // hero: 8-frame walk cycles rendered from the rigged 3D dread knight (art-review/hero2), plus an idle frame per direction
+  const HERO_FRAMES = 8, HERO_FRAME_MS = 95, HERO_KEYS = ["Down", "Up", "Side"].flatMap(d => ["hk" + d + "Idle", ...Array.from({ length: HERO_FRAMES }, (_, i) => "hk" + d + i)]);
   const OW2DP = "wall wallBlock wallBlock2 tower gateArch pyramid serpent jaguar sunstone stele steleFace headBlock brazier featherPole sunBanner ballRing awning blanket jars rack maize boatSide agave boat marigold scrub inn lgA lgB lgSpear lgBanner lgDead lgCent rbA rbB rbArcher rbBanner rbDead rbSword cavA cavB jackA jackB hyena skull ribs bones bones2 grass grass2 wagon debris heroDown0 heroDown1 heroDown2 heroUp0 heroUp1 heroUp2 heroSide0 heroSide1 heroSide2 house well temple facePillar platform chacmool".split(" ");
   const OW2D = "palm1 palm2 cactus barrel boulder rocks shrub reeds".split(" ");
   const LEGACY_NPC = "mentor innkeeper merchant scholar".split(" ");
@@ -74,13 +76,14 @@
       const man = this.man && this.man[key], R = this.R;
       if (R.sprites && R.sprites[key]) return R.sprites[key];
       if (man) return "assets/regions/sprites/" + key + ".png";
+      if (HERO_KEYS.includes(key)) return "assets/hero/" + key + ".png";
       if (OW2DP.includes(key)) return "assets/ow2dp/" + key + ".png";
       if (OW2D.includes(key)) return "assets/ow2d/" + key + ".png";
       if (LEGACY_NPC.includes(key)) return "assets/" + key + ".png";
       return null;
     }
     neededKeys() {
-      const R = this.R, s = new Set(["heroDown0", "heroDown1", "heroDown2", "heroUp0", "heroUp1", "heroUp2", "heroSide0", "heroSide1", "heroSide2"]);
+      const R = this.R, s = new Set(HERO_KEYS);
       (R.props || []).forEach(p => s.add(p[0])); (R.scatter || []).forEach(sc => sc.keys.forEach(k => s.add(Array.isArray(k) ? k[0] : k))); (R.npcs || []).forEach(n => n.art && s.add(n.art));
       const a = R.amb || {};
       if ((a.armies && a.armies.length) || a.chase || a.standoff) "lgA lgB lgSpear lgBanner lgDead lgCent rbA rbB rbArcher rbBanner rbDead rbSword cavA cavB".split(" ").forEach(k => s.add(k));
@@ -336,7 +339,7 @@
       const en = (R.entries || {})[this.entryName] || (R.entries || {}).start || (R.entries || {}).default || { x: R.w / 2, y: R.h / 2, face: "down" };
       const [sx, sy] = this.nearestFree(en.x, en.y); this.face = en.face === "up" ? "up" : en.face === "down" ? "down" : "side"; this.flipH = en.face === "left";
       this.heroShadow = this.add.image(sx, sy - 1, "shadow").setDepth(sy - 1);
-      this.hero = this.add.image(sx, sy, "heroDown0").setOrigin(0.5, 1).setDepth(sy);
+      this.hero = this.add.image(sx, sy, "hkDownIdle").setOrigin(0.5, 1).setDepth(sy);
       this.heroGlow = this.add.image(sx, sy - 28, "pglow").setBlendMode(Phaser.BlendModes.ADD).setDepth(sy + 0.2).setScale(0.8, 1);
       this.heroGlowLow = this.add.image(sx, sy - 2, "pglow").setBlendMode(Phaser.BlendModes.ADD).setDepth(sy - 1.5).setScale(0.9, 0.35);
       this.pos = { x: sx, y: sy }; this.moving = false; this.makeFollowers(sx, sy);
@@ -661,8 +664,8 @@
       if (vx || vy) moved = this.walk(vx, vy, step, usePtr);
       if (!this.scripted) this.moving = moved;
       if (vx || vy) { if (Math.abs(vy) > Math.abs(vx) + 0.1) this.face = vy > 0 ? "down" : "up"; else { this.face = "side"; this.flipH = vx < 0; } }
-      const px = Math.round(this.pos.x), py = Math.round(this.pos.y), seq = [0, 1, 0, 2], mv = this.moving, fr = mv ? seq[Math.floor(time / 130) % 4] : 0, bob = mv ? (fr ? 1 : 0) : 0;
-      this.hero.setTexture(this.face === "up" ? "heroUp" + fr : this.face === "down" ? "heroDown" + fr : "heroSide" + fr).setFlipX(this.face === "side" && this.flipH).setPosition(px, py - bob).setDepth(this.pos.y);
+      const px = Math.round(this.pos.x), py = Math.round(this.pos.y), mv = this.moving, fr = mv ? Math.floor(time / HERO_FRAME_MS) % HERO_FRAMES : "Idle", bob = 0;   // the 8-frame walk has its own bob
+      this.hero.setTexture((this.face === "up" ? "hkUp" : this.face === "down" ? "hkDown" : "hkSide") + fr).setFlipX(this.face === "side" && this.flipH).setPosition(px, py - bob).setDepth(this.pos.y);
       this.heroShadow.setPosition(px, py - 1).setDepth(this.pos.y - 1);
       { const pu = 0.5 + 0.5 * Math.sin(time * 0.0026); this.heroGlow.setPosition(px, py - 30).setDepth(this.pos.y + 0.2).setAlpha(0.10 + 0.12 * pu).setScale(0.75 + 0.08 * pu, 0.95 + 0.08 * pu); this.heroGlowLow.setPosition(px, py - 2).setDepth(this.pos.y - 1.5).setAlpha(0.28 + 0.2 * pu); }
       if (mv) { this.puffTimer -= dt; if (this.puffTimer <= 0) { this.puffTimer = 0.16; const p = this.add.image(Math.round(this.pos.x - vx * 6), py - 1, "puff").setDepth(this.pos.y + 0.5).setAlpha(this.R.noPuff ? 0 : 0.5).setScale(0.6); if (this.R.puffTint) p.setTint(this.R.puffTint); this.tweens.add({ targets: p, alpha: 0, scale: 1.3, y: p.y - 5, duration: 480, onComplete: () => p.destroy() }); } }
