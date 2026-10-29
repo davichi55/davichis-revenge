@@ -149,7 +149,7 @@
     const cols = 3;
     return UI.window("Choose your team", (body, api) => {
       body.innerHTML = `<div style="color:#ff6b57;margin:-2px 0 10px;font-size:19px" class="shake">The horn! The walls are shaking! Choose, and run.</div>
-        <div class="grid" style="grid-template-columns:repeat(${cols},1fr)">${Data.PACKS.map((p, i) => `<button class="pk${i === sel ? " sel" : ""}" data-p="${i}"><div class="art">${p.ids.map(id => UI.art(id)).join("")}</div><b>${p.n}</b><small>${p.ids.map(id => Data.NAMES[id]).join(" · ")}</small><small style="color:#d8c7a6">${p.line}</small></button>`).join("")}</div>`;
+        <div class="grid" style="grid-template-columns:repeat(${cols},1fr)">${Data.PACKS.map((p, i) => `<button class="pk${i === sel ? " sel" : ""}" data-p="${i}"><div class="art">${p.ids.map(id => UI.art(id)).join("")}</div><b>${p.n}</b><small>${p.ids.map(id => Data.NAMES[id]).join(" · ")}</small></button>`).join("")}</div>`;
     }, { noClose: true, closeLabel: "", gold: () => "", foot: "Arrow keys and Enter, or click. The pens do not say what the creatures can do. Pick what feels right.",
       click: (e, api) => { const b = e.target.closest("[data-p]"); if (b) { sel = +b.dataset.p; api.redraw(); if (e.detail >= 1) api.close(sel); } },
       keys: (e, api) => { const k = e.key; if (k === "ArrowRight") sel = (sel + 1) % 9; else if (k === "ArrowLeft") sel = (sel + 8) % 9; else if (k === "ArrowDown") sel = (sel + 3) % 9; else if (k === "ArrowUp") sel = (sel + 6) % 9; else if (k === "Enter" || k === " ") return api.close(sel); else return; api.redraw(); } });
