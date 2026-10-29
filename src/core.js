@@ -182,7 +182,7 @@
   mv("detonate", "Detonate", 24, 3, "enemy", { fx: "detonate", desc: "Consumes all element marks (burn, wet, chill, shock) on the target for a burst." });
   // --- Leviathan ---
   mv("tailSlap", "Tail Slap", 1, 0, "enemy", { basic: 1, grp: "basic", kind: "best", p: 0.9, el: "self", tide: 1, desc: "Heavy slap. +1 MP, +1 Tide." });
-  mv("undertow", "Undertow", 1, 1, "enemy", { kind: "spell", p: 0.6, el: "water", tide: 1, desc: "Small hit, +1 Tide." });
+  mv("undertow", "Undertow", 1, 1, "enemy", { kind: "spell", p: 0.6, el: "water", st: [["wet", 1]], tide: 1, desc: "Drags the target under: small water hit, makes it wet, +1 Tide." });
   mv("deepBreath", "Deep Breath", 3, 1, "self", { grp: "support", tide: 2, fx: "deepBreath", desc: "+2 Tide." });
   mv("maelstrom", "Maelstrom", 4, 3, "enemy", { kind: "best", p: 1.0, el: "water", bk: ["impact"], fx: "maelstrom", desc: "Damage grows with Tide, uses all Tide. Counts toward impact breaks." });
   mv("swell", "Swell", 6, 2, "self", { grp: "support", fx: "swell", desc: "+1 Tide at the start of each of its next 3 turns." });
@@ -1288,6 +1288,10 @@
         if (ok("swell") && u.tide <= 2 && !hasBuff(u, "swell") && u.mp >= 5) return R("swell", u);
         if (ok("deepBreath") && u.tide <= 3 && u.mp >= 4) return R("deepBreath", u);
         if (ok("riptide") && foe.boss && foe.actedRound !== ctx.round && u.mp >= 4) return R("riptide", foe);
+        // set up a partner's combo: wet + shock (Conductive) or wet + chill (Freeze)
+        const comboMate = (u.side === "p" ? ctx.party : ctx.foes).some(a => a !== u && a.alive && (a.element === "shock" || a.element === "ice" || a.offMove === "coldSnap"));
+        const dry = foes.find(f => !f.st.wet && !f.st.freeze);
+        if (ok("undertow") && comboMate && dry && u.mp >= 2) return R("undertow", dry);
         if (ok("undertow") && u.mp >= 5 && u.tide < 5) return R("undertow", foe);
         return R(basic, F(basic));
       }
