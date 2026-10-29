@@ -24,15 +24,17 @@ const Flow = (() => {
   F.wait = ms => new Promise(r => setTimeout(r, Math.max(10, ms * F.speedF())));
 
   // ---------- save / load ----------
+  // the arena hangs each unit's 3D model on u.view; saving it made one save ~26 MB and localStorage refused it
+  const snap = () => JSON.stringify(G, (k, v) => (k === "view" || (v && v.isObject3D) ? undefined : v));
   F.save = (quiet) => {
     if (!G) return false;
-    try { G.playMs = (G.playMs || 0) + (Date.now() - (G.t0 || Date.now())); G.t0 = Date.now(); localStorage.setItem(SAVE_KEY, JSON.stringify(G)); if (!quiet) UI.toast("Game saved."); return true; }
-    catch (e) { if (!quiet) UI.toast("Saving failed: this browser blocks storage."); return false; }
+    try { G.playMs = (G.playMs || 0) + (Date.now() - (G.t0 || Date.now())); G.t0 = Date.now(); localStorage.setItem(SAVE_KEY, snap()); if (!quiet) UI.toast("Game saved."); return true; }
+    catch (e) { console.error("save failed", e); if (!quiet) UI.toast("Saving failed: the browser refused the save."); return false; }
   };
   F.load = () => { try { const s = localStorage.getItem(SAVE_KEY); if (!s) return false; G = JSON.parse(s); G.t0 = Date.now(); if (!G.v) return false; return true; } catch (e) { return false; } };
   F.hasSave = () => { try { return !!localStorage.getItem(SAVE_KEY); } catch (e) { return false; } };
   F.saveInfo = () => { try { const g = JSON.parse(localStorage.getItem(SAVE_KEY)); return g && { ch: g.ch, region: g.region, party: g.party.map(u => u.name + " " + u.level).join(", ") }; } catch (e) { return null; } };
-  F.checkpoint = () => { F.cp = JSON.stringify(G); try { localStorage.setItem(CP_KEY, F.cp); } catch (e) {} };
+  F.checkpoint = () => { F.cp = snap(); try { localStorage.setItem(CP_KEY, F.cp); } catch (e) {} };
   F.restoreCheckpoint = () => { if (!F.cp) return false; const sp = G.speed; G = JSON.parse(F.cp); G.speed = sp; G.t0 = Date.now(); return true; };
 
   // ---------- audio (never throws) ----------

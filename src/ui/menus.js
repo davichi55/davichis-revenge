@@ -149,7 +149,7 @@ const Menus = (() => {
         if (d.unlock !== undefined) { if (Flow.unlockBook(d.unlock)) { msg = `${Data.BOOK[d.unlock].n} unlocked! Equip it in Party > Skill.`; Flow.sfx("levelUp"); } return api.redraw(); }
         if (d.sys !== undefined) {
           const v = G.vol || (G.vol = { music: 0.7, sfx: 0.8 }), s = d.sys;
-          if (s === "save") { Flow.save(); msg = "Game saved."; }
+          if (s === "save") { msg = Flow.save() ? "Game saved." : "Saving failed."; }
           else if (s === "speed") G.speed = (G.speed + 1) % SPEEDS.length;
           else if (s === "mv-" || s === "mv+") { v.music = Math.max(0, Math.min(1, Math.round((v.music + (s === "mv+" ? 0.1 : -0.1)) * 10) / 10)); Flow.applyVolume(); }
           else if (s === "sv-" || s === "sv+") { v.sfx = Math.max(0, Math.min(1, Math.round((v.sfx + (s === "sv+" ? 0.1 : -0.1)) * 10) / 10)); Flow.applyVolume(); Flow.sfx("menuMove"); }
