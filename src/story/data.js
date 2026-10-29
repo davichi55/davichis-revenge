@@ -256,7 +256,7 @@ const Data = (() => {
 
   // ---------- bestiary text (short, in the apprentice's voice) ----------
   const BEST = {
-    pipeSlug: "A pale slug with a crab claw. Slow. Spits goo.", inkImp: "Born of spilled lab ink. Fires blots.", cellarRatKing: "Three rats knotted together. Acts as a swarm.", dustWisp: "A dry spark in a jar. Weak to water.", gelatinCubeMimic: "A specimen box that grew legs. Its guard breaks under medium and strong spells.",
+    pipeSlug: "A pale slug with a crab claw. Slow. Spits goo.", inkImp: "Born of spilled lab ink. Fires blots.", cellarRatKing: "Three rats knotted together. Acts as a swarm.", dustWisp: "A dry spark in a jar. Weak to water.", gelatinCubeMimic: "A specimen box that grew legs. Hates fire.",
     sandstitchJackal: "A jackal with a scarab shell. Circles you and bites for bleed.", glassAdder: "Clear-hooded viper. Poison bite, then it hides in the sand.", dustwingImp: "Throws sand to lower Speed.", mirageCat: "Hits and flickers like heat haze.",
     raidShieldbearer: "Tower shield: takes less physical damage. Use spells.", raidSlinger: "Stays back and hits whoever is weakest.", raidTorchbearer: "Burns what it touches.", raidSpearman: "Reach attack: hits the front creature.", raidArcher: "Shoots the lowest-HP creature.",
     dripWraith: "A water ghost in the cistern.", boneCrab: "A skeleton crab. Brittle but hard.", cisternEel: "A fish with human teeth.", mossGolem: "A small golem of moss and stone.",

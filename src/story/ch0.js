@@ -130,8 +130,9 @@
       F.give("sunwater", 3);
       const res = await F.fight([F.mkEnemy("inkImp", 2, " A"), F.mkEnemy("inkImp", 2, " B")], {}); if (res === "win") { F.set("pro.l2"); await UI.say([["dunmar", "Fine. A flask costs an action, so it is for when you must, not when you can."]]); await heal(F); }
     } else {
-      await UI.say([["dunmar", "Lesson three, the last. Breaks. Every enemy has a guard. Medium and strong spells crack it."],
-        ["dunmar", "Broken, it takes 50% more damage for a couple of turns. Then you spam the cheap spells. If it recovers, you break it again. The box in front of you is the old kind. It is full of tricks."]]);
+      await UI.say([["dunmar", "Lesson three, the last. Weaknesses. When you pick a target, look at what it fears and what it shrugs off."],
+        ["dunmar", "This box is the old kind, full of tricks, but it hates fire. Two of these three breathe fire. Use it."],
+        ["dunmar", "One more thing, for later. Every enemy has a guard. Once your creatures learn medium and strong moves, those crack it, and a broken enemy takes 50% more damage for a couple of turns. Today you cannot do that yet. Just burn it."]]);
       const res = await F.fight([F.mkEnemy("gelatinCubeMimic", 2)], {});
       if (res === "win") {
         F.set("pro.lessons"); await heal(F);
