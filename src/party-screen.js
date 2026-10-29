@@ -13,7 +13,33 @@ function partyScreen(startAt = 0) {
   const roster = () => G.party.concat(G.collection || []);
   const style = u => { try { return Core.CREATURES[u.id].styleName || ""; } catch (e) { return ""; } };
   const moveBox = m => { const d = Core.MOVES[m]; if (!d) return `<div class="row"><div class="g">${esc(m)}</div></div>`; return `<div class="row"><div class="g">${esc(d.name)}<small>${esc(d.desc || "")}</small></div><span style="color:#6fb7ff">${d.basic ? "+1 MP" : d.hpCost ? "15% HP" : (d.mp || 0) + " MP"}</span></div>`; };
-  const gearMsg = u => { const a = Flow.activeBonus(u); return a ? `${Data.SETS[a.set].n}: ${a.b.n} (${a.level === 2 ? "full" : "2-piece, half strength"})` : "No set bonus yet. Two pieces of one set give half the bonus, three give all of it."; };
+  const gearMsg = u => { const a = Flow.activeBonus(u); if (!a) return "No set bonus yet. Two pieces of one set give half the bonus, three give all of it."; const nd = bonusNeed(u, a.b); return `${Data.SETS[a.set].n}: ${a.b.n} (${a.level === 2 ? "full" : "2-piece, half strength"})${nd && !nd.ok ? " · does nothing on " + u.name + " yet" : ""}`; };
+  // set bonuses that only work with a certain move or passive: what they need, and whether this creature has it (null = always works)
+  const NEEDS = {
+    lockedShields: { move: "shieldWall" }, shieldBrother: { move: "bulwark" }, earthquake: { move: "earthshaker" }, chargedAttune: { move: "attune" }, sharperDetonate: { move: "detonate" },
+    masterMixing: { passive: "comboMaster", what: "the Combo Master passive (Dragon style)" },
+    deadEnd: { any: m => (m.bk || []).includes("impact"), what: "an impact move" },
+    cheapCruelty: { any: m => m.mp === 1 && (m.p || 0) > 0, what: "a 1 MP attack" },
+    slowBurn: { any: m => (m.st || []).some(s => s[0] === "burn"), what: "a move that burns" },
+    emberHeart: { any: (m, u) => m.el === "fire" || (m.el === "self" && u.element === "fire"), what: "fire moves" },
+  };
+  const ownerStyle = id => { const s = Object.keys(Core.STYLE_MOVES).find(k => Core.STYLE_MOVES[k].includes(id)); return s ? Core.STYLES[s].name : ""; };
+  function bonusNeed(u, b) {
+    const n = b.fx && NEEDS[b.fx]; if (!n) return null;
+    const known = Core.movesOf(u), later = (Core.STYLE_MOVES[u.style] || []).filter(id => !known.includes(id)).map(id => Core.MOVES[id]).sort((x, y) => x.lvl - y.lvl);
+    if (n.passive) return u.passive === n.passive ? { ok: true, text: "Works: " + u.name + " has Combo Master." } : { ok: false, text: "Needs " + n.what + ". No effect on " + u.name + "." };
+    if (n.move) {
+      const m = Core.MOVES[n.move];
+      if (known.includes(n.move)) return { ok: true, text: "Works: " + u.name + " knows " + m.name + "." };
+      if (later.some(x => x.id === n.move)) return { ok: false, text: "Only boosts " + m.name + ", which " + u.name + " learns at level " + m.lvl + "." };
+      return { ok: false, text: "Only boosts " + m.name + " (" + ownerStyle(n.move) + " style). No effect on " + u.name + "." };
+    }
+    const have = known.map(id => Core.MOVES[id]).filter(m => m && n.any(m, u));
+    if (have.length) return { ok: true, text: "Works with " + have.slice(0, 3).map(m => m.name).join(", ") + "." };
+    const nx = later.find(m => n.any(m, u));
+    return { ok: false, text: "Needs " + n.what + (nx ? ". First one: " + nx.name + " at level " + nx.lvl + "." : ". No effect on " + u.name + ".") };
+  }
+  const dot = ok => `<span title="${ok ? "active" : "no effect"}" style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:1px;${ok ? "background:#7dff9a;box-shadow:0 0 6px 2px #46e070;animation:sbPulse 1.6s ease-in-out infinite" : "background:#4a4038;border:1px solid #7a6a58"}"></span>`;
   return UI.window("Party", (body, api, tab) => {
     const R = roster(); cur = Math.min(cur, R.length - 1); const u = R[cur], c = (Core.CREATURES && Core.CREATURES[u.id]) || {};
     const maxStat = Math.max(20, ...Core.STATS.map(k => u.stats[k]));
@@ -34,7 +60,7 @@ function partyScreen(startAt = 0) {
       const a = Flow.activeBonus(u), cnt = Flow.setCounts(u);
       main = note + `<h3>Gear</h3>` + Data.SLOTS.map(sl => { const pid = u.eq && u.eq[sl]; return `<div class="row"><div class="g">${Data.SLOT_NAMES[sl]}<small>${pid ? esc(Data.pieceName(pid)) + " · " + esc(Data.SETS[pid.split(".")[0]].n) : "empty"}</small></div><button class="b" data-slot="${sl}">${pid ? "Change" : "Equip"}</button></div>`; }).join("")
         + `<h3 style="margin-top:12px">Set bonus</h3><div style="color:#b7a58a;margin-bottom:6px">${esc(gearMsg(u))}</div>`
-        + Object.keys(cnt).filter(s => cnt[s] >= 2).map(s => Data.SETS[s].b.map((b, bi) => { const on = (u.sb && u.sb[s] != null ? u.sb[s] : 0) === bi; return `<button class="row${on ? " sel" : ""}" data-sb="${s}:${bi}" style="width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer"><div class="g">${esc(b.n)}<small>${esc(cnt[s] >= 3 ? b.d : "Half strength: " + b.d2)}</small></div>${on ? "<b style='color:#f2c14e'>chosen</b>" : ""}</button>`; }).join("")).join("") + (Object.values(cnt).some(n => n >= 2) ? `<div style="color:#b7a58a;font-size:13px">Change the bonus any time outside a fight.</div>` : "");
+        + Object.keys(cnt).filter(s => cnt[s] >= 2).map(s => Data.SETS[s].b.map((b, bi) => { const on = (u.sb && u.sb[s] != null ? u.sb[s] : 0) === bi, nd = bonusNeed(u, b), ok = !nd || nd.ok; return `<button class="row${on ? " sel" : ""}" data-sb="${s}:${bi}" style="width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer;${ok ? "" : "opacity:.6"}"><div class="g">${dot(ok)}${esc(b.n)}<small>${esc(cnt[s] >= 3 ? b.d : "Half strength: " + b.d2)}</small>${nd ? `<small style="color:${ok ? "#8fe0a0" : "#c98a6a"}">${esc(nd.text)}</small>` : ""}</div>${on ? "<b style='color:#f2c14e'>chosen</b>" : ""}</button>`; }).join("")).join("") + "<style>@keyframes sbPulse{50%{box-shadow:0 0 10px 4px #46e070;opacity:.8}}</style>" + (Object.values(cnt).some(n => n >= 2) ? `<div style="color:#b7a58a;font-size:13px">Change the bonus any time outside a fight.</div>` : "");
     } else {
       const slot = u.slot && Data.BOOK[u.slot];
       main = note + `<h3>Off-style move</h3><div style="color:#b7a58a;margin-bottom:8px">One move from the Skill Book can ride along in this slot. It costs the normal amount but has none of the style's bonus effects.</div>

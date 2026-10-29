@@ -187,8 +187,8 @@ const Data = (() => {
       { n: "Iron Nose Ring", d: "25% less chance to be stunned or slowed.", d2: "12%.", fx: "ironNose" }] },
     G16: { n: "Tower Shield Phalanx", pieces: ["Bronze Helm", "Tower Shield", "Short Stabbing Sword"], b: [
       { n: "Wall", d: "+20% Defense.", d2: "+10% Defense.", st: { def: [20, 10] } },
-      { n: "Shield Brother", d: "Taking hits for an ally: 25% less damage.", d2: "12%.", fx: "shieldBrother" },
-      { n: "Locked Shields", d: "Shield Wall reduces team damage by 40%.", d2: "35%.", fx: "lockedShields" }] },
+      { n: "Shield Brother", d: "Hits it takes for an ally (Bulwark) deal 25% less damage.", d2: "12% less.", fx: "shieldBrother" },
+      { n: "Locked Shields", d: "Shield Wall cuts team damage by 40% instead of 30%.", d2: "35% instead of 30%.", fx: "lockedShields" }] },
     G45: { n: "Stoneweather Cloak", pieces: ["Sun-Bleached Hood", "Thick Grey Cloak", "Weathered Staff"], b: [
       { n: "Hard to Rattle", d: "30% less chance to be hit by a status.", d2: "15%.", fx: "hardToRattle" },
       { n: "Shake It Off", d: "Statuses on you last 1 turn shorter.", d2: "Only burn and poison.", fx: "shakeOff" },
@@ -204,7 +204,7 @@ const Data = (() => {
     G4: { n: "Warden of the Winding Halls", pieces: ["Maze-Pattern Helm", "Bronze Maze Plate", "Long-Hafted Axe"], b: [
       { n: "Dead End", d: "Impact moves count as 2 hits toward breaks.", d2: "The first impact move each turn.", fx: "deadEnd" },
       { n: "Opening Charge", d: "Your first action of the fight deals +40% damage.", d2: "+20%.", fx: "openingCharge" },
-      { n: "Cheap Cruelty", d: "Weak (1 MP) spells deal +25% damage.", d2: "+12%.", fx: "cheapCruelty" }] },
+      { n: "Cheap Cruelty", d: "1 MP attacks deal +25% damage.", d2: "+12%.", fx: "cheapCruelty" }] },
     G17: { n: "Stoneguard of the Sun Gate", pieces: ["Mirror-Disc Helm", "Mirror-Disc Plate", "Sun-Gate Shield"], b: [
       { n: "Mirror Plate", d: "+20% Resistance.", d2: "+10% Resistance.", st: { res: [20, 10] } },
       { n: "Warded Against Elements", d: "15% less damage from all elements.", d2: "7%.", fx: "warded" },
