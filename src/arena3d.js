@@ -531,7 +531,11 @@
     ctx = Core.newBattle(opts.party, opts.foes);
     const fm = formation(opts.foes);
     opts.foes.forEach((e, i) => makeView(e, e.art || e.id, fm[i][0], fm[i][1]));
-    [[2.6, -2.4], [3.8, 0.4], [5.0, 3.0]].forEach(([x, z], i) => opts.party[i] && makeView(opts.party[i], opts.party[i].id, x, z));
+    // the front slot is closest to the camera: the bulkiest creature stands at the back so it never hides a smaller one (Danny 2026-10-30, Mawdeep over Pyrewisp)
+    const SLOTS = [[3.4, -3.2], [6.0, -0.8], [2.4, 2.2]], team = opts.party.slice(0, 3);
+    team.forEach(p => makeView(p, p.id, 0, 0));
+    const bulk = p => { const b = new THREE.Box3().setFromObject(p.view.group), s = b.getSize(tmpV); return s.x * s.y + s.z * s.y * 0.5; };
+    team.map(p => [p, bulk(p)]).sort((a, b) => b[1] - a[1]).forEach(([p], i) => { const [x, z] = SLOTS[i]; p.view.group.position.set(x, 0, z); p.view.home.set(x, 0, z); });
     makeView(coach, "knight", 9.6, -4.8);   // behind the team, upper right of the screen, so no creature covers him
     if (!coachLight) coachLight = new THREE.PointLight(0x9a4dff, 1.2, 6, 2);
     coach.view.group.add(coachLight); coachLight.position.set(0, 1.6, 0.6);
