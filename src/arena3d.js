@@ -50,6 +50,7 @@
   let ready = null, renderer, scene, camera, world, dust, torchLights = [], units = [], ctx = null, active = false, speedF = () => 1, shake = 0, introT = 0, marker = null, manifest = {}, manifestTried = false;
   const tex = {}, assets = {}, el = {};
   const $ = s => el.root.querySelector(s);
+  const FX = () => root.FX3D || null;   // battle effects (src/fx3d.js); the fight works without them
   const sfx = k => { try { const A = root.Audio; if (A && typeof A.sfx === "function") A.sfx(k); } catch (e) { /* audio must never break a fight */ } };
 
   // ---------- one-time setup: DOM overlay, renderer ----------
@@ -95,7 +96,7 @@
     renderer = new THREE.WebGLRenderer({ antialias: true }); renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
     el.root.prepend(renderer.domElement);
     scene = new THREE.Scene(); camera = new THREE.PerspectiveCamera(42, 16 / 9, 0.1, 200);
-    world = new THREE.Group(); scene.add(world);
+    world = new THREE.Group(); scene.add(world); if (FX()) FX().init(scene);
     marker = new THREE.Mesh(new THREE.ConeGeometry(0.32, 0.7, 4), new THREE.MeshBasicMaterial({ color: 0xf2c14e })); marker.rotation.x = Math.PI; marker.visible = false; scene.add(marker);
     addEventListener("resize", resize);
     ready = Promise.all(["floor_sand", "floor_stone", "pano_desert", "pano_temple"].map(k => loadTex("assets/" + k + ".png", true).then(t => { tex[k] = t; })).concat(PROPS.map(k => ensureAsset(k)), [loadManifest()]));
@@ -232,6 +233,7 @@
     requestAnimationFrame(frame);
     const dt = Math.min(0.05, clock.getDelta()), t = clock.elapsedTime;
     if (!active) return;
+    if (FX()) FX().update(dt);
     // fixed camera: a slow push-in at the start, then one steady wide shot
     const f = introT > 0 ? (introT = Math.max(0, introT - dt)) / 2.5 : 0;
     camera.position.set(0, 4.6 + 1.5 * f, 14.5 + 6 * f);
@@ -362,34 +364,43 @@
   }
   async function playOne(e) {
     if (e.t === "use") {
-      log(`${e.src.name}: ${e.move}`); lastUse = { src: e.src, move: e.move, total: 0 };
+      const mv = e.moveId && Core.MOVES[e.moveId], P = e.basic ? 1 : e.enemy ? (e.big ? 2.3 : 1.2) : mv && mv.mp >= 3 ? 2.3 : mv && mv.mp >= 2 ? 1.6 : 1.2;
+      log(`${e.src.name}: ${e.move}`); lastUse = { src: e.src, move: e.move, total: 0, P };
+      if (FX()) FX().setEnabled(speedF() >= 0.1);
       const offensive = !e.item && (e.enemy || e.tkind === "enemy" || e.tkind === "allEnemies");
       let tgt = null;
       if (offensive) {
         if (e.tgt && e.tgt.view && e.tgt.side !== e.src.side) tgt = e.tgt;
         else tgt = e.src.side === "e" ? ctx.party.find(p => p.alive && p.view) : centreOf(ctx.foes.filter(f => f.alive));
       }
-      if (tgt && !e.big) lunge(e.src, tgt, e.src.boss ? 0.22 : 0.5);
+      // spells fly (an orb from the caster), physical moves lunge; non-basic moves gather a glow on the caster first
+      const spell = offensive && !e.basic && (e.enemy ? !!e.el && !e.big : mv && (mv.kind === "spell" || (mv.kind === "best" && Core.eff(e.src, "pow") > Core.eff(e.src, "atk"))));
+      const fx = FX();
+      if (fx && !e.basic && !e.item && (offensive || e.grp === "support" || e.grp === "control")) fx.cast(e.src, e.el, P);
+      if (fx && offensive && e.tkind === "allEnemies") fx.wave((e.src.side === "p" ? ctx.foes : ctx.party).filter(x => x.alive), e.el, P);
+      if (spell && fx && tgt && e.tkind !== "allEnemies") { await wait(260); await fx.shoot(e.src, tgt.view && tgt.side ? tgt : (ctx.foes.find(f => f.alive) || tgt), e.el, P, 360 * speedF()); }
+      else if (tgt && !e.big) lunge(e.src, tgt, e.src.boss ? 0.22 : 0.5);
       if (e.big) { shake = 0.2; await wait(400); }
       else if (!offensive) sfx("buff");
       else if (e.el && EL_SFX[e.el]) { /* the sound plays on the hit */ } else if (!e.basic && e.grp !== "basic" && !e.enemy) sfx("spell");
-      await wait(e.basic ? 300 : 420);
+      await wait(e.basic ? 300 : spell ? 120 : 420);
     } else if (e.t === "dmg") {
       if (e.dot) {
-        float(e.tgt, "-" + e.v, (CHIP[e.dot] || ["", "#ff9a6a"])[1]); sfx(EL_SFX[e.el] || "hit"); hud(); await wait(160); return;
+        if (FX()) FX().status(e.tgt, e.dot); float(e.tgt, "-" + e.v, (CHIP[e.dot] || ["", "#ff9a6a"])[1]); sfx(EL_SFX[e.el] || "hit"); hud(); await wait(160); return;
       }
+      if (FX()) FX().hit(e.tgt, e.el, e.kind, lastUse && lastUse.src === e.src ? lastUse.P : 1, e.crit);
       playClip(e.tgt, "hurt", 1.6); if (e.tgt.view) e.tgt.view.hitT = 1; tint(e.tgt, 0xff6060); shake = Math.max(shake, e.crit ? 0.18 : e.tgt.boss ? 0.05 : 0.09);
       sfx(e.crit ? "crit" : EL_SFX[e.el] || (e.v > e.tgt.maxHp * 0.22 ? "hitHeavy" : e.kind === "spell" ? "spell" : "hit"));
       popNum(e.tgt, e.v, e.tgt.side === "p" ? "#ff7a66" : e.crit ? "#ffd23f" : "#fff4e0", [e.crit ? "CRITICAL" : "", e.note, e.tgt.broken ? "BROKEN x1.5" : "", e.absorbed ? e.absorbed + " blocked" : ""].filter(Boolean).join(" · "));
       if (lastUse && e.src && lastUse.src === e.src) { lastUse.total += e.v; log(`${e.src.name}: ${lastUse.move}  —  ${lastUse.total} damage`); }
       hud(); await wait(320);
-    } else if (e.t === "heal") { if (e.v > 0) { tint(e.tgt, 0x90ff90, 200); popNum(e.tgt, "+" + e.v, "#7ee081"); sfx("heal"); } hud(); await wait(e.v > 0 ? 260 : 20); }
+    } else if (e.t === "heal") { if (e.v > 0) { if (FX()) FX().heal(e.tgt); tint(e.tgt, 0x90ff90, 200); popNum(e.tgt, "+" + e.v, "#7ee081"); sfx("heal"); } hud(); await wait(e.v > 0 ? 260 : 20); }
     else if (e.t === "selfDmg") { float(e.tgt, "-" + e.v, "#ff6b57"); hud(); await wait(200); }
     else if (e.t === "say") { log(e.text); await wait(450); }
-    else if (e.t === "status") { const c = CHIP[e.type]; float(e.tgt, c ? `${c[0]} ${c[2]}${e.n > 1 ? " x" + e.n : ""}` : e.type === "coil" ? "Coiled" : e.type === "curse" ? "Sealed" : e.type, c ? c[1] : "#e8c8ff"); sfx(ST_SFX[e.type] || "debuff"); hud(); await wait(240); }
-    else if (e.t === "debuff") { float(e.tgt, `${STAT_LABEL[e.stat] || e.stat} ▼`, "#ff9a8a"); sfx("debuff"); hud(); await wait(220); }
-    else if (e.t === "buff") { float(e.tgt, `${STAT_LABEL[e.stat] || e.stat} ▲`, "#a8e0a0"); sfx("buff"); hud(); await wait(200); }
-    else if (e.t === "reaction") { banner(e.name.toUpperCase() + "!", { Freeze: "#7fe3ff", Steam: "#e0e0e0", Conductive: "#ffe45c", Shatter: "#b0e8ff", Detonate: "#ff9a4a" }[e.name]); if (e.text) log(e.text); flash("#ffffff", 180); sfx(e.name === "Freeze" || e.name === "Shatter" ? "ice" : e.name === "Conductive" ? "shock" : "fire"); shake = Math.max(shake, 0.15); hud(); await wait(750); }
+    else if (e.t === "status") { if (FX()) FX().status(e.tgt, e.type); const c = CHIP[e.type]; float(e.tgt, c ? `${c[0]} ${c[2]}${e.n > 1 ? " x" + e.n : ""}` : e.type === "coil" ? "Coiled" : e.type === "curse" ? "Sealed" : e.type, c ? c[1] : "#e8c8ff"); sfx(ST_SFX[e.type] || "debuff"); hud(); await wait(240); }
+    else if (e.t === "debuff") { if (FX()) FX().debuff(e.tgt); float(e.tgt, `${STAT_LABEL[e.stat] || e.stat} ▼`, "#ff9a8a"); sfx("debuff"); hud(); await wait(220); }
+    else if (e.t === "buff") { if (FX()) FX().buff(e.tgt); float(e.tgt, `${STAT_LABEL[e.stat] || e.stat} ▲`, "#a8e0a0"); sfx("buff"); hud(); await wait(200); }
+    else if (e.t === "reaction") { if (FX() && e.tgt) FX().reaction(e.tgt, e.name); banner(e.name.toUpperCase() + "!", { Freeze: "#7fe3ff", Steam: "#e0e0e0", Conductive: "#ffe45c", Shatter: "#b0e8ff", Detonate: "#ff9a4a" }[e.name]); if (e.text) log(e.text); flash("#ffffff", 180); sfx(e.name === "Freeze" || e.name === "Shatter" ? "ice" : e.name === "Conductive" ? "shock" : "fire"); shake = Math.max(shake, 0.15); hud(); await wait(750); }
     else if (e.t === "stunned") { float(e.tgt, e.type === "freeze" ? "FROZEN" : "STUNNED", "#ffd23f"); sfx("debuff"); log(`${e.tgt.name} cannot act!`); await wait(500); }
     else if (e.t === "tide") { if (e.n > 0) float(e.tgt, "Tide " + e.v, "#4ad0c8"); hud(); await wait(e.n > 0 ? 160 : 20); }
     else if (e.t === "resist") { float(e.tgt, "Resisted", "#c9b28a"); await wait(160); }
@@ -397,10 +408,10 @@
     else if (e.t === "reflect") { float(e.tgt, "Reflected!", "#e8f0ff"); flash("#ffffff", 150); await wait(300); }
     else if (e.t === "cleanse") { float(e.tgt, "Cleansed", "#ffe9a0"); sfx("heal"); hud(); await wait(160); }
     else if (e.t === "breakPt") { float(e.tgt, `Crack ${e.pts}/${e.need || 2}`, "#f2c14e"); hud(); await wait(260); }
-    else if (e.t === "broken") { coachSay(pick(["Now! It's open!", "Hit it while it's down!", "Its guard is broken!"])); sfx("break"); banner("BROKEN!", "#f2c14e"); flash("#ffd27a"); shake = 0.25; log(`${e.tgt.name} is BROKEN! It takes 50% more damage.`); hud(); await wait(900); }
+    else if (e.t === "broken") { if (FX()) FX().brk(e.tgt); coachSay(pick(["Now! It's open!", "Hit it while it's down!", "Its guard is broken!"])); sfx("break"); banner("BROKEN!", "#f2c14e"); flash("#ffd27a"); shake = 0.25; log(`${e.tgt.name} is BROKEN! It takes 50% more damage.`); hud(); await wait(900); }
     else if (e.t === "phase") { sfx("telegraph"); flash("#ff3b2a", 500); shake = 0.35; banner("PHASE " + (e.tgt.phaseNo || ""), "#ff6b57"); log(e.text); hud(); await wait(1700); }
-    else if (e.t === "ko") { if (e.tgt.side === "p") coachSay(pick([e.tgt.name + "! Get up!", "Hold on, " + e.tgt.name + "!"]), "idle"); sfx("ko"); if (e.tgt.view) e.tgt.view.alive = 0; log(`${e.tgt.name} falls!`); hud(); await wait(500); }
-    else if (e.t === "revive") { sfx("heal"); if (e.tgt.view) e.tgt.view.alive = 1; tint(e.tgt, 0xffe080, 300); log(e.text || `${e.tgt.name} is back on its feet!`); hud(); await wait(500); }
+    else if (e.t === "ko") { if (e.tgt.side === "p") coachSay(pick([e.tgt.name + "! Get up!", "Hold on, " + e.tgt.name + "!"]), "idle"); sfx("ko"); if (FX()) FX().ko(e.tgt); if (e.tgt.view) e.tgt.view.alive = 0; log(`${e.tgt.name} falls!`); hud(); await wait(500); }
+    else if (e.t === "revive") { if (FX()) FX().revive(e.tgt); sfx("heal"); if (e.tgt.view) e.tgt.view.alive = 1; tint(e.tgt, 0xffe080, 300); log(e.text || `${e.tgt.name} is back on its feet!`); hud(); await wait(500); }
     else if (e.t === "telegraph") { sfx("telegraph"); coachSay(pick(["Brace yourselves!", "Something big is coming!", "Guard up, all of you!"]), "idle"); $(".warn").textContent = "⚠ " + e.text; log(e.text); await wait(1000); }
   }
 
@@ -564,7 +575,7 @@
     finish();
     return out;
   }
-  function finish() { active = false; el.root.style.display = "none"; $(".cmd").hidden = true; setMarker(null); clearFighters(); }
+  function finish() { if (FX()) FX().clear(); active = false; el.root.style.display = "none"; $(".cmd").hidden = true; setMarker(null); clearFighters(); }
 
   // test helper: a small JPEG of the current 3D view (lets automated checks see facing without a big screen)
   function snap(w = 640) { renderer.render(scene, camera); const c = document.createElement("canvas"), src = renderer.domElement; c.width = w; c.height = Math.round(w * src.height / src.width); c.getContext("2d").drawImage(src, 0, 0, c.width, c.height); return c.toDataURL("image/jpeg", 0.6); }
