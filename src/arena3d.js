@@ -47,7 +47,7 @@
     counter: "COUNTER", cover: "COVERED", hounds: "HOUNDS", decoy: "DECOY", antlers: "ANTLERS", dust: "DUST", braceDeep: "BRACE", tithe: "TITHE", redHot: "RED-HOT", stunImmune: "UNSTUNNABLE", mp: "MP", endure: "ENDURE" };
   const GROUPS = [["damage", "Attacks"], ["support", "Support"], ["control", "Control"], ["personal", "Personal"], ["skill", "Skill book (off-style slot)"]];
 
-  let ready = null, renderer, scene, camera, world, dust, torchLights = [], units = [], ctx = null, active = false, speedF = () => 1, shake = 0, introT = 0, marker = null, manifest = {}, manifestTried = false;
+  let ready = null, renderer, scene, camera, world, dust, torchLights = [], units = [], ctx = null, active = false, speedF = () => 1, shake = 0, shakeLast = 0, shakePeak = 0, shakeT = 0, shakeDur = 0.2, introT = 0, marker = null, manifest = {}, manifestTried = false;
   const tex = {}, assets = {}, el = {}; let arenaCtl = null;   // arenaCtl: the controller of the arena built by src/arena-sets.js (ARENA agent)
   const camP = { y: 4.6, z: 14.5, ly: 1.9, k: 1, base: 42, id: "std" };   // camera framing of this fight; src/arena-layout.js picks a wider preset for huge bosses
   const $ = s => el.root.querySelector(s);
@@ -253,7 +253,10 @@
     // fixed camera: a slow push-in at the start, then one steady wide shot
     const f = introT > 0 ? (introT = Math.max(0, introT - dt)) / 2.5 : 0;
     camera.position.set(0, camP.y + 1.5 * f, Math.min(20.8, camP.z + 6 * f));
-    if (shake > 0) { shake = Math.max(0, shake - dt * 2.5); camera.position.x += (Math.random() - 0.5) * shake; camera.position.y += (Math.random() - 0.5) * shake; }
+    if (shake > shakeLast + 1e-6) { shakePeak = shake; shakeDur = 0.1 + 1.4 * shake; shakeT = 0; }   // a new impulse (callers raise `shake` to its peak)
+    if (shakePeak > 0) { shakeT += dt; const k = Math.max(0, 1 - shakeT / shakeDur); shake = shakePeak * k * k; if (k <= 0) shakePeak = shake = 0;
+      camera.position.x += (Math.random() - 0.5) * shake; camera.position.y += (Math.random() - 0.5) * shake; }
+    shakeLast = shake;
     camera.lookAt(0, camP.ly, 0);
     units.forEach(u => {
       const v = u.view; if (!v) return; const g = v.group;
@@ -318,16 +321,17 @@
   function popNum(u, value, color, note, cls) {
     const p = screenPos(u); if (!p) return;
     const d = document.createElement("div"); d.className = "dmg" + (cls ? " " + cls : ""); d.style.color = color; d.textContent = value;
-    if (note) { const sm = document.createElement("small"); sm.textContent = note; d.appendChild(sm); }
+    if (note) { const sm = document.createElement("small"); sm.textContent = note; d.appendChild(sm); d.style.animationDuration = "1.9s"; }   // a note ("CRITICAL · BROKEN x1.5") needs ~1.25 s at 20 characters a second (Netflix subtitle rule)
     d.style.left = (p[0] + (Math.random() - 0.5) * 50) + "px"; d.style.top = p[1] + "px";
-    el.root.appendChild(d); setTimeout(() => d.remove(), 1600);
+    el.root.appendChild(d); setTimeout(() => d.remove(), note ? 2000 : 1600);
   }
   let lastUse = null;
   function float(u, s, color) {
     const p = screenPos(u, 0.9); if (!p) return;
     const d = document.createElement("div"); d.className = "num"; d.textContent = s; d.style.color = color || "#f4e9d4";
     d.style.left = (p[0] + (Math.random() - 0.5) * 40) + "px"; d.style.top = p[1] + "px";
-    el.root.appendChild(d); requestAnimationFrame(() => { d.style.transform = "translateY(-50px)"; d.style.opacity = "0"; }); setTimeout(() => d.remove(), 1000);
+    d.style.transition = "transform 1.3s ease-out, opacity .4s ease-in .9s";   // fully readable for 0.9 s (subtitle minimum 0.83 s), then a 0.4 s fade
+    el.root.appendChild(d); requestAnimationFrame(() => { d.style.transform = "translateY(-50px)"; d.style.opacity = "0"; }); setTimeout(() => d.remove(), 1350);
   }
   function banner(text, color) {
     const d = document.createElement("div"); d.className = "react"; d.style.color = color || "#ffd27a"; d.textContent = text; el.root.appendChild(d); setTimeout(() => d.remove(), 1700);
@@ -345,7 +349,9 @@
     clearTimeout(bubbleT); bubbleT = setTimeout(() => bubbleEl && (bubbleEl.style.opacity = "0"), 1600 * speedF() + 400);
   }
   const pick = list => list[Math.floor(Math.random() * list.length)];
+  const flashTimes = [];
   function flash(color, ms = 220) {
+    const now = performance.now(); while (flashTimes.length && now - flashTimes[0] > 1000) flashTimes.shift(); if (flashTimes.length >= 3) return; flashTimes.push(now);   // WCAG 2.3.1: at most 3 flashes a second
     const d = document.createElement("div"); Object.assign(d.style, { position: "absolute", inset: "0", background: color, opacity: "0.5", pointerEvents: "none", transition: `opacity ${ms}ms` });
     el.root.appendChild(d); requestAnimationFrame(() => (d.style.opacity = "0")); setTimeout(() => d.remove(), ms + 50);
   }
