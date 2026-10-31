@@ -425,7 +425,7 @@
       else if (!offensive) sfx("buff");
       else if (e.el && EL_SFX[e.el]) { /* the sound plays on the hit */ } else if (!e.basic && e.grp !== "basic" && !e.enemy) sfx("spell");
       await wait(e.basic ? 300 : spell ? 120 : 420);
-    } else if (e.t === "dmg") {
+    } else if (e.t === "dmg") { if (e.absorbed) seenFx("shield");
       if (e.hpAfter !== undefined && e.tgt) shown.set(e.tgt, e.hpAfter);
       if (e.dot) {
         if (FX()) FX().status(e.tgt, e.dot); float(e.tgt, "-" + e.v, (CHIP[e.dot] || ["", "#ff9a6a"])[1]); sfx(EL_SFX[e.el] || "hit"); hud(); await wait(160); return;
@@ -454,7 +454,7 @@
     else if (e.t === "phase") { sfx("telegraph"); flash("#ff3b2a", 500); shake = 0.35; banner("PHASE " + (e.tgt.phaseNo || ""), "#ff6b57"); log(e.text); hud(); await wait(1700); }
     else if (e.t === "ko") { if (e.tgt.side === "p") coachSay(pick([e.tgt.name + "! Get up!", "Hold on, " + e.tgt.name + "!"]), "idle"); sfx("ko"); if (FX()) FX().ko(e.tgt); if (e.tgt.view) e.tgt.view.alive = 0; log(`${e.tgt.name} falls!`); hud(); await wait(500); }
     else if (e.t === "revive") { if (FX()) FX().revive(e.tgt); sfx("heal"); if (e.tgt.view) e.tgt.view.alive = 1; tint(e.tgt, 0xffe080, 300); log(e.text || `${e.tgt.name} is back on its feet!`); hud(); await wait(500); }
-    else if (e.t === "telegraph") { sfx("telegraph"); coachSay(pick(["Brace yourselves!", "Something big is coming!", "Guard up, all of you!"]), "idle"); $(".warn").textContent = "⚠ " + e.text; log(e.text); await wait(1000); }
+    else if (e.t === "telegraph") { seenFx("telegraph"); sfx("telegraph"); coachSay(pick(["Brace yourselves!", "Something big is coming!", "Guard up, all of you!"]), "idle"); $(".warn").textContent = "⚠ " + e.text; log(e.text); await wait(1000); }
   }
 
   // ---------- command menu (keyboard: arrows + Enter, Esc = back, 1-9 = pick; or click) ----------
