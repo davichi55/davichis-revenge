@@ -75,6 +75,19 @@
     ["telegraph", "Big attacks", "Some foes gather their strength for a whole turn and strike on their next one; a warning shows above the fight. Stunning or freezing the foe while it gathers cancels the attack. Otherwise it is time to heal, shield or guard."],
     ["shield", "Shields", "A shield takes damage before HP does, until it is used up or runs out of time. Blocked damage shows as \"blocked\" next to the number."],
     ["guard", "Taunts and guarding", "A taunting creature draws every single-target attack onto itself (area attacks still hit everyone). Bulwark goes further: the guard takes the hits meant for one ally until its next turn.", true],
+    // boss traits (RULES-BOSS 2026-11-01): the numbers come from Core.TRAIT (src/core.js), so this text always matches the rules
+    ...(function () {
+      const T = typeof Core !== "undefined" && Core.TRAIT; if (!T) return [];
+      const pc = x => Math.round(x * 100);
+      return [
+        ["echo", "Echo", "Some foes remember the last move your team used and answer it: a hit in the same element, or Physical, Spell, Status or Healing, aimed back at whoever made the move. A Status answer is a smaller hit that carries the same lowered stat or damage-over-time status back (never stun, freeze or petrify). The same kind again makes the answer " + pc(T.echo.per) + "% stronger, up to +" + pc(T.echo.per * T.echo.cap) + "% after " + T.echo.cap + " repeats; a different kind starts again. Guards, taunts and other buffs are not remembered. The remembered kind shows under the foe's name."],
+        ["executioner", "Executioner", "Every " + T.exec.every + "th round an Executioner marks the hero with the lowest share of HP and strikes on its next turn; a warning shows above the fight. A taunt or a cover pulls the strike onto someone else. Guard counts double against it (at most " + pc(T.exec.maxDr) + "% less damage). A mark at " + pc(T.exec.soft) + "% HP or more when it lands takes " + pc(1 - T.exec.softMult) + "% less. Breaking or stunning the Executioner calls the strike off. If the marked hero has fallen, it finds no one."],
+        ["banner", "Banner Bearer", "While a Banner Bearer lives, its allies deal " + pc(T.banner.dmg) + "% more damage and take " + pc(T.banner.dr) + "% less. A BANNER chip shows on each of them, and it ends the moment the bearer falls."],
+        ["wall", "Shield wall", "A hoplite covers the living foe on each side of it: while the hoplite lives they take " + pc(T.wall) + "% less damage (a WALL chip shows). The hoplite itself is not covered."],
+        ["braced", "Braced", "Every " + T.brace.every + "th round a Braced foe sets itself until its own next turn (BRACED shows on it). Charges (Labyrinth Charge, Bull Rush, Stampede, Two Heads One Charge, Ram Strike, and any strike made while diving) deal " + pc(T.brace.cut) + "% less to it, and " + pc(T.brace.back) + "% of the damage they do comes back on the attacker. Other moves are not affected."],
+        ["barrier", "Barrier", "Some foes keep a barrier worth " + pc(T.barrier.frac) + "% of their max HP. It absorbs damage like a shield and rises again at full strength at the start of the foe's " + T.barrier.again + "rd turn after it breaks. A Shatter reaction breaks it outright and the hit lands on HP; Shatter Shield strips what is left."],
+      ];
+    })(),
     ["swarm", "Swarms", "Some foes are a swarm of many small bodies: area moves hit them 1.6x as hard, single-target moves only 0.75x.", true],
     ["burn", "Burn", "Fire damage at the end of each of the burning one's turns, for 3 turns (a new stack refreshes the time), up to 8 stacks. Each tick = stacks x (1 + 0.18 x the Power of whoever set it alight). More Power, hotter burn. Water puts it out."],
     ["bleed", "Bleed", "Damage at the end of each of the bleeding one's turns, for 3 turns, up to 8 stacks. Each tick = stacks x (1 + 0.18 x the Attack of whoever cut it). Skeletons and some others cannot bleed."],

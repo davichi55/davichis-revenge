@@ -251,7 +251,7 @@
   S.trigger.gateS10 = async F => {
     if (F.f("ch7.s10")) return;
     F.music("tension");
-    const ok = await M.general(F, 10, { level: 39, soldiers: [["palaceGuard", 38, " B"], ["palaceGuard", 38, " C"]], bg: "palace", title: "The Gate Warden", place: "the inner gate of the Palace Court", where: "It ran for the lowest gate, and the lowest gate let it through.", fx: 130, fy: -6,
+    const ok = await M.general(F, 10, { level: 39, soldiers: [["palaceGuard", 38, " B"], ["maskedExecutioner", 40, " C"]], bg: "palace", title: "The Gate Warden", place: "the inner gate of the Palace Court", where: "It ran for the lowest gate, and the lowest gate let it through.", fx: 130, fy: -6,
       setup: async c => {
         const h = c.hero; c.tint("#2a1a08", 0.25, 400);
         M3.actors(c, [["gd", "npcGuard", 150, -40, { name: "Gate-guard", flip: true }]]);
@@ -299,7 +299,7 @@
   S.trigger.gardenS11 = async F => {
     if (F.f("ch7.s11")) return;
     F.music("tension");
-    const ok = await M.general(F, 11, { level: 41, soldiers: [["courtPriest", 39, " B"]], bg: "palaceGarden", title: "The Garden Keeper", place: "the sun-dial in the Palace Garden", where: "It went up through the glass roof, and every caged bird sang.", fx: 140, fy: -4,
+    const ok = await M.general(F, 11, { level: 41, soldiers: [["wardStoneAbjurer", 40, " B"]], bg: "palaceGarden", title: "The Garden Keeper", place: "the sun-dial in the Palace Garden", where: "It went up through the glass roof, and every caged bird sang.", fx: 140, fy: -4,
       setup: async c => {
         const h = c.hero; c.tint("#14260e", 0.22, 400);
         M3.actors(c, [["gd", "npcPriest", 170, -30, { name: "Court Priest", flip: true }]]);

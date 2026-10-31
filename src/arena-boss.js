@@ -5,7 +5,7 @@
 //   u.collar            a general's harvesting collar: a glowing gold ring at the neck; cracks when the general is broken, shatters when it falls
 //   u.coverBy / parts   the body of a multi-part boss wears a shield bubble while a part of it stands (foe.partOf === body.id)
 //   u.hidden            burrowed / submerged: the model sinks, roots and a dirt ring come up        u.airborne  hovers high above the ground (shadow shrinks)
-//   u.held | u.heldBy   a pinned creature is greyed and wrapped in thorns                           u.marked | u.mark  a red mark floats over its head
+//   u.held | u.heldBy   a pinned creature is greyed and wrapped in thorns                           u.marked | u.mark  a red mark floats over its head (also the hero an Executioner has marked; a unit with u.barrier wears the shield bubble while its barrier stands)
 //   u.growN / arenaFx "heat"  a heat glow that grows with the stacks                                 arenaFx "storm" or ctx.storm  lightning storm; a charging boss (ctx.telegraph) crackles
 //   arenaFx "sunEater"  corona behind the boss, the sky darkens with every phase                  ctx.flood  flooded floor
 //   events: phase (shockwave ring, sky level), broken (collar cracks), ko (collar shatters), summon (rise animation is done in arena3d), steal / mark / pull / held (small floating word)
@@ -49,8 +49,8 @@
       const l = new T.PointLight(0xff8a30, 0.9, 7, 2); l.position.copy(ring.position); l.position.z += 0.8; v.group.add(l);
       fx.collar = { ring, glow, l, w, cracked: false, gone: false };
     }
-    if (u.coverBy || (E.units().some(o => o.partOf && o.partOf === u.id))) {   // multi-part body: a shield bubble while a part stands
-      const m = new T.Mesh(new T.SphereGeometry(1, 20, 14), new T.MeshBasicMaterial({ color: elColor(u), transparent: true, opacity: 0, side: T.DoubleSide, depthWrite: false, blending: T.AdditiveBlending, fog: false }));
+    if (u.coverBy || u.barrier || (E.units().some(o => o.partOf && o.partOf === u.id))) {   // multi-part body: a shield bubble while a part stands; a unit with a barrier (rules: boss traits) wears it while the barrier stands
+      const m = new T.Mesh(new T.SphereGeometry(1, 20, 14), new T.MeshBasicMaterial({ color: u.barrier ? 0x9fd8ff : elColor(u), transparent: true, opacity: 0, side: T.DoubleSide, depthWrite: false, blending: T.AdditiveBlending, fog: false }));
       m.position.y = b.h * 0.5; m.scale.set(Math.max(1.2, b.w * 0.62), b.h * 0.56, Math.max(1, b.d * 0.7)); v.group.add(m); fx.shield = { m, k: 0 };
     }
     if (u.arenaFx === "heat" || u.grow) { const g = spriteOf(softT(), elColor(u), b.h * 1.6, b.h * 1.6, { add: true, opacity: 0.0 }); g.position.y = b.h * 0.5; g.position.z = -0.5; v.group.add(g); const l = new T.PointLight(elColor(u), 0, 9, 2); l.position.y = b.h * 0.6; l.position.z = 1; v.group.add(l); fx.heat = { g, l, k: 0 }; }
@@ -70,7 +70,7 @@
       if (!broken && col.cracked) { col.cracked = false; col.ring.material.map = collarT(false); col.ring.material.needsUpdate = true; }
       col.glow.position.copy(col.ring.position);
     }
-    if (fx.shield) { const parts = E.units().some(o => o.alive && o.partOf && o.partOf === u.id) || (u.coverBy && E.units().some(o => o.alive && o.id === u.coverBy)), s = fx.shield; s.k += ((parts && u.alive ? 1 : 0) - s.k) * Math.min(1, dt * 3); s.m.material.opacity = s.k * (0.2 + Math.sin(tt * 2.3) * 0.06); s.m.visible = s.k > 0.02; s.m.rotation.y = tt * 0.4; }
+    if (fx.shield) { const parts = E.units().some(o => o.alive && o.partOf && o.partOf === u.id) || (u.coverBy && E.units().some(o => o.alive && o.id === u.coverBy)) || !!(u.barrier && u.buffs && u.buffs.some(b => b.barrier)), s = fx.shield; s.k += ((parts && u.alive ? 1 : 0) - s.k) * Math.min(1, dt * 3); s.m.material.opacity = s.k * (0.2 + Math.sin(tt * 2.3) * 0.06); s.m.visible = s.k > 0.02; s.m.rotation.y = tt * 0.4; }
     if (fx.heat) { const mx = (u.grow && u.grow[2]) || 6, k = clamp((u.growN || 0) / mx, 0, 1) * 0.8 + (u.arenaFx === "heat" ? 0.2 : 0); fx.heat.k += (k - fx.heat.k) * Math.min(1, dt * 2); const f = fx.heat.k; fx.heat.g.material.opacity = f * (0.45 + Math.sin(tt * 7) * 0.1); fx.heat.g.scale.setScalar(b.h * (1.3 + f * 1.0)); fx.heat.l.intensity = f * 1.8; }
     if (fx.corona) { const ph = (u.phaseNo || 1) - 1; fx.corona.c.material.rotation = tt * 0.15; fx.corona.c.material.color.setHex([0xffd060, 0xff9a30, 0xff5a20, 0xff2a10, 0xff1008][Math.min(4, ph)]); fx.corona.c.scale.setScalar(b.h * (2.6 + 0.5 * Math.sin(tt * 1.4) + ph * 0.25)); }
     if (fx.arcs) {
@@ -113,7 +113,7 @@
     if (held && !fx.thorns) { fx.thorns = thornsFor(u); v.group.add(fx.thorns); tintUnit(u, true); }
     if (!held && fx.thorns) { v.group.remove(fx.thorns); fx.thorns = null; tintUnit(u, false); }
     if (fx.thorns) fx.thorns.rotation.y = Math.sin(tt * 1.1) * 0.08;
-    const marked = (!!(u.marked || u.mark) && u.alive) || (fx.markUntil && performance.now() / 1000 < fx.markUntil);
+    const marked = (!!(u.marked || u.mark || (u.buffs && u.buffs.some(b => b.type === "execMark"))) && u.alive) || (fx.markUntil && performance.now() / 1000 < fx.markUntil);
     if (marked && !fx.mark) { fx.mark = spriteOf(markT(), 0xffffff, 1.1, 1.1, { depthTest: false, opacity: 0.95 }); fx.mark.renderOrder = 9; v.group.add(fx.mark); }
     if (!marked && fx.mark) { v.group.remove(fx.mark); fx.mark = null; }
     if (fx.mark) { fx.mark.position.set(0, b.h + 0.9 + Math.sin(tt * 4) * 0.08 + (v.model.position.y > 0 ? v.model.position.y : 0), 0); fx.mark.material.rotation = tt * 1.4; }

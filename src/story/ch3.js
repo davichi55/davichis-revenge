@@ -734,7 +734,7 @@
     F.music("fort");
     await F.banter("fort");
     await Cinema.boss({ id: "fortCenturion", name: "Centurion Varro Toric", title: "Fort Ocelan", bg: "fort", music: "general", lines: [["centurion", "Orders are orders. They were here before me."], ["centurion", "The tribune will ask how you passed the wall."], ["hero", "Through the front."], ["centurion", "Of course you did."]] });
-    const res = await F.boss([F.mkEnemy("fortCenturion", 13), F.mkEnemy("legionShieldbearer", 12, " B"), F.mkEnemy("legionShieldbearer", 12, " C")], { bg: "fort", music: "guardian", intro: "The shield wall closes!" });
+    const res = await F.boss([F.mkEnemy("fortCenturion", 13), F.mkEnemy("legionShieldbearer", 12, " B"), F.mkEnemy("aquilaBearer", 14, " C")], { bg: "fort", music: "guardian", intro: "The shield wall closes!" });
     if (res !== "win") return;
     await M.stage(async c => {
       const h = c.hero; c.actor("cen", { art: "npcCenturion", x: h.x + 90, y: h.y, name: "Varro Toric", flip: true });

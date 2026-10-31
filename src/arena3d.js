@@ -44,7 +44,9 @@
   const CHIP = { burn: ["\u{1F525}", "#ff8a3a", "Burn"], bleed: ["\u{1FA78}", "#e04a4a", "Bleed"], poison: ["☠", "#9be06a", "Poison"], shock: ["⚡", "#ffe45c", "Shock"], chill: ["❄", "#9fd8ff", "Chill"],
     freeze: ["\u{1F9CA}", "#7fe3ff", "Freeze"], wet: ["\u{1F4A7}", "#6fb7ff", "Wet"], slow: ["\u{1F40C}", "#c9b28a", "Slow"], stun: ["\u{1F4AB}", "#ffd23f", "Stun"], steam: ["♨", "#d6d6d6", "Steam"], petrify: ["\u{1F5FF}", "#b0a090", "Petrify"] };
   const STAT_LABEL = { atk: "ATK", def: "DEF", pow: "POW", res: "RES", spd: "SPD", foc: "FOC", lck: "LCK", dr: "GUARD", shield: "SHIELD", taunt: "TAUNT", hot: "REGEN", sres: "STATUS-RES", vuln: "EXPOSED", wrathStore: "WRATH", swell: "SWELL",
-    counter: "COUNTER", cover: "COVERED", hounds: "HOUNDS", decoy: "DECOY", antlers: "ANTLERS", dust: "DUST", braceDeep: "BRACE", tithe: "TITHE", redHot: "RED-HOT", stunImmune: "UNSTUNNABLE", mp: "MP", endure: "ENDURE" };
+    counter: "COUNTER", cover: "COVERED", hounds: "HOUNDS", decoy: "DECOY", antlers: "ANTLERS", dust: "DUST", braceDeep: "BRACE", tithe: "TITHE", redHot: "RED-HOT", stunImmune: "UNSTUNNABLE", mp: "MP", endure: "ENDURE", banner: "BANNER", wall: "WALL", execMark: "EXECUTION", braced: "BRACED" };
+  // boss-trait chips (Banner, Shield wall, Execution mark, Braced, Barrier): an icon and a colour in front of the label, same chip box as the statuses
+  const TRAIT_CHIP = { banner: ["🚩", "#ffd27a"], wall: ["🧱", "#b8c8d8"], execMark: ["🎯", "#ff6a5a"], braced: ["🛡", "#8fd0ff"], barrier: ["🔮", "#9fd8ff"] };
   const GROUPS = [["damage", "Attacks"], ["support", "Support"], ["control", "Control"], ["personal", "Personal"], ["skill", "Skill book (off-style slot)"]];
 
   let ready = null, renderer, scene, camera, world, dust, torchLights = [], units = [], ctx = null, active = false, speedF = () => 1, freezeT = 0, shake = 0, shakeLast = 0, shakePeak = 0, shakeT = 0, shakeDur = 0.2, introT = 0, marker = null, manifest = {}, manifestTried = false;
@@ -293,7 +295,9 @@
   function chipsFor(u) {
     return Core.statusList(u).map(s => {
       if (s.buff) {
-        const label = STAT_LABEL[s.type] || (s.type.startsWith("ward_") ? "WARD" : s.type.toUpperCase());
+        const label = s.barrier ? "BARRIER" : STAT_LABEL[s.type] || (s.type.startsWith("ward_") ? "WARD" : s.type.toUpperCase());
+        const tc = TRAIT_CHIP[s.barrier ? "barrier" : s.type];
+        if (tc) return `<span style="color:${tc[1]}" title="${label}">${tc[0]} ${label}${s.barrier && s.val ? " " + s.val : ""}${s.turns ? `<em>${s.turns}</em>` : ""}</span>`;
         const arrow = s.val === undefined ? "" : s.val >= 0 ? "▲" : "▼";
         const bad = s.val !== undefined && s.val < 0;
         return `<span style="color:${bad ? "#ff9a8a" : "#a8e0a0"}" title="${label}">${label}${arrow}${s.turns ? `<em>${s.turns}</em>` : ""}</span>`;
@@ -305,6 +309,7 @@
   }
   function hud(activeU) {
     const phaseNote = e => (e.phases && (e.phases.length || e.phaseNo > 1) ? ` · phase ${e.phaseNo}/${e.phaseNo + e.phases.length}` : "");
+    ctx.foes.forEach(f => { if (f.alive) { if (f.echo) seenFx("echo"); if (f.banner) seenFx("banner"); if (f.hoplite) seenFx("wall"); if (f.brace) seenFx("braced"); if (f.barrier) seenFx("barrier"); if (f.exec) seenFx("executioner"); } });   // journal Effects: boss traits seen on the foe panel
     $(".foes").innerHTML = ctx.foes.map(e => `<div class="foe${e.alive || shownHp(e) > 0 ? "" : " down"}">${e.name}${e.boss ? ` · Lv ${e.level}${phaseNote(e)}` : ""}
       <div class="bar"><i style="width:${100 * shownHp(e) / e.maxHp}%;background:#d94a3a"></i></div>${e.alive ? foeTags(e) : ""}<div class="chips">${e.alive ? chipsFor(e) : ""}</div>
       ${e.breakType && e.alive ? `<div class="brk${e.broken ? " on" : ""}">${e.broken ? "BROKEN! +50% damage" : "Break " + "◆".repeat(e.breakPts) + "◇".repeat(Math.max(0, (e.breakNeed || 1) - e.breakPts))}</div>` : ""}</div>`).join("");
@@ -463,7 +468,8 @@
     else if (e.t === "phase") { sfx("telegraph"); flash("#ff3b2a", 500); shake = 0.35; banner("PHASE " + (e.tgt.phaseNo || ""), "#ff6b57"); log(e.text); hud(); await wait(1700); }
     else if (e.t === "ko") { hitStop(150); if (e.tgt.side === "p") coachSay(pick([e.tgt.name + "! Get up!", "Hold on, " + e.tgt.name + "!"]), "idle"); sfx("ko"); if (FX()) FX().ko(e.tgt); if (e.tgt.view) e.tgt.view.alive = 0; log(`${e.tgt.name} falls!`); hud(); await wait(500); }
     else if (e.t === "revive") { if (FX()) FX().revive(e.tgt); sfx("heal"); if (e.tgt.view) e.tgt.view.alive = 1; tint(e.tgt, 0xffe080, 300); log(e.text || `${e.tgt.name} is back on its feet!`); hud(); await wait(500); }
-    else if (e.t === "telegraph") { seenFx("telegraph"); sfx("telegraph"); coachSay(pick(["Brace yourselves!", "Something big is coming!", "Guard up, all of you!"]), "idle"); $(".warn").textContent = "⚠ " + e.text; log(e.text); await wait(1000); }
+    else if (e.t === "telegraph") { seenFx("telegraph"); if (e.exec) seenFx("executioner"); sfx("telegraph"); coachSay(e.exec && e.tgt ? pick([e.tgt.name + " is marked!", "It wants " + e.tgt.name + "!", "Taunt it, or guard " + e.tgt.name + "!"]) : pick(["Brace yourselves!", "Something big is coming!", "Guard up, all of you!"]), "idle"); $(".warn").textContent = "⚠ " + e.text; if (e.exec && e.tgt) { float(e.tgt, "MARKED", "#ff5a4a"); banner("EXECUTION", "#ff5a4a"); } log(e.text); await wait(1000); }
+    else if (e.t === "trait") { seenFx({ echo: "echo", banner: "banner", wall: "wall", braced: "braced", barrier: "barrier" }[e.kind]); sfx(e.kind === "echo" ? "spell" : e.down ? "break" : e.kind === "braced" ? "hitHeavy" : "buff"); if (e.label) banner(e.label, e.color); if (e.tgt && e.kind === "braced") float(e.tgt, "Recoil", "#ff9a8a"); log(e.text || e.label); hud(); await wait(e.kind === "echo" ? 520 : 650); }
   }
 
   // ---------- command menu (keyboard: arrows + Enter, Esc = back, 1-9 = pick; or click) ----------
@@ -504,6 +510,7 @@
   function foeTags(f) {
     const w = Object.entries(f.rs || {}).filter(([k, v]) => v <= -0.25).map(([k]) => k), r = Object.entries(f.rs || {}).filter(([k, v]) => v >= 0.4).map(([k]) => k);
     const t = [w.length ? `<span class="w">Weak: ${w.join(", ")}</span>` : "", r.length ? `<span class="r">Resists: ${r.join(", ")}</span>` : "", f.pr ? `<span class="r">Resists physical</span>` : "", f.reflect ? `<span class="r">Reflects ${f.reflect.join("/")}</span>` : "", f.swarm ? `<span class="w">Swarm: area hits</span>` : "", f.breakType ? `<span class="b">Break: ${f.breakType}</span>` : "", f.immune && f.immune.length ? `<span class="r">Immune: ${f.immune.join(", ")}</span>` : ""].filter(Boolean);
+    (Core.foeNotes ? Core.foeNotes(f, ctx) : []).forEach(n => t.push(`<span class="b">${n}</span>`));   // boss traits: Echo memory, Executioner mark, banner, wall, braced, barrier
     return t.length ? `<div class="tags">${t.join("")}</div>` : "";
   }
   async function pickTarget(kind, u) {
@@ -525,6 +532,7 @@
     if (m.p) bits.push(`Power ${Math.round(m.p * 100)}%${m.hits > 1 ? " x" + m.hits : ""}`);
     if (id === "maelstrom" || id === "tidalWave") bits.push(`Tide now ${u.tide}: x${(1 + 0.8 * u.tide).toFixed(1)}`);
     if (m.el && m.el !== "self") bits.push(m.el);
+    if (m.charge) bits.push("charge");
     if (m.bk && m.bk.length) bits.push("break: " + m.bk.join("/"));
     if (m.skill) bits.push("off-style: no role bonuses");
     return bits.length ? " [" + bits.join(", ") + "]" : "";

@@ -1942,5 +1942,77 @@
  "bakuroth__dreadEater": {
   "w": 147,
   "h": 106
+ },
+ "scytheLegionary": {
+  "w": 88,
+  "h": 112
+ },
+ "katanaLegionary": {
+  "w": 97,
+  "h": 112
+ },
+ "chainSickleSkirmisher": {
+  "w": 91,
+  "h": 106
+ },
+ "warFanDancer": {
+  "w": 69,
+  "h": 106
+ },
+ "gateHalberdier": {
+  "w": 57,
+  "h": 118
+ },
+ "bucklerFlailer": {
+  "w": 75,
+  "h": 106
+ },
+ "brassArmSapper": {
+  "w": 71,
+  "h": 112
+ },
+ "bellowsFlamer": {
+  "w": 86,
+  "h": 112
+ },
+ "drumCarrier": {
+  "w": 80,
+  "h": 123
+ },
+ "aquilaBearer": {
+  "w": 94,
+  "h": 132
+ },
+ "phalanxHoplite": {
+  "w": 98,
+  "h": 118
+ },
+ "maskedExecutioner": {
+  "w": 119,
+  "h": 132
+ },
+ "wardStoneAbjurer": {
+  "w": 69,
+  "h": 123
+ },
+ "harpoonMarine": {
+  "w": 112,
+  "h": 112
+ },
+ "repeaterCrossbowman": {
+  "w": 84,
+  "h": 106
+ },
+ "clockworkWarHound": {
+  "w": 99,
+  "h": 95
+ },
+ "scarecrowReaver": {
+  "w": 72,
+  "h": 123
+ },
+ "tuskedWarBoar": {
+  "w": 170,
+  "h": 112
  }
 }

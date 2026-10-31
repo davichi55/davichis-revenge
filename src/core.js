@@ -23,7 +23,7 @@
   // CONDS[name] = (ctx,e,arg) => bool, used as `if: "name:arg"` in an ability; EFFECTS[name] = (ctx,e,ability,target,targets,big) => void, used as `fx: "name"` in an ability.
   const HOOKS = {}, CONDS = {}, EFFECTS = {};
   const EVO = {};   // evolution traits (src/evolution.js fills this in; every call site below is guarded by `unit.evo`)
-  const hookRun = (u, ev, ...args) => { let out; if (u && u.hooks) for (const h of u.hooks) { const H = HOOKS[h]; if (H && H[ev]) { const r = H[ev](...args); if (r !== undefined) out = r; } } return out; };
+  const hookRun = (u, ev, ...args) => { let out; if (u && u.hooks) for (const h of u.hooks) { const H = HOOKS[h]; if (H && H[ev]) { const r = H[ev](...args); if (r !== undefined) out = (ev === "inMult" || ev === "outMult") && typeof r === "number" && typeof out === "number" ? out * r : r; } } return out; };   // several hooks on one unit: damage multipliers multiply
   const MAX_LEVEL = 99;
 
   // exact-total stat spread: every stat starts at 3, the rest is shared by weight (largest remainder), so every creature has the same total
@@ -121,13 +121,13 @@
   // --- Minotaur ---
   mv("gore", "Gore", 1, 0, "enemy", { basic: 1, grp: "basic", p: 1.0, el: "self", desc: "Horn strike. +1 MP." });
   mv("hoofStomp", "Hoof Stomp", 1, 1, "enemy", { p: 1.35, desc: "Quick, cheap hit." });
-  mv("labCharge", "Labyrinth Charge", 4, 2, "enemy", { p: 2.0, bk: ["impact"], desc: "Heavy charge. Counts toward impact breaks." });
-  mv("bullRush", "Bull Rush", 6, 2, "enemy", { p: 1.4, fx: "bullRush", desc: "If the enemy has not acted yet this round, pushes its turn to the end of the round." });
+  mv("labCharge", "Labyrinth Charge", 4, 2, "enemy", { p: 2.0, bk: ["impact"], charge: 1, desc: "Heavy charge. Counts toward impact breaks." });
+  mv("bullRush", "Bull Rush", 6, 2, "enemy", { p: 1.4, fx: "bullRush", charge: 1, desc: "If the enemy has not acted yet this round, pushes its turn to the end of the round." });
   mv("roar", "Labyrinth Roar", 8, 1, "self", { grp: "support", fx: "roar", desc: "Draws the enemy's next single-target attacks onto itself." });
   mv("skullCrush", "Skull Crusher", 12, 3, "enemy", { p: 2.8, bk: ["impact"], db: [["def", -0.2, 3]], desc: "Massive blow, lowers enemy Defense. Counts toward impact breaks." });
   mv("bloodrage", "Bloodrage", 16, 2, "self", { grp: "support", fx: "bloodrage", desc: "+30% Attack, -30% Defense for 2 turns." });
   mv("reckless", "Reckless Blow", 20, 0, "enemy", { p: 3.0, hpCost: 0.15, desc: "Huge hit that costs 15% of its own max HP." });
-  mv("stampede", "Stampede", 24, 3, "allEnemies", { p: 1.6, bk: ["impact"], desc: "Hits all enemies. Counts toward impact breaks." });
+  mv("stampede", "Stampede", 24, 3, "allEnemies", { p: 1.6, bk: ["impact"], charge: 1, desc: "Hits all enemies. Counts toward impact breaks." });
   mv("wrath", "Wrath", 28, 2, "self", { grp: "support", fx: "wrath", desc: "Stores the damage it takes and adds it to its next hit." });
   // --- Harpy ---
   mv("talonSwipe", "Talon Swipe", 1, 0, "enemy", { basic: 1, grp: "basic", p: 0.9, el: "self", desc: "Quick slash. +1 MP." });
@@ -238,7 +238,7 @@
 
   // --- personal moves (PERSONAL_MOVES.md): one per creature; "own" = the creature id ---
   function pm(id, own, name, lvl, mp, target, o) { const m = mv(id, name, lvl, mp, target, Object.assign({ grp: "personal", own, personal: 1 }, o)); return m; }
-  pm("twoHeads", "horncinder", "Two Heads, One Charge", 12, 2, "enemy", { p: 2.0, bk: ["impact"], fx: "twoHeads", choices: [["bull", "Bull head (impact)"], ["goat", "Goat head (bleed)"]], desc: "Bull: a normal impact hit. Goat: 60% damage plus 1 bleed, no break." });
+  pm("twoHeads", "horncinder", "Two Heads, One Charge", 12, 2, "enemy", { p: 2.0, bk: ["impact"], fx: "twoHeads", charge: 1, choices: [["bull", "Bull head (impact)"], ["goat", "Goat head (bleed)"]], desc: "Bull: a normal impact hit. Goat: 60% damage plus 1 bleed, no break." });
   pm("erodingRune", "shellmund", "Eroding Rune", 22, 2, "self", { grp: "personal", fx: "erodingRune", desc: "For 2 turns every hit it takes adds a rune (max 4); then the runes burst on all enemies." });
   pm("nineTails", "kitsuneva", "Nine Tails Blessing", 26, 3, "self", { fx: "nineTails", desc: "Nine small heals over 3 turns, each to whoever is lowest at that moment." });
   pm("grudgeBite", "skarnwolf", "Grudge Bite", 16, 2, "enemy", { p: 1.5, fx: "grudgeBite", desc: "Bites and marks. Each time the marked enemy hits it, it deals +10% to that enemy (max 4)." });
@@ -277,7 +277,7 @@
 
   // --- skill-book moves (shared, one equipped off-style slot; unlocked by gathering 10 of a material) ---
   function sk(id, name, mp, target, o) { return mv(id, name, 0, mp, target, Object.assign({ grp: "skill", skill: 1 }, o)); }
-  sk("ramStrike", "Ram Strike", 2, "enemy", { kind: "best", p: 1.5, bk: ["impact"], desc: "Impact blow. Counts toward impact breaks." });
+  sk("ramStrike", "Ram Strike", 2, "enemy", { kind: "best", p: 1.5, bk: ["impact"], charge: 1, desc: "Impact blow. Counts toward impact breaks." });
   sk("dampenWing", "Dampen Wing", 2, "enemy", { kind: "spell", p: 0.4, db: [["spd", -0.3, 2]], bk: ["slow"], desc: "Slows the enemy for 2 turns. Counts toward slow breaks." });
   sk("coldSnap", "Cold Snap", 2, "enemy", { kind: "spell", p: 0.9, el: "ice", st: [["chill", 2]], desc: "Ice, adds chill." });
   sk("douse", "Douse", 2, "enemy", { kind: "spell", p: 0.7, el: "water", st: [["wet", 1]], desc: "Water, makes the target wet." });
@@ -676,7 +676,7 @@
     const need = tgt.breakNeed || 1;
     tgt.breakPts = ctx.round - tgt.breakHitRound <= 1 ? tgt.breakPts + 1 : 1; tgt.breakHitRound = ctx.round;
     ctx.ev.push({ t: "breakPt", tgt, pts: tgt.breakPts, need });
-    if (tgt.breakPts >= need) { tgt.broken = 2; tgt.breakPts = 0; ctx.ev.push({ t: "broken", tgt }); if (tgt.hooks) hookRun(tgt, "broken", ctx, tgt); }
+    if (tgt.breakPts >= need) { tgt.broken = 2; tgt.breakPts = 0; ctx.ev.push({ t: "broken", tgt }); if (tgt.hooks) hookRun(tgt, "broken", ctx, tgt); if (tgt.charging && tgt.charging.exec) { tgt.charging = null; dropExec(ctx, tgt); ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null; say(ctx, tgt.name + "'s execution is broken off!"); } }
   }
   function damage(ctx, src, tgt, base, kind, tg = {}) {
     if (!tgt.alive) return 0;
@@ -711,7 +711,11 @@
     if (tgt.broken) v *= 1.5 + (src.passive === "rampage" && passives ? 0.25 : 0);
     else if (tgt.frontShield && !(tgt.shieldDown > 0)) v *= 1 - tgt.frontShield;
     if (tgt.coverBy && ctx.foes.some(f => f.alive && f !== tgt && f.id === tgt.coverBy)) { v *= 0.6; notes.push("COVERED"); }
-    v *= 1 - Math.min(0.6, Math.max(0, buffVal(tgt, "dr")));
+    v *= tg.exec ? 1 - Math.min(TRAIT.exec.maxDr, Math.max(0, buffVal(tgt, "dr") * TRAIT.exec.guardMult)) : 1 - Math.min(0.6, Math.max(0, buffVal(tgt, "dr")));   // an execution: Guard counts double (at most 80% less)
+    if (tg.exec && tgt.hp / tgt.maxHp >= TRAIT.exec.soft) v *= TRAIT.exec.softMult;   // ... and a target at half HP or more takes 35% less
+    if (tgt.side === "e") { if (tgt.wallFrom) v *= 1 - tgt.wallFrom; if (tgt.bannerFrom) v *= 1 - tgt.bannerFrom.dr; }   // boss traits: shield wall, banner aura
+    if (src.side === "e" && src.bannerFrom) v *= 1 + src.bannerFrom.dmg;
+    const braced = tgt.side === "e" && src.side === "p" && ctx.mv && ctx.mv.charge && ctx.mv.user === src && hasBuff(tgt, "braced"); if (braced) v *= 1 - TRAIT.brace.cut;   // Braced Stance: charges deal less
     v *= 1 + buffVal(tgt, "vuln") + buffVal(tgt, "marked");
     if (tgt.hooks) { const hm = hookRun(tgt, "inMult", ctx, tgt, src, { kind, el, tg, v }); if (typeof hm === "number") v *= hm; }      // boss rules: damage taken (roots, airborne, front guards...)
     if (src.hooks) { const hm = hookRun(src, "outMult", ctx, src, tgt, { kind, el, tg, v }); if (typeof hm === "number") v *= hm; }     // boss rules: damage dealt
@@ -722,10 +726,11 @@
     if (tgt.notes > 0 && src.side === "p" && src !== tgt.notesBy) { v *= 1.15; tgt.notes--; }
     if (tgt.terrorOn && tg.strongHit) v *= 0.8;
     // reactions with the element/physical hit
+    let shat = false;   // a Shatter reaction on this hit (it breaks a boss barrier outright)
     if (!tg.noReact) {
       const combo = src.passive === "comboMaster" && passives ? comboMult(src) : 1;
       if (el === "shock" && tgt.st.wet) { v *= (2 + (src.fx ? fxv(src, "wetConductor", 0.5, 0.25) : 0)) * combo; removeStatus(tgt, "wet"); reaction(ctx, tgt, "Conductive", "Wet + shock: double damage!"); if (chance(0.3)) addStatus(ctx, src, tgt, "stun", 1, { chance: 1, off: !passives }) ; }
-      else if (kind === "phys" && tg.strong && (tgt.st.chill || tgt.st.freeze)) { v *= 1.6 * combo; removeStatus(tgt, "chill"); removeStatus(tgt, "freeze"); reaction(ctx, tgt, "Shatter", "Chill + a heavy blow: Shatter!"); }
+      else if (kind === "phys" && tg.strong && (tgt.st.chill || tgt.st.freeze)) { v *= 1.6 * combo; removeStatus(tgt, "chill"); removeStatus(tgt, "freeze"); reaction(ctx, tgt, "Shatter", "Chill + a heavy blow: Shatter!"); shat = true; }
     }
     if (tg.bonus) v += tg.bonus * gm * fv;
     v = Math.max(1, Math.round(v));
@@ -741,11 +746,14 @@
     if (dc && src.side !== tgt.side) { v = Math.max(1, Math.round(v * 0.5)); tgt.buffs = tgt.buffs.filter(b => b !== dc); const pe = tgt.lastEl; const map = { fire: "burn", water: "wet", ice: "chill", shock: "shock" }; if (pe && map[pe] && src.alive) addStatus(ctx, tgt, src, map[pe], 1, { sure: 1 }); }
     let absorbed = 0;
     const sh = getBuff(tgt, "shield");
-    let shieldGone = null;
-    if (sh) { absorbed = Math.min(sh.val, v); sh.val -= absorbed; v -= absorbed; if (sh.val <= 0) { tgt.buffs = tgt.buffs.filter(b => b !== sh); shieldGone = sh; } }
+    let shieldGone = null, brk = 0;   // brk: a boss barrier broke on this hit (1 = used up, 2 = smashed by a Shatter)
+    if (sh && sh.barrier && shat) { tgt.buffs = tgt.buffs.filter(b => b !== sh); shieldGone = sh; brk = 2; }   // Shatter: the barrier breaks outright and the hit lands on HP
+    else if (sh) { absorbed = Math.min(sh.val, v); sh.val -= absorbed; v -= absorbed; if (sh.val <= 0) { tgt.buffs = tgt.buffs.filter(b => b !== sh); shieldGone = sh; if (sh.barrier) brk = 1; } }
     let held = false; if (v >= tgt.hp && tgt.hp > 1 && hasBuff(tgt, "endure")) { v = tgt.hp - 1; held = true; tgt.buffs = tgt.buffs.filter(b => b.type !== "endure"); }   // Unbowed: one blow cannot defeat it
     tgt.hp = Math.max(0, tgt.hp - v);
     ev.push({ t: "dmg", src, tgt, v, crit, absorbed, el, kind, note: notes.filter(Boolean).join(" "), hpAfter: tgt.hp });
+    if (brk) barrierDown(ctx, tgt, brk === 2);
+    if (braced && src.alive && v > 0) { directHit(ctx, tgt, src, v * TRAIT.brace.back, "BRACED"); ctx.ev.push({ t: "trait", kind: "braced", src: tgt, tgt: src, label: "BRACED", color: "#8fd0ff", text: tgt.name + " takes the charge on its guard." }); }
     tgt.lastHit = v + absorbed;
     if (held) say(ctx, tgt.name + " holds on!");
     const th = getBuff(tgt, "thorns"); if (th && src.side !== tgt.side && src.alive && !tg.aoe && !tg.refl && !tg.counterHit && v > 0) directHit(ctx, tgt, src, v * th.val, "THORNS");   // Thornwall
@@ -780,17 +788,19 @@
       const p = u.phases.shift();
       Object.assign(u, p); u.maxHp = maxHpOf(u.stats, u.level, u.hpMult); u.hp = u.maxHp;
       u.broken = 0; u.breakPts = 0; u.buffs = []; u.st = {}; u.charging = null; u.phaseNo = (u.phaseNo || 1) + 1; u.ctrlCount = 0; u.shieldDown = 0; u.growN = 0; u.loseAct = 0;
-      ctx.telegraph = null; ctx.ev.push({ t: "phase", tgt: u, text: p.text });
+      dropExec(ctx, u); ctx.telegraph = null; ctx.ev.push({ t: "phase", tgt: u, text: p.text });
       if (u.hooks) hookRun(u, "phase", ctx, u);
+      traitStart(ctx, u);
       return;
     }
     if (u.side === "e" && u.passive === "ashes" && !u.ashesUsed && !u.broken) {   // an enemy Phoenix rises at once (a Phoenix that is broken cannot)
-      u.ashesUsed = true; u.hp = Math.max(1, Math.round(u.maxHp * (u.riseFrac || 0.25))); u.st = {}; u.buffs = []; u.charging = null; u.broken = 0; u.breakPts = 0;
+      u.ashesUsed = true; u.hp = Math.max(1, Math.round(u.maxHp * (u.riseFrac || 0.25))); u.st = {}; u.buffs = []; dropExec(ctx, u); u.charging = null; u.broken = 0; u.breakPts = 0; if (u.barrier) { u.barrierUp = false; barrierRaise(ctx, u); }
       ctx.ev.push({ t: "revive", tgt: u, text: u.name + " rises from the ashes!" }); ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null; return;
     }
     if (u.fx && u.tide) u.keepTide = Math.floor(u.tide * fxv(u, "salvage", 0.5, 0.25));   // gear: Salvage the Deep
-    u.hp = 0; u.alive = false; u.buffs = []; u.st = {}; u.tide = 0; u.charging = null; u.runes = null; u.held = null;
+    u.hp = 0; u.alive = false; u.buffs = []; u.st = {}; u.tide = 0; dropExec(ctx, u); u.charging = null; u.runes = null; u.held = null;
     ctx.ev.push({ t: "ko", tgt: u });
+    if (u.side === "e") traitDeath(ctx, u);   // boss traits: banner and shield wall end, a pending execution is called off
     if (u.passive === "ashes" && !u.ashesUsed && !(u.side === "e" && u.broken)) { u.ashesUsed = true; u.rise = true; }
     if (u.side === "p") ctx.party.forEach(a => { if (a.sun && a.sun.owner === u) a.sun = null; });
     if (u.side === "p") ctx.party.forEach(a => { if (a.evo && a !== u && a.alive) EVO.allyDown(ctx, a, u); });   // evolution trait: vengeance
@@ -937,8 +947,10 @@
     const tgts = targetsOf(ctx, u, m, target);
     const pre = u.fx ? gearPre(ctx, u, m, target, el) : null;   // gear: bonuses that last for this one move
     if (m.basic && u.style === "leviathan") { /* Tide comes from m.tide in genericAttack */ }
-    if (m.fx && FX[m.fx]) FX[m.fx](ctx, u, m, target, tgts, opt); else genericAttack(ctx, u, m, tgts);
+    ctx.mv = { user: u, charge: !!m.charge || !!u.diveReady };   // boss traits: a charge (or any strike made while diving) is weak against a Braced foe
+    try { if (m.fx && FX[m.fx]) FX[m.fx](ctx, u, m, target, tgts, opt); else genericAttack(ctx, u, m, tgts); } finally { ctx.mv = null; }
     if (pre) gearPost(ctx, u, m, moveId, el, pre);
+    if (u.side === "p" && ctx.foes.some(f => f.echo && f.alive)) traitMove(ctx, u, m);   // boss traits: Echo remembers this move
     if (u.gallop && moveId !== "staticGallop") { if (el === "shock" && m.mp) u.gallop.n = Math.min(4, u.gallop.n + 1); else if (m.mp) u.gallop = null; }
     if (m.kind !== "phys" && el && m.mp) u.lastEl = el;
     u.opening = 0; u.spellBonus = 0;
@@ -986,7 +998,7 @@
     purge(c, u, m, t, ts) { ts.forEach(a => cleanse(c, a, 0, u)); say(c, "A clean flame washes over the team."); },
     sunfire(c, u, m, t, ts) { const d = genericAttack(c, u, m, [t], { pmul: 1 + fxv(u, "brighterSun", 0.25, 0.12) }); ctxTeam(c, u).forEach(a => a.alive && healFlat(c, a, Math.round(d * 0.3 * (1 + fxv(u, "brighterSun", 0.25, 0.12))), { src: u })); },   // Brighter Sun: more damage, more healing
     shatterShield(c, u, m, t, ts) {
-      genericAttack(c, u, m, ts); t.buffs = t.buffs.filter(b => !["shield", "dr"].includes(b.type)); if (t.frontShield) { t.shieldDown = 2; say(c, t.name + "'s barrier cracks!"); }
+      genericAttack(c, u, m, ts); t.buffs = t.buffs.filter(b => !["shield", "dr"].includes(b.type)); if (t.barrier) barrierDown(c, t, true); if (t.frontShield) { t.shieldDown = 2; say(c, t.name + "'s barrier cracks!"); }
     },
     coil(c, u, m, t) { if (ctrlRoll(c, u, t, 0.9)) { t.loseAct = (t.loseAct || 0) + 1; c.ev.push({ t: "status", tgt: t, type: "coil" }); say(c, t.name + " is wrapped up and loses an action!"); if (fxl(u, "tighterCoil")) debuff(c, u, t, "spd", -fxv(u, "tighterCoil", 0.2, 0.1), 2); } },   // Tighter Coil
     stoneGaze(c, u, m, t) { if (ctrlRoll(c, u, t, 0.7 + fxv(u, "hardStare", 0.2, 0.1))) addStatus(c, u, t, "stun", 1, { sure: 1 }); },   // Hard Stare
@@ -1135,6 +1147,126 @@
   }
 
 
+  // ---------- boss traits (RULES-BOSS 2026-11-01): Echo, Executioner, Banner Bearer, Shield Wall, Braced Stance, Barrier re-raise ----------
+  // Fields on an enemy definition (copied by makeEnemy): echo:true | exec:{ name, p } | banner:true | hoplite:true | brace:true | barrier:true. The numbers below are the ones the journal (U.FX_HELP) prints.
+  // Events for the arena: { t:"trait", kind, src, tgt, text, label, color, down } (kind = echo | banner | wall | braced | barrier), and the normal "telegraph" event with exec:true for the Executioner.
+  const TRAIT = {
+    echo: { per: 0.2, cap: 4, base: 0.6 },                                      // the answer hits for 0.6 power x (1 + 0.2 per repeat); at most 4 repeats (+80%)
+    exec: { every: 4, soft: 0.5, softMult: 0.65, guardMult: 2, maxDr: 0.8 },     // marks the lowest-HP% hero every 4th round, lands on its next turn; target above 50% HP takes 35% less; Guard counts double (at most 80% less)
+    banner: { dmg: 0.15, dr: 0.10 },                                            // allies of a Banner Bearer deal 15% more and take 10% less damage while it lives
+    wall: 0.25,                                                                 // the neighbours of a hoplite take 25% less damage while it lives
+    brace: { every: 4, cut: 0.5, back: 0.25 },                                  // braced every 4th round until its next turn: charges deal 50% less and 25% of the damage they deal hits the attacker
+    barrier: { frac: 0.12, again: 4 },                                          // a barrier of 12% max HP, back at the start of its 4th turn after it breaks
+  };
+  const ECHO_CONTROL = ["stun", "freeze", "petrify"];   // an echoed status never takes control away from the hero
+  const ECHO_NAMES = { phys: "Physical", spell: "Spell", status: "Status", heal: "Healing" };
+  const echoLabel = k => ECHO_NAMES[k] || (k.charAt(0).toUpperCase() + k.slice(1));
+  function echoKey(u, m) {   // the kind of a hero's move, as an Echo foe remembers it (null = buffs, guards, taunts: not remembered)
+    if (!m) return null;
+    if (HEAL_MOVES.includes(m.id) || m.target === "allyDown") return "heal";
+    if (m.target !== "enemy" && m.target !== "allEnemies") return null;
+    if (!(m.p > 0)) return m.st || m.db || m.grp === "control" || m.fx ? "status" : null;
+    const el = m.el === "self" ? u.element : m.el;
+    if (el) return el;
+    return (m.kind === "best" ? (eff(u, "atk") >= eff(u, "pow") ? "phys" : "spell") : m.kind) === "phys" ? "phys" : "spell";
+  }
+  function traitMove(ctx, u, m) {   // after a hero's move: every Echo foe remembers its kind; the same kind again adds a repeat, another kind starts again
+    const k = echoKey(u, m); if (!k) return;
+    ctx.foes.forEach(f => {
+      if (!f.alive || !f.echo) return;
+      f.echoN = f.echoKey === k ? Math.min(TRAIT.echo.cap, (f.echoN || 0) + 1) : 0;
+      f.echoKey = k; f.echoUser = u; f.echoMove = m.id; f.echoPend = true;
+    });
+  }
+  function echoAnswer(ctx, e) {   // the Echo foe answers with the remembered kind, aimed at the hero who used it
+    const u = e.echoUser, k = e.echoKey, m = MOVES[e.echoMove]; e.echoPend = false;
+    if (!u || !u.alive || !k) return false;
+    const n = e.echoN || 0, label = echoLabel(k);
+    const xe = e.echo === true ? {} : e.echo, ab = { n: xe.name ? xe.name + " (" + label + ")" : "Echo of " + label, p: +(TRAIT.echo.base * (1 + TRAIT.echo.per * n)).toFixed(3), k: "best", tgt: "user", user: u, echo: true };
+    if (!ECHO_NAMES[k]) ab.el = k;
+    if (k === "status" && m) {   // a smaller hit that carries the same damage-over-time status or lowered stat back (never stun, freeze or petrify)
+      ab.p = +(ab.p * 0.6).toFixed(3);
+      const st = (m.st || []).find(s => !ECHO_CONTROL.includes(s[0])), db = (m.db || [])[0];
+      if (st) ab.st = [st[0], 1, 0.8]; else if (db) ab.db = [db[0], -Math.abs(db[1]), db[2] || 2];
+    }
+    ctx.ev.push({ t: "trait", kind: "echo", src: e, tgt: u, label: "ECHO: " + label + (n ? " +" + Math.round(100 * TRAIT.echo.per * n) + "%" : ""), color: "#c9a0ff", text: e.name + " answers " + u.name + " with " + label + (n ? ", " + (n + 1) + " in a row" : "") + "." });
+    execAb(ctx, e, ab, ctx.party.filter(p => p.alive), false);
+    return true;
+  }
+  function dropExec(ctx, e) {   // the marked hero is free again (the strike landed, was stunned, broken off or the executioner fell)
+    if (!e.execTgt) return;
+    ctx.party.forEach(p => { p.buffs = p.buffs.filter(b => !(b.type === "execMark" && b.by === e)); });
+    e.execTgt = null;
+  }
+  const execDue = (e, r) => r >= 3 && r % TRAIT.exec.every === ((e.exec && e.exec.on) || 0);   // every 4th round, from round 3 on; exec.on shifts the rounds (so it does not share a round with the foe's big attack)
+  function traitAct(ctx, e, targets) {   // start of an enemy action: Echo answers first, the Executioner marks every 4th round; true = this action is used up
+    if (e.echo && e.echoPend && echoAnswer(ctx, e)) return true;
+    if (e.exec && !e.charging && execDue(e, ctx.round) && e.lastExecRound !== ctx.round && !(e.bigEvery && ctx.round % e.bigEvery === 0)) {
+      e.lastExecRound = ctx.round;
+      const t = targets.slice().sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0], x = e.exec === true ? {} : e.exec, name = x.name || "Execution";
+      e.charging = { n: name, p: x.p || 1.4, big: true, exec: true, k: "phys", tgt: "exec" }; e.execTgt = t; e.endedTurn = true; ctx.telegraph = e;
+      addBuff(t, "execMark", 1, 99, { force: 1, by: e });
+      ctx.ev.push({ t: "telegraph", src: e, move: name, exec: true, tgt: t, text: e.name + " marks " + t.name + " for " + name + ". It falls on its next turn." });
+      return true;
+    }
+    return false;
+  }
+  // banner aura and shield wall are worked out from who is alive (never stored as buffs, so they end the moment the bearer or hoplite falls)
+  function refreshAuras(ctx) {
+    const alive = ctx.foes.filter(f => f.alive);
+    alive.forEach(f => { f.bannerFrom = null; f.wallFrom = 0; });
+    alive.forEach(b => { if (b.banner) alive.forEach(f => { if (f !== b) f.bannerFrom = { dmg: TRAIT.banner.dmg, dr: TRAIT.banner.dr, by: b }; }); });
+    alive.forEach((w, i) => { if (w.hoplite) [alive[i - 1], alive[i + 1]].forEach(n => { if (n) n.wallFrom = TRAIT.wall; }); });
+  }
+  function barrierRaise(ctx, u) {
+    const v = Math.round(u.maxHp * TRAIT.barrier.frac);
+    addBuff(u, "shield", v, 99, { force: 1, barrier: true }); u.barrierUp = true; u.barrierIn = 0;
+    ctx.ev.push({ t: "trait", kind: "barrier", src: u, tgt: u, label: "BARRIER " + v, color: "#9fd8ff", text: (u.barrier && u.barrier.up) || u.name + "'s barrier rises." });
+  }
+  function barrierDown(ctx, u, smashed) {   // the barrier is gone (used up, or smashed by a Shatter): it comes back after TRAIT.barrier.again of its turns
+    if (!u.barrierUp) return;
+    u.barrierUp = false; u.barrierIn = TRAIT.barrier.again;
+    ctx.ev.push({ t: "trait", kind: "barrier", src: u, tgt: u, down: true, label: "BARRIER DOWN", color: "#ffd27a", text: smashed ? "The Shatter breaks " + u.name + "'s barrier outright!" : (u.barrier && u.barrier.down) || u.name + "'s barrier breaks!" });
+  }
+  function barrierTurn(ctx, u) {
+    if (u.buffs.some(b => b.barrier)) { u.barrierUp = true; return; }
+    if (u.barrierUp) { u.barrierUp = false; u.barrierIn = TRAIT.barrier.again; }   // lost another way (Curse of Stone ...)
+    if (u.barrierIn > 0) { u.barrierIn--; if (u.barrierIn > 0) return; }
+    barrierRaise(ctx, u);
+  }
+  function traitStart(ctx, u) {   // start of the fight, a new phase, a summon
+    if (u.echo) { u.echoKey = null; u.echoN = 0; u.echoPend = false; }
+    if (u.barrier) { u.buffs = u.buffs.filter(b => !b.barrier); barrierRaise(ctx, u); }
+    refreshAuras(ctx);
+    if (u.banner && !u.bannerSaid && ctx.foes.some(f => f.alive && f !== u)) { u.bannerSaid = 1; ctx.ev.push({ t: "trait", kind: "banner", src: u, label: "BANNER", color: "#ffd27a", text: u.name + " raises the standard." }); }
+    if (u.hoplite && !u.wallSaid && ctx.foes.some(f => f.alive && f.wallFrom)) { u.wallSaid = 1; ctx.ev.push({ t: "trait", kind: "wall", src: u, label: "SHIELD WALL", color: "#b8c8d8", text: u.name + " locks shields with its neighbours." }); }
+  }
+  function traitTurn(ctx, u) {   // start of an enemy's turn (after the stun check)
+    refreshAuras(ctx);
+    if (u.barrier) barrierTurn(ctx, u);
+    if (u.brace && ctx.round % TRAIT.brace.every === 0) {
+      hold(u, u, "braced", 1, { force: 1 });
+      ctx.ev.push({ t: "trait", kind: "braced", src: u, label: "BRACED", color: "#8fd0ff", text: (u.brace && u.brace.text) || u.name + " braces for a charge." });
+    }
+  }
+  function traitDeath(ctx, u) {   // an enemy fell: its aura or wall ends, a pending execution is called off
+    if (u.exec) dropExec(ctx, u);
+    refreshAuras(ctx);
+    if (u.banner) ctx.ev.push({ t: "trait", kind: "banner", src: u, down: true, label: "BANNER FALLS", color: "#ffd27a", text: "The standard falls." });
+    if (u.hoplite) ctx.ev.push({ t: "trait", kind: "wall", src: u, down: true, label: "WALL BREAKS", color: "#b8c8d8", text: "The shield wall breaks." });
+  }
+  const nextEvery = (r, n, last, on) => { let k = Math.max(r, 3); while (k % n !== (on || 0) || k === last) k++; return k; };
+  function foeNotes(f, ctx) {   // short lines for the foe's HUD panel (arena3d.js): what its traits are doing right now
+    const n = [], r = ctx ? ctx.round : 0;
+    if (f.echo) n.push(f.echoKey ? "Echo: " + echoLabel(f.echoKey) + (f.echoN ? " +" + Math.round(100 * TRAIT.echo.per * f.echoN) + "%" : "") : "Echo: nothing yet");
+    if (f.exec) n.push(f.charging && f.charging.exec && f.execTgt ? "Executes " + f.execTgt.name + " next turn" : "Executioner: marks on round " + nextEvery(r, TRAIT.exec.every, f.lastExecRound, f.exec.on));
+    if (f.banner) n.push("Banner: allies +" + Math.round(100 * TRAIT.banner.dmg) + "% damage, take " + Math.round(100 * TRAIT.banner.dr) + "% less");
+    if (f.hoplite) n.push("Shield wall: neighbours take " + Math.round(100 * TRAIT.wall) + "% less");
+    if (f.brace) n.push(hasBuff(f, "braced") ? "BRACED: charges deal " + Math.round(100 * TRAIT.brace.cut) + "% less, " + Math.round(100 * TRAIT.brace.back) + "% comes back" : "Braces on round " + nextEvery(Math.max(r, 1), TRAIT.brace.every, 0, 0));
+    if (f.barrier) { const sh = f.buffs.find(b => b.barrier); n.push(sh ? "Barrier " + sh.val : "Barrier returns in " + (f.barrierIn || 0) + (f.barrierIn === 1 ? " turn" : " turns")); }
+    return n;
+  }
+
   // ---------- enemies ----------
   const ENEMY_PROFILES = {
     brute: { hp: 3, atk: 3, pow: 0.5, def: 2, res: 1, spd: 0.6, foc: 0.5, lck: 0.5 },
@@ -1232,7 +1364,7 @@
     const u = { id, side: "e", name: d.name + (tag || ""), art: d.art || id, level, stats: spread(ENEMY_PROFILES[d.profile], BASE_TOTAL + POINTS_PER_LEVEL * (level - 1)), mp: d.mp || 0, maxMp: d.mp || 0, buffs: [], st: {}, alive: true,
       broken: 0, breakPts: 0, breakHitRound: -9, boss: !!d.boss, human: HUMAN_IDS.includes(id) || !!d.human, phases: d.phases ? d.phases.map(p => ({ ...p })) : null, phaseNo: 1 };
     ["actions", "hpMult", "breakType", "breakNeed", "frontShield", "bigEvery", "bigHit", "bigName", "bigSingle", "pr", "swarm", "reflect", "coverBy", "ab", "open", "sr", "intro", "vscale", "vtint",
-      "grow", "riseWhile", "riseMax", "riseAfter", "riseFrac", "dieWith", "passive", "passiveName", "element", "general", "collar", "slot", "personal", "partOf", "titan", "legend", "sig", "arenaFx", "guards", "airMult", "shellMult", "tollEvery", "rootsMax"].forEach(k => d[k] !== undefined && (u[k] = d[k]));
+      "grow", "riseWhile", "riseMax", "riseAfter", "riseFrac", "dieWith", "passive", "passiveName", "element", "general", "collar", "slot", "personal", "partOf", "titan", "legend", "sig", "arenaFx", "guards", "airMult", "shellMult", "tollEvery", "rootsMax", "echo", "exec", "banner", "hoplite", "brace", "barrier", "bigTgt", "bigSt", "copyShot"].forEach(k => d[k] !== undefined && (u[k] = d[k]));
     if (d.hooks) u.hooks = d.hooks.slice();
     u.rs = Object.assign({}, d.rs); u.immune = d.immune ? d.immune.slice() : [];
     if (u.breakType && u.breakNeed === undefined) u.breakNeed = 1;
@@ -1318,6 +1450,7 @@
     foes.forEach(f => { f.st = f.st || {}; f.endedTurn = false; f.loseAct = 0; });
     const ctx = { party, foes, round: 0, telegraph: null, ev: [], order: null, hearth: {}, later: [], flood: null, team: u => (u.side === "p" ? party : foes), opp: u => (u.side === "p" ? foes : party) };
     foes.forEach(f => { if (f.hooks && f.alive) hookRun(f, "start", ctx, f); });
+    foes.forEach(f => { if (f.alive) traitStart(ctx, f); });   // boss traits: barrier up, auras, echo memory
     party.forEach(p => { if (p.evo && EVO.start) EVO.start(ctx, p); });   // evolution traits that act at the start of a fight
     foes.forEach(f => { if (f.open && f.alive) execAb(ctx, f, f.open, party.filter(p => p.alive), false); });
     return ctx;
@@ -1341,7 +1474,7 @@
     if (u.st.stun || u.st.freeze) {
       const k = u.st.freeze ? "freeze" : "stun"; delete u.st.stun; delete u.st.freeze;
       ctx.ev.push({ t: "stunned", tgt: u, type: k });
-      if (u.charging) { u.charging = null; ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null; say(ctx, u.name + "'s attack is interrupted!"); }
+      if (u.charging) { u.charging = null; dropExec(ctx, u); ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null; say(ctx, u.name + "'s attack is interrupted!"); }
       u.sun = null; u.tails = 0; u.loseAct = 0; u.endedTurn = true;
       return 0;
     }
@@ -1349,6 +1482,7 @@
       u.growN = Math.min(u.grow[2] || 99, (u.growN || 0) + 1); addBuff(u, u.grow[0], u.grow[1] * u.growN, 99, { force: 1 });
       ctx.ev.push({ t: "buff", tgt: u, stat: u.grow[0], val: u.grow[1] * u.growN });
     }
+    if (u.side === "e") traitTurn(ctx, u);   // boss traits: auras, barrier timer, braced stance
     if (u.held) {   // pinned by a boss: loses its actions until the holder is broken, stunned, dead or the hold runs out
       const h = u.held;
       if (!h.by || !h.by.alive || h.by.broken || h.by.st.stun || h.by.st.freeze || h.t <= 0) { u.held = null; ctx.ev.push({ t: "say", text: u.name + " breaks free!" }); }
@@ -1410,10 +1544,11 @@
         if (f.riseWhile && !ctx.foes.some(a => a.alive && a !== f && a.id === f.riseWhile)) { f.rise = false; return; }
         if (f.riseIn > 0) { f.riseIn--; return; }
         f.rise = false; f.alive = true; f.hp = Math.max(1, Math.round(f.maxHp * (f.riseFrac || 0.5))); f.st = {}; f.buffs = []; f.broken = 0; f.breakPts = 0; f.charging = null;
-        ctx.ev.push({ t: "revive", tgt: f, text: f.name + " rises again!" });
+        ctx.ev.push({ t: "revive", tgt: f, text: f.name + " rises again!" }); traitStart(ctx, f);
       }
     });
     ctx.party.forEach(p => { if (p.held && (p.held.by && !p.held.by.alive)) p.held = null; });
+    refreshAuras(ctx);
     ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null;
   }
   const outcome = ctx => (!ctx.foes.some(f => f.alive) ? "win" : !ctx.party.some(p => p.alive) ? "lose" : null);
@@ -1449,7 +1584,9 @@
   function pickTarget(ctx, e, a, targets) {
     let t;
     const taunt = targets.filter(x => hasBuff(x, "taunt"));
+    if (a.tgt === "user") return a.user && a.user.alive ? a.user : targets[0];   // Echo: aimed back at the hero who made the move
     if (taunt.length && !a.aoe) t = pick(taunt);
+    else if (a.tgt === "exec") t = e.execTgt && e.execTgt.alive ? e.execTgt : targets.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp)[0];
     else if (a.tgt === "weak") t = targets.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp)[0];
     else if (a.tgt === "front") t = ctx.party.find(x => x.alive) || targets[0];
     else if (a.tgt === "marked" && targets.some(x => hasBuff(x, "marked"))) t = pick(targets.filter(x => hasBuff(x, "marked")));
@@ -1480,7 +1617,7 @@
       list.forEach(t => {
         if (!t.alive) return;
         let total = 0;
-        for (let h = 0, n = a.hits || 1; h < n && t.alive; h++) total += damage(ctx, e, t, a.p, kind, { el, aoe: !!a.aoe, enemy: 1, strongHit: strong, noReact: 0 });
+        for (let h = 0, n = a.hits || 1; h < n && t.alive; h++) total += damage(ctx, e, t, a.p, kind, { el, aoe: !!a.aoe, enemy: 1, strongHit: strong, noReact: 0, exec: !!a.exec });
         if (a.drain && total) healFlat(ctx, e, Math.round(total * a.drain), { silent: 1 });
         if (t.alive && a.st) addStatus(ctx, e, t, a.st[0], a.st[1], { chance: a.st[2] });
         if (t.alive && a.db) debuff(ctx, e, t, a.db[0], a.db[1], a.db[2]);
@@ -1507,6 +1644,7 @@
       const dead = ctx.foes.find(f => !f.alive && f !== e && !f.summoned);
       if (dead) { e.revivedOnce = true; revive(ctx, dead, a.reviveAlly === true ? 0.5 : a.reviveAlly); ev[ev.length - 1].text = e.name + " calls " + dead.name + " back!"; }
     }
+    if (a.wardAlly) { const m = mates.filter(f => !hasBuff(f, "shield")).sort((x, y) => y.maxHp - x.maxHp)[0]; if (m) { const sh = Math.round(m.maxHp * a.wardAlly); addBuff(m, "shield", sh, a.shieldTurns || 3, { force: 1 }); ev.push({ t: "buff", tgt: m, stat: "shield", val: sh }); say(ctx, e.name + " sets a ward stone on " + m.name + "."); } }   // a ward on an ally that has no shield (the biggest one first)
     if (a.empower) { const m = mates.slice().sort((x, y) => eff(y, "atk") + eff(y, "pow") - eff(x, "atk") - eff(x, "pow"))[0] || e; addBuff(m, a.empower[0], a.empower[1], a.empower[2], { force: 1 }); ev.push({ t: "buff", tgt: m, stat: a.empower[0], val: a.empower[1] }); say(ctx, e.name + " empowers " + m.name + "!"); }
     if (a.shield) { const sh = Math.round(e.maxHp * a.shield); addBuff(e, "shield", sh, a.shieldTurns || 3, { force: 1 }); ev.push({ t: "buff", tgt: e, stat: "shield", val: sh }); }
     if (a.cleanseSelf) { Object.keys(e.st).forEach(k => delete e.st[k]); e.buffs = e.buffs.filter(b => b.val > 0); ev.push({ t: "say", text: e.name + " shakes off every ailment." }); }
@@ -1517,7 +1655,7 @@
         if (!ENEMIES[id] || e.kids.length >= max || ctx.foes.filter(f => f.alive).length >= 5) return;
         const same = ctx.foes.filter(f => f.id === id).length, u = makeEnemy(id, Math.max(1, e.level + (a.sumLv || 0)), same ? " " + ("ABCDEFGHIJKLMNOP"[same] || same + 1) : "");
         u.summoned = true; u.xpAbs = 0; u.goldAbs = 0; u.xp = 0; u.kakal = 0; u.gold = 0; u.drops = []; u.endedTurn = true; u.actedRound = ctx.round; ctx.foes.push(u); e.kids.push(u);
-        ev.push({ t: "summon", src: e, unit: u }); say(ctx, e.name + " summons " + u.name + "!");
+        ev.push({ t: "summon", src: e, unit: u }); say(ctx, e.name + " summons " + u.name + "!"); traitStart(ctx, u);
       });
     }
   }
@@ -1526,12 +1664,18 @@
     const targets = ctx.party.filter(f => f.alive);
     if (!targets.length) return;
     if (e.hooks && hookRun(e, "act", ctx, e, targets) === true) return;   // a boss rule took the whole action
+    if (traitAct(ctx, e, targets)) return;   // boss traits: Echo answers, the Executioner marks
     if (e.charging) {
       const ab = e.charging; e.charging = null; ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null;
+      if (ab.exec) {   // the execution lands on its mark (a taunter or a cover takes it instead); with the mark gone it finds no one
+        const keep = e.execTgt; dropExec(ctx, e);
+        if (!(keep && keep.alive) && !targets.some(x => hasBuff(x, "taunt"))) { say(ctx, e.name + "'s " + ab.n + " finds no one."); return; }
+        e.execTgt = keep; execAb(ctx, e, ab, targets, true); e.execTgt = null; return;
+      }
       execAb(ctx, e, ab, targets, true); return;
     }
     if (e.bigEvery && ctx.round % e.bigEvery === 0 && e.lastBigRound !== ctx.round) {
-      const ab = { n: e.bigName || "Crushing Blow", p: e.bigHit, aoe: !e.bigSingle, big: true, k: "phys" };
+      const ab = { n: e.bigName || "Crushing Blow", p: e.bigHit, aoe: !e.bigSingle, big: true, k: "phys" }; if (e.bigTgt) ab.tgt = e.bigTgt; if (e.bigSt) ab.st = e.bigSt;   // bigTgt: "weak" = the lowest-HP hero, bigSt: a status the heavy hit may add
       e.charging = ab; e.lastBigRound = ctx.round; e.endedTurn = true; ctx.telegraph = e;
       ctx.ev.push({ t: "telegraph", src: e, move: ab.n, text: e.name + " gathers its strength... " + ab.n + " is coming!" });
       return;
@@ -1539,6 +1683,7 @@
     const list = (e.ab || []).filter(a => cond(ctx, e, a));
     let tot = sum(list.map(a => a.w || 1)), r = rnd() * tot, a = list[0];
     for (const x of list) { r -= x.w || 1; if (r <= 0) { a = x; break; } }
+    if (e.copyShot) { if (e.shot1 && e.shot1.turn === ctx.round) { a = e.shot1.a; e.shot1 = null; } else if (a) e.shot1 = { a, turn: ctx.round }; }   // copyShot: the second action of a turn repeats the first (a flavour of a few field enemies, not the boss Echo)
     if (!a) return;
     execAb(ctx, e, a, targets, false);
   }
@@ -1609,6 +1754,7 @@
       if (f.swarm && m && m.target === "enemy") mult *= 0.75;
       if (f.coverBy && foes.some(x => x !== f && x.id === f.coverBy)) mult *= 0.5;
       if (f.broken) mult *= 1.5; else if (f.frontShield) mult *= 1 - f.frontShield;
+      if (f.wallFrom) mult *= 1 - f.wallFrom; if (f.banner) mult *= 2.2; if (f.hoplite) mult *= 1.4;   // boss traits: the Banner Bearer falls first, a hoplite before the foes it shields
       const s = f.hp / Math.max(0.05, mult);
       if (s < bs) { bs = s; best = f; }
     });
@@ -1689,7 +1835,35 @@
     const tithe = big && !weak && hpF > 0.5 && u.tide >= Math.min(need, tmax) && !hasBuff(u, "tithe");   // it pays when the release is next, and only with HP to spare
     return { tmax, need, tithe };
   }
+  // Auto play against the boss traits: against an Executioner taunt / guard / heal the mark, against Echo break a streak with another kind of move, never charge into a Braced foe.
+  // (Banner Bearers and hoplites are handled in focus(): the bearer is hit first, a hoplite before the foes it shields.)
   function autoChoice(ctx, u) {
+    const foes = ctx.foes.filter(f => f.alive), mv = movesOf(u), ok = id => mv.includes(id) && canUse(ctx, u, id);
+    const ex = foes.find(f => f.charging && f.charging.exec && f.execTgt && f.execTgt.alive);
+    if (ex) {
+      const t = ex.execTgt, team = ctx.party.filter(a => a.alive);
+      if (!team.some(a => hasBuff(a, "taunt")) && u !== t && u.hp / u.maxHp > 0.55) for (const id of ["challenge", "roar", "bannerDecoy", "decoy"]) if (ok(id)) return { move: id, target: u };
+      if (!team.some(a => hasBuff(a, "dr")) && ok("shieldWall")) return { move: "shieldWall", target: u };
+      if (t.hp / t.maxHp < TRAIT.exec.soft && !hasBuff(t, "taunt")) for (const id of ["warmLight", "silverLining", "goldenFleece", "healWave"]) if (ok(id)) return { move: id, target: id === "healWave" ? u : t };
+    }
+    const c = autoChoiceBase(ctx, u);
+    return c && c.move && foes.some(f => f.echo || f.brace) ? autoVary(ctx, u, c, foes, mv, ok) : c;
+  }
+  function autoVary(ctx, u, c, foes, mv, ok) {
+    const m = MOVES[c.move]; if (!m) return c;
+    const streak = foes.filter(f => f.echo && f.echoKey && f.echoN >= 1).map(f => f.echoKey), key = echoKey(u, m);
+    const braced = foes.some(f => hasBuff(f, "braced")), isCharge = x => !!x.charge || (!!u.diveReady && x.target === "enemy");
+    const spam = !!key && streak.includes(key), bad = braced && isCharge(m);
+    if (!spam && !bad) return c;
+    const tf = c.target && c.target.side === "e" ? c.target : null;
+    if (tf && tf.breakType && tf.breakPts > 0 && (m.bk || []).includes(tf.breakType)) return c;   // do not drop a break that is half done
+    const alts = mv.filter(id => { const x = MOVES[id]; return ok(id) && (x.target === "enemy" || x.target === "allEnemies") && x.p > 0 && !(braced && isCharge(x)) && !(streak.length && streak.includes(echoKey(u, x))); })
+      .sort((a, b) => (MOVES[b].p * (MOVES[b].hits || 1)) / (1 + mpCost(u, b)) - (MOVES[a].p * (MOVES[a].hits || 1)) / (1 + mpCost(u, a)));
+    if (!alts.length) return c;
+    const id = alts[0], x = MOVES[id];
+    return { move: id, target: x.target === "allEnemies" ? u : (tf || focus(ctx, u, id)) };
+  }
+  function autoChoiceBase(ctx, u) {
     const mv = movesOf(u), foes = ctx.foes.filter(f => f.alive), team = ctx.party.filter(a => a.alive);
     const ok = id => mv.includes(id) && canUse(ctx, u, id);
     const lowest = team.slice().sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
@@ -1910,12 +2084,14 @@
   function statusList(u) {
     const out = Object.keys(u.st).map(k => ({ type: k, name: STATUS[k] ? STATUS[k].name : k, n: u.st[k].n, turns: u.st[k].t }));
     if (u.tide) out.push({ type: "tide", name: "Tide", n: u.tide });
-    u.buffs.forEach(b => { if (["wrathStore", "swell", "stunImmune", "hounds", "cover", "decoy", "antlers", "dust", "braceDeep", "counter", "redHot", "thorns", "endure", "veil"].includes(b.type) || b.type.startsWith("ward_")) out.push({ type: b.type, name: b.type, n: 0, turns: b.turns < 50 ? b.turns : 0, buff: true }); else out.push({ type: b.type, name: b.type, n: 0, val: b.val, turns: b.turns < 50 ? b.turns : 0, buff: true }); });
+    u.buffs.forEach(b => { if (["wrathStore", "swell", "stunImmune", "hounds", "cover", "decoy", "antlers", "dust", "braceDeep", "counter", "redHot", "thorns", "endure", "veil", "execMark", "braced"].includes(b.type) || b.type.startsWith("ward_")) out.push({ type: b.type, name: b.type, n: 0, turns: b.turns < 50 ? b.turns : 0, buff: true }); else out.push({ type: b.type, name: b.type, n: 0, val: b.val, turns: b.turns < 50 ? b.turns : 0, buff: true, barrier: !!b.barrier }); });
+    if (u.bannerFrom) out.push({ type: "banner", name: "banner", n: 0, val: u.bannerFrom.dmg, turns: 0, buff: true });   // boss traits: derived from who is alive
+    if (u.wallFrom) out.push({ type: "wall", name: "wall", n: 0, turns: 0, buff: true });
     return out;
   }
 
   const Core = { DMG, PLAYER_FX: FX, STATS, STAT_NAMES, STYLES, STYLE_WEIGHTS, CREATURES, PACKS, LAB_EXTRAS, MOVES, STYLE_MOVES, ENEMIES, ENEMY_PROFILES, ENCOUNTERS, SKILLBOOK, ITEMS, MATERIALS, STATUS,
-    makeGeneral, GEN_BREAK, XPN, XPG, xpGap, fightXpBase, fightXp, fightGold, goldBase, enemiesPerLevel, itemOk, HOOKS, CONDS, EFFECTS, hookRun, abExtras, revive, healFlat, addBuff, addStatus, damage, debuff, say, die, defEnemy: en, encT: T,   // content files (src/rules/*.js) add enemies with Core.defEnemy(id, name, profile, o) and tables with Core.ENCOUNTERS[id] = [Core.encT(foes, weight, lo, hi), ...]
+    makeGeneral, GEN_BREAK, TRAIT, foeNotes, echoKey, echoLabel, XPN, XPG, xpGap, fightXpBase, fightXp, fightGold, goldBase, enemiesPerLevel, itemOk, HOOKS, CONDS, EFFECTS, hookRun, abExtras, revive, healFlat, addBuff, addStatus, damage, debuff, say, die, defEnemy: en, encT: T,   // content files (src/rules/*.js) add enemies with Core.defEnemy(id, name, profile, o) and tables with Core.ENCOUNTERS[id] = [Core.encT(foes, weight, lo, hi), ...]
     makeCreature, makeEnemy, makeFoes, rollEncounter, rollEncounterSpec, karvanFight, rewards, movesOf, setOffMove, isOffStyle, mpCost, canUse, newBattle, useMove, useItem, usePotion, enemyAct,
     turnOrder, actionsFor, endTurn, endRound, outcome, autoChoice, autoItem, focus, giveXp, spendPoint, xpToNext, eff, hasBuff, buffVal, maxHpOf, statusList, elemMult, spread,
     EVO, EVOAPI: { gainTide, hold, countBreak, delayTurn, directHit, getBuff, cleanse, healFlat, addBuff, addStatus, debuff, say, die, pick, chance, clamp } };

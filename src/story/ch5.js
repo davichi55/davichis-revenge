@@ -295,7 +295,7 @@
   // S4 at the lab gate
   S.trigger.labGateS4 = async F => {
     if (F.f("ch5.s4")) return;
-    const ok = await M3.general(F, 4, { level: 23, soldiers: [["legionShieldbearer", 22, " A"], ["legionShieldbearer", 22, " B"]], bg: "occupied", title: "Gift of the Academy", banter: "labgate",
+    const ok = await M3.general(F, 4, { level: 23, soldiers: [["legionHoplite", 22, " A"], ["legionHoplite", 22, " B"]], bg: "occupied", title: "Gift of the Academy", banter: "labgate",
       place: "the lab gate of Ashen Orun", where: "It ran south over the dunes, toward the old well road.", after: ["(The lab's own. They set it to guard the lab.)"],
       setup: async c => {
         const g = S.generalFor(4) || { id: "horncinder" };

@@ -244,7 +244,7 @@
   S.trigger.wardenS16 = async F => {
     if (F.f("ch9.s16")) return;
     F.music("tension");
-    const ok = await M.general(F, 16, { level: 52, soldiers: [["prisonGuard", 51, " B"], ["prisonGuard", 51, " C"]], bg: "prison", title: "The Black Mirror Warden", place: "the courtyard gate of the Black Mirror", where: "It went over the cliff edge, and the wind held it up.", fx: 130, fy: -4,
+    const ok = await M.general(F, 16, { level: 52, soldiers: [["prisonHoplite", 51, " B"], ["prisonHoplite", 51, " C"]], bg: "prison", title: "The Black Mirror Warden", place: "the courtyard gate of the Black Mirror", where: "It went over the cliff edge, and the wind held it up.", fx: 130, fy: -4,
       setup: async c => {
         const h = c.hero; c.tint("#10241c", 0.25, 400);
         M3.actors(c, [["wd", "npcWarden", 170, -30, { name: "The Warden", flip: true }]]);
@@ -296,7 +296,7 @@
   S.trigger.forgeS17 = async F => {
     if (F.f("ch9.s17")) return;
     F.music("tension");
-    const ok = await M.general(F, 17, { level: 54, soldiers: [["collarSmith", 53, " B"]], bg: "prison", title: "The Collar-Smith's Hound", place: "the collar-forge of the Black Mirror", where: "It went through the forge's glass wall, and the whole hall rang like a bell.", fx: 130, fy: -4,
+    const ok = await M.general(F, 17, { level: 54, soldiers: [["maskedExecutioner", 54, " B"]], bg: "prison", title: "The Collar-Smith's Hound", place: "the collar-forge of the Black Mirror", where: "It went through the forge's glass wall, and the whole hall rang like a bell.", fx: 130, fy: -4,
       setup: async c => {
         const h = c.hero; c.tint("#2a0e08", 0.3, 400);
         M3.actors(c, [["cs", "npcCollarsmith", 170, -30, { name: "The Collar-Smith", flip: true }]]);

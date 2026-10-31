@@ -114,6 +114,77 @@
   TB.drowned = [T(["drownedSentry", "drownedSentry"], 2, 72, 74), T(["lanternEel", "lanternEel"], 2, 72, 73), T(["builderWraith"], 2, 74, 75), T(["coralColossus"], 2, 75, 76), T(["abyssalCrab", "lanternEel"], 2, 74, 76)];
   TB.deep = [T(["deepGlowfish", "deepGlowfish", "deepGlowfish"], 2, 78, 79), T(["lanternJelly", "lanternJelly"], 2, 78, 80), T(["trenchHorror"], 2, 79, 81), T(["lightlessMaw"], 2, 80, 81), T(["lanternJelly", "trenchHorror"], 1, 80)];
 
+  // ---------- boss traits on soldiers (RULES-BOSS 2026-11-01): banner bearers and hoplites. This file loads last, so every soldier is defined by now. ----------
+  // variant(base, id, patch) copies a finished definition (no second FIELD_DMG scaling) and keeps the base art. The numbers of the traits live in Core.TRAIT (src/core.js).
+  const variant = (base, id, patch) => { const b = Core.ENEMIES[base]; if (!b) return null; return (Core.ENEMIES[id] = Object.assign({}, b, { id, art: b.art || base }, patch)); };
+  { const sb = Core.ENEMIES.standardBearer; if (sb) { sb.banner = true; sb.ab = sb.ab.filter(a => !a.ally); } }   // the Standard-Bearer's standard is passive now: allies deal more and take less while it stands
+  variant("legionOptio", "legionStandard", { name: "Legion Standard-Bearer", art: "standardBearer", banner: true, hpMult: 0.4, ab: Core.ENEMIES.legionOptio.ab.filter(a => !a.ally).map(a => (a.p ? Object.assign({}, a, { p: +(a.p * 0.85).toFixed(3) }) : a)) });   // a patrol's standard (chapters 3-4)
+  variant("legionShieldbearer", "legionHoplite", { name: "Legion Hoplite", hoplite: true, hpMult: +(Core.ENEMIES.legionShieldbearer.hpMult * 0.55).toFixed(3) });
+  variant("prisonGuard", "prisonHoplite", { hoplite: true, hpMult: +(Core.ENEMIES.prisonGuard.hpMult * 0.75).toFixed(3) });   // same name and art as the Prison Guard (ch9 general S16)
+  { const EN = Core.ENCOUNTERS, add = (t, groups) => EN[t] && groups.forEach(g => EN[t].push(T(g[0], g[1], g[2], g[3])));
+    add("jungleRoad", [[["legionStandard", "legionShieldbearer", "legionArcher"], 1, 13, 14]]);
+    add("canopyLegion", [[["legionStandard", "legionMarksman"], 1, 18]]);
+    add("fort", [[["legionHoplite", "legionHoplite", "legionArcher"], 1, 14]]);
+    add("coast", [[["legionHoplite", "legionHoplite", "legionSpearman"], 1, 45]]);
+    add("warfront", [[["legionHoplite", "legionHoplite", "legionArcher"], 1, 59]]);
+  }
+
+  // ---------- 18 new enemies (2026-11-01, designs in art-review/new-enemies/list.md; art is in assets/): defined here, placed in the tables below ----------
+  // Field enemies are scaled by FIELD_DMG in defEnemy; elite adds (aquilaBearer, maskedExecutioner, wardStoneAbjurer) are field units too, placed only in named story fights (see src/story/*).
+  // Random-encounter versions of the boss traits stay mild: no Echo / Executioner / Barrier in random groups (the Reaper only winds up a weak single-target sweep, the Repeater copies its own first shot, the Fan Dancer has a plain small shield).
+  const NF = (id, name, profile, o) => Core.defEnemy(id, name, profile, Object.assign({ human: 1 }, o));
+  H.oilTank = { broken(ctx, u) {   // the oil tank bursts when the Flamer breaks: a small blast on the foes beside it
+    const alive = ctx.foes.filter(f => f.alive), i = alive.indexOf(u); Core.say(ctx, "The oil tank bursts!");
+    [alive[i - 1], alive[i + 1]].forEach(n => { if (n && n !== u) Core.EVOAPI.directHit(ctx, u, n, Math.round(n.maxHp * 0.15), "OIL"); });
+  } };
+  H.windDown = { round(ctx, u) { if (u.alive && ctx.round === 3) { u.actions = 1; Core.addBuff(u, "atk", -0.25, 99, { force: 1 }); Core.say(ctx, u.name + "\x27s key runs down."); } } };   // the Clockwork War-Hound has 2 actions for 3 rounds, then 1 and a weaker bite
+  H.eagle = { round(ctx, u) { if (u.alive) ctx.foes.forEach(f => { if (f.alive && f.barrier && !f.buffs.some(b => b.barrier) && f.barrierIn > 1) f.barrierIn--; }); } };   // the Eagle Standard: a lost barrier comes back one turn sooner every round
+  K.mateNoWard = (ctx, e) => ctx.foes.some(f => f.alive && f !== e && !Core.hasBuff(f, "shield"));
+  NF("scytheLegionary", "Reaper Legionary", "human", { hpMult: 0.55, bigEvery: 3, bigHit: 0.85, bigName: "Reaper\x27s Sweep", bigSingle: 1, bigTgt: "weak", ab: [{ n: "Scythe Cut", p: 1.0, w: 3 }, { n: "Hook and Haul", p: 0.6, db: ["spd", -0.2, 2], w: 1 }] });
+  NF("katanaLegionary", "Katana Legionary", "swift", { hpMult: 0.38, brace: { text: "The legionary sets his feet, one hand on the hilt." }, ab: [{ n: "Iaido Cut", p: 1.05, w: 3 }, { n: "Quick Draw", p: 0.6, st: ["bleed", 1, 0.4], w: 1 }] });
+  NF("chainSickleSkirmisher", "Chain-Sickle Skirmisher", "swift", { hpMult: 0.4, ab: [{ n: "Chain Wrap", p: 0.4, hold: 1, st: ["bleed", 1, 0.6], w: 2, if: "nobodyHeld" }, { n: "Sickle Cut", p: 0.9, st: ["bleed", 1, 0.4], w: 3 }] });
+  NF("warFanDancer", "Cohort War-Fan Dancer", "swift", { hpMult: 0.5, ab: [{ n: "Fan Slash", p: 0.85, w: 3 }, { n: "Whirl of Fans", p: 0.35, aoe: 1, w: 1 }, { n: "Fans Up", shield: 0.15, shieldTurns: 2, w: 2, if: "every:2" }] });
+  NF("gateHalberdier", "Gate Halberdier", "human", { hpMult: 0.65, pr: 0.2, brace: true, ab: [{ n: "Halberd Chop", p: 0.95, w: 3 }, { n: "Hook the Eye", pull: 2, w: 1, if: "first" }] });
+  NF("bucklerFlailer", "Buckler Flailer", "human", { hpMult: 0.5, pr: 0.15, ab: [{ n: "Buckler Bash", p: 0.9, w: 3 }, { n: "Curling Flail", p: 0.55, mark: 0.3, w: 2, if: "nomarked" }] });
+  NF("brassArmSapper", "Brass-Arm Sapper", "human", { hpMult: 0.7, bigEvery: 3, bigHit: 0.8, bigName: "Piston Punch", bigSingle: 1, bigSt: ["stun", 1, 0.4], ab: [{ n: "Wrench Swing", p: 1.0, w: 3 }, { n: "Steam Vent", p: 0.35, k: "spell", aoe: 1, db: ["spd", -0.2, 2], w: 1 }] });
+  NF("bellowsFlamer", "Bellows Flamer", "human", { hpMult: 0.4, rs: { fire: -0.5, water: -0.25 }, breakType: "water", hooks: ["oilTank"], ab: [{ n: "Cone of Fire", p: 0.5, k: "spell", el: "fire", aoe: 1, st: ["burn", 1, 0.5], w: 3 }, { n: "Nozzle Jab", p: 0.8, w: 1 }] });
+  NF("drumCarrier", "War-Drum Carrier", "human", { hpMult: 0.45, banner: true, ab: [{ n: "Mallet Smack", p: 0.5, w: 3 }, { n: "Beat the March", ally: ["spd", 0.1, 2], w: 2, if: "every:2" }] });
+  NF("aquilaBearer", "Eagle Standard Bearer", "human", { hpMult: 0.5, banner: true, hooks: ["eagle"], ab: [{ n: "Standard Strike", p: 0.6, w: 3 }, { n: "Club", p: 0.5, w: 1 }] });
+  NF("phalanxHoplite", "Phalanx Hoplite", "human", { hpMult: 0.4, pr: 0.2, hoplite: true, ab: [{ n: "Spear Poke", p: 0.8, tgt: "front", w: 3 }, { n: "Lock Shields", self: ["dr", 0.25, 1], w: 1 }] });
+  NF("maskedExecutioner", "Masked Executioner", "brute", { hpMult: 0.85, exec: { name: "Headsman\x27s Axe", p: 0.8 }, ab: [{ n: "Axe Chop", p: 0.85, w: 3 }, { n: "Hood Stare", p: 0.3, k: "spell", db: ["atk", -0.2, 2], w: 1 }] });
+  NF("wardStoneAbjurer", "Ward-Stone Abjurer", "caster", { hpMult: 0.7, barrier: { up: "The ward stones lock into a ring of light.", down: "The ring of stones goes dark." }, ab: [{ n: "Stone Bolt", p: 0.6, k: "spell", w: 3 }, { n: "Ward Stone", wardAlly: 0.08, shieldTurns: 3, w: 5, if: "every:2&mateNoWard" }] });
+  NF("harpoonMarine", "Harpoon Marine", "human", { hpMult: 0.55, ab: [{ n: "Harpoon Throw", p: 1.0, w: 3 }, { n: "Hook and Drag", p: 0.5, hold: 1, w: 2, if: "nobodyHeld" }] });
+  NF("repeaterCrossbowman", "Repeater Crossbowman", "swift", { hpMult: 0.35, actions: 2, copyShot: true, ab: [{ n: "Bolt", p: 0.38, w: 1 }, { n: "Poison Bolt", p: 0.34, st: ["poison", 1, 0.5], w: 1 }, { n: "Flame Bolt", p: 0.34, el: "fire", st: ["burn", 1, 0.4], w: 1 }] });
+  NF("clockworkWarHound", "Clockwork War-Hound", "beast", { human: 0, hpMult: 0.45, actions: 2, immune: ["poison", "bleed"], rs: { shock: -0.3 }, hooks: ["windDown"], ab: [{ n: "Saw-Tooth Bite", p: 0.42, st: ["bleed", 1, 0.5], w: 3 }, { n: "Gear Grind", p: 0.55, w: 1 }] });
+  NF("scarecrowCrow", "Scarecrow Crow", "flyer", { human: 0, hpMult: 0.2, art: "mazeBat", vtint: 0x3a3a50, vscale: 0.8, ab: [{ n: "Peck", p: 0.6, w: 1 }] });
+  NF("scarecrowReaver", "Scarecrow Reaver", "brute", { human: 0, hpMult: 0.7, immune: ["poison", "bleed"], rs: { fire: -0.75 }, riseWhile: "scarecrowCrow", riseAfter: 1, riseMax: 2, riseFrac: 0.5, ab: [{ n: "Twin Sickles", p: 0.55, hits: 2, w: 3 }, { n: "Straw Flurry", p: 0.4, k: "spell", db: ["spd", -0.2, 2], w: 1 }] });
+  NF("tuskedWarBoar", "Armoured Tusk-Boar", "beast", { human: 0, hpMult: 0.6, pr: 0.1, bigEvery: 3, bigHit: 1.1, bigName: "Tusk Charge", bigSingle: 1, ab: [{ n: "Gore", p: 1.0, w: 3 }, { n: "Trample", p: 0.45, aoe: 1, w: 1 }] });
+
+  // ---------- where they walk: [table, foes, weight, lowest level, highest level]; weight = rarity (common 3, uncommon 2, rare 1), the Katana is very rare (0.5) ----------
+  { const EN = Core.ENCOUNTERS, SB = "legionShieldbearer", SP = "legionSpearman", AR = "legionArcher", MK = "legionMarksman", OP = "legionOptio", CE = "legionCenturion", PG = "palaceGuard", CP = "courtPriest", JE = "jaguarCohortElite", CG = "supplyConvoyGuard", SL = "legionSlinger", EA = "eagleCohortArcher", PR = "prisonGuard";
+    const sc = "scytheLegionary", kt = "katanaLegionary", ch = "chainSickleSkirmisher", fd = "warFanDancer", hb = "gateHalberdier", bf = "bucklerFlailer", sp = "brassArmSapper", fl = "bellowsFlamer", dm = "drumCarrier", hp = "phalanxHoplite", hm = "harpoonMarine", rp = "repeaterCrossbowman", wh = "clockworkWarHound", sk = "scarecrowReaver", cr = "scarecrowCrow", bo = "tuskedWarBoar";
+    [["jungleRoad", [sc, SB], 2, 12, 13], ["jungleRoad", [kt, SP, AR], 0.5, 13, 14], ["jungle", [bo], 3, 12, 14], ["jungle", [sk, cr], 2, 12, 13],
+      ["fort", [sc, SP, AR], 2, 13, 14], ["fort", [bo, SP], 3, 13, 14], ["fort", [kt, SB, AR], 0.5, 13, 13], ["pools", [sk, cr], 2, 13, 14],
+      ["canopyLegion", [sc, MK], 2, 17, 18], ["canopyLegion", [ch, MK], 2, 17, 18], ["lookout", [sc, MK], 2, 18, 19], ["lookout", [ch, MK, OP], 2, 18, 19],
+      ["occupied", [sc, SB, AR], 2, 22, 23], ["occupied", [bf, SP], 3, 22, 23], ["occupied", [kt, SB, AR], 0.5, 22, 23],
+      ["canyon", [bf, AR], 3, 24, 25], ["canyon", [ch, AR], 2, 24, 25], ["canyon", [bo, AR], 3, 24, 25], ["canyon", [kt, AR], 0.5, 24, 25],
+      ["kharamRoad", [ch, SB], 2, 28, 29], ["kharamRoad", [sp, AR], 2, 27, 29], ["kharamRoad", [wh, wh], 2, 27, 28], ["kharamRoad", [rp, SB, SP], 2, 28, 30], ["kharamRoad", [kt, SB, AR], 0.5, 28, 30],
+      ["giantQuarry", [sp], 2, 30, 31], ["giantQuarry", [wh, wh], 2, 30, 31],
+      ["tzavan", [bf, SP], 3, 31, 32], ["tzavan", [dm, SB, SP], 2, 31, 32], ["tzavan", [ch, AR], 2, 31, 32], ["tzavan", [bo, SB], 3, 31, 32],
+      ["barracks", [bf, SP], 3, 31, 32], ["barracks", [dm, OP, AR], 2, 32, 33], ["barracks", [bo, SP], 3, 31, 32],
+      ["seaOpen", [hm, hm], 3, 28, 30], ["straits", [hm, AR], 3, 31, 32], ["patrolGalley", [hm, SB, AR], 2, 30, 32],
+      ["sewer", [sk, cr], 1, 38, 39],
+      ["palace", [fd, PG], 2, 39, 40], ["palace", [hb, EA], 3, 39, 40], ["garden", [fd, CP], 2, 40, 41], ["eastWing", [fd, JE], 2, 42, 42], ["eastWing", [hb, CP], 3, 42, 42],
+      ["villa", [fd, CE], 2, 47, 48], ["villa", [hb, CP], 3, 47, 48], ["villa", [wh, wh], 2, 47, 47],
+      ["coast", [hp, hp, hp], 3, 44, 45], ["coast", [kt, SB, SP], 0.5, 45, 45], ["convoy", [hp, hp, CG], 3, 45, 46], ["convoy", [fd, CG], 1, 45, 46],
+      ["saltFlats", [hp, hp, hp], 3, 45, 46], ["saltFlats", [fl, SB], 2, 45, 46], ["saltMine", [sp, OP], 2, 46, 46], ["saltMine", [fl, SP], 2, 46, 46],
+      ["prison", [hb, PR], 3, 51, 52], ["prison", [wh, wh], 2, 51, 52],
+      ["warfront", [hp, hp, hp], 3, 59, 59], ["warfront", [sp, AR], 2, 59, 60], ["warfront", [fl, fl, SB], 2, 59, 59], ["warfront", [dm, SB, SP], 2, 59, 59], ["warfront", [rp, SB, AR], 2, 59, 60], ["warfront", [wh, wh], 2, 59, 59],
+      ["trenches", [hp, hp, hp], 3, 60, 60], ["trenches", [fl, SL], 2, 59, 60], ["trenches", [dm, OP, SL], 2, 60, 60], ["trenches", [rp, SB], 2, 60, 60],
+      ["stair", [hb, PG], 3, 64, 64], ["stair", [rp, CE], 2, 65, 65]].forEach(([t, foes, w, a, b]) => { if (EN[t]) EN[t].push(T(foes, w, a, b)); else console.warn("newfoes: no table", t); });
+    EN.coastConvoy = EN.convoy;   // the same array (m4 aliases it)
+  }
+
   // ---------- art: stand-ins until ART-B's own sprite or model exists ----------
   // id: [stand-in art id, tint, scale]. At load in the browser the creature index and the model manifest are read once; an id that now has its own art switches to it.
   // The four bosses whose rules were written before their art existed also switch (mentorIthiel, veilStag, lastWarden, mawmotherOfTheDeep).

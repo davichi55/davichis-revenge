@@ -293,7 +293,7 @@
   S.trigger.gateS23 = async F => {
     if (F.f("ch11.s23")) return;
     F.music("greatPyramid");
-    const freed = await M.gateScene(F, 23, 1, { level: 66, soldiers: [["courtPriest", 64, " B"], ["courtPriest", 64, " C"]], title: "Keeper of the Zenith Gate", place: "the Zenith Gate", fx: 120, fy: -6,
+    const freed = await M.gateScene(F, 23, 1, { level: 66, soldiers: [["courtPriest", 64, " B"], ["aquilaBearer", 66, " C"]], title: "Keeper of the Zenith Gate", place: "the Zenith Gate", fx: 120, fy: -6,
       setup: async c => {
         M3.actors(c, [["p1", "npcPriest", 130, -50], ["p2", "npcPriest", 150, 40]]);
         c.tint("#e8e8f4", 0.18, 400); c.fx("sparkle", c.hero.x + 120, c.hero.y - 40, { ms: 1800, r: 70 });

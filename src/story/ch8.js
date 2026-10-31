@@ -323,7 +323,7 @@
   S.trigger.tollS13 = async F => {
     if (F.f("ch8.s13")) return;
     F.music("tension");
-    const ok = await M.general(F, 13, { level: 45, soldiers: [["legionCenturion", 44, " B"]], bg: "harbourCoast", title: "The Tollbooth General", place: "the Tzavan coast tollbooth", where: "It went out along the cliff, where the road runs out of stone.", fx: 130, fy: -4,
+    const ok = await M.general(F, 13, { level: 45, soldiers: [["aquilaBearer", 45, " B"]], bg: "harbourCoast", title: "The Tollbooth General", place: "the Tzavan coast tollbooth", where: "It went out along the cliff, where the road runs out of stone.", fx: 130, fy: -4,
       setup: async c => {
         const h = c.hero; c.tint("#202a34", 0.2, 400);
         M3.actors(c, [["gd", "npcLegionGuard", 160, -30, { name: "Toll-clerk", flip: true }]]);
@@ -498,7 +498,7 @@
     if (F.f("ch8.s15")) return;
     if (!F.f("vil.cook") && !hub()) { await UI.say([["narr", "The strongroom door is behind a corridor of steward's guards. A servant's stair might get you round."]]); return; }
     F.music("tension");
-    const ok = await M.general(F, 15, { level: 49, soldiers: [["legionCenturion", 47, " B"]], bg: "villa", title: "The Governor's Strongroom", place: "the Governor's strongroom", where: "It went out through the songbird garden, and the cages sprang open behind it.", fx: 130, fy: -4,
+    const ok = await M.general(F, 15, { level: 49, soldiers: [["aquilaBearer", 48, " B"]], bg: "villa", title: "The Governor's Strongroom", place: "the Governor's strongroom", where: "It went out through the songbird garden, and the cages sprang open behind it.", fx: 130, fy: -4,
       setup: async c => {
         const h = c.hero; c.tint("#2a1c10", 0.22, 400);
         M3.actors(c, [["gv", "npcTribune", 170, -30, { name: "The Governor", flip: true }]]);

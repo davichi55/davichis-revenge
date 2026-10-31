@@ -406,7 +406,7 @@
     if (F.f("ch10.s20")) return;
     if (!F.f("ch10.s19")) { await say("odan", "The causeway first, friend. The cohorts have not gone home yet."); return; }
     F.music("sanctum");
-    const freed = await S.generalScene(F, 20, { level: 61, soldiers: [["spiritPriest", 59, " B"], ["spiritPriest", 59, " C"]], bg: "crypt", title: "General of the Sanctum Door", place: "the cathedral steps",
+    const freed = await S.generalScene(F, 20, { level: 61, soldiers: [["spiritPriest", 59, " B"], ["wardStoneAbjurer", 60, " C"]], bg: "crypt", title: "General of the Sanctum Door", place: "the cathedral steps",
       where: "It went up the cliff, past the bells, and the bells did not ring for it.", fx: 120, fy: -6,
       setup: async c => {
         M3.actors(c, [["lysenne", "npcLysenne", -120, -10], ["morvane", "npcMorvane", 150, 0], ["g1", "npcFlockGuard", 110, 50]]);
@@ -651,7 +651,7 @@
   // ---------- 4.G the Naval Cup (Tzavan): STORY-M5 overrides the fights of Data.CUPS.naval ----------
   if (D.CUPS && D.CUPS.naval) Object.assign(D.CUPS.naval, {
     fights: [{ n: "Whelps and a gull-lord", foes: ["krakenWhelp", "krakenWhelp", "gullLord"], lv: 58 }, { n: "Siren eels", foes: ["sirenEel", "sirenEel", "mermaidShaman"], lv: 59 },
-      { n: "The boarding party", foes: ["legionShieldbearer", "legionShieldbearer", "legionArcher", "legionArcher"], lv: 60 }],
+      { n: "The boarding party", foes: ["legionShieldbearer", "harpoonMarine", "legionArcher", "legionArcher"], lv: 60 }],
     champion: { n: "The Naumachia Admiral", foes: ["naumachiaAdmiral", "krakenWhelp", "krakenWhelp"], lv: 62, intro: "Water pours over the white steps. The Admiral stands on a ship's prow that was never built to float, and two whelps circle the stern." } });
 
   // ---------- L7: the Veil Stag of the marsh at dawn ----------

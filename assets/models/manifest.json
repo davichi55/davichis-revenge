@@ -3035,5 +3035,131 @@
   "yaw": 1.57,
   "scale": 1.4,
   "kind": "creature"
+ },
+ "scytheLegionary": {
+  "file": "models/scytheLegionary.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.458
+ },
+ "katanaLegionary": {
+  "file": "models/katanaLegionary.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.639
+ },
+ "chainSickleSkirmisher": {
+  "file": "models/chainSickleSkirmisher.glb",
+  "yaw": 1.571,
+  "scale": 0.95,
+  "kind": "human",
+  "aspect": 1
+ },
+ "warFanDancer": {
+  "file": "models/warFanDancer.glb",
+  "yaw": 1.571,
+  "scale": 0.95,
+  "kind": "human",
+  "aspect": 0.434
+ },
+ "gateHalberdier": {
+  "file": "models/gateHalberdier.glb",
+  "yaw": 1.571,
+  "scale": 1.15,
+  "kind": "human",
+  "aspect": 0.462
+ },
+ "bucklerFlailer": {
+  "file": "models/bucklerFlailer.glb",
+  "yaw": 1.571,
+  "scale": 0.95,
+  "kind": "human",
+  "aspect": 0.767
+ },
+ "brassArmSapper": {
+  "file": "models/brassArmSapper.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.485
+ },
+ "bellowsFlamer": {
+  "file": "models/bellowsFlamer.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.723
+ },
+ "drumCarrier": {
+  "file": "models/drumCarrier.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "human",
+  "aspect": 0.636
+ },
+ "aquilaBearer": {
+  "file": "models/aquilaBearer.glb",
+  "yaw": 1.571,
+  "scale": 1.45,
+  "kind": "human",
+  "aspect": 0.513
+ },
+ "phalanxHoplite": {
+  "file": "models/phalanxHoplite.glb",
+  "yaw": 1.571,
+  "scale": 1.12,
+  "kind": "human",
+  "aspect": 0.58
+ },
+ "maskedExecutioner": {
+  "file": "models/maskedExecutioner.glb",
+  "yaw": 1.571,
+  "scale": 1.25,
+  "kind": "human",
+  "aspect": 0.356
+ },
+ "wardStoneAbjurer": {
+  "file": "models/wardStoneAbjurer.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "human",
+  "aspect": 0.409
+ },
+ "harpoonMarine": {
+  "file": "models/harpoonMarine.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.873
+ },
+ "repeaterCrossbowman": {
+  "file": "models/repeaterCrossbowman.glb",
+  "yaw": 1.571,
+  "scale": 0.95,
+  "kind": "human",
+  "aspect": 0.565
+ },
+ "clockworkWarHound": {
+  "file": "models/clockworkWarHound.glb",
+  "yaw": 1.571,
+  "scale": 0.85,
+  "kind": "enemy",
+  "aspect": 1.308
+ },
+ "scarecrowReaver": {
+  "file": "models/scarecrowReaver.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "enemy",
+  "aspect": 0.362
+ },
+ "tuskedWarBoar": {
+  "file": "models/tuskedWarBoar.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.606
  }
 }
