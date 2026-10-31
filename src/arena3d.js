@@ -444,7 +444,7 @@
     else if (e.t === "buff") { seenFx("buff"); if (FX()) FX().buff(e.tgt); float(e.tgt, `${STAT_LABEL[e.stat] || e.stat} ▲`, "#a8e0a0"); sfx("buff"); hud(); await wait(200); }
     else if (e.t === "reaction") { seenFx(e.name); if (FX() && e.tgt) FX().reaction(e.tgt, e.name); banner(e.name.toUpperCase() + "!", { Freeze: "#7fe3ff", Steam: "#e0e0e0", Conductive: "#ffe45c", Shatter: "#b0e8ff", Detonate: "#ff9a4a" }[e.name]); if (e.text) log(e.text); flash("#ffffff", 180); sfx(e.name === "Freeze" || e.name === "Shatter" ? "ice" : e.name === "Conductive" ? "shock" : "fire"); shake = Math.max(shake, 0.15); hud(); await wait(750); }
     else if (e.t === "stunned") { float(e.tgt, e.type === "freeze" ? "FROZEN" : "STUNNED", "#ffd23f"); sfx("debuff"); log(`${e.tgt.name} cannot act!`); await wait(500); }
-    else if (e.t === "tide") { if (e.n > 0) float(e.tgt, "Tide " + e.v, "#4ad0c8"); hud(); await wait(e.n > 0 ? 160 : 20); }
+    else if (e.t === "tide") { seenFx("tide"); if (e.n > 0) float(e.tgt, "Tide " + e.v, "#4ad0c8"); hud(); await wait(e.n > 0 ? 160 : 20); }
     else if (e.t === "resist") { seenFx("resist"); float(e.tgt, "Resisted", "#c9b28a"); await wait(160); }
     else if (e.t === "immune") { float(e.tgt, "Immune", "#c9b28a"); await wait(160); }
     else if (e.t === "reflect") { float(e.tgt, "Reflected!", "#e8f0ff"); flash("#ffffff", 150); await wait(300); }

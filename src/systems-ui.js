@@ -62,6 +62,7 @@
     ["stun", "Stun", "Loses its next turn. A stun also cancels an attack the enemy was gathering strength for. Bosses grow harder to stun each time."],
     ["steam", "Steam", "Wreathed in steam: Attack -25% for 2 turns. Comes from mixing wet and fire."],
     ["petrify", "Petrify", "Turning to stone: each round Attack, Power and Speed drop by another 10%; at the third step it is stunned."],
+    ["tide", "Tide", "Leviathans build Tide (up to 5) with moves such as Tail Slap (+1), Undertow (+1), Deep Breath (+2), Riptide (+1), Swell (+1 at the start of each of its next 3 turns) and Brace the Deep (+1 when hit, at most 2). Maelstrom and Tidal Wave release it: damage x (1 + 0.8 per Tide), so 5 Tide hits 5x as hard, and the Tide drops to 0. A release at 5 Tide also tries to stun (High Water). Tide starts at 0 every fight. Leviathans also hold up to 15 MP instead of 10."],
     ["Conductive", "Reaction: Conductive", "Shock on a wet target: double damage, and the water is used up."],
     ["Freeze", "Reaction: Freeze", "Chill on a wet target, or wet on a chilled one: the target freezes."],
     ["Shatter", "Reaction: Shatter", "A medium or strong physical move on a chilled or frozen target: 1.6x damage, and the ice breaks."],
