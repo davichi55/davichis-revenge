@@ -91,7 +91,7 @@ const Menus = (() => {
   };
 
   // ---------- main menu ----------
-  M.main = () => {
+  M.main = (startTab) => {   // startTab: a tab name, e.g. "Journal" (Q on the map opens the quest log)
     let jt = 0, msg = "";
     const TABS = ["Party", "Items", "Journal", "System"]; if (G.flags.ferryPass && window.Systems && Systems.ui) TABS.splice(3, 0, "Travel"); Systems.ui && (Systems.ui.jt = 0, Systems.ui.page = 0);
     const win = UI.window("Menu", (body, api, tab) => {
@@ -142,7 +142,7 @@ const Menus = (() => {
           <div class="row"><div class="g">Back to title<small>Unsaved progress is lost.</small></div><button class="b" data-sys="title">Title</button></div>`;
       }
     }, {
-      tabs: TABS, gold, foot: "Q / R or Tab switches tabs. Esc closes.",
+      tabs: TABS, tab: Math.max(0, TABS.indexOf(startTab)), gold, foot: "Q / R or Tab switches tabs. Esc closes.",
       click: async (e, api) => {
         const t = e.target.closest("[data-d],[data-sw],[data-order],[data-use],[data-unlock],[data-jt],[data-sys],[data-sj],[data-travel],[data-charm]"); if (!t) return; const d = t.dataset; msg = "";
         if (d.sj !== undefined) { Systems.ui.journalClick(d.sj); return api.redraw(); }

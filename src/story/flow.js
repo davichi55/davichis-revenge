@@ -302,7 +302,7 @@ const Flow = (() => {
     F.afterFight && F.afterFight(res);
   });
   F.hookExit = (to, entry) => F.guard(async () => { F.go(to, entry); });
-  F.hookMenu = () => (F.locked ? Promise.resolve() : Menus.main());
+  F.hookMenu = (tab) => (F.locked ? Promise.resolve() : Menus.main(tab));
   F.encounterMult = () => (window.Systems ? Systems.encounterMult() : (G.flags.wardstone ? 0.5 : 1));   // charms: src/systems.js
 
   // Visible-condition helper for hub and engines

@@ -58,7 +58,7 @@ Story.exitGate = (to, F) => {
   Hk.chest = id => Flow.hookChest(id);
   Hk.gather = id => Flow.hookGather(id);
   Hk.encounter = (table, rid) => Flow.hookEncounter(table, toStory(rid));
-  Hk.menu = () => Flow.hookMenu();
+  Hk.menu = (rid, tab) => Flow.hookMenu(tab);
   Hk.exit = async (to, entry, info) => {
     const my = toStory(to), why = Story.exitGate(my, Flow);
     if (why) { await Flow.guard(() => UI.say([["hero", why]])); return false; }

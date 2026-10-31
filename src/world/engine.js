@@ -142,6 +142,7 @@
       this.keys = this.input.keyboard.addKeys({ up: "UP", down: "DOWN", left: "LEFT", right: "RIGHT", w: "W", a: "A", s: "S", d: "D" });
       this.input.keyboard.on("keydown-E", () => this.interact()); this.input.keyboard.on("keydown-SPACE", () => this.interact());
       this.input.keyboard.on("keydown-ESC", () => { if (!this.busy) this.runHook("menu", this.rid); });
+      this.input.keyboard.on("keydown-Q", () => { if (!this.busy) this.runHook("menu", this.rid, "Journal"); });   // Q = the quest log (Danny 2026-10-31)
       if (!this._blurHook) { this._blurHook = () => this.releaseKeys(); window.addEventListener("blur", this._blurHook); }   // alt-tab while walking
       this.input.on("pointerdown", p => this.pointerDown(p));
       this.cameras.main.setBounds(0, 0, R.w, R.h).startFollow(this.hero, true, 0.12, 0.12).setRoundPixels(true);
