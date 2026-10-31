@@ -324,8 +324,52 @@
     if (hubMode()) { try { await fn(dryStage()); } catch (e) { if (e instanceof Flow.Interrupt) throw e; console.warn("dry stage", e); } return; }
     return Cinema.stage(fn, o);
   };
+  // ---------- staged beats shared by chapters 3-11 and the post-game (Danny 2026-10-31: everything that feels like a scene should show a scene) ----------
+  // all of them are plain M.stage scenes (so they also run, as spoken lines only, in the menu hub); none of them changes a flag or moves the hero to another map
+  const mapNpc = id => { const sc = window.World && World.scene; return sc && sc.npcs ? sc.npcs.find(q => q.id === id) || null : null; };
+  // a copy of a map NPC as a stage actor; the real one is hidden for the length of the scene. Returns the actor id, or null when there is no such NPC (hub, other map)
+  M.ghost = (c, id, o) => { const n = mapNpc(id); if (!n || !n.art) return null; c.actor("g_" + id, Q({ art: n.art, x: n.x, y: n.y, flip: !!n.flip, name: n.name }, o || {})); c.remove(id); return "g_" + id; };
+  // a freed prisoner (a map NPC) steps out: the key turns, the door gives, the lines play, then they leave along the corridor (o.dx / o.dy: where to, relative to the cell; o.keep: do not walk off)
+  M.freeNpc = (id, lines, o) => M.stage(async c => {
+    o = o || {}; const n = mapNpc(id), g = n ? M.ghost(c, id) : null;
+    c.sfx("keyTurn"); await c.wait(350); c.sfx("door");
+    if (n) c.fx("dust", n.x, n.y - 8, { ms: 900, r: 28 });
+    if (g) { c.emote(g, o.emote || "!"); await c.wait(300); }
+    if (lines && lines.length) await c.say(lines);
+    if (g && !o.keep) { const away = o.dx != null ? o.dx : (n.x >= c.hero.x ? 220 : -220); await c.walk(g, n.x + away, n.y + (o.dy || 0), o.ms || 1700); await c.anim(g, "fadeOut", { ms: 500 }); }
+    if (g) c.remove(g);
+  });
+  // a boss or legend creature takes its leave on the live map: it stands ahead of the hero while the lines play, then bows (o.end "bow", the default), falls ("fall") or just fades ("fade").
+  // o = { dx, dy, scale, fx, sfx, shake, tint }
+  M.outro = (art, lines, o) => M.stage(async c => {
+    o = o || {}; const p = rel(c, o.dx != null ? o.dx : 140, o.dy || 0);
+    c.actor("bo", { art, x: p.x, y: p.y, scale: o.scale || 1.3, flip: true });
+    if (o.tint) c.tint(o.tint, 0.26, 300);
+    if (o.sfx) c.sfx(o.sfx);
+    if (o.shake) c.shake(o.shake, 600);
+    if (o.fx) c.fx(o.fx, p.x, p.y - 30, { ms: 2600, r: 60 });
+    await c.wait(500);
+    if (lines && lines.length) await c.say(lines);
+    const end = o.end || "bow";
+    if (end === "fall") await c.anim("bo", "fall", { ms: 700 }); else if (end === "bow") await c.anim("bo", "bow");
+    await c.anim("bo", "fadeOut", { ms: 1100 });
+    c.remove("bo"); if (o.tint) c.tint(o.tint, 0, 400);
+  });
+  // a gate, door, shutter, hatch or sluice works on the live map: the camera swings to it (o.dx / o.dy from the hero), it grinds and shakes, dust or o.fx rises, then the lines play.
+  // o = { dx, dy, fx, fx2, sfx, shake, flash, tint }
+  M.gate = (lines, o) => M.stage(async c => {
+    o = o || {}; const p = rel(c, o.dx != null ? o.dx : 170, o.dy != null ? o.dy : -10);
+    if (o.tint) c.tint(o.tint, 0.22, 300);
+    await c.pan(p.x, p.y, 700);
+    c.sfx(o.sfx || "stoneGrind"); c.shake(o.shake != null ? o.shake : 2, 900);
+    if (o.flash) c.flash(o.flash, 350);
+    c.fx(o.fx || "dust", p.x, p.y, { ms: 2000, r: 50 }); if (o.fx2) c.fx(o.fx2, p.x, p.y - 20, { ms: 2000, r: 40 });
+    await c.wait(950);
+    if (lines && lines.length) await c.say(lines);
+    c.follow(); if (o.tint) c.tint(o.tint, 0, 400);
+  });
   M.once = (F, flag) => { if (F.f(flag)) return false; F.set(flag); return true; };
-  M.cycle = (key, lines) => { const n = G.flags[key] || 0; G.flags[key] = n + 1; return lines[n % lines.length]; };
+  M.cycle =(key, lines) => { const n = G.flags[key] || 0; G.flags[key] = n + 1; return lines[n % lines.length]; };
   // illustrated panels used as a dialogue scene: each line becomes a caption "Name: text" (Cinema.panels shows captions only)
   M.talkPanels = (img, rows, o) => Cinema.panels(rows.map(([who, text, pan]) => ({ img, pan, text: who === "narr" ? text : (UI.PEOPLE[who] ? UI.PEOPLE[who].name : who) + ": “" + text + "”" })), o);
   // a town's standard talkers: innkeeper, merchant, and the three rumour givers r1..r3 (who = speaker ids, small = small talk lists per giver)
@@ -678,8 +722,8 @@
     T(FO)[id] = async F => {
       if (F.f("fort.freed" + (n + 1))) return;
       if (!F.f("fort.cellKey")) { await UI.say([[who, ["Please. The guard has the keys. The one with the ledger.", "Do not stand there. They count who stands there.", "Is it day outside? We have a window, but it faces a wall."][n]]]); return; }
-      F.set("fort.freed" + (n + 1)); F.sfx("door");
-      await UI.say([["narr", "The key turns. The door gives with a sound like a held breath leaving."], [who, line]]);
+      F.set("fort.freed" + (n + 1));
+      await M.freeNpc(id, [["narr", "The key turns. The door gives with a sound like a held breath leaving."], [who, line]], { dx: 260, dy: 40 });
       if ([1, 2, 3].every(k => F.f("fort.freed" + k))) { F.set("fort.cells"); await UI.say([["narr", "The cell block is empty. At the far end, the stair to the tower stands unwatched."]]); }
     };
   });
@@ -717,7 +761,15 @@
     const res = await F.fight([F.mkEnemy("legionSpearman", 14), F.mkEnemy("legionOptio", 14, " B")], { bg: "pyramid", intro: "The overseer calls the guard!", music: "battleSoldiers" });
     if (res !== "win") return;
     F.set("pyr.gate" + n); F.sfx("door");
-    await UI.say([["narr", "The overseer drops his tally-stick. Behind him, the workers put their shoulders to the crank without being told, and the gate swings. They run into the jungle, all of them, not one looking back."]]);
+    await M.stage(async c => {
+      const ov = M.ghost(c, "overseer" + n), wk = M.ghost(c, "slave" + n), h = c.hero;
+      const crowd = [wk].filter(Boolean); for (let i = 0; i < 3; i++) { c.actor("pw" + i, { art: i % 2 ? "npcCaptive" : "npcSlave", x: h.x + 30 + i * 36, y: h.y + 40 + i * 14, flip: true }); crowd.push("pw" + i); }
+      if (ov) { c.emote(ov, "!"); await c.wait(250); }
+      await c.say([["narr", "The overseer drops his tally-stick. Behind him, the workers put their shoulders to the crank without being told, and the gate swings. They run into the jungle, all of them, not one looking back."]]);
+      c.sfx("door"); c.shake(1, 500);
+      await Promise.all([...(ov ? [c.walk(ov, h.x - 400, h.y - 60, 2600)] : []), ...crowd.map((id, i) => c.walk(id, h.x - 420 - i * 30, h.y + 40 + i * 20, 2000 + i * 150))]);
+      crowd.concat(ov ? [ov] : []).forEach(id => c.remove(id));
+    });
   };
   [1, 2, 3].forEach(n => {
     T(CH)["slave" + n] = async F => { await UI.say([["slave", ["Please do not make me look.", "I did not see you. I did not see anything. It is better.", "The overseer is on the left. I am looking at the floor. The floor is good."][n - 1]]]); };
@@ -773,11 +825,11 @@
     const res = await F.fight([F.mkEnemy(o.enemy, (info && info.level) || o.level)], { noFlee: true, music: "legend", goldMult: 0, xpBonus: 1.5, intro: o.fightIntro, bg: F.arenaOf(G.region) });
     if (res !== "win") { F.music(F.regionMusic()); return false; }
     F.set(id.toLowerCase() + ".done"); const g = Math.round(10 * Systems.m(l.ch)); G.gold += g; UI.toast("+" + g + " kakal", 2400);
-    await Systems.giveReward(l.reward, l.ch); if (o.after) await UI.say(o.after);
+    await Systems.giveReward(l.reward, l.ch); if (o.after) await M.outro(o.enemy, o.after, { fx: o.fx, end: o.end, scale: o.scale, tint: o.tint });
     return true;
   };
   Data.LEGENDS.L2.level = 15; Data.LEGENDS.L3.level = 21;
-  S.legend.L2 = M.legend("L2", { enemy: "shearwing", level: 15, bg: "jungle", title: "The Razor Sunbird", fightIntro: "Shearwing screams down out of the canopy!",
+  S.legend.L2 = M.legend("L2", { enemy: "shearwing", fx: "feathers", end: "bow", level: 15, bg: "jungle", title: "The Razor Sunbird", fightIntro: "Shearwing screams down out of the canopy!",
     intro: [["narr", "A shape crosses the canopy light: a bird of beaten gold, every feather an edge. It circles once, as if it had been waiting for you."]],
     lines: [["narr", "A sunbird as long as a wagon folds its wings and drops. The leaves it passes fall in two halves."], ["hero", "(It cut a banner in half in one pass. I have no banner.)"]],
     after: [["narr", "Shearwing lands, quite gently, and bows its head to you before the light goes out of its feathers. On the ground lie the pieces of a very old armour."]] });

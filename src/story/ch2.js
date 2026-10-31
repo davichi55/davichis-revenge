@@ -29,18 +29,26 @@
     dunmar: async F => {
       if (!F.f("am.wagon")) {
         F.set("am.wagon");
-        await UI.say([
-          ["narr", "At the edge of the market stands a covered wagon painted with faded stars. Cages hang inside, and eyes glint behind the bars."],
-          ["dunmar", "Lad! You came through. Look at you, still in that tin."],
-          ["hero", "Dunmar. The others..."],
-          ["dunmar", "Taken. Eight pens. I got these six cages out on the back stair. This is the Menagerie Wagon now. It parks wherever there is a safe town."],
-          ["dunmar", "Ithiel moved half of the cages out of the vault last week. Never said why. Never asked me, either. Strange old goat."],
-        ]);
-        await F.banter("wagon");
-        await UI.say([
-          ["dunmar", "The cells here open with keys, old keys from the old dungeons. Bring me one and I can free one of my cages. Their creatures are as good as your own."],
-          ["dunmar", "There's a story about a bull in the walls under this oasis. Old Mazeheart waits down the stair under the rib arch in the north-east corner of town, if you dare."],
-        ]);
+        // the camera finds the wagon first: cages rattle, eyes glint behind the bars, then Dunmar spots his apprentice
+        await S.stage(async c => {
+          await c.pan(1150, 700, 900);
+          c.sfx("creak"); c.shake(1.5, 500);
+          c.fx("sparkle", 1128, 742, { r: 26, ms: 2600, color: 0xffe08a }); c.fx("sparkle", 1176, 750, { r: 26, ms: 2600, color: 0xffe08a });
+          await c.say([["narr", "At the edge of the market stands a covered wagon painted with faded stars. Cages hang inside, and eyes glint behind the bars."]]);
+          c.follow(); c.emote("oldDunmar", "!");
+          await c.wait(500);
+          await c.say([
+            ["dunmar", "Lad! You came through. Look at you, still in that tin."],
+            ["hero", "Dunmar. The others..."],
+            ["dunmar", "Taken. Eight pens. I got these six cages out on the back stair. This is the Menagerie Wagon now. It parks wherever there is a safe town."],
+            ["dunmar", "Ithiel moved half of the cages out of the vault last week. Never said why. Never asked me, either. Strange old goat."],
+          ]);
+          await F.banter("wagon");
+          await c.say([
+            ["dunmar", "The cells here open with keys, old keys from the old dungeons. Bring me one and I can free one of my cages. Their creatures are as good as your own."],
+            ["dunmar", "There's a story about a bull in the walls under this oasis. Old Mazeheart waits down the stair under the rib arch in the north-east corner of town, if you dare."],
+          ]);
+        });
         UI.toast("The Menagerie Wagon is here.");
       } else if (F.item("keyK1")) {
         await UI.say([["dunmar", "A bone key! Look at it. Cold as a grave. Right, hold the lantern."]]);
@@ -102,6 +110,22 @@
   };
 
   // ---------- the Bone Maze (K1) ----------
+  // the Maze Guardian is beaten: it staggers, crumbles into horns and dust, and the camera finds the chest at the back of the cell. lines = what is said afterwards
+  S.mazeGuardianFalls = async (F, lines) => {
+    await S.stage(async c => {
+      const h = c.hero;
+      c.actor("mg", { art: "boneBullCalf", x: h.x - 10, y: h.y - 96, h: 120 });
+      await c.wait(300);
+      c.sfx("roar"); await c.anim("mg", "shake", { ms: 500 });
+      await c.anim("mg", "fall", { dir: "left", ms: 600 });
+      c.sfx("rockFall"); c.shake(4, 700); c.fx("dust", h.x - 10, h.y - 96, { n: 22, scale: 1.8, color: 0xd8d0b8 });
+      await c.anim("mg", "fadeOut", { ms: 900 });
+      await c.pan(h.x + 70, h.y + 10, 900);
+      c.fx("glow", h.x + 70, h.y + 8, { color: 0xffd36a, ms: 2000 }); c.fx("sparkle", h.x + 70, h.y - 6, { r: 24, ms: 1800 });
+      await c.say(lines);
+      c.follow();
+    });
+  };
   S.trigger.mazeDeep = async F => {
     const JUNCTIONS = [
       ["Three passages of pale bone. A bellow rolls out of the LEFT one, loud, shaking dust from the roof.", "left"],
@@ -125,7 +149,7 @@
     const res = await F.boss([F.mkEnemy("mazeGuardian", 8), F.mkEnemy("mazeBat", 7, " B")], { bg: "boneMaze", intro: "The Maze's guardian lowers its horns!" });
     if (res !== "win") return;
     F.set("k1.done"); F.quest("bellow", 1);
-    await UI.say([["narr", "The guardian crumbles into horns. At the back of the cell, a chest."]]);
+    await S.mazeGuardianFalls(F, [["narr", "The guardian crumbles into horns. At the back of the cell, a chest."]]);
   };
   S.chest["maze.chest"] = async F => {
     if (!F.f("k1.key")) { F.set("k1.key"); F.give("keyK1", 1); }
@@ -141,7 +165,19 @@
     }
     if (F.f("bear.done") && !F.f("sg.letter")) {
       F.set("sg.letter");
-      await UI.say([["narr", "A courier in a grey hood waits at the gate. He puts a letter in your hand and is gone before you can ask."]]);
+      await S.stage(async c => {
+        const h = c.hero;
+        c.actor("cour", { art: "npcHooded", x: h.x + 260, y: h.y + 8, alpha: 0 });
+        await c.anim("cour", "fadeIn", { ms: 300 });
+        await S.rush(c, "cour", h.x + 54, h.y + 4, 120);
+        c.emote("hero", "?"); c.face("cour", "left");
+        await c.say([["narr", "A courier in a grey hood waits at the gate. He puts a letter in your hand and is gone before you can ask."]]);
+        c.sfx("paper"); c.fx("sparkle", h.x + 20, h.y - 30, { r: 14, ms: 700 });
+        await c.anim("cour", "bow");
+        c.walk("cour", h.x + 360, h.y - 70, 800); await c.wait(450);
+        c.emote("hero", "!");
+        await c.anim("cour", "fadeOut", { ms: 350 });
+      });
       await F.letter("the green seal", ["\"Well done. The data is exactly what I needed.\"", "\"A friend will meet you on the far shore. Captain Brisk at the Saltgate dock will take you. Do not stop recording. - I.\""]);
       await UI.say([["hero", "(Exactly what he needed? ...For the research. Of course.)"]]);
       F.quest("m_boat", 0);
@@ -177,16 +213,38 @@
   S.trigger.bearer = async F => {
     if (F.f("bear.done")) return;
     F.music("ruins");
-    await UI.say([["narr", "The great door grinds open. A sunken chamber, a fallen star of stone hanging in the air on a giant's back. The giant kneels, and breathes."], ["hero", "(It has not moved in a thousand years. It is awake now.)"]]);
-    await F.banter("bearer");
+    await S.stage(async c => {
+      c.sfx("stoneGrind"); c.shake(3, 1500); c.fx("dust", 750, 700, { n: 18, scale: 1.8 });
+      await c.wait(900);
+      await c.pan(750, 235, 1100);
+      c.actor("bearer", { art: "duneBearer", x: 750, y: 262, h: 190, alpha: 0 });
+      c.light(750, 220, 200, 0.8); c.fx("glow", 750, 215, { color: 0x8fe8ff, n: 3 });
+      await c.anim("bearer", "fadeIn", { ms: 1400 });
+      await c.say([["narr", "The great door grinds open. A sunken chamber, a fallen star of stone hanging in the air on a giant's back. The giant kneels, and breathes."], ["hero", "(It has not moved in a thousand years. It is awake now.)"]]);
+      c.sfx("rumble"); c.shake(2, 600); c.emote("hero", "!");
+      await F.banter("bearer");
+      await c.anim("bearer", "fadeOut", { ms: 500 });
+      c.follow();
+    });
     const intro = (Core.ENEMIES && Core.ENEMIES.duneBearer && Core.ENEMIES.duneBearer.intro) || "The sand rises. An ancient giant stands up, a cracked sky-stone strapped to its back.";
     await Cinema.boss({ id: "duneBearer", name: "The Dune Bearer", title: "Titan of the Whisperglass", bg: "ruins", music: "titan" });
     const res = await F.boss([F.mkEnemy("duneBearer", 10)], { intro, music: "titan", xpBonus: 1.0 });
     if (res !== "win") return;
     F.set("bear.done"); F.set("ch2.bearerDone"); F.questDone("m_bearer"); F.giveGear("G17", 3);
     G.best.duneBearer = Object.assign(G.best.duneBearer || {}, { breakKnown: true });
-    await UI.say([["narr", "The Bearer sinks to its knees. The sky-stone cracks in half and thuds into the sand. The giant looks at you, and for an instant its eyes are not angry. Then it is still."],
-      ["hero", "(I wrote down every blow. Ithiel will be pleased.)"], ["narr", "From the debris you take a gleaming mirror-disc set: Stoneguard of the Sun Gate."]]);
+    await S.stage(async c => {
+      c.actor("bearer", { art: "duneBearer", x: 750, y: 262, h: 190 });
+      await c.pan(750, 235, 700);
+      c.sfx("roar"); await c.anim("bearer", "bow"); c.shake(4, 900);
+      c.sfx("quake"); c.flash("#fff2c8", 400); c.fx("explosion", 750, 215, { scale: 1.2, shake: 3 });
+      await c.wait(700);
+      await c.say([["narr", "The Bearer sinks to its knees. The sky-stone cracks in half and thuds into the sand. The giant looks at you, and for an instant its eyes are not angry. Then it is still."]]);
+      await c.anim("bearer", "fadeOut", { ms: 900 });
+      await c.say([["hero", "(I wrote down every blow. Ithiel will be pleased.)"]]);
+      c.sfx("itemGet"); c.fx("sparkle", 750, 240, { r: 50, ms: 1800 });
+      await c.say([["narr", "From the debris you take a gleaming mirror-disc set: Stoneguard of the Sun Gate."]]);
+      c.follow();
+    });
     F.save(true);
     F.go("saltgate", "back");
   };
@@ -194,6 +252,16 @@
   // ---------- the end of M1 ----------
   S.ending = async F => {
     F.set("m1.done"); F.questDone("m_boat");
+    // out along the pier to the boat, the bell, the lines come off the bollards; then the screen goes dark
+    await S.stage(async c => {
+      c.sfx("shipBell");
+      await Promise.all([c.walk("smuggler", 1440, 332, 1700), c.walk("hero", 1410, 336, 2000)]);
+      c.face("hero", "right"); c.face("smuggler", "left");
+      c.sfx("anchor"); c.fx("splash", 1500, 400, { scale: 1.4 }); c.emote("hero", "...");
+      await c.pan(1450, 420, 1000);
+      c.sfx("sail"); c.sfx("gull");
+      await c.wait(900);
+    });
     await UI.fade(true, 700); F.music("sad");
     await F.banter("boat");
     await UI.say([["hero", "(Behind me: a burning academy, eight empty pens, a Titan on its knees. Ahead: the empire.)"]]);

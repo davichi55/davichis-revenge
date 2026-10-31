@@ -133,7 +133,16 @@
     },
   });
   S.gather.tallyBox = async F => {
-    await UI.say([["narr", "Under the wagon bed, a strongbox wedged in the sand. Something growls in the shade. Then something else."]]);
+    await S.stage(async c => {
+      const h = c.hero;
+      await c.say([["narr", "Under the wagon bed, a strongbox wedged in the sand. Something growls in the shade. Then something else."]]);
+      c.sfx("growl");
+      c.actor("j1", { art: "sandstitchJackal", x: h.x + 44, y: h.y - 22, alpha: 0 }); c.actor("j2", { art: "sandstitchJackal", x: h.x + 76, y: h.y + 4, alpha: 0, flip: true });
+      await Promise.all([c.anim("j1", "fadeIn", { ms: 200 }), c.anim("j2", "fadeIn", { ms: 350 })]);
+      c.emote("hero", "!"); c.fx("dust", h.x + 60, h.y - 8, { n: 8 }); c.shake(2, 250);
+      await Promise.all([c.anim("j1", "lunge", { dx: -26 }), c.anim("j2", "lunge", { dx: -26 })]);
+      await c.wait(300);
+    });
     const res = await F.fight([F.mkEnemy("sandstitchJackal", 4, " A"), F.mkEnemy("sandstitchJackal", 4, " B")], { intro: "Jackals have made a den under the wagon!" });
     if (res !== "win") return false;
     F.set("tally.got"); F.quest("tally", 1); F.sfx("door");
@@ -141,7 +150,14 @@
   };
   S.gather.lostBell = async F => {
     F.set("bell.got"); F.quest("bell", 1); F.sfx("coin");
-    await UI.say([["narr", "Under a skin of glass, a small brass bell gone green. When you lift it, the whole ridge answers on one thin note."], ["hero", "(He tuned it to this. Of course he did.)"]]);
+    await S.stage(async c => {
+      const h = c.hero;
+      c.sfx("chime"); c.fx("glow", h.x, h.y - 30, { color: 0x9fe8ff, n: 3 });
+      await c.say([["narr", "Under a skin of glass, a small brass bell gone green. When you lift it, the whole ridge answers on one thin note."]]);
+      c.sfx("bell"); c.shake(1.5, 900); c.fx("sparkle", h.x, h.y - 20, { r: 130, ms: 2200, color: 0xbfffee }); c.tint("#bfffee", 0.12, 400);
+      await c.wait(1300);
+      await c.say([["hero", "(He tuned it to this. Of course he did.)"]]);
+    });
   };
   // Adders in the Reeds: the reed keeper of the oasis opens the pearl shallows
   T("oasisOutskirts", {

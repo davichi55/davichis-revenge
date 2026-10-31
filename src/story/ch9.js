@@ -169,8 +169,8 @@
     S.done["fire" + n] = F => F.f("nest.f" + n);
     S.trigger["fire" + n] = async F => {
       if (F.f("nest.f" + n)) return; F.set("nest.f" + n); F.sfx("fire");
-      await UI.say([["narr", ["You strike a spark into the first brazier. It catches slowly, then roars; the ash-drift across the corridor lifts on the heat and blows away in flakes.", "The second brazier smokes, then lights. A drift of old nest-material, three feet deep, burns away like paper.", "The third brazier takes at once. A whole wall of ash falls in on itself and the stair beyond it is clear."][n - 1]]]);
-      if ([1, 2, 3].every(k => F.f("nest.f" + k))) { F.set("nest.open"); await UI.say([["narr", "The last drift burns away. At the top of the stair the trunk opens into a great hollow, and in the hollow something shifts, with a sound like a hundred slow wings."]]); }
+      await S.m2.gate([["narr", ["You strike a spark into the first brazier. It catches slowly, then roars; the ash-drift across the corridor lifts on the heat and blows away in flakes.", "The second brazier smokes, then lights. A drift of old nest-material, three feet deep, burns away like paper.", "The third brazier takes at once. A whole wall of ash falls in on itself and the stair beyond it is clear."][n - 1]]], { dx: 90 + n * 30, dy: -20, sfx: "fire", fx: "fire", fx2: "embers", shake: 1 });
+      if ([1, 2, 3].every(k => F.f("nest.f" + k))) { F.set("nest.open"); await S.m2.gate([["narr", "The last drift burns away. At the top of the stair the trunk opens into a great hollow, and in the hollow something shifts, with a sound like a hundred slow wings."]], { dx: 200, dy: -60, sfx: "wingFlutter", fx: "embers", fx2: "smoke", shake: 2, tint: "#2a1a10" }); }
     };
     S.done["vent" + n] = F => F.f("nest.open");
     S.trigger["vent" + n] = async F => {
@@ -182,7 +182,7 @@
   S.trigger.nestGuardian = async F => {
     if (F.f("k7.done")) return;
     if (!hub() && !F.f("nest.open") && !F.f("nest.f1")) { await UI.say([["narr", "Ash blocks the corridor to the heart of the tree. It would burn."]]); return; }
-    const ok = await M3.keyBoss(F, { id: "hollowNestGuardian", level: 54, k: "k7", key: "keyK7", name: "The Nest Guardian", title: "Keeper of the Ash", bg: "hollowTree",
+    const ok = await M3.keyBoss(F, { id: "hollowNestGuardian", level: 54, k: "k7", key: "keyK7", name: "The Nest Guardian", title: "Keeper of the Ash", bg: "hollowTree", fx: "embers", end: "fade",
       lines: [["narr", "The hollow is full of legs. The Nest Guardian unfolds from the wall of the tree: a body of grey chitin and ash, a hundred small wings folded on its back, and eyes the colour of banked coals."], ["hero", "(It has been alone in here since the fire.)"]],
       stage: async c => { c.tint("#2a1a10", 0.3, 500); c.sfx("encounter"); c.fx("embers", c.hero.x + 100, c.hero.y - 20, { ms: 2200 }); await c.say([["narr", "The updraught drops to a whisper. Every ember in the wall of the tree goes dark at once."]]); },
       after: [["narr", "The wings fold. The ash falls from its back in a long grey sheet and the thing lies quiet at last. On a branch above it, a key of grey ash-wood, still warm in the middle."], ["hero", "(Whatever it kept, it kept to the end.)"]] });
@@ -279,9 +279,9 @@
       if (F.f("prison.f" + n)) { await UI.say([["narr", "The cell is empty. The glass door stands open, and the wind goes through it."]]); return; }
       if (!F.item("cellKey")) { await UI.say([["narr", look]]); if (glass) await say(who, glass); else await UI.say([["narr", "It cannot speak. It does not need to."]]); return; }
       await UI.say([["narr", look + " The Warden's key turns the lock of black glass."]]);
-      F.set("prison.f" + n); G.flags["prison.freed"] = (G.flags["prison.freed"] || 0) + 1; F.sfx("door");
-      if (who === "narr") await UI.say([["narr", free]]); else await say(who, free);
-      if (G.flags["prison.freed"] >= 8) await UI.say([["narr", "The last glass door swings open. From one end of the cell block to the other the wind goes through, and for a moment it sounds like a great many people breathing out."]]);
+      F.set("prison.f" + n); G.flags["prison.freed"] = (G.flags["prison.freed"] || 0) + 1;
+      await S.m2.freeNpc("cell" + n, [[who, free]], { dx: n >= 7 ? 240 : -240, dy: n >= 7 ? 10 : 30 });
+      if (G.flags["prison.freed"] >= 8) await S.m2.gate([["narr", "The last glass door swings open. From one end of the cell block to the other the wind goes through, and for a moment it sounds like a great many people breathing out."]], { dx: 0, dy: -40, sfx: "gust", fx: "smoke", fx2: "sparkle", shake: 1, tint: "#10241c" });
     };
   });
   S.chest.prisonStore = async F => {

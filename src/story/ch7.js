@@ -190,8 +190,8 @@
   [1, 2, 3].forEach(n => {
     S.done["valve" + n] = F => F.f("sw.v" + n);
     S.trigger["valve" + n] = async F => {
-      if (F.f("sw.v" + n)) return; F.set("sw.v" + n); F.sfx("door");
-      await UI.say([["narr", VALVE[n - 1]]]);
+      if (F.f("sw.v" + n)) return; F.set("sw.v" + n);
+      await S.m2.gate([["narr", VALVE[n - 1]]], { dx: 100, dy: 10, sfx: "waterRush", fx: "splash", fx2: n === 3 ? "smoke" : undefined, shake: n === 3 ? 3 : 1, tint: "#0a1814" });
       if (F.f("sw.v1") && F.f("sw.v2") && F.f("sw.v3")) await say("pavo", "That is all three. The grating is out of the water. Nine hundred lies and one true drain.");
     };
   });
@@ -252,8 +252,8 @@
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(400); c.remove("gd"); c.follow();
       }, after: ["(The gate is open. I do not want to walk through it.)"] });
     if (!ok) return;
-    F.set("ch7.s10"); F.sfx("door");
-    await UI.say([["narr", "The collar-altar goes dark. The gate stands open, and a long white corridor runs under banners to the Garden. Nobody has come yet."]]);
+    F.set("ch7.s10");
+    await S.m2.gate([["narr", "The collar-altar goes dark. The gate stands open, and a long white corridor runs under banners to the Garden. Nobody has come yet."]], { dx: 190, dy: -20, sfx: "door", fx: "dust", fx2: "sparkle", shake: 2 });
   };
 })();
 
@@ -300,8 +300,8 @@
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(400); c.remove("gd"); c.follow();
       }, after: ["(Every bird in this garden is singing. They know something I do not.)"] });
     if (!ok) return;
-    F.set("ch7.s11"); F.set("ch7.garden"); F.sfx("door");
-    await UI.say([["narr", "The gold wire falls out of the jasmine like a dropped necklace. Beyond the hedge wall, a little gate stands ajar toward the East Wing."]]);
+    F.set("ch7.s11"); F.set("ch7.garden");
+    await S.m2.gate([["narr", "The gold wire falls out of the jasmine like a dropped necklace. Beyond the hedge wall, a little gate stands ajar toward the East Wing."]], { dx: 200, dy: 10, sfx: "door", fx: "leaves", fx2: "sparkle", shake: 1 });
   };
   M3.spot("palaceGarden", "hiddenShrine", async F => {
     if (!once(F, "ch7.shrine")) { await UI.say([["narr", "The hedge-shrine is small and grey. A feather inside a star. The mirrored lines beside it have not changed."]]); return; }

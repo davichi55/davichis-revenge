@@ -55,7 +55,8 @@
     const res = await F.boss([F.mkEnemy("mazeGuardian", 8), F.mkEnemy("mazeBat", 7, " B")], { bg: "boneMaze", intro: "The Maze's guardian lowers its horns!", xpBonus: 1.0 });
     if (res !== "win") return;
     F.set("k1.done"); F.quest("bellow", 1); F.set("k1.key"); F.give("keyK1", 1);
-    await UI.say([["narr", "The guardian crumbles into horns. On a hook by the cage hangs a bone key, cold as a grave. At the back of the cell stands a chest."]]);
+    const fall = [["narr", "The guardian crumbles into horns. On a hook by the cage hangs a bone key, cold as a grave. At the back of the cell stands a chest."]];
+    if (S.mazeGuardianFalls) await S.mazeGuardianFalls(F, fall); else await UI.say(fall);   // staged in ch2.js (Danny 2026-10-31: scenes, not only text)
   };
   Tr.mazeDeep = async F => {    // hub version: the three junctions, then the cage
     const J = [["Three passages of pale bone. A bellow rolls out of the LEFT one, loud, shaking dust from the roof.", "left"], ["A fork. The bellowing is behind the RIGHT wall now, so close you feel it in your teeth.", "right"], ["A last hall of ribs. The bellow comes from straight AHEAD, down the middle aisle.", "mid"]];

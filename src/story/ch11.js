@@ -252,7 +252,7 @@
     if (p.order[step] === i) {
       G.flags["plates." + which + ".n"] = step + 1; F.sfx("menuOk");
       if (step + 1 < 3) await UI.say([["narr", "The " + SIDE[i] + " plate sinks under your boot with a soft click. A line of light jumps to the next plate."]]);
-      else { F.set(key); F.sfx("door"); await UI.say([["narr", p.done]]); }
+      else { F.set(key); await S.m2.gate([["narr", p.done]], { dx: 200, dy: -10, sfx: "stoneGrind", fx: "dust", fx2: "sparkle", shake: 2, tint: which === "dusk" ? "#301810" : which === "dawn" ? "#a04860" : "#e8e8f4" }); }
       return;
     }
     await UI.say([["narr", "The " + SIDE[i] + " plate gives a flat, wrong note. Every light-line in the corridor goes out together, and the shutter behind you comes down like a guillotine. In the dark, things that were waiting for the plates to say so begin to move."]]);
@@ -318,8 +318,8 @@
       } });
     if (!freed) return;
     F.give("duskDisc", 1, true); F.set("ch11.s24"); F.sfx("coin");
-    await UI.say([["narr", "The third disc is cold and heavy. It fills the last socket, and the three together make the frame hum, one low chord, and somewhere under the hall a lock turns over like a sleeper."],
-      ["narr", "The floor of the gate parts along a seam of light. A long stair runs down into the dark."]]);
+    await S.m2.gate([["narr", "The third disc is cold and heavy. It fills the last socket, and the three together make the frame hum, one low chord, and somewhere under the hall a lock turns over like a sleeper."],
+      ["narr", "The floor of the gate parts along a seam of light. A long stair runs down into the dark."]], { dx: 160, dy: 20, sfx: "stoneGrind", fx: "dust", fx2: "sparkle", shake: 4, flash: "#f0a060" });
     F.questDone("m_gates"); F.quest("m_emperor", 0);
     UI.toast("The Descent is open.", 3200);
   };

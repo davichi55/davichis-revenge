@@ -328,7 +328,13 @@
       }, after: ["(The bar is up. The road is open. It does not feel like a victory.)"] });
     if (!ok) return;
     F.set("ch8.s13");
-    await UI.say([["narr", "The bar swings up and stays up. The carts in the line stand where they are, drivers looking at each other, then at the road north."]]);
+    await S.m2.stage(async c => {
+      const h = c.hero, p = { x: h.x + 150, y: h.y - 6 };
+      [["d1", "supplyWagon", 60, 40], ["d2", "supplyWagon", 150, 70], ["d3", "supplyWagon", 240, 40]].forEach(([id, art, dx, dy]) => c.actor(id, { art, x: h.x + dx, y: h.y + dy, flip: true }));
+      await c.pan(p.x, p.y, 700); c.sfx("woodDoor"); c.shake(1, 500); c.fx("dust", p.x, p.y, { ms: 1600, r: 40 }); await c.wait(900);
+      await c.say([["narr", "The bar swings up and stays up. The carts in the line stand where they are, drivers looking at each other, then at the road north."]]);
+      c.follow(); ["d1", "d2", "d3"].forEach(id => c.remove(id));
+    });
   };
 
   // ---------- the Red Salt Flats and the Ninth Legion's cache ----------
@@ -454,7 +460,13 @@
       }, after: ["(It spoke to me before the cultists stopped it. In its own voice. Through the crack.)"] });
     if (!ok) return;
     F.set("ch8.s14"); F.sfx("door");
-    await UI.say([["narr", "The altar goes dark. The cultists drop their knives and run down the stair in a body, shouting about the weather. At the back of the platform, a chest has been standing open all along."]]);
+    await S.m2.stage(async c => {
+      const h = c.hero, ids = [];
+      for (let i = 0; i < 4; i++) { ids.push("cu" + i); c.actor("cu" + i, { art: "npcAcolyte", x: h.x + 110 + (i % 2) * 40, y: h.y - 50 + i * 30, flip: true }); }
+      c.tint("#2c0c08", 0.22, 300); c.sfx("chainBreak"); ids.forEach(id => c.emote(id, "!")); await c.wait(500);
+      await c.say([["narr", "The altar goes dark. The cultists drop their knives and run down the stair in a body, shouting about the weather. At the back of the platform, a chest has been standing open all along."]]);
+      await Promise.all(ids.map((id, i) => c.walk(id, h.x - 360 - i * 24, h.y + 40 + i * 12, 1800 + i * 120))); ids.forEach(id => c.remove(id)); c.tint("#2c0c08", 0, 400);
+    });
     UI.toast("Sunmaw stops harvesting for a season.", 3600);
   };
   S.chest.g13_bloodlettersAltar = M.gearChest("g13_bloodlettersAltar", "G13", "ch8.s14", "The chest is bolted to the altar. Something still guards the altar.");
@@ -538,8 +550,8 @@
       if (v === MIRR[n]) { G.flags["cis.ok" + n] = true; await UI.say([["narr", ["The stand grates round a quarter-turn. The mirror catches the shaft of light and throws it across the hall; a bright thread falls onto the water and holds.", "The mirror swings and stops. The beam it caught leaps to the next stand in the line, and the stand trembles."][n % 2]]]); }
       else { delete G.flags["cis.ok" + n]; await UI.say([["narr", ["The stand grates round a quarter-turn. The beam slides off the glass and drowns itself in the lake.", "The mirror swings. The light falls on a statue's face, and the statue seems, very slightly, to look at you.", "The mirror turns and sends the light up into the roof, where a thousand years of dust turn gold and settle again."][v % 3]]]); }
       if ([1, 2, 3, 4].every(i => G.flags["cis.ok" + i])) {
-        F.set("cis.solved"); F.sfx("door");
-        await UI.say([["narr", "The fourth mirror takes the beam and the whole hall lights in a line: stand to stand, bronze to bronze, until the light lands on the sealed door at the far end. It begins to glow like a coal, and then the bronze moves. Behind it, a veil of grey cloth stirs where there is no wind."]]);
+        F.set("cis.solved");
+        await S.m2.gate([["narr", "The fourth mirror takes the beam and the whole hall lights in a line: stand to stand, bronze to bronze, until the light lands on the sealed door at the far end. It begins to glow like a coal, and then the bronze moves. Behind it, a veil of grey cloth stirs where there is no wind."]], { dx: 220, dy: -30, sfx: "stoneGrind", fx: "glow", fx2: "sparkle", shake: 2, flash: "#fff4c8", tint: "#0c2a1c" });
       }
     };
   });
@@ -547,7 +559,7 @@
   S.trigger.cisternGuardian = async F => {
     if (F.f("k6.done")) return;
     if (!hub() && !F.f("cis.solved") && !F.f("cis.open")) { await UI.say([["narr", "The sealed door will not open to a hand. It wants the light."]]); return; }
-    const ok = await M3.keyBoss(F, { id: "veiledCisternGuardian", level: 49, k: "k6", key: "keyK6", name: "The Veiled Guardian", title: "Keeper of the Glass Cistern", bg: "glassCistern",
+    const ok = await M3.keyBoss(F, { id: "veiledCisternGuardian", level: 49, k: "k6", key: "keyK6", name: "The Veiled Guardian", title: "Keeper of the Glass Cistern", bg: "glassCistern", fx: "sparkle", end: "fade",
       lines: [["narr", "The veil lifts without a hand on it. Behind it, a figure of grey cloth stands in the middle of the lake, its face a smooth oval of glass in which you see yourself looking back, and slightly behind you, someone else."], ["hero", "(It is wearing every face it has ever looked at.)"]],
       stage: async c => { c.tint("#0c2a1c", 0.3, 500); c.sfx("encounter"); c.fx("sparkle", c.hero.x + 100, c.hero.y - 20, { ms: 2000 }); await c.say([["narr", "The water of the lake goes flat as a plate. Every statue in the cistern has turned its head toward the door."]]); },
       after: [["narr", "The veil falls in on itself like a held breath let go, and settles on the water. On a dais where it stood there lies a key of green glass, as cold as the cistern."], ["hero", "(Whatever it kept, someone paid for it to be kept.)"]] });
@@ -589,7 +601,14 @@
     if (res !== "win") { F.music(F.regionMusic()); return false; }
     const g = Math.round(10 * Systems.m(l.ch)); G.gold += g; UI.toast("+" + g + " kakal", 2400);
     F.set("l6.done"); F.give("ninthBanner", 1, true); await Systems.giveReward(l.reward, l.ch);
-    await UI.say([["narr", "The banner stops walking. It stands in the salt, quite still, and the mist goes out of the line in one long breath, leaving boots, a few buckles, and a very old banner folded as neatly as a letter. Someone has been taking care of it."], ["hero", "(Folded. They folded it for me.)"]]);
+    await stage(async c => {
+      const h = c.hero; c.tint("#8a96b0", 0.3, 300);
+      for (let i = 0; i < 6; i++) c.actor("nl" + i, { art: "npcLegionGuard", x: h.x + 200 + (i % 3) * 38, y: h.y - 60 + Math.floor(i / 3) * 90 + (i % 2) * 14, flip: true, alpha: 0.6 });
+      await c.wait(400);
+      const out = (async () => { await c.wait(1200); for (let i = 0; i < 6; i++) c.anim("nl" + i, "fadeOut", { ms: 1400 }); await c.wait(1500); })();
+      await c.say([["narr", "The banner stops walking. It stands in the salt, quite still, and the mist goes out of the line in one long breath, leaving boots, a few buckles, and a very old banner folded as neatly as a letter. Someone has been taking care of it."], ["hero", "(Folded. They folded it for me.)"]]);
+      await out; for (let i = 0; i < 6; i++) c.remove("nl" + i); c.tint("#8a96b0", 0, 400);
+    });
     F.music(F.regionMusic());
     return true;
   };

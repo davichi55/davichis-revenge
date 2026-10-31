@@ -404,7 +404,7 @@
       } });
     if (!ok) return;
     F.set("ch5.s5");
-    await UI.say([["narr", "The collar goes dark. Behind the warden, the great door sighs open on a long room of cabinets, and the hum of the copy-tubes grows loud. At the foot of the door, a chest."]]);
+    await S.m2.gate([["narr", "The collar goes dark. Behind the warden, the great door sighs open on a long room of cabinets, and the hum of the copy-tubes grows loud. At the foot of the door, a chest."]], { dx: 230, dy: -10, fx: "dust", fx2: "sparkle", shake: 3 });
   };
   S.done.s5Fight = F => F.f("ch5.s5");
   S.chest.g26_stonegazeOrder = async F => { if (!F.f("ch5.s5")) { await UI.say([["narr", "The chest is chained to the great door. Something guards it."]]); return false; } return S.gearChest2(F, "g26_stonegazeOrder", "G26"); };

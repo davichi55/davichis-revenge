@@ -467,7 +467,7 @@
     if (ORDER[step] === i) {
       G.flags["crypt.step"] = step + 1; F.sfx("fire");
       if (step + 1 < 4) await UI.say([["narr", `${NICHES[i]} lights, and holds, a small yellow flame in the dust. Somewhere behind the door a stone shifts a hand's breadth.`]]);
-      else { F.set("crypt.open"); F.sfx("door"); await UI.say([["narr", "The fourth flame catches and all four turn white. The door breathes out, a long breath of cold, dry air that smells of lamp-oil and old paper. Behind it an archive room: shelf on shelf of clay and slate, a reading-table, a lamp that is already lit."]]); }
+      else { F.set("crypt.open"); await S.m2.gate([["narr", "The fourth flame catches and all four turn white. The door breathes out, a long breath of cold, dry air that smells of lamp-oil and old paper. Behind it an archive room: shelf on shelf of clay and slate, a reading-table, a lamp that is already lit."]], { dx: 140, dy: -20, sfx: "stoneGrind", fx: "smoke", fx2: "sparkle", shake: 2, flash: "#fff4e0" }); }
       return;
     }
     await UI.say([["narr", "The flame takes, and gutters, and goes out, and every other candle in the crypt goes out with it. In the dark, something begins to sing."]]);
@@ -571,8 +571,8 @@
     const res = await F.fight([F.mkEnemy("prismTarget", 60)], { bg: "prism", intro: "The door's glyphs flare." });
     Flow.doorSpec = null;
     if (res !== "win") return;
-    F.set("prism.d" + n); F.sfx("door");
-    await UI.say([["narr", d.done]]);
+    F.set("prism.d" + n);
+    await S.m2.gate([["narr", d.done]], { dx: 150, dy: -10, sfx: n === 3 ? "shatter" : n === 2 ? "shock" : "steam", fx: ["smoke", "lightning", "sparkle"][n - 1], fx2: n === 1 ? "sparkle" : undefined, shake: n === 3 ? 3 : 2, flash: ["#ffffff", "#bcd8ff", "#e0f4ff"][n - 1] });
     if (n === 3) await UI.say([["narr", "Past the third door, the light comes from one place. A chamber with a single great facet hanging in it, turning slowly, and the beams all bending towards it."]]);
   };
   [1, 2, 3].forEach(n => { S.trigger["prismDoor" + n] = door(n); S.done["prismDoor" + n] = F => F.f("prism.d" + n); });
@@ -582,7 +582,7 @@
   };
   S.trigger.prismFight = async F => {
     if (F.f("k8.done")) return;
-    const ok = await M3.keyBoss(F, { id: "prismGuardian", level: 62, k: "k8", key: "keyK8", name: "The Prism Guardian", title: "Keeper of the Light", bg: "prism",
+    const ok = await M3.keyBoss(F, { id: "prismGuardian", level: 62, k: "k8", key: "keyK8", name: "The Prism Guardian", title: "Keeper of the Light", bg: "prism", fx: "sparkle", end: "fade",
       lines: [["narr", "The great facet stops turning. It splits the nearest beam into four colours and holds them in a fan, and each colour looks at you."], ["hero", "(It will answer whatever I send with something else.)"]],
       after: [["narr", "The facets dim one by one. In the centre of the chamber, where the Keeper hung, a key of faceted glass lies on the floor, throwing a different colour every time the light moves."]] });
     if (ok) F.quest("k8", 1), F.questDone("k8");
@@ -666,7 +666,7 @@
     if (res !== "win") { F.music(F.regionMusic()); return false; }
     M.markBreak("veilStag");
     F.gold(Math.round(10 * M3.m(10)), true); F.give("soulDew", 1); F.set("l7.done");
-    await UI.say([["narr", "The stag bows its head. The halo gutters to a single flame, and the flame falls into your hand: a vial of dew that glows faintly, like a lantern behind a curtain. When you look up, the mist has taken the hummock."]]);
+    await S.m2.outro("veilStag", [["narr", "The stag bows its head. The halo gutters to a single flame, and the flame falls into your hand: a vial of dew that glows faintly, like a lantern behind a curtain. When you look up, the mist has taken the hummock."]], { fx: "glow", end: "bow", sfx: "chime", dx: 120 });
     return true;
   };
 

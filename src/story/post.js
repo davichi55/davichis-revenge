@@ -364,7 +364,7 @@
     if (PATH[step][1] === i) {
       G.flags["deep.n"] = step + 1; F.sfx("menuOk");
       if (step + 1 < PATH.length) await UI.say([["narr", "You go " + WAY[i] + ", after the lights. The dark folds back to let you through, and shuts behind you without a sound."]]);
-      else { F.set("deep.path"); await UI.say([["narr", "The last light ahead of you goes out of sight round a pillar of pale coral, and when you follow it round, the trench opens. A thousand lanterns hang in the water in a great ring, burning slowly. The tallest one has turned to face you."]]); }
+      else { F.set("deep.path"); await S.m2.gate([["narr", "The last light ahead of you goes out of sight round a pillar of pale coral, and when you follow it round, the trench opens. A thousand lanterns hang in the water in a great ring, burning slowly. The tallest one has turned to face you."]], { dx: 180, dy: -40, sfx: "chime", fx: "glow", fx2: "sparkle", shake: 0, tint: "#08183a" }); }
       return;
     }
     await UI.say([["narr", "You step " + WAY[i] + ", off the lights, and the dark closes over your head like a hand. Something with a mouth turns slowly towards the warmth of you."]]);
@@ -375,7 +375,7 @@
   S.done.deepPath = F => F.f("deep.path");
   S.trigger.deepGuardian = async F => {
     if (F.f("k9.done")) return;
-    const ok = await M3.keyBoss(F, { id: "lanternDeepGuardian", level: 81, k: "k9", key: "keyK9", name: "The Lantern Guardian", title: "Keeper of the Deep", bg: "deepTrench",
+    const ok = await M3.keyBoss(F, { id: "lanternDeepGuardian", level: 81, k: "k9", key: "keyK9", name: "The Lantern Guardian", title: "Keeper of the Deep", bg: "deepTrench", fx: "glow", end: "fade",
       lines: [["narr", "The tallest lantern dips, once, as if it were nodding, and the thousand lights around it go out together. In the dark, a great pale shape rises behind the flame."], ["hero", "(It is not angry. It is the thing that keeps the dark in order.)"]],
       after: [["narr", "The great lantern dims to a coal, and then to a single low glow, and the lights around it come back one by one. At its foot, in the silt, lies a key of pale lantern-glass, lit from inside."]] });
     if (ok) F.questDone("m_deep");
@@ -411,7 +411,7 @@
     if (res !== "win") { F.music(F.regionMusic()); return false; }
     M.markBreak("mawmotherOfTheDeep");
     F.gold(Math.round(10 * M3.m(12)), true); F.giveGear("G37", 3); F.set("l9.done");
-    await UI.say([["narr", "She goes down slowly, and sings the whole way, and the song goes quieter as she sinks until it is only the shape of a song. The star in her belly dims to a point. A long way down, it turns to look at you, and then it is gone."]]);
+    await S.m2.outro("mawmotherOfTheDeep", [["narr", "She goes down slowly, and sings the whole way, and the song goes quieter as she sinks until it is only the shape of a song. The star in her belly dims to a point. A long way down, it turns to look at you, and then it is gone."]], { fx: "splash", end: "fall", tint: "#08183a", sfx: "waves", scale: 1.6, dx: 160 });
     return true;
   };
   if (R.starhaven) R.starhaven.things.push(["legendL9", "The storm-belt sea beyond the dinghy beach, where something rolls", s => !s.f["l9.done"] && s.f["stormSails"], "trigger"]);

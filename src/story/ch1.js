@@ -20,7 +20,7 @@
     await UI.say([["narr", "Night in the Whisperglass Dunes. Behind you Orun burns gold against the stars. The glass sand hums under your boots, a thin high note, like a wet finger on a cup."]]);
     await F.banter("flee");
     F.music("raid");
-    await Cinema.stage(async c => {
+    await S.stage(async c => {
       const h = c.hero; c.tint("#301810", 0.25, 600);
       [["r1", "raidShieldbearer", 300, -30], ["r2", "raidSlinger", 340, 25], ["r3", "raidTorchbearer", 380, -5]].forEach(([id, art, dx, dy], i) => c.actor(id, { art, x: h.x + dx + 160, y: h.y + dy, light: id === "r3" ? 110 : 0 }));
       await c.say([["narr", "Torchlight on the ridge. Imperial raiders, spread out in a line, hunting for runaways."]]);
@@ -69,7 +69,7 @@
   S.trigger.karvan = async F => {
     if (F.f("ci.karvan")) return;
     F.music("raid");
-    await Cinema.stage(async c => {
+    await S.stage(async c => {
       const h = c.hero;
       c.actor("k", { art: "raidOptioKarvan", x: h.x + 330, y: h.y, h: 84 });
       c.actor("s1", { art: "raidShieldbearer", x: h.x + 300, y: h.y - 34 }); c.actor("s2", { art: "raidShieldbearer", x: h.x + 300, y: h.y + 34 });
@@ -93,13 +93,27 @@
     if (res !== "win") return;
     F.set("ci.karvan"); F.giveGear("G16", 3); G.ch = 2; F.questDone("m_cistern");
     G.best.raidOptioKarvan = Object.assign(G.best.raidOptioKarvan || {}, { seen: 1, beaten: 1 });
-    await UI.say([
-      ["karvan", "Hah... Strange. I was told you would be slower. And that you would keep writing."],
-      ["hero", "Who told you that?"],
-      ["karvan", "..."],
-      ["narr", "He drops his shield and limps away through the dark. The bronze gate groans open on its own weight, and the road east lies empty."],
-      ["narr", "Karvan's shield crew left their kit behind: helm, shield and sword. It is a full Tower Shield Phalanx set."],
-    ]);
+    // the beaten Optio limps off into the dark, his crew drags itself after him, and the bronze gate opens by itself
+    await S.stage(async c => {
+      const h = c.hero;
+      c.actor("k", { art: "raidOptioKarvan", x: h.x + 70, y: h.y + 40, h: 84 });
+      c.actor("s1", { art: "raidShieldbearer", x: h.x + 20, y: h.y + 78 }); c.actor("s2", { art: "raidShieldbearer", x: h.x + 120, y: h.y + 84 });
+      await c.anim("k", "fall", { dir: "right", ms: 300 }); await c.anim("k", "rise", { ms: 500 });
+      await c.say([
+        ["karvan", "Hah... Strange. I was told you would be slower. And that you would keep writing."],
+        ["hero", "Who told you that?"],
+        ["karvan", "..."],
+      ]);
+      c.face("k", "right");
+      c.walk("k", h.x + 20, h.y + 330, 5200); c.walk("s1", h.x - 30, h.y + 350, 4800); c.walk("s2", h.x + 60, h.y + 360, 5000);
+      await c.say([["narr", "He drops his shield and limps away through the dark. The bronze gate groans open on its own weight, and the road east lies empty."]]);
+      await c.pan(800, 90, 800);
+      c.sfx("stoneGrind"); c.shake(3, 1500); c.fx("dust", 800, 96, { n: 18, scale: 1.8 }); c.fx("glow", 800, 80, { color: 0xffd36a, ms: 2600 }); c.light(800, 90, 190, 0.9);
+      await c.wait(1500);
+      await Promise.all(["k", "s1", "s2"].map(id => c.anim(id, "fadeOut", { ms: 600 })));
+      c.follow();
+      await c.say([["narr", "Karvan's shield crew left their kit behind: helm, shield and sword. It is a full Tower Shield Phalanx set."]]);
+    });
     F.save(true);
     F.go("dunes", "from_cistern_gate");
   };

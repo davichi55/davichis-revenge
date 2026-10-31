@@ -223,7 +223,12 @@
   S.trigger.plumeLetter = async F => {
     if (!F.f("ch4.coil") || F.f("ch4.done")) return;
     F.music("letters");
-    await UI.say([["narr", "A courier in a grey hood stands at the end of the weavers' bridge. He puts a letter and a small object in your hand, and is gone down the rope lift before you can ask."]]);
+    await M.stage(async c => {
+      const p = M.rel(c, 190, -6); c.actor("co", { art: "npcCourier", x: p.x, y: p.y, name: "Courier", flip: true });
+      await c.wait(300); await c.walk("co", c.hero.x + 36, c.hero.y, 1200); c.sfx("paper");
+      await c.say([["narr", "A courier in a grey hood stands at the end of the weavers' bridge. He puts a letter and a small object in your hand, and is gone down the rope lift before you can ask."]]);
+      c.sfx("whoosh"); await c.walk("co", p.x + 80, p.y + 40, 700); c.remove("co");
+    }, { music: "letters" });
     await F.letter("the green seal", ["\"The Plumed Coil. Exactly as I hoped.\"", "\"You have done more than I asked. Now there is something I must explain, and I will not do it by letter. Return to Sehkarem. Captain Brisk will meet you at Tamar's Landing at the next tide. Do not delay. The pass enclosed will take you through any door in Orun. - I.\""]);
     F.give("ithielPass", 1); F.set("ch4.done"); F.set("wagon.at", PR);
     await UI.say([["hero", "(Orun is held by the empire. And a pass from Ithiel opens every door.)"], ["hero", "(Mother. Alive. The capital. First, Orun. Then her.)"]]);
@@ -266,11 +271,24 @@
     S.trigger["lookoutPost" + n] = async F => {
       if (F.f("lookout.post" + n)) return;
       F.music("canopy");
-      await UI.say([["narr", ["The first watch post: a stone platform on a chain of rope bridges, a signal fire laid and not lit, and two marksmen in feather cloaks who have already drawn.", "The second post. Arrows come before the bridge does.", "The last post. The marksmen have lashed their bows to the rail and they do not look afraid. They look like men who have decided something."][n - 1]]]);
+      await M.stage(async c => {
+        const h = c.hero; c.tint("#183024", 0.14, 300);
+        [["mk1", 190, -40], ["mk2", 230, 30]].forEach(([id, dx, dy]) => c.actor(id, { art: "npcMarksman", x: h.x + dx, y: h.y + dy, flip: true }));
+        c.actor("op", { art: "npcOptio", x: h.x + 270, y: h.y - 4, flip: true });
+        await c.pan(h.x + 120, h.y - 10, 700); c.emote("mk1", "!");
+        await c.say([["narr", ["The first watch post: a stone platform on a chain of rope bridges, a signal fire laid and not lit, and two marksmen in feather cloaks who have already drawn.", "The second post. Arrows come before the bridge does.", "The last post. The marksmen have lashed their bows to the rail and they do not look afraid. They look like men who have decided something."][n - 1]]]);
+        c.sfx("arrowShot"); c.fx("dust", h.x + 40, h.y + 6, { ms: 600, r: 20 }); c.shake(2, 300); await c.anim("hero", "shake"); c.follow(); c.tint("#183024", 0, 300);
+        ["mk1", "mk2", "op"].forEach(id => c.remove(id));
+      }, { music: "tension" });
       const res = await F.fight([F.mkEnemy("legionMarksman", 18, " A"), F.mkEnemy("legionMarksman", 18 + (n > 1 ? 1 : 0), " B"), F.mkEnemy("legionOptio", 18, " C")], { bg: "lookout", intro: "Arrows hiss across the gap!", music: "battleSoldiers" });
       if (res !== "win") return;
       F.set("lookout.post" + n); F.sfx("fire");
-      await UI.say([["narr", n < 3 ? "You light the signal fire with the marksmen's own flint. The smoke goes up straight, and the next post goes quiet." : "You light the last signal fire. The smoke goes up in a straight line, and the whole chain of posts is yours. At the end of the bridge, a chest."]]);
+      await M.stage(async c => {
+        const p = M.rel(c, 90, -10); c.fx("fire", p.x, p.y, { ms: 3200, r: 40 }); c.fx("smoke", p.x, p.y - 30, { ms: 4200, r: 40 }); c.light(p.x, p.y - 20, 150, 0.9);
+        await c.pan(p.x, p.y - 60, 700); await c.wait(500);
+        await c.say([["narr", n < 3 ? "You light the signal fire with the marksmen's own flint. The smoke goes up straight, and the next post goes quiet." : "You light the last signal fire. The smoke goes up in a straight line, and the whole chain of posts is yours. At the end of the bridge, a chest."]]);
+        c.follow();
+      });
     };
   });
   S.chest.g8_condorTowerWatch = async F => { if (!F.f("lookout.post3")) { await UI.say([["narr", "The chest is chained to the last post, and the last post is not yours yet."]]); return false; } return S.gearChest2(F, "g8_condorTowerWatch", "G8"); };
@@ -286,8 +304,8 @@
   [1, 2, 3].forEach(n => {
     S.trigger["wheel" + n] = async F => {
       if (F.f("av.wheel" + n)) return;
-      F.set("av.wheel" + n); F.sfx("door");
-      await UI.say([["narr", WHEEL[n - 1]]]);
+      F.set("av.wheel" + n);
+      await M.gate([["narr", WHEEL[n - 1]]], n === 3 ? { dx: 190, dy: -20, fx: "dust", fx2: "feathers", shake: 3 } : { dx: 150, fx: n === 2 ? "feathers" : "dust", sfx: n === 2 ? "gust" : "stoneGrind", shake: 1 });
     };
   });
   S.done.aviaryGuardian = F => F.f("k2.done");
@@ -299,7 +317,7 @@
     const res = await F.boss([F.mkEnemy("windhollowGuardian", 19)], { bg: "aviary", music: "guardian", intro: "The stone bird spreads its wings!" });
     if (res !== "win") return;
     F.set("k2.done"); F.give("keyK2", 1);
-    await UI.say([["narr", "The roc folds in on itself, feather by feather, and settles on its perch as stone again. From the hook at its throat hangs a key of grey feather-stone. A chest has opened in the perch behind it."], ["hero", "(The wagon has a lock this key fits. Dunmar will know which.)"]]);
+    await M.outro("windhollowGuardian", [["narr", "The roc folds in on itself, feather by feather, and settles on its perch as stone again. From the hook at its throat hangs a key of grey feather-stone. A chest has opened in the perch behind it."], ["hero", "(The wagon has a lock this key fits. Dunmar will know which.)"]], { fx: "feathers", end: "fade", dx: 150 });
   };
   S.chest.g10_snatchersPlumage = async F => { if (!F.f("k2.done")) { await UI.say([["narr", "A chest on a high perch, caged in stone feathers. The guardian's shadow lies across it."]]); return false; } return S.gearChest2(F, "g10_snatchersPlumage", "G10"); };
 
@@ -447,7 +465,7 @@
   };
 
   // 4.G Legend L3 and the waterfall cave
-  S.legend.L3 = M.legend("L3", { enemy: "motherGlowmoth", level: 21, bg: "canopy", title: "Mother of the Lamps", fightIntro: "Mother Glowmoth spreads her lamps!",
+  S.legend.L3 = M.legend("L3", { enemy: "motherGlowmoth", fx: "glow", end: "fade", tint: "#0a0c18", level: 21, bg: "canopy", title: "Mother of the Lamps", fightIntro: "Mother Glowmoth spreads her lamps!",
     intro: [["narr", "A lamp swings out of the dark, then a second, then ten. They are wings. Mother Glowmoth drifts towards you, kind and hungry."], ["narr", "She lights the way for the lost, and eats the lights of those who lie."]],
     lines: [["narr", "The moonless canopy goes still. Every lantern on the bridges leans toward her."], ["hero", "(She is not going to ask me anything. She is going to look, and know.)"]],
     after: [["narr", "The lamps go out one by one. Where Mother Glowmoth hung, two small flasks hang for a breath, glowing, and fall softly into your hands."]] });

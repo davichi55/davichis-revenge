@@ -208,7 +208,13 @@
       } });
     if (!ok) return false;
     F.set("ch6.s7");
-    await UI.say([["captain", "The galleys are rowing home with the tide. They will say it was a storm. Admirals always say it was a storm."]]);
+    await S.m2.stage(async c => {
+      M3.actors(c, [["g1", "harborShip", 250, -110, { scale: 1.15 }], ["g2", "harborShip", 310, 70, { scale: 1.15 }], ["captain", "npcBrisk", -50, -24]]);
+      await c.pan(c.hero.x + 170, c.hero.y - 10, 800); c.sfx("oars");
+      const out = Promise.all([c.walk("g1", c.hero.x + 900, c.hero.y - 150, 5200), c.walk("g2", c.hero.x + 960, c.hero.y + 110, 5600)]);
+      await c.say([["captain", "The galleys are rowing home with the tide. They will say it was a storm. Admirals always say it was a storm."]]);
+      await out; c.remove("g1"); c.remove("g2"); c.remove("captain"); c.follow();
+    }, { music: "harbour" });
     return true;
   };
   // ---------- the helm: the end of chapter 6 (needs ch6.plan); chapter 7's opening belongs to STORY-M4 ----------
@@ -276,7 +282,7 @@
     const res = await F.fight(Core.bossFoes ? Core.bossFoes("oldHollowbell", info.level || 28) : [F.mkEnemy("oldHollowbell", info.level || 28)], { noFlee: true, music: "legend", goldMult: 0, xpBonus: 1.5, bg: F.arenaOf(G.region), intro: Core.ENEMIES.oldHollowbell && Core.ENEMIES.oldHollowbell.intro });
     if (res !== "win") { F.music(F.regionMusic()); return false; }
     F.set("l4.done"); F.gold(10 * m(6));
-    await UI.say([["narr", "The bell goes quiet. The tortoise settles into the sand with a sound like a door closing in a very large house. From under his shell rolls a round grey stone, warm on one side, marked with a ring of wells."], ["hero", "(He rang for the water. Nobody answered.)"]]);
+    await S.m2.outro("oldHollowbell", [["narr", "The bell goes quiet. The tortoise settles into the sand with a sound like a door closing in a very large house. From under his shell rolls a round grey stone, warm on one side, marked with a ring of wells."], ["hero", "(He rang for the water. Nobody answered.)"]], { fx: "dust", end: "bow", sfx: "bell", dx: 150 });
     await Systems.giveReward(D.LEGENDS.L4.reward, 6);
     F.questDone("hollowbell");
     F.music(F.regionMusic());
@@ -292,7 +298,7 @@
     const res = await F.fight(Core.bossFoes ? Core.bossFoes("blackPearlHermit", info.level || 35) : [F.mkEnemy("blackPearlHermit", info.level || 35)], { noFlee: true, music: "legend", goldMult: 0, xpBonus: 1.5, bg: "seaDeck", intro: Core.ENEMIES.blackPearlHermit && Core.ENEMIES.blackPearlHermit.intro });
     if (res !== "win") { F.music(F.regionMusic()); return false; }
     F.set("l5.done"); F.gold(10 * m(6));
-    await UI.say([["hermit", "Fairly fought. Take it. A pearl should be carried by someone who knows what it cost."], ["narr", "He lowers the black pearl into your hands. It is cold, and heavier than the sea, and set around it in a ring of old silver is the first piece of something that was made to be worn."]]);
+    await S.m2.outro("blackPearlHermit", [["hermit", "Fairly fought. Take it. A pearl should be carried by someone who knows what it cost."], ["narr", "He lowers the black pearl into your hands. It is cold, and heavier than the sea, and set around it in a ring of old silver is the first piece of something that was made to be worn."]], { fx: "glow", end: "bow", scale: 1.2, dx: 110 });
     await Systems.giveReward(D.LEGENDS.L5.reward, 6);
     F.music(F.regionMusic());
     return true;
@@ -478,7 +484,7 @@
     const res = await M3.boss(F, { id: o.id, level: o.level, name: o.name, title: o.title, bg: o.bg, music: "guardian", lines: o.lines, stage: o.stage });
     if (res !== "win") return false;
     markBreak(o.id); F.set(o.k + ".done"); F.give(o.key, 1, true); F.sfx("coin");
-    await UI.say(o.after);
+    await S.m2.outro(o.id, o.after, { fx: o.fx, end: o.end, dx: o.dx, scale: o.scale });   // the guardian is on the map while its last lines play, then it goes quiet
     UI.toast(D.ITEMS[o.key].n + " received. The Menagerie Wagon will know what it opens.", 3600);
     return true;
   };
@@ -501,8 +507,8 @@
     const step = G.flags["fen.step"] || 0;
     if (FEN[step] === n) {
       F.set("fen.w" + n); G.flags["fen.step"] = step + 1; F.sfx("door");
-      if (step + 1 < 4) await UI.say([["narr", `The wheel groans over, ${["once", "twice", "three times"][step]} on its rusted shaft. Somewhere below, a room drains with a long, wet sigh.`]]);
-      else { F.set("fen.drained"); await UI.say([["narr", "The last wheel drops into place. All through the shrine the fen goes out like a tide, down through the floor, and the stepping stones stand on bare black stone. At the far end the great doors of the shrine's heart stand open on a flooded nave."]]); }
+      if (step + 1 < 4) await S.m2.gate([["narr", `The wheel groans over, ${["once", "twice", "three times"][step]} on its rusted shaft. Somewhere below, a room drains with a long, wet sigh.`]], { dx: 110, dy: 20, sfx: "waterRush", fx: "splash", shake: 1 });
+      else { F.set("fen.drained"); await S.m2.gate([["narr", "The last wheel drops into place. All through the shrine the fen goes out like a tide, down through the floor, and the stepping stones stand on bare black stone. At the far end the great doors of the shrine's heart stand open on a flooded nave."]], { dx: 200, dy: -20, sfx: "waterRush", fx: "splash", fx2: "smoke", shake: 3, tint: "#0c2418" }); }
       return;
     }
     await UI.say([["narr", "The wheel turns, and the wrong room drains: the water rushes out of its door and into a lower one, and the lower room fills with something that was asleep."]]);
@@ -517,7 +523,7 @@
   S.trigger.fenGuardian = async F => {
     if (F.f("k3.done")) return;
     if (!F.f("fen.drained")) { await UI.say([["narr", "Black water fills the nave to the roof beams, calm and level, like a held breath. Nothing wades into that."]]); return; }
-    const ok = await M3.keyBoss(F, { id: "drownedShrineGuardian", level: 31, k: "k3", key: "keyK3", name: "The Drowned Shrine Guardian", title: "Keeper of the Fen", bg: "fenShrine",
+    const ok = await M3.keyBoss(F, { id: "drownedShrineGuardian", level: 31, k: "k3", key: "keyK3", name: "The Drowned Shrine Guardian", title: "Keeper of the Fen", bg: "fenShrine", fx: "splash", end: "bow",
       lines: [["narr", "Black water pours from the shrine's mouth and stands up in the shape of a weed-hung keeper, a giant of green stone."]],
       stage: async c => { c.tint("#0c2418", 0.3, 600); c.sfx("encounter"); c.fx("splash", c.hero.x + 120, c.hero.y); await c.say([["narr", "In the drained nave the last pool shivers. A shoulder rises from it, then another, hung with weed and bound in old rope, and the keeper has not yet turned its face to you."]]); },
       after: [["narr", "The keeper kneels, goes still, and the black water sinks into the floor. On a drowned altar lies a key stained green, smelling of the fen."], ["hero", "(Whatever it kept, it kept for someone who did not come back.)"]] });
@@ -553,7 +559,13 @@
       } });
     if (!ok) return;
     F.set("ch6.s8");
-    await UI.say([["narr", "The collar breaks. The overseers throw down their whips, and go. On the platform the rails shine, and past them, inside the cliff, a long hall of stone figures waits in the dark."]]);
+    await S.m2.stage(async c => {
+      M3.actors(c, [["m1", "npcOverseer", 150, -50], ["m2", "npcOverseer", 150, 40]]);
+      c.sfx("chainBreak"); c.emote("m1", "!"); c.emote("m2", "!"); await c.wait(500);
+      await c.say([["narr", "The collar breaks. The overseers throw down their whips, and go. On the platform the rails shine, and past them, inside the cliff, a long hall of stone figures waits in the dark."]]);
+      await Promise.all([c.walk("m1", c.hero.x - 420, c.hero.y - 120, 2200), c.walk("m2", c.hero.x - 440, c.hero.y + 100, 2400)]);
+      c.remove("m1"); c.remove("m2");
+    });
   };
   S.done.s8Fight = F => F.f("ch6.s8");
   const block = n => async F => {
@@ -562,16 +574,16 @@
     F.set("qb." + n); F.sfx("hitHeavy");
     const count = [1, 2, 3, 4, 5].filter(k => F.f("qb." + k)).length;
     if (count < 5) { await UI.say([["narr", `You push the carved block along its rail until it drops onto a glyph tile with a thud you feel in your teeth. ${count} of 5.`]]); return; }
-    await UI.say([["narr", "The fifth block drops onto its tile. Light-lines run through the floor, up the walls, along the giants' shoulders, and the whole hall begins to turn its heads."]]);
+    await S.m2.gate([["narr", "The fifth block drops onto its tile. Light-lines run through the floor, up the walls, along the giants' shoulders, and the whole hall begins to turn its heads."]], { dx: 160, dy: -30, sfx: "rumble", fx: "dust", fx2: "sparkle", shake: 4, flash: "#ffe9a8" });
     const res = await F.fight([F.mkEnemy("giantstoneSentry", 31, " A"), F.mkEnemy("chiselImp", 30, " B"), F.mkEnemy("giantstoneSentry", 31, " C")], { bg: "giantQuarry", intro: "The giants of the hall wake, shaking dust from their shoulders!" });
     if (res !== "win") return;
-    F.set("quarry.open"); await UI.say([["narr", "The last giant sinks back onto its plinth. At the end of the hall the door of the inner works slides into the floor."]]);
+    F.set("quarry.open"); await S.m2.gate([["narr", "The last giant sinks back onto its plinth. At the end of the hall the door of the inner works slides into the floor."]], { dx: 220, dy: -10, fx: "dust", shake: 3 });
   };
   [1, 2, 3, 4, 5].forEach(n => { S.trigger["block" + n] = block(n); S.done["block" + n] = F => F.f("qb." + n); });
   S.trigger.quarryGiant = async F => {
     if (F.f("k4.done")) return;
     if (!F.f("quarry.open")) { await UI.say([["narr", "A door of black stone, sealed. Five glyph tiles are set in the floor of the outer hall, and each tile lies empty."]]); return; }
-    const ok = await M3.keyBoss(F, { id: "stoneGiant", level: 32, k: "k4", key: "keyK4", name: "The Stone Giant", title: "Carried the Sky", bg: "giantQuarry",
+    const ok = await M3.keyBoss(F, { id: "stoneGiant", level: 32, k: "k4", key: "keyK4", name: "The Stone Giant", title: "Carried the Sky", bg: "giantQuarry", fx: "dust", end: "bow", scale: 1.7,
       lines: [["narr", "The quarry wall shrugs, and a giant steps out of it."]],
       stage: async c => { c.sfx("hitHeavy"); c.shake(5, 900); c.fx("dust", c.hero.x + 160, c.hero.y); await c.say([["narr", "In the inner hall the biggest figure of all, a giant three storeys high with its back to the room, begins very slowly to turn."]]); },
       after: [["narr", "The giant sits down, as if tired, and the light goes out of its seams. In its open hand lies a key cut from a fingernail of black stone."], ["hero", "(It never finished waking. It looked relieved.)"]] });
@@ -597,19 +609,19 @@
     const lit = G.flags["roost.lit"] || 0, now = Date.now();
     if (lit > 0 && now - M3.roost.t > 22000) {
       G.flags["roost.lit"] = 0; F.sfx("hitHeavy");
-      await UI.say([["narr", "A draft slides up the ramp, finds the chain of bowls and goes along it, flame by flame. By the time it reaches you every bowl is black."]]);
+      await S.m2.gate([["narr", "A draft slides up the ramp, finds the chain of bowls and goes along it, flame by flame. By the time it reaches you every bowl is black."]], { dx: 120, dy: -40, sfx: "gust", fx: "smoke", shake: 1 });
       return;
     }
     if (n !== lit + 1) { await UI.say([["narr", lit === 0 ? "The bowl will not catch. The chain starts at the first, at the foot of the ramp." : "The bowl takes the spark and gutters out. The chain goes in order, one bowl after the other."]]); return; }
     G.flags["roost.lit"] = n; M3.roost.t = now; F.sfx("fire");
     if (n < 8) await UI.say([["narr", `The bowl catches with a soft whump, and a ribbon of gold climbs the tripod. ${n} of 8.`]]);
-    else { F.set("roost.open"); await UI.say([["narr", "The eighth bowl catches, and the whole ramp runs gold from foot to crown. At the top of the tower a door of beaten leaf swings open on its own."]]); }
+    else { F.set("roost.open"); await S.m2.gate([["narr", "The eighth bowl catches, and the whole ramp runs gold from foot to crown. At the top of the tower a door of beaten leaf swings open on its own."]], { dx: 130, dy: -90, sfx: "fire", fx: "fire", fx2: "sparkle", shake: 1, flash: "#fff1b8" }); }
   };
   for (let n = 1; n <= 8; n++) { S.trigger["brazier" + n] = brazier(n); S.done["brazier" + n] = F => F.f("roost.open"); }
   S.trigger.roostGuardian = async F => {
     if (F.f("k5.done")) return;
     if (!F.f("roost.open")) { await UI.say([["narr", "The door at the top of the ramp is a sheet of beaten leaf, shut. The bowls below it are cold."]]); return; }
-    const ok = await M3.keyBoss(F, { id: "sunbirdGuardian", level: 33, k: "k5", key: "keyK5", name: "The Sunbird Guardian", title: "Noon Made Bird", bg: "sunbirdRoost",
+    const ok = await M3.keyBoss(F, { id: "sunbirdGuardian", level: 33, k: "k5", key: "keyK5", name: "The Sunbird Guardian", title: "Noon Made Bird", bg: "sunbirdRoost", fx: "feathers", end: "fade",
       lines: [["narr", "The roost burns white. A bird made of noon sunlight spreads its wings."]],
       stage: async c => { c.flash("#fff1b8", 600); c.fx("feathers", c.hero.x + 120, c.hero.y - 40); c.sfx("encounter"); await c.say([["narr", "In the crown of the tower there is a nest of gold wire the size of a house, and in the nest a light that is not a fire. It is hot, and it is old, and it opens one eye."]]); },
       after: [["narr", "The great bird folds her wings. The white light goes out of her, and the roost is only a golden tower in the wind. On the edge of the nest lies a feather-shaped key, warm even in the cold."], ["hero", "(She was guarding chicks. The Company only ever saw what it could take.)"]] });
@@ -686,7 +698,7 @@
       stage: async c => { c.tint("#0a1c28", 0.3, 600); c.shake(3, 900); c.sfx("encounter"); c.fx("splash", c.hero.x + 130, c.hero.y); await c.say([["narr", "The great round chamber: a pool at the middle, spinning, taller on the edges than the middle, and in the spin, once, something that is not water turns its face to the roof."]]); } });
     if (res !== "win") return;
     markBreak("motherOfTheMaelstrom"); F.set("t3.done"); F.giveGear("G32", 3); F.gold(10 * m(6));
-    await UI.say([["narr", "The whirlpool slows, and slows, and goes still as a plate. In the middle, where the water was turning, a ring of black stone shows, with lines of pale light going down. A round lid, the size of a house, set into the sea floor."], ["hero", "(A lid. Not a beast. A lid.)"]]);
+    await S.m2.outro("motherOfTheMaelstrom", [["narr", "The whirlpool slows, and slows, and goes still as a plate. In the middle, where the water was turning, a ring of black stone shows, with lines of pale light going down. A round lid, the size of a house, set into the sea floor."], ["hero", "(A lid. Not a beast. A lid.)"]], { fx: "splash", end: "fade", tint: "#0a1c28", dx: 150 });
   };
   S.done.motherFight = F => F.f("t3.done");
 
@@ -744,7 +756,7 @@
       stage: async c => { c.tint("#401408", 0.3, 600); c.fx("embers", c.hero.x + 100, c.hero.y - 20); c.shake(2, 700); await c.say([["narr", "The hollow in the ash is not empty. It is warm, and it breathes, and as you stand at its edge a shape lifts out of it on four legs, made of the same fire that the volcano is made of, looks past you at the horizon, and starts to run."]]); } });
     if (res !== "win") return;
     markBreak("emberWolf"); F.set("t4.done"); F.giveGear("G31", 3); F.gold(10 * m(6));
-    await UI.say([["narr", "The wolf stops, shakes itself like a dog out of a river, and the flames go out of it one by one, until a lean grey animal is standing in the hollow, tired and blinking. It looks at the horizon once more, and lies down, and is still. On the wall of the crater, lines of pale light go down into the stone."], ["hero", "(It was running from something. Or toward it. It never got there.)"]]);
+    await S.m2.outro("emberWolf", [["narr", "The wolf stops, shakes itself like a dog out of a river, and the flames go out of it one by one, until a lean grey animal is standing in the hollow, tired and blinking. It looks at the horizon once more, and lies down, and is still. On the wall of the crater, lines of pale light go down into the stone."], ["hero", "(It was running from something. Or toward it. It never got there.)"]], { fx: "embers", end: "fall", tint: "#401408", dx: 150 });
   };
   S.done.wolfFight = F => F.f("t4.done");
 })();
@@ -808,7 +820,7 @@
       stage: async c => { c.tint("#0a0a20", 0.35, 600); c.sfx("encounter"); c.shake(2, 600); await c.say([["narr", "At the bottom of the Hollows an arch of black glass stands closed, and in front of it a hound lies like a hill, three great heads on three long necks. Each is asleep. Each is asleep in a different direction. One has its eyes open anyway."]]); } });
     if (res !== "win") return;
     markBreak("gateHound"); F.set("t5.done"); F.giveGear("G22", 3); F.gold(10 * m(6));
-    await UI.say([["narr", "The three heads lower, one after another, and rest on their paws. Behind the hound, the arch of black glass is not open. It is simply no longer cold."], ["hero", "(The bronze statue in the market. Somebody was telling me. Somebody was warning me, too.)"]]);
+    await S.m2.outro("gateHound", [["narr", "The three heads lower, one after another, and rest on their paws. Behind the hound, the arch of black glass is not open. It is simply no longer cold."], ["hero", "(The bronze statue in the market. Somebody was telling me. Somebody was warning me, too.)"]], { fx: "smoke", end: "bow", scale: 1.5, tint: "#0a0a20", dx: 170 });
   };
   S.done.gateFight = F => F.f("t5.done");
 })();
