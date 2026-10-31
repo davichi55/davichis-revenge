@@ -1656,13 +1656,18 @@
     return null;
   }
   // the skill-book moves of chapters 6-11 and the post-game: one rule each, used by the Auto button and the harnesses (only when the creature has it in its off-style slot)
+  const SKILL_CD = { kelpPoultice: 2, chiselCrack: 3, giltShield: 3, bitterRue: 2, rootDraught: 3, staticSnare: 2, bannerDecoy: 3, lanternVigil: 3 };   // rounds between two casts by the same creature (Auto does not spam utility moves)
   function autoSkill(ctx, u, S) {
-    const id = u.offMove; if (!id || !MOVES[id] || !MOVES[id].skill || !S.ok(id)) return null;
+    const id = u.offMove; if (!id || !MOVES[id] || !MOVES[id].skill || !S.ok(id) || !SKILL_CD[id]) return null;
+    const last = ctx.skLast = ctx.skLast || {}; if (ctx.round - (last[u.id] === undefined ? -99 : last[u.id]) < SKILL_CD[id]) return null;
+    const r = autoSkillPick(ctx, u, S, id); if (r) last[u.id] = ctx.round; return r;
+  }
+  function autoSkillPick(ctx, u, S, id) {
     const { foe, lowest, avg, tele, team, foes } = S, frac = a => a.hp / a.maxHp, R = target => ({ move: id, target });
     switch (id) {
       case "kelpPoultice": return avg < 0.65 && team.filter(a => frac(a) < 0.7).length >= 2 ? R(u) : null;
       case "chiselCrack": return team.length > 1 && (foe.boss || (foes.length === 1 && frac(foe) > 0.5)) && !foe.buffs.some(b => b.type === "def" && b.val < 0) ? R(foe) : null;
-      case "giltShield": { const t = (tele ? team : team.filter(a => frac(a) < 0.55)).filter(a => !hasBuff(a, "shield")).sort((a, b) => frac(a) - frac(b))[0]; return t ? R(t) : null; }
+      case "giltShield": { const t = team.filter(a => frac(a) < (tele ? 0.75 : 0.55)).filter(a => !hasBuff(a, "shield")).sort((a, b) => frac(a) - frac(b))[0]; return t ? R(t) : null; }
       case "bitterRue": { const sick = team.find(a => DOT_CLEANSE.filter(k => a.st[k]).length + a.buffs.filter(b => b.val < 0 && b.type !== "sres").length >= 2 || (a.st.poison && a.st.poison.n >= 3) || (a.st.burn && a.st.burn.n >= 3)); return sick ? R(sick) : null; }
       case "rootDraught": { const dry = team.filter(a => a !== u && a.mp <= 1 && a.maxMp - a.mp >= 3).sort((a, b) => a.mp - b.mp)[0]; return dry && u.mp >= 3 ? R(dry) : null; }
       case "staticSnare": return tele ? { move: id, target: foes.find(f => f.charging) || foe } : null;

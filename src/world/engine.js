@@ -169,13 +169,20 @@
         const frame = this.add.rectangle(x - 3, y - 3, W + 6, H + 6, 0x120c09, 0.85).setOrigin(0).setStrokeStyle(1, 0xb08a4a, 0.9).setScrollFactor(0).setDepth(21000);
         const img = this.add.image(x, y, key).setOrigin(0).setScale(s).setAlpha(0.82).setScrollFactor(0).setDepth(21001);
         const g = this.add.graphics().setScrollFactor(0).setDepth(21002);
-        this.mini = { x, y, s: s / CELL, frame, img, g, t: 0 }; this.showMinimap();
+        this.mini = { x, y, s: s / CELL, frame, img, g, t: 0, W, H, side: "right", sideT: 0 }; this.showMinimap();
         this.events.once("shutdown", () => { if (this.textures.exists(key)) this.textures.remove(key); this.mini = null; });
       } catch (e) { console.warn("minimap", e); this.mini = null; }
     }
     showMinimap() { if (!this.mini) return; let on = true; try { on = G.minimap !== false; } catch (e) {} [this.mini.frame, this.mini.img, this.mini.g].forEach(o => o.setVisible(on)); }
     updateMinimap(time) {
       const m = this.mini; if (!m || !m.img.visible || time - m.t < 100) return; m.t = time;
+      // never cover the hero or a character (Danny: the Maze Guardian hid under it): hop to the other top corner when something is near this one
+      const cam = this.cameras.main, wv = cam.worldView, scr = (x, y) => [(x - wv.x) * cam.zoom, (y - wv.y) * cam.zoom];
+      const busy = side => { const x0 = side === "right" ? 960 - 12 - m.W - 3 : 9, x1 = x0 + m.W + 6, y1 = 12 + m.H + 3, pad = 70;
+        const pts = [scr(this.pos.x, this.pos.y - 30)].concat((this.npcs || []).filter(n => n.s && n.s.visible).map(n => scr(n.x, n.y - 30)));
+        return pts.some(([px, py]) => px > x0 - pad && px < x1 + pad && py < y1 + pad + 30); };
+      if (time > m.sideT && busy(m.side)) { const other = m.side === "right" ? "left" : "right"; if (!busy(other)) { m.side = other; m.sideT = time + 1200; const nx = other === "right" ? 960 - 12 - m.W : 12, dx = nx - m.x; m.x = nx; m.frame.x += dx; m.img.x += dx; } }
+      const both = busy("right") && busy("left"); m.frame.setAlpha(both ? 0.25 : 0.85); m.img.setAlpha(both ? 0.25 : 0.82); m.g.setAlpha(both ? 0.4 : 1);   // nowhere free: fade it out
       const g = m.g, X = v => m.x + v * m.s, Y = v => m.y + v * m.s; g.clear();
       g.fillStyle(0x16100e, 1); for (const d of this.dynSolids) if (d.on) g.fillRect(X(d.r[0]), Y(d.r[1]), Math.max(1, (d.r[2] - d.r[0]) * m.s), Math.max(1, (d.r[3] - d.r[1]) * m.s));   // doors and walls that open with the story
       for (const e of this.exits || []) if (e.on && e.glow) { g.fillStyle(0xffc84a, 1); g.fillCircle(X(e.rect[0] + e.rect[2] / 2), Y(e.rect[1] + e.rect[3] / 2), 3); }
