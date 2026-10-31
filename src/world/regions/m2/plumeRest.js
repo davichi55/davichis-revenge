@@ -28,7 +28,7 @@
     props: [
       ["m2_plumeInn", 640, 440], ["m2_weaverHutA", 860, 330], ["m2_weaverHutB", 520, 340], ["m2_loomFrame", 970, 480], ["m2_featherLine", 450, 440], ["m2_yaxaShrine", 920, 520], ["m2_windBells", 760, 540], ["m2_platformLamp", 560, 580], ["m2_platformLamp", 880, 590], ["m2_nestSeat", 740, 600, { solid: false }],
       ["m2_featherStall", 1200, 560], ["m2_dyeVats", 1090, 700], ["m2_featherBundles", 1320, 700], ["m2_loomFrame", 1140, 250], ["m2_kiteRack", 1280, 330], ["m2_featherLine", 1100, 400], ["m2_weaverHutA", 1250, 280], ["m2_loomBasket", 1230, 760, { solid: false }],
-      ["wagon", 250, 690], ["m2_tarpCrates", 380, 820], ["m2_hayStack", 190, 790], ["m2_featherLine", 440, 700], ["m2_platformLamp", 330, 780], ["m2_hen", 300, 790, { solid: false }],
+      ["wagon", 250, 690, { hide: "wagon.at=plumeRest" }], ["menagerieWagon", 250, 690, { show: "wagon.at=plumeRest" }], ["m2_tarpCrates", 380, 820], ["m2_hayStack", 190, 790], ["m2_featherLine", 440, 700], ["m2_platformLamp", 330, 780], ["m2_hen", 300, 790, { solid: false }],
       ["m2_weaverHutB", 700, 130], ["m2_featherBundles", 820, 170], ["m2_loomBasket", 620, 190, { solid: false }], ["m2_ropeLift", 760, 880, { solid: [40, 14] }], ["m2_barge", 760, 960, { show: "ch4.done", solid: false }], ["m2_platformLamp", 650, 880], ["m2_platformLamp", 880, 880],
       ["m2_bridgeAnchor", 90, 560], ["m2_featherCharms", 260, 560, { solid: false }], ["m2_featherCharms", 1000, 330], ["m2_wovenLantern", 440, 580, { solid: false }], ["m2_wovenLantern", 1050, 470, { solid: false }],
     ],

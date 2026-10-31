@@ -344,7 +344,7 @@
     // Dunmar's Menagerie Wagon (Danny 2026-10-31: every freed lab creature should really be there): the camera turns to the wagon, the lock turns, the creature shows in the cage,
     // the cage rattles and opens (o.fx: "leaves" | "feathers" | "sparkle" | "embers" ...), o.desc lines play while it stands on the wagon bed, then it jumps down and walks to you.
     // o.before: lines before the lock turns. o.scale for big creatures. Without a menagerieWagon sprite on the map it simply appears beside you, as before. cageBack(id) sends it back into the wagon's shade.
-    _wagon() { const sc = this.sc; if (!sc) return null; const w = sc.children.list.find(o => o.texture && o.texture.key === "menagerieWagon"); return w ? { x: w.x, y: w.y, h: w.displayHeight } : null; }
+    _wagon() { const sc = this.sc; if (!sc) return null; const w = sc.children.list.find(o => o.texture && o.texture.key === "menagerieWagon" && o.visible); return w ? { x: w.x, y: w.y, h: w.displayHeight } : null; }
     async cageOut(id, art, o = {}) {
       const sc = this.sc; if (!sc || this.dead) return; const h = this.hero, w = this._wagon();
       if (!w) { this.sfx("door"); this.actor(id, { art, x: h.x + 70, y: h.y, scale: o.scale }); this.fx(o.fx || "sparkle", h.x + 70, h.y - 30, { r: 50, ms: 1600 }); if (o.before) await this.say(o.before); if (o.desc) await this.say(o.desc); return; }
