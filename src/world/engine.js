@@ -502,6 +502,7 @@
       } });
       if (a.smoke) this.time.addEvent({ delay: 260, loop: true, callback: () => this.spawnSmoke(a.smoke) });
       this.time.addEvent({ delay: 140, loop: true, callback: () => this.spawnEmbers() });
+      this.time.delayedCall(0, () => { try { if (World.Atmos) World.Atmos.build(this); } catch (e) { console.warn("atmos", e); } });   // colour grade, bloom, fog, clouds, parallax (src/world/atmos.js); after the props exist
     }
     spawnEmbers() {
       const v = this.cameras.main.worldView;
@@ -893,6 +894,7 @@
       if (!this.ready) return;
       this.updateMinimap(time);
       const dt = Math.min(0.05, delta / 1000), k = this.keys, ptr = this.input.activePointer;
+      if (this.atmos) World.Atmos.update(this, time, dt);   // src/world/atmos.js
       let vx = (k.right.isDown || k.d.isDown ? 1 : 0) - (k.left.isDown || k.a.isDown ? 1 : 0), vy = (k.down.isDown || k.s.isDown ? 1 : 0) - (k.up.isDown || k.w.isDown ? 1 : 0), usePtr = false;
       if (this.busy || this.scripted) { vx = 0; vy = 0; }
       else if (!vx && !vy && ptr.isDown && !this.noPtr) { usePtr = true; const w = this.cameras.main.getWorldPoint(ptr.x, ptr.y), dx = w.x - this.pos.x, dy = w.y - (this.pos.y - 18), d = Math.hypot(dx, dy); if (d > 8) { vx = dx / d; vy = dy / d; } }

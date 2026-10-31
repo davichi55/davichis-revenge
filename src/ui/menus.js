@@ -137,6 +137,7 @@ const Menus = (() => {
           <div class="row"><div class="g">Battle speed<small>Animations in fights.</small></div><button class="b" data-sys="speed">${SPEEDS[G.speed].name}</button></div>
           <div class="row"><div class="g">Remember last action<small>The battle menu opens on the action you used last.</small></div><button class="b" data-sys="cursor">${G.cursorMem === false ? "Off" : "On"}</button></div>
           <div class="row"><div class="g">Minimap<small>The area map in the corner (M).</small></div><button class="b" data-sys="minimap">${G.minimap === false ? "Off" : "On"}</button></div>
+          <div class="row"><div class="g">Atmosphere<small>Colour grading, light halos, drifting fog, cloud shadows and foreground leaves on the maps.</small></div><button class="b" data-sys="atmos">${G.atmos === false ? "Off" : "On"}</button></div>
           <div class="row"><div class="g">Music volume</div><button class="b" data-sys="mv-">-</button><b>${Math.round(v.music * 100)}%</b><button class="b" data-sys="mv+">+</button></div>
           <div class="row"><div class="g">Sound effects volume</div><button class="b" data-sys="sv-">-</button><b>${Math.round(v.sfx * 100)}%</b><button class="b" data-sys="sv+">+</button></div>
           <div class="row"><div class="g">Back to title<small>Unsaved progress is lost.</small></div><button class="b" data-sys="title">Title</button></div>`;
@@ -174,6 +175,7 @@ const Menus = (() => {
           else if (s === "speed") G.speed = (G.speed + 1) % SPEEDS.length;
           else if (s === "cursor") G.cursorMem = G.cursorMem === false;
           else if (s === "minimap") { G.minimap = G.minimap === false; try { if (World.scene) World.scene.showMinimap(); } catch (e) {} }
+          else if (s === "atmos") { G.atmos = G.atmos === false; try { if (World.scene && World.Atmos) World.Atmos.build(World.scene); } catch (e) {} }
           else if (s === "mv-" || s === "mv+") { v.music = Math.max(0, Math.min(1, Math.round((v.music + (s === "mv+" ? 0.1 : -0.1)) * 10) / 10)); Flow.applyVolume(); }
           else if (s === "sv-" || s === "sv+") { v.sfx = Math.max(0, Math.min(1, Math.round((v.sfx + (s === "sv+" ? 0.1 : -0.1)) * 10) / 10)); Flow.applyVolume(); Flow.sfx("menuMove"); }
           else if (s === "title") { if (await UI.confirm("Back to the title screen? Unsaved progress is lost.", "Yes", "No")) { api.close("title"); } return; }
