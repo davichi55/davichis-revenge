@@ -341,6 +341,30 @@
       await new Promise(res => { try { sc.cameras.main.zoomTo(z, this._dur(ms || 900), "Sine.easeInOut", true, (cam, p) => { if (p === 1) res(); }); } catch (e) { return res(); } setTimeout(res, this._dur(ms || 900) + 1200); });
     }
     follow() { if (this.sc && !this.dead) try { this.sc.follow(); } catch (e) { /* ignore */ } }
+    // Dunmar's Menagerie Wagon (Danny 2026-10-31: every freed lab creature should really be there): the camera turns to the wagon, the lock turns, the creature shows in the cage,
+    // the cage rattles and opens (o.fx: "leaves" | "feathers" | "sparkle" | "embers" ...), o.desc lines play while it stands on the wagon bed, then it jumps down and walks to you.
+    // o.before: lines before the lock turns. o.scale for big creatures. Without a menagerieWagon sprite on the map it simply appears beside you, as before. cageBack(id) sends it back into the wagon's shade.
+    _wagon() { const sc = this.sc; if (!sc) return null; const w = sc.children.list.find(o => o.texture && o.texture.key === "menagerieWagon"); return w ? { x: w.x, y: w.y, h: w.displayHeight } : null; }
+    async cageOut(id, art, o = {}) {
+      const sc = this.sc; if (!sc || this.dead) return; const h = this.hero, w = this._wagon();
+      if (!w) { this.sfx("door"); this.actor(id, { art, x: h.x + 70, y: h.y, scale: o.scale }); this.fx(o.fx || "sparkle", h.x + 70, h.y - 30, { r: 50, ms: 1600 }); if (o.before) await this.say(o.before); if (o.desc) await this.say(o.desc); return; }
+      await this.pan(w.x, w.y - w.h * 0.4, 900); this.light(w.x, w.y - w.h * 0.45, 150, 0.85);
+      if (o.before) await this.say(o.before);
+      this.sfx("keyTurn"); await this.wait(450);
+      const a = this.actor(id, { art, x: w.x, y: w.y + 12, scale: o.scale, face: w.x < h.x ? "right" : "left" }); if (a) a.lift = Math.round(w.h * 0.3);
+      await this.anim(id, "fadeIn", { ms: 450 });
+      this.sfx("creak"); this.shake(2, 450); await this.anim(id, "shake", { ms: 450 });
+      this.sfx("door"); this.fx(o.fx || "sparkle", w.x, w.y - w.h * 0.45, { r: 70, ms: 2200 }); if (o.fx && o.fx !== "sparkle") this.fx("sparkle", w.x, w.y - w.h * 0.5, { r: 50, ms: 1400 });
+      if (o.desc) await this.say(o.desc);
+      if (a && !this.dead) { await this._tw({ targets: a, lift: 0, x: w.x + (h.x > w.x ? 30 : -30), duration: 380, ease: "Quad.easeIn" }); this.sfx("stomp"); try { sc.dustAt(a.x, a.y, 1); } catch (e) { /* ignore */ } }
+      const tx = Math.round((w.x + h.x) / 2 + (h.x > w.x ? 0 : 0)), ty = Math.max(w.y + 50, Math.round((w.y + h.y) / 2) + 10);
+      this.follow(); await this.walk(id, tx, ty, 1100); this.face(id, h.x > tx ? "right" : "left");
+    }
+    async cageBack(id) {
+      const w = this._wagon(), a = this.actors.get(id); if (!a || this.dead) return;
+      if (w) { await this.walk(id, w.x + 70, w.y + 40, 1200); this.face(id, "left"); }
+      await this.anim(id, "fadeOut", { ms: 600 }); this.remove(id);
+    }
     shake(strength, ms) { const sc = this.sc; if (!sc || this.dead) return; try { const s = strength == null ? 4 : strength; sc.cameras.main.shake(this._dur(ms || 400), new Phaser.Math.Vector2(s / W, s / H), true); } catch (e) { /* ignore */ } }
     flash(color, ms) {
       if (!this.frame) return; const f = this.frame.querySelector(".flash"); if (!f) return; f.style.background = color == null ? "#fff" : (typeof color === "number" ? "#" + color.toString(16).padStart(6, "0") : color);

@@ -197,13 +197,12 @@
     await M.stage(async c => {
       const h = c.hero; c.sfx("door"); c.tint("#10241c", 0.16, 300);
       M3.actors(c, [["im", "npcImela", 150, 8, { name: "Imela", flip: true }], ["dun", "npcDunmar", -60, 6, { name: "Dunmar" }]]);
-      await c.say([["dunmar", "Hold the lantern, lad. Mind the lock. It's ash-wood, and ash-wood does what it wants."], ["narr", "The cage door swings open on a warm breath of ash. A small bear-like thing, the size of a hearth-dog, with a belly that glows like a banked ember, steps down onto the boards, sniffs the air once, and freezes."]]);
-      c.actor("hk", { art: "hearthkin", x: h.x + 60, y: h.y + 8 }); c.fx("sparkle", h.x + 60, h.y - 24); await c.wait(600);
+      await c.cageOut("hk", "hearthkin", { fx: "embers", before: [["dunmar", "Hold the lantern, lad. Mind the lock. It's ash-wood, and ash-wood does what it wants."]], desc: [["narr", "The cage door swings open on a warm breath of ash. A small bear-like thing, the size of a hearth-dog, with a belly that glows like a banked ember, steps down onto the boards, sniffs the air once, and freezes."]] });
       await c.say([["hearthkin", "I know that smell. Bread and thyme and a window left open."]]);
       c.emote("im", "!"); c.sfx("break"); await c.wait(500);
       await c.say([["narr", "Somewhere behind you a cup hits the table, rolls, and does not break."], ["imela", "Hearthkin. You little thief. You took my kettle."], ["hearthkin", "I did not take it. I minded it. Someone had to mind it."]]);
       await c.say([["dunmar", "...Nineteen years it sat in my cages. And I never once asked whose kitchen it minded."], ["hero", "It remembers the house."], ["imela", "It remembers more than I do."]]);
-      c.remove("hk"); c.remove("im"); c.remove("dun"); c.tint("#10241c", 0, 500); c.follow();
+      await c.cageBack("hk"); c.remove("im"); c.remove("dun"); c.tint("#10241c", 0, 500); c.follow();
     }, { music: "hope" });
     F.set("k7.done"); F.questDone("m_k7"); UI.toast("Hearthkin joins the collection.", 3400);
   };

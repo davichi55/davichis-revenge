@@ -46,12 +46,14 @@
         await UI.say([["dunmar", "A bone key! Look at it. Cold as a grave. Right, hold the lantern."]]);
         F.take("keyK1", 1); F.set("k1.freed"); F.questDone("bellow");
         const lv = Math.max(3, F.avgLevel() - 1), b = F.mk("bramblehoof", lv); G.collection.push(b); G.best.bramblehoof = { seen: 1, beaten: 0 };
-        F.sfx("door");
-        await UI.say([
-          ["narr", "A cage of bark and moss swings open. An elk-bull the colour of old wood steps down, and the moss on its antlers is blooming."],
-          ["bramblehoof", "Bark remembers. You opened the door, small iron one. ...I will walk with you, when you need a horn."],
-          ["dunmar", "Bramblehoof, a forest guardian. The wild clans lost him to the lab. Freeing him will not be forgotten."],
-        ]);
+        // Danny 2026-10-31: he should be there in the world, not only in the text: the cage rattles, he steps out of the Menagerie Wagon (menagerieWagon at 1150,780) and comes to you
+        await Cinema.stage(async c => {
+          await c.cageOut("bh", "bramblehoof", { fx: "leaves", desc: [["narr", "A cage of bark and moss swings open. An elk-bull the colour of old wood steps down, and the moss on its antlers is blooming."]] });
+          await c.anim("bh", "bow");
+          await c.say([["bramblehoof", "Bark remembers. You opened the door, small iron one. ...I will walk with you, when you need a horn."],
+            ["dunmar", "Bramblehoof, a forest guardian. The wild clans lost him to the lab. Freeing him will not be forgotten."]]);
+          await c.cageBack("bh");   // into the wagon's shade, ready when you call him
+        });
       } else await UI.say([["dunmar", F.f("k1.freed") ? "Bramblehoof is out and grumbling about the sand. Good. More keys will turn up, lad." : "Any keys yet? No? Well. The oasis is full of stories."]]);
     },
     pell: async F => {

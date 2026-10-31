@@ -595,10 +595,9 @@
     F.take("keyK8", 1); F.set("k8.freed");
     const u = F.mk("kirinth", Math.max(3, F.avgLevel() - 1)); G.collection.push(u); G.best.kirinth = G.best.kirinth || { seen: 1, beaten: 0 }; F.sfx("door");
     await stage(async c => {
-      const h = c.hero; c.sfx("door"); c.actor("kr", { art: "kirinth", x: h.x + 70, y: h.y, scale: 1.1 }); c.fx("sparkle", h.x + 70, h.y - 30, { ms: 1600, r: 50 });
-      await c.say([["dunmar", "Hold the lantern, lad. This lock is made of colours."], ["narr", "The cage door turns every shade of the rainbow and swings open. A qilin steps down onto the wagon boards: a deer's grace, a dragon's head, scales of pearl that go from blue to rose to green as it looks about."],
-        ["kirinth", "My scales know my mood before I do."], ["dunmar", "The Flock calls it sacred, lad. Half of them will be thrilled and half furious."], ["kirinth", "Sacred is a thing others call you. I would rather be asked."]]);
-      c.remove("kr");
+      await c.cageOut("kr", "kirinth", { scale: 1.1, before: [["dunmar", "Hold the lantern, lad. This lock is made of colours."]], desc: [["narr", "The cage door turns every shade of the rainbow and swings open. A qilin steps down onto the wagon boards: a deer's grace, a dragon's head, scales of pearl that go from blue to rose to green as it looks about."]] });
+      await c.say([["kirinth", "My scales know my mood before I do."], ["dunmar", "The Flock calls it sacred, lad. Half of them will be thrilled and half furious."], ["kirinth", "Sacred is a thing others call you. I would rather be asked."]]);
+      await c.cageBack("kr");
     });
     UI.toast("Kirinth joins the collection.", 3200);
     await UI.say([["kirinth", "I will walk with you, if you will have me. I am told you ask first."]]);

@@ -568,9 +568,11 @@
   M3.freeExtra = async (F, keyId) => {
     const [cid, flag, desc, l1, l2, dun] = EXTRAS[keyId]; F.take(keyId, 1); F.set(flag + ".freed");
     const u = F.mk(cid, Math.max(3, F.avgLevel() - 1)); G.collection.push(u); G.best[cid] = G.best[cid] || { seen: 1, beaten: 0 };
+    const fx = { bramblehoof: "leaves", quillshade: "feathers", mirequeen: "leaves", brassbone: "dust", selkira: "splash" }[cid];
     await Cinema.stage(async c => {
-      const h = c.hero; c.sfx("door"); c.actor("ex", { art: cid, x: h.x + 70, y: h.y }); c.fx("sparkle", h.x + 70, h.y - 30);
-      await c.say([["dunmar", "Right, hold the lantern. Let me see to this lock."], ["narr", desc], [cid, l1], [cid, l2], ["dunmar", dun]]);
+      await c.cageOut("ex", cid, { fx, before: [["dunmar", "Right, hold the lantern. Let me see to this lock."]], desc: [["narr", desc]], scale: cid === "brassbone" ? 1.1 : undefined });
+      await c.say([[cid, l1], [cid, l2], ["dunmar", dun]]);
+      await c.cageBack("ex");
     });
   };
   M3.wagon = async F => {

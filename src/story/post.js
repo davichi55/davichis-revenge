@@ -386,10 +386,10 @@
     F.take("keyK9", 1); F.set("k9.freed");
     const u = F.mk("bakuroth", Math.max(3, F.avgLevel() - 1)); G.collection.push(u); G.best.bakuroth = G.best.bakuroth || { seen: 1, beaten: 0 }; F.sfx("door");
     await stage(async c => {
-      const h = c.hero; c.sfx("door"); c.actor("bk", { art: "bakuroth", x: h.x + 80, y: h.y, scale: 1.3 }); c.fx("sparkle", h.x + 80, h.y - 40, { ms: 1800, r: 60 }); c.tint("#08183a", 0.2, 400);
-      await c.say([["dunmar", "That key has a light in it. Hold the lantern, lad. ...No. Hold two."], ["narr", "The cage door swings out over the sea and the wagon tips, alarmingly, towards it. A great soft shape comes down the wagon boards one slow coil at a time: a leviathan the size of a house, pale as a lantern, with eyes like deep wells, and a gentleness in the way it moves that makes the boards feel smaller than they are."],
-        ["bakuroth", "I ate a bad dream last night. It had stars in it."], ["dunmar", "That is a lot of creature for a wagon, lad."], ["bakuroth", "Sleep. I will keep the nightmares. They taste of salt."]]);
-      c.remove("bk"); c.tint("#08183a", 0, 500);
+      c.tint("#08183a", 0.2, 400);
+      await c.cageOut("bk", "bakuroth", { scale: 1.3, fx: "splash", before: [["dunmar", "That key has a light in it. Hold the lantern, lad. ...No. Hold two."]], desc: [["narr", "The cage door swings out over the sea and the wagon tips, alarmingly, towards it. A great soft shape comes down the wagon boards one slow coil at a time: a leviathan the size of a house, pale as a lantern, with eyes like deep wells, and a gentleness in the way it moves that makes the boards feel smaller than they are."]] });
+      await c.say([["bakuroth", "I ate a bad dream last night. It had stars in it."], ["dunmar", "That is a lot of creature for a wagon, lad."], ["bakuroth", "Sleep. I will keep the nightmares. They taste of salt."]]);
+      await c.cageBack("bk"); c.tint("#08183a", 0, 500);
     });
     UI.toast("Bakuroth joins the collection.", 3200);
   };

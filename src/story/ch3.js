@@ -319,7 +319,7 @@
   M.T = T;
   const hubMode = () => !!(Flow.engine && Flow.engine.mode === "hub");
   // a Cinema stage that also runs in the menu hub (there is no map to film there): the same lines are spoken, the motion calls do nothing
-  const dryStage = () => new Proxy({ hero: { x: 0, y: 0 }, say: lines => UI.say(lines) }, { get: (t, k) => (k in t ? t[k] : k === "then" ? undefined : () => Promise.resolve()) });
+  const dryStage = () => new Proxy({ hero: { x: 0, y: 0 }, say: lines => UI.say(lines), cageOut: (id, art, o = {}) => UI.say([...(o.before || []), ...(o.desc || [])]) }, { get: (t, k) => (k in t ? t[k] : k === "then" ? undefined : () => Promise.resolve()) });
   M.stage = async (fn, o) => {
     if (hubMode()) { try { await fn(dryStage()); } catch (e) { if (e instanceof Flow.Interrupt) throw e; console.warn("dry stage", e); } return; }
     return Cinema.stage(fn, o);
@@ -342,13 +342,12 @@
       await UI.say([["dunmar", "Grey feather-stone. The Windhollow key! Hold the lantern, lad."]]);
       F.take("keyK2", 1); F.set("k2.freed"); F.questDone("m_windhollow");
       const lv = Math.max(3, F.avgLevel() - 1), q = F.mk("quillshade", lv); G.collection.push(q); G.best.quillshade = Object.assign(G.best.quillshade || {}, { seen: 1, beaten: 0 });
-      F.sfx("door");
       await M.stage(async c => {
-        c.sfx("door"); c.fx("feathers", c.hero.x + 60, c.hero.y - 10); await c.wait(600);
-        await c.say([["narr", "A small cage swings open. A grey squirrel with a harpy's wing-folds shakes out its tail and looks around the wagon like someone checking for eavesdroppers."]]);
+        await c.cageOut("qs", "quillshade", { fx: "feathers", desc: [["narr", "A small cage swings open. A grey squirrel with a harpy's wing-folds shakes out its tail and looks around the wagon like someone checking for eavesdroppers."]] });
+        await c.say([["quillshade", "Between us? The cook at the palace sleeps through the second bell."], ["dunmar", "Quillshade carried messages between the factions. The academy treated her as furniture. Mind what you say near her, lad. She remembers everything and tells it to anyone who asks nicely."],
+          ["quillshade", "Between us, the Hollow has a house nobody opens. Down the long stair. You did not hear that from me."]]);
+        await c.cageBack("qs");
       });
-      await UI.say([["quillshade", "Between us? The cook at the palace sleeps through the second bell."], ["dunmar", "Quillshade carried messages between the factions. The academy treated her as furniture. Mind what you say near her, lad. She remembers everything and tells it to anyone who asks nicely."],
-        ["quillshade", "Between us, the Hollow has a house nobody opens. Down the long stair. You did not hear that from me."]]);
       return;
     }
     const L = [];

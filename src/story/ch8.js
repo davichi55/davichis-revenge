@@ -561,10 +561,10 @@
     F.take("keyK6", 1); F.set("k6.freed"); F.questDone("m_k6");
     const u = F.mk("mothmara", Math.max(3, F.avgLevel() - 1)); G.collection.push(u); G.best.mothmara = G.best.mothmara || { seen: 1, beaten: 0 }; F.sfx("door");
     await M.stage(async c => {
-      const h = c.hero; c.sfx("door"); c.actor("mm", { art: "mothmara", x: h.x + 70, y: h.y }); c.fx("sparkle", h.x + 70, h.y - 30); c.tint("#1a1030", 0.2, 400);
-      await c.say([["dunmar", "A cage of green glass. Careful, lad. She does not like a lamp held too close."], ["narr", "The cage door opens on its own. A nightmare-horse, black as a well, a veil of small snakes lifting about her head like hair in water, steps down onto the wagon boards and does not look at anyone's eyes."],
-        ["mothmara", "I have asked many questions in the dark. I would like to ask a kind one."], ["dunmar", "She was used to question prisoners, lad. She carries it."], ["mothmara", "Forgive me. I remember what I saw in them. ...May I walk with you?"]]);
-      c.remove("mm"); c.tint("#1a1030", 0, 500);
+      c.tint("#1a1030", 0.2, 400);
+      await c.cageOut("mm", "mothmara", { before: [["dunmar", "A cage of green glass. Careful, lad. She does not like a lamp held too close."]], desc: [["narr", "The cage door opens on its own. A nightmare-horse, black as a well, a veil of small snakes lifting about her head like hair in water, steps down onto the wagon boards and does not look at anyone's eyes."]] });
+      await c.say([["mothmara", "I have asked many questions in the dark. I would like to ask a kind one."], ["dunmar", "She was used to question prisoners, lad. She carries it."], ["mothmara", "Forgive me. I remember what I saw in them. ...May I walk with you?"]]);
+      await c.cageBack("mm"); c.tint("#1a1030", 0, 500);
     });
     UI.toast("Mothmara joins the collection.", 3200);
   };
