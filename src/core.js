@@ -17,6 +17,14 @@
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const pick = a => a[Math.floor(rnd() * a.length)];
   const sum = a => a.reduce((s, x) => s + x, 0);
+  // ---------- extension registries (RULES-BOSS, 2026-10-31): src/rules/bosses.js and the content files plug special rules in here ----------
+  // HOOKS[name] = { start(ctx,u), turn(ctx,u)->extra actions, act(ctx,u,targets)->true when it acted, round(ctx,u), inMult(ctx,u,src,info)->damage multiplier taken, outMult(ctx,u,tgt,info)->multiplier dealt,
+  //   hit(ctx,u,src,v,info), status(ctx,u,type,src), broken(ctx,u), die(ctx,u)->false cancels the death, allyDie(ctx,u,dead) }; a unit lists its hooks in u.hooks (en(..., { hooks: [name] })).
+  // CONDS[name] = (ctx,e,arg) => bool, used as `if: "name:arg"` in an ability; EFFECTS[name] = (ctx,e,ability,target,targets,big) => void, used as `fx: "name"` in an ability.
+  const HOOKS = {}, CONDS = {}, EFFECTS = {};
+  const EVO = {};   // evolution traits (src/evolution.js fills this in; every call site below is guarded by `unit.evo`)
+  const hookRun = (u, ev, ...args) => { let out; if (u && u.hooks) for (const h of u.hooks) { const H = HOOKS[h]; if (H && H[ev]) { const r = H[ev](...args); if (r !== undefined) out = r; } } return out; };
+  const MAX_LEVEL = 99;
 
   // exact-total stat spread: every stat starts at 3, the rest is shared by weight (largest remainder), so every creature has the same total
   function spread(weights, total, tweak) {
@@ -111,7 +119,7 @@
   function mv(id, name, lvl, mp, target, o) { MOVES[id] = Object.assign({ id, name, lvl, mp, target, kind: "phys", grp: "damage" }, o); return MOVES[id]; }
   // --- Minotaur ---
   mv("gore", "Gore", 1, 0, "enemy", { basic: 1, grp: "basic", p: 1.0, el: "self", desc: "Horn strike. +1 MP." });
-  mv("hoofStomp", "Hoof Stomp", 1, 1, "enemy", { p: 1.35, desc: "Quick, cheap hit. Best spammed on a broken enemy." });
+  mv("hoofStomp", "Hoof Stomp", 1, 1, "enemy", { p: 1.35, desc: "Quick, cheap hit." });
   mv("labCharge", "Labyrinth Charge", 4, 2, "enemy", { p: 2.0, bk: ["impact"], desc: "Heavy charge. Counts toward impact breaks." });
   mv("bullRush", "Bull Rush", 6, 2, "enemy", { p: 1.4, fx: "bullRush", desc: "If the enemy has not acted yet this round, pushes its turn to the end of the round." });
   mv("roar", "Labyrinth Roar", 8, 1, "self", { grp: "support", fx: "roar", desc: "Draws the enemy's next single-target attacks onto itself." });
@@ -129,7 +137,7 @@
   mv("cyclone", "Cyclone", 12, 3, "allEnemies", { p: 0.45, hits: 3, desc: "Several hits on all enemies." });
   mv("dive", "Dive", 16, 2, "self", { grp: "support", fx: "dive", desc: "Flies up: takes 30% less damage until its next turn, and its next strike hits 60% harder." });
   mv("hitAndRun", "Hit and Run", 20, 1, "enemy", { p: 1.0, fx: "hitAndRun", desc: "Hits, then takes 25% less damage until its next turn." });
-  mv("snatch", "Snatch", 24, 1, "enemy", { fx: "snatch", grp: "control", desc: "Steals one enemy buff." });
+  mv("snatch", "Snatch", 24, 1, "enemy", { fx: "snatch", grp: "control", desc: "Strips one buff from the enemy." });
   // --- Hydra ---
   mv("venomBite", "Venom Bite", 1, 0, "enemy", { basic: 1, grp: "basic", kind: "spell", p: 0.8, el: "self", st: [["poison", 1, 0.3]], desc: "Bite, 30% chance to poison. +1 MP." });
   mv("toxicSpit", "Toxic Spit", 1, 1, "enemy", { kind: "spell", p: 0.5, el: "poison", st: [["poison", 1]], desc: "Adds 1 poison stack." });
@@ -152,7 +160,7 @@
   mv("unbreakable", "Unbreakable", 24, 2, "self", { grp: "support", fx: "unbreakable", desc: "Removes its own debuffs, immune to stun for 2 turns." });
   // --- Phoenix ---
   mv("emberPeck", "Ember Peck", 1, 0, "enemy", { basic: 1, grp: "basic", kind: "spell", p: 0.85, el: "fire", desc: "Small fire hit. +1 MP." });
-  mv("warmLight", "Warm Light", 1, 1, "ally", { grp: "support", fx: "warmLight", desc: "Heals one ally (more than a third of their HP)." });
+  mv("warmLight", "Warm Light", 1, 1, "ally", { grp: "support", fx: "warmLight", desc: "Heals one ally. The stronger the healer's Power, the more it heals." });
   mv("rejuvenate", "Rejuvenate", 4, 2, "ally", { grp: "support", fx: "rejuvenate", desc: "Heals an ally a little every turn for 3 turns." });
   mv("cleansingFlame", "Cleansing Flame", 6, 1, "ally", { grp: "support", fx: "cleansingFlame", desc: "Removes 1 status from an ally." });
   mv("flameWard", "Flame Ward", 8, 2, "ally", { grp: "support", fx: "flameWard", desc: "Shield on an ally that absorbs damage for 2 turns." });
@@ -179,7 +187,7 @@
   mv("attune", "Attune", 12, 1, "self", { grp: "support", fx: "attune", desc: "Its next spell of the same element as its last one costs 1 less (minimum 1)." });
   mv("inferno", "Inferno", 16, 3, "allEnemies", { kind: "spell", p: 0.9, el: "fire", st: [["burn", 1]], desc: "Fire on all enemies." });
   mv("blizzard", "Blizzard", 20, 3, "allEnemies", { kind: "spell", p: 0.8, el: "ice", st: [["chill", 1]], desc: "Ice on all enemies, adds chill." });
-  mv("detonate", "Detonate", 24, 3, "enemy", { fx: "detonate", desc: "Consumes all element marks (burn, wet, chill, shock) on the target for a burst." });
+  mv("detonate", "Detonate", 24, 3, "enemy", { kind: "spell", fx: "detonate", desc: "Consumes all element marks (burn, wet, chill, shock) on the target for a burst." });
   // --- Leviathan ---
   mv("tailSlap", "Tail Slap", 1, 0, "enemy", { basic: 1, grp: "basic", kind: "best", p: 0.9, el: "self", tide: 1, desc: "Heavy slap. +1 MP, +1 Tide." });
   mv("undertow", "Undertow", 1, 1, "enemy", { kind: "spell", p: 0.6, el: "water", st: [["wet", 1]], tide: 1, desc: "Drags the target under: small water hit, makes it wet, +1 Tide." });
@@ -191,16 +199,40 @@
   mv("abyssalHunger", "Abyssal Hunger", 16, 2, "enemy", { kind: "spell", p: 0.6, el: "dark", fx: "abyssal", desc: "Drains MP from the enemy into itself." });
   mv("tidalWave", "Tidal Wave", 20, 3, "allEnemies", { kind: "best", p: 0.55, el: "water", fx: "tidalWave", desc: "Damage on all enemies grows with Tide, uses all Tide." });
 
+  // --- late-game moves (MOVE-RESEARCH 2026-10-31): levels 28-60, one new job each (see logs/MOVE-RESEARCH.md) ---
+  mv("decimate", "Decimate", 34, 3, "enemy", { p: 1.8, fx: "decimate", desc: "Heavy blow, 80% harder on an enemy at 35% HP or less. A kill gives back 2 MP." });
+  mv("hornStandard", "Standard of the Horn", 46, 3, "team", { grp: "support", fx: "hornStandard", desc: "The whole team gets +20% Attack and Power for 2 turns." });
+  mv("augurEye", "Augur's Eye", 30, 1, "enemy", { grp: "control", fx: "augurEye", desc: "Marks an enemy: the next 4 hits on it from your team are critical hits. Lasts 2 turns." });
+  mv("scatterGale", "Scattering Gale", 44, 2, "allEnemies", { p: 0.3, db: [["spd", -0.25, 2]], bk: ["slow"], grp: "control", desc: "Light hit on all enemies and -25% Speed for 2 turns. Counts toward slow breaks." });
+  mv("hungryVine", "Hungry Vine", 32, 2, "enemy", { kind: "spell", p: 0.5, el: "nature", st: [["poison", 1]], fx: "hungryVine", desc: "Nature hit, adds 1 poison. For 3 turns each damage-over-time tick on the target heals your lowest-HP ally for 80% of the tick." });
+  mv("spreadBlight", "Spread the Blight", 40, 2, "enemy", { grp: "control", fx: "spreadBlight", desc: "Copies the target's burn, bleed and poison onto every other enemy, at half the stacks (at least 1)." });
+  mv("tripleFang", "Triple Fang", 54, 3, "enemy", { kind: "best", p: 0.8, st: [["bleed", 1], ["poison", 1], ["burn", 1]], desc: "Bites with all three heads: adds 1 bleed, 1 poison and 1 burn." });
+  mv("thornwall", "Thornwall", 28, 2, "team", { grp: "support", fx: "thornwall", desc: "For 2 turns an enemy that hits an ally with a single-target attack takes 60% of the damage that ally took." });
+  mv("idolStandIn", "Idol Stand-In", 40, 1, "ally", { grp: "support", hpCostPct: 0.15, fx: "idolStandIn", desc: "Costs 15% of its max HP: an ally gets a shield worth 1.5 times that for 3 turns (1 times on itself)." });
+  mv("unbowed", "Unbowed", 52, 2, "self", { grp: "support", fx: "unbowed", desc: "For 2 turns, one blow that would defeat it leaves it on 1 HP instead." });
+  mv("emberWish", "Ember Wish", 30, 2, "ally", { grp: "support", fx: "emberWish", desc: "At the end of next round the ally is healed for 50% of its max HP. If it has fallen by then, it rises with that much instead." });
+  mv("dawnVeil", "Dawn Veil", 44, 2, "team", { grp: "support", fx: "dawnVeil", desc: "For 3 turns each ally blocks the next status or stat drop an enemy tries to put on it (once each)." });
+  mv("heartfireOffering", "Heartfire Offering", 58, 2, "team", { grp: "support", hpCostPct: 0.3, fx: "heartfireOffering", desc: "Costs 30% of its max HP: every other ally is healed for that much and cleansed of 1 status." });
+  mv("verdictOfStone", "Verdict of Stone", 32, 2, "enemy", { kind: "spell", p: 0.3, grp: "control", fx: "verdictOfStone", desc: "Light hit, then marks the target for 3 turns: it takes +10% damage from everyone, +4% more per status or lowered stat on it (max +30%)." });
+  mv("hissingChoir", "Hissing Choir", 48, 3, "allEnemies", { kind: "spell", p: 0.25, db: [["atk", -0.2, 2], ["pow", -0.2, 2]], grp: "control", desc: "Light hit on all enemies. Their Attack and Power fall by 20% for 2 turns." });
+  mv("stormchain", "Stormchain", 28, 2, "enemy", { kind: "spell", p: 1.0, el: "shock", st: [["shock", 1]], fx: "stormchain", desc: "Lightning hits the target, then arcs to every other enemy for half the damage, adding shock to each. A wet enemy still takes the double-damage bonus." });
+  mv("stormGathering", "Storm Gathering", 42, 1, "self", { grp: "support", fx: "stormGathering", desc: "Its next damaging spell deals +70% damage." });
+  mv("cometCall", "Comet Call", 56, 3, "enemy", { kind: "spell", p: 3.6, el: "fire", fx: "cometCall", desc: "Calls a comet that falls at the end of next round for heavy fire damage and 2 burn. If the target is gone it hits another enemy." });
+  mv("ebbTide", "Ebb Tide", 32, 1, "team", { grp: "support", needTide: 1, fx: "ebbTide", desc: "Spends all its Tide: every ally is healed for 3.5% of its max HP per Tide. Needs at least 1 Tide." });
+  mv("risingFlood", "Rising Flood", 46, 2, "allEnemies", { kind: "spell", p: 0.35, el: "water", st: [["wet", 1]], fx: "risingFlood", desc: "Water hit on all enemies, making them wet. At the end of each of the next 3 rounds every enemy is made wet again." });
+  mv("weightOfDeep", "Weight of the Deep", 60, 3, "enemy", { kind: "best", p: 1.1, el: "water", fx: "weightOfDeep", desc: "Heavy water blow: +45% damage per Tide. Keeps its Tide." });
+
   const STYLE_MOVES = {
-    minotaur: ["gore", "hoofStomp", "labCharge", "bullRush", "roar", "skullCrush", "bloodrage", "reckless", "stampede", "wrath"],
-    harpy: ["talonSwipe", "featherVolley", "rend", "shriek", "tailwind", "cyclone", "dive", "hitAndRun", "snatch"],
-    hydra: ["venomBite", "toxicSpit", "searingBreath", "lacerate", "corrode", "fester", "plagueCloud", "rupture", "regrow"],
-    colossus: ["stoneFist", "challenge", "fortify", "bulwark", "counterSt", "shieldWall", "crushWeight", "earthshaker", "unbreakable"],
-    phoenix: ["emberPeck", "warmLight", "rejuvenate", "cleansingFlame", "flameWard", "healWave", "rebirth", "purge", "sunfire"],
-    gorgon: ["serpentLash", "hiss", "venomMark", "petrifyingGaze", "crackArmour", "shatterShield", "coil", "stoneGaze", "curseOfStone"],
-    dragon: ["claw", "ember", "torrent", "frostBreath", "thunderclap", "attune", "inferno", "blizzard", "detonate"],
-    leviathan: ["tailSlap", "undertow", "deepBreath", "maelstrom", "swell", "braceDeep", "riptide", "abyssalHunger", "tidalWave"],
+    minotaur: ["gore", "hoofStomp", "labCharge", "bullRush", "roar", "skullCrush", "bloodrage", "reckless", "stampede", "wrath", "decimate", "hornStandard"],
+    harpy: ["talonSwipe", "featherVolley", "rend", "shriek", "tailwind", "cyclone", "dive", "hitAndRun", "snatch", "augurEye", "scatterGale"],
+    hydra: ["venomBite", "toxicSpit", "searingBreath", "lacerate", "corrode", "fester", "plagueCloud", "rupture", "regrow", "hungryVine", "spreadBlight", "tripleFang"],
+    colossus: ["stoneFist", "challenge", "fortify", "bulwark", "counterSt", "shieldWall", "crushWeight", "earthshaker", "unbreakable", "thornwall", "idolStandIn", "unbowed"],
+    phoenix: ["emberPeck", "warmLight", "rejuvenate", "cleansingFlame", "flameWard", "healWave", "rebirth", "purge", "sunfire", "emberWish", "dawnVeil", "heartfireOffering"],
+    gorgon: ["serpentLash", "hiss", "venomMark", "petrifyingGaze", "crackArmour", "shatterShield", "coil", "stoneGaze", "curseOfStone", "verdictOfStone", "hissingChoir"],
+    dragon: ["claw", "ember", "torrent", "frostBreath", "thunderclap", "attune", "inferno", "blizzard", "detonate", "stormchain", "stormGathering", "cometCall"],
+    leviathan: ["tailSlap", "undertow", "deepBreath", "maelstrom", "swell", "braceDeep", "riptide", "abyssalHunger", "tidalWave", "ebbTide", "risingFlood", "weightOfDeep"],
   };
+  Object.values(STYLE_MOVES).forEach(l => l.sort((a, b) => MOVES[a].lvl - MOVES[b].lvl));   // learn order = level order (the menus and the next-move hint rely on it)
 
   // --- personal moves (PERSONAL_MOVES.md): one per creature; "own" = the creature id ---
   function pm(id, own, name, lvl, mp, target, o) { const m = mv(id, name, lvl, mp, target, Object.assign({ grp: "personal", own, personal: 1 }, o)); return m; }
@@ -251,6 +283,15 @@
   sk("kindle", "Kindle", 2, "enemy", { kind: "spell", p: 0.9, el: "fire", st: [["burn", 1]], desc: "Fire, adds burn." });
   sk("soak", "Soak", 1, "enemy", { kind: "spell", p: 0.5, el: "water", st: [["wet", 1]], desc: "Cheap water, makes the target wet." });
   sk("revive", "Revive", 3, "allyDown", { grp: "skill", fx: "revive", desc: "Revives a fallen ally at 20% HP." });
+  // chapters 6-11 and the post-game (SKILLBOOK agent 2026-10-31): each one covers a weakness some packs have. Off-style: normal MP cost, no style bonuses, always a little weaker than the style's own version.
+  sk("kelpPoultice", "Kelp Poultice", 3, "team", { grp: "skill", fx: "kelpPoultice", desc: "Heals every ally for 56% of the user's Power (Healing Wave: 77%)." });
+  sk("chiselCrack", "Chisel Crack", 2, "enemy", { kind: "best", p: 0.8, db: [["def", -0.2, 3]], bk: ["shell"], desc: "Hit that lowers enemy Defense by 20% for 3 turns. Counts toward shell breaks." });
+  sk("giltShield", "Gilt Shield", 2, "ally", { grp: "skill", fx: "giltShield", desc: "Shield worth 18% of the ally's max HP for 2 turns." });
+  sk("bitterRue", "Bitter Rue", 2, "ally", { grp: "skill", fx: "bitterRue", desc: "Removes up to 2 statuses or lowered stats from an ally." });
+  sk("rootDraught", "Root Draught", 1, "ally", { grp: "skill", fx: "rootDraught", desc: "An ally gains 3 MP (on itself that is 2 MP net)." });
+  sk("staticSnare", "Static Snare", 2, "enemy", { kind: "spell", p: 0.6, el: "shock", st: [["shock", 1]], fx: "staticSnare", desc: "Shock hit that adds 1 shock, then a 50% base chance to stun for 1 turn (Luck against Resistance; bosses resist repeats)." });
+  sk("bannerDecoy", "Banner Decoy", 2, "self", { grp: "skill", fx: "bannerDecoy", desc: "Draws single-target attacks onto itself and takes 25% less damage, until its next turn." });
+  sk("lanternVigil", "Lantern Vigil", 2, "ally", { grp: "skill", fx: "lanternVigil", desc: "For 2 turns, one blow that would defeat the ally leaves it on 1 HP instead." });
 
   // gathering unlocks (10 pieces each, WORLD_MAP.md section 3)
   const MATERIALS = {
@@ -272,6 +313,14 @@
     gargoyleChip: { name: "Gargoyle Chip", desc: "Grey carved stone." }, slag: { name: "Cooled Slag", desc: "Burns clean." }, basaltShard: { name: "Basalt Shard", desc: "Black and sharp." },
     mirrorScale: { name: "Mirror Scale", desc: "It throws light back." }, batEar: { name: "Bat Ear", desc: "Thin as paper." }, calfHorn: { name: "Calf Horn", desc: "A small chalk-white horn." },
     soldierToken: { name: "Soldier Token", desc: "An imperial legion token." },
+    wrackKelp: { name: "Wrack Kelp", desc: "Brown sea-kelp, still wet. Unlocks Kelp Poultice." },
+    chiselSteel: { name: "Chisel Steel", desc: "A sliver of builder steel that holds an edge. Unlocks Chisel Crack." },
+    giltFlake: { name: "Gilt Flake", desc: "Gold leaf off a palace screen. Unlocks Gilt Shield." },
+    orchardRue: { name: "Orchard Rue", desc: "A bitter grey herb. Unlocks Bitter Rue." },
+    glowrootSap: { name: "Glowroot Sap", desc: "Amber sap that glows when shaken. Unlocks Root Draught." },
+    stormglass: { name: "Stormglass", desc: "Sand fused hollow by lightning. Unlocks Static Snare." },
+    bannerThread: { name: "Dawn Thread", desc: "Red-and-gold banner cloth, scorched at the end. Unlocks Banner Decoy." },
+    lanternGlass: { name: "Lantern Glass", desc: "A bead of cold light in clear jelly. Unlocks Lantern Vigil." },
   };
   const SKILLBOOK = {
     ramStrike: { material: "duneclawShard", count: 10, titan: "T1 Dune Bearer", note: "Impact move for the Dune Bearer's sky-stone." },
@@ -282,14 +331,42 @@
     kindle: { material: "cinderglassEmber", count: 10, titan: "T6 Root Gnawer", note: "Fire." },
     soak: { material: "riverPearl", count: 10, titan: "T7 Storm Ram", note: "Cheap wet." },
     revive: { material: "cinderPlume", count: 10, titan: null, note: "Revive a fallen ally." },
+    kelpPoultice: { material: "wrackKelp", count: 10, titan: null, note: "Small team heal for packs without a healer (ch6)." },
+    chiselCrack: { material: "chiselSteel", count: 10, titan: null, note: "Armour break, shell breaks (ch6)." },
+    giltShield: { material: "giltFlake", count: 10, titan: null, note: "Shield for an ally (ch7)." },
+    bitterRue: { material: "orchardRue", count: 10, titan: null, note: "Cleanse 2 (ch8)." },
+    rootDraught: { material: "glowrootSap", count: 10, titan: null, note: "MP gift (ch9)." },
+    staticSnare: { material: "stormglass", count: 10, titan: null, note: "Shock and a stun try (ch10)." },
+    bannerDecoy: { material: "bannerThread", count: 10, titan: null, note: "Taunt and guard (ch11)." },
+    lanternVigil: { material: "lanternGlass", count: 10, titan: null, note: "Endure for an ally (post-game)." },
   };
   Object.keys(SKILLBOOK).forEach(k => (SKILLBOOK[k].move = k));
 
   const ITEMS = {
     potion: { name: "Potion", target: "ally", desc: "Heals 25% of max HP." },
-    antidote: { name: "Antidote", target: "ally", desc: "Removes burn, bleed, poison, shock and chill." },
+    antidote: { name: "Antidote", target: "ally", desc: "Clears burn, bleed, poison, shock, chill and slow from one ally, and any lowered stat. Not Wet." },
     ashenEmber: { name: "Ashen Ember", target: "allyDown", desc: "Revives a fallen ally at 30% HP." },
+    tonic: { name: "Clearwater Tonic", target: "ally", desc: "Cures every status, Wet included, and every lowered stat on one ally." },
+    soulDew: { name: "Soul Dew", target: "allyDown", desc: "Revives a fallen ally at full HP. Works once per fight." },
+    // boss consumables (ECONOMY.md): a ward = that ally takes 25% less damage of the element for 3 turns; a bomb = about 80% of a weak spell, never counts toward a break
+    cinderWard: { name: "Cinder-Ward", target: "ally", desc: "One ally takes 25% less fire damage for 3 turns." },
+    rimeWard: { name: "Rime-Ward", target: "ally", desc: "One ally takes 25% less ice and water damage for 3 turns." },
+    stormWard: { name: "Storm-Ward", target: "ally", desc: "One ally takes 25% less lightning damage for 3 turns." },
+    venomWard: { name: "Venom-Ward", target: "ally", desc: "One ally takes 25% less poison damage for 3 turns." },
+    cinderBomb: { name: "Cinder Bomb", target: "enemy", desc: "Fire damage and a burn stack. Never counts toward a break." },
+    rimeFlask: { name: "Rime Flask", target: "enemy", desc: "Ice damage and a chill stack. Never counts toward a break." },
+    soakJar: { name: "Soak Jar", target: "enemy", desc: "Makes the enemy Wet. Never counts toward a break." },
+    sparkJar: { name: "Spark Jar", target: "enemy", desc: "Lightning damage and a shock stack. Never counts toward a break." },
+    venomPot: { name: "Venom Pot", target: "enemy", desc: "Poison damage and a poison stack. Never counts toward a break." },
   };
+  const WARDS = { cinderWard: ["fire"], rimeWard: ["ice", "water"], stormWard: ["shock"], venomWard: ["poison"] };
+  const BOMBS = { cinderBomb: ["fire", "burn", 1], rimeFlask: ["ice", "chill", 1], soakJar: [null, "wet", 1], sparkJar: ["shock", "shock", 1], venomPot: ["poison", "poison", 1] };
+  // can this item be used right now? (the arena greys it out otherwise)
+  function itemOk(ctx, id) {
+    const it = ITEMS[id]; if (!it) return false;
+    if (it.target === "allyDown") return ctx.party.some(p => !p.alive) && !(id === "soulDew" && ctx.dewUsed);
+    return true;
+  }
 
 
   // ---------- units ----------
@@ -316,9 +393,162 @@
   const fxv = (u, k, full, half) => { const l = fxl(u, k); return l >= 2 ? full : l === 1 ? half : 0; };
   const fxs = u => u.fxs || (u.fxs = {});
   const comboMult = u => (u && u.passive === "comboMaster" ? 1.3 + fxv(u, "masterMixing", 0.2, 0.1) : 1);
+  // ---------- gear set bonuses: the rules behind every fx tag (owner RULES-GEAR; test-gear.js tests each tag) ----------
+  // u.fx[tag] = 2 with all three pieces, 1 with two pieces (half strength). Per-fight state of a tag lives in u.fxs (primitives only: units get saved). Stat bonuses (hp, def, res, spd, startMp, xp) are applied by Flow.applyGear.
+  const ELEM_GEAR = { emberHeart: ["fire"], deepFrost: ["water", "ice"], stormSurge: ["shock"] };   // +20% damage of these elements: hits, and the burn / shock the wearer leaves on a target
+  const elemGear = (u, el) => { let b = 0; if (u && u.fx && el) for (const t in ELEM_GEAR) if (ELEM_GEAR[t].includes(el)) b += fxv(u, t, 0.2, 0.1); return b; };
+  const HEAL_MOVES = ["warmLight", "rejuvenate", "healWave", "silverLining", "nineTails", "sunAscending", "lamentOfThePod", "lightTheHearth", "regrow", "fallingDust"];   // Frugal Light: these cost 1 less MP
+  const poisonMove = m => m.el === "poison" || !!(m.st && m.st.some(s => s[0] === "poison"));
+  // MP cost cuts: [tag, which moves, how the 2-piece version alternates: "turn" = every second turn, "use" = every second use]. A cut is exactly 1 MP; a move never costs less than 1.
+  const CUTS = [["thrifty", u => !u.spellsTurn, "turn"], ["leanBrew", (u, m) => poisonMove(m), "use"], ["frugalLight", (u, m) => HEAL_MOVES.includes(m.id), "use"], ["quickPurge", (u, m) => m.id === "purge", "use"],
+    ["cheapStone", (u, m) => m.id === "stoneGaze", "use"], ["fireThrift", (u, m, el) => el === "fire" && m.kind !== "phys", "use"], ["cheapThunder", (u, m, el) => el === "shock" && m.kind !== "phys", "use"]];
+  function costCut(u, m, el) {
+    if (!u.fx || !m.mp || m.basic) return 0;
+    for (const [tag, ok, mode] of CUTS) {
+      const l = fxl(u, tag); if (!l || !ok(u, m, el)) continue;
+      if (l >= 2 || (mode === "turn" ? (u.fxTurns || 0) % 2 === 1 : ((fxs(u).cuts || {})[tag] || 0) % 2 === 0)) return 1;   // two pieces: every second turn / use, starting with the first
+    }
+    return 0;
+  }
+  function countCuts(u, m, el) { if (!u.fx || !m.mp || m.basic) return; const f = fxs(u); for (const [tag, ok, mode] of CUTS) if (mode === "use" && fxl(u, tag) && ok(u, m, el)) { f.cuts = f.cuts || {}; f.cuts[tag] = (f.cuts[tag] || 0) + 1; } }
+  const hpFrac = (u, m) => (m.hpCost || m.hpCostPct || 0) * (u.fx ? 1 - fxv(u, "sandUnderfoot", 0.25, 0.12) : 1);   // share of max HP a move costs (Sand Underfoot makes it cheaper)
+  const gearTideMax = u => 5 + (u && u.fx && fxl(u, "deeperReservoir") >= 2 ? 1 : 0);
+  const healBoost = u => (u && u.fx ? 1 + fxv(u, "radiantHealing", 0.2, 0.1) : 1);
+  const exposedPer = ctx => 0.05 + Math.max(0, ...ctx.party.filter(p => p.alive && p.passive === "exposed" && p.fx).map(p => fxv(p, "deeperExposure", 0.03, 0.01)));
+  const gearMp = (u, n) => { if (u.alive) u.mp = Math.min(u.maxMp, u.mp + n); };
+  // "lasts 1 turn longer": every time with the full set, every second time with two pieces
+  function gearMore(u, tag) { const l = fxl(u, tag); if (!l) return 0; if (l >= 2) return 1; const f = fxs(u); f[tag + "N"] = (f[tag + "N"] || 0) + 1; return f[tag + "N"] % 2 === 0 ? 1 : 0; }
+  const LONGER = { burn: "slowBurn", bleed: "openWounds", wet: "lingeringDamp", chill: "lingeringDamp" };
+  const DB_GEAR = { crackArmour: "cracking", hiss: "quietHiss" };   // a stat reduction of this move is 50% / 25% stronger
+  // slowed enemies take more damage from everyone (Heavy Feet): the Speed debuff remembers who put it there
+  const feetVuln = tgt => Math.max(0, ...tgt.buffs.filter(b => b.type === "spd" && b.val < 0 && b.by && b.by.fx).map(b => fxv(b.by, "heavyFeet", 0.1, 0.05)));
+  function gearStart(p) {   // start of a fight
+    p.maxMp += fxv(p, "deeperWell", 3, 1); p.mp = Math.min(p.mp, p.maxMp);
+    p.tideMax = gearTideMax(p);
+    if (p.style === "leviathan" && fxl(p, "deeperReservoir") === 1) p.tide = 1;
+    if (fxl(p, "firstGust")) addBuff(p, "spd", fxv(p, "firstGust", 0.4, 0.2), 1);
+    if (fxl(p, "firstOut") === 1) addBuff(p, "spd", 0.25, 1);   // two pieces: +25% Speed in round 1 (the full set acts first, see turnOrder)
+  }
+  // damage a wearer deals: one multiplier from every offensive tag
+  function gearOut(ctx, src, tgt, tg, kind, el) {
+    let m = 1; const hp = src.hp / src.maxHp;
+    if (src.opening) m *= 1 + src.opening;            // Opening Charge (first move of the fight)
+    if (src.spellBonus) m *= 1 + src.spellBonus;      // Charged Attune
+    if (src.momBonus) m *= 1 + src.momBonus;          // Momentum
+    if (src.danceBonus) m *= 1 + src.danceBonus;      // Element Dance
+    if (src.repBonus) m *= 1 + src.repBonus;          // Reprisal
+    if (src.calm) m *= 1 + fxv(src, "unseenRetreat", 0.2, 0.1);
+    if (src.hp >= src.maxHp) m *= 1 + fxv(src, "fullStrength", 0.2, 0.1);
+    if (hp < 0.5) m *= 1 + fxv(src, "berserkOath", 0.25, 0.12);
+    if (hp < 0.25) m *= 1 + fxv(src, "lastStand", 0.25, 0.12);
+    m *= 1 + fxv(src, "disciplined", 0.08, 0.04) + elemGear(src, el);
+    if (el === "poison") m *= 1 + fxv(src, "toxicEdge", 0.25, 0.12);
+    if (tg.cheap) m *= 1 + fxv(src, "cheapCruelty", 0.25, 0.12);
+    if (tg.strongHit) m *= 1 + fxv(src, "heavyHitter", 0.2, 0.1);
+    if (tg.aoe && tg.spell) m *= 1 + fxv(src, "wideBurn", 0.2, 0.1);   // spells that hit all enemies
+    if (tgt.broken) m *= 1 + fxv(src, "arenaFavourite", 0.2, 0.1) + (tg.move === "maelstrom" || tg.move === "tidalWave" ? fxv(src, "finishingWave", 0.3, 0.15) : 0);
+    if (Object.keys(tgt.st).length >= 3) m *= 1 + fxv(src, "cocktail", 0.15, 0.07);
+    if (debuffCount(tgt) >= 2) m *= 1 + fxv(src, "exploit", 0.15, 0.07);
+    if (fxl(src, "windCutter") && eff(src, "spd") > eff(tgt, "spd")) m *= 1 + fxv(src, "windCutter", 0.2, 0.1);
+    if (fxl(src, "patientPredator")) m *= 1 + Math.min(fxv(src, "patientPredator", 0.2, 0.1), Math.max(0, ctx.round - 1) * fxv(src, "patientPredator", 0.04, 0.02));
+    if (tg.move === "crushWeight") m *= 1 + fxv(src, "weightyBlows", 0.3, 0.15);
+    if (tg.move === "tailSlap" || tg.move === "undertow") m *= 1 + fxv(src, "heavyTail", 0.3, 0.15);
+    return m;
+  }
+  // damage a wearer takes: one multiplier from every defensive tag
+  function gearIn(ctx, src, tgt, tg, kind, el) {
+    let m = 1;
+    if (el) m *= 1 - fxv(tgt, "warded", 0.15, 0.07);
+    if (el === "fire") m *= 1 - fxv(tgt, "ashenSkin", 0.2, 0.1);
+    if (ctx.lastRedirect === tgt && src.side !== tgt.side) m *= 1 - fxv(tgt, "shieldBrother", 0.25, 0.12);
+    if (kind === "phys" && tgt.hp < tgt.maxHp * 0.5) m *= 1 - fxv(tgt, "spiteSkin", 0.2, 0.1);
+    const tb = getBuff(tgt, "taunt"); if (tb && tb.ch) m *= 1 - fxv(tgt, "heavySleeper", 0.15, 0.07);
+    if (tgt.tide >= 3) m *= 1 - fxv(tgt, "pressureSkin", 0.15, 0.07);
+    if (src.buffs.some(b => b.type === "atk" && b.val < 0 && b.by === tgt)) m *= 1 - fxv(tgt, "calmEyes", 0.2, 0.1);
+    return m;
+  }
+  // after a hit landed (v = damage that got through the shield)
+  function gearHit(ctx, src, tgt, v, absorbed, crit) {
+    if (src.fx && src.side !== tgt.side) {
+      const f = fxs(src);
+      if (crit && fxl(src, "rewardHunt") && (fxl(src, "rewardHunt") >= 2 ? f.huntT !== src.fxTurns : !f.huntUsed)) { f.huntT = src.fxTurns; f.huntUsed = 1; gearMp(src, 1); }
+      if (fxl(src, "swiftRecovery") && src.alive && src.hp < src.maxHp) {   // 2% of max HP per hit, at most 6% per move
+        if (f.srNo !== src.moveNo) { f.srNo = src.moveNo; f.srSum = 0; }
+        const h = Math.min(Math.round(src.maxHp * fxv(src, "swiftRecovery", 0.02, 0.01)), Math.round(src.maxHp * fxv(src, "swiftRecovery", 0.06, 0.03)) - f.srSum);
+        if (h > 0) { f.srSum += h; healFlat(ctx, src, h, { silent: 1 }); }
+      }
+    }
+    if (tgt.fx && src.side !== tgt.side && (v > 0 || absorbed > 0)) {
+      const f = fxs(tgt);
+      if (v > 0) tgt.hurtSince = true;
+      if (fxl(tgt, "absorb") && tgt.alive && f.absT !== tgt.fxTurns && (fxl(tgt, "absorb") >= 2 || tgt.fxTurns % 2 === 0)) { f.absT = tgt.fxTurns; gearMp(tgt, 1); }
+      if (fxl(tgt, "reprisal")) f.rep = Math.min(3, (f.rep || 0) + 1);
+    }
+  }
+  // Dead End / Shell Cracker: the move counts as a second hit toward the break (the first such move each turn with two pieces)
+  function gearBreak(ctx, src, tgt, tg) {
+    for (const [tag, kind] of [["deadEnd", "impact"], ["shellCracker", "shell"]]) {
+      if (!fxl(src, tag) || !tg.bk.includes(kind)) continue;
+      const f = fxs(src), no = src.moveNo || 0;
+      if (fxl(src, tag) >= 2 || f[tag + "T"] !== src.fxTurns || f[tag + "M"] === no) { f[tag + "T"] = src.fxTurns; f[tag + "M"] = no; countBreak(ctx, tgt, tg.bk); }
+    }
+  }
+  // before a move resolves: the bonuses that last for this one move (cleared in gearPost). Returns what gearPost needs.
+  function gearPre(ctx, u, m, target, el) {
+    const f = fxs(u); u.moveNo = (u.moveNo || 0) + 1;
+    if (fxl(u, "momentum")) {   // basic attacks in a row on one target
+      if (m.basic) { const ti = ctx.foes.indexOf(target); f.momN = f.momTgt === ti ? Math.min(3, (f.momN || 0) + 1) : 0; f.momTgt = ti; u.momBonus = f.momN * fxv(u, "momentum", 0.1, 0.05); }
+      else { f.momN = 0; f.momTgt = -1; u.momBonus = 0; }
+    }
+    if (fxl(u, "reprisal") && (m.target === "enemy" || m.target === "allEnemies")) { u.repBonus = (f.rep || 0) * fxv(u, "reprisal", 0.1, 0.05); f.rep = 0; }
+    if (fxl(u, "elementDance") && m.kind !== "phys" && el && m.mp && u.lastEl && u.lastEl !== el) u.danceBonus = fxv(u, "elementDance", 0.2, 0.1);
+    return { broken: ctx.foes.filter(x => x.alive && x.broken), tgtBroken: !!(target && target.broken) };
+  }
+  function gearPost(ctx, u, m, moveId, el, pre) {
+    const f = fxs(u);
+    u.momBonus = 0; u.repBonus = 0; u.danceBonus = 0;
+    countCuts(u, m, el);
+    if (fxl(u, "crowdRoar") && ctx.foes.some(x => x.broken && !pre.broken.includes(x)) && (fxl(u, "crowdRoar") >= 2 ? f.roarT !== u.fxTurns : !f.roarUsed)) { f.roarT = u.fxTurns; f.roarUsed = 1; gearMp(u, 1); }
+    if (m.basic && fxl(u, "fedByBlood") && pre.tgtBroken) { f.fedN = (f.fedN || 0) + 1; if (fxl(u, "fedByBlood") >= 2 || f.fedN % 2 === 0) gearMp(u, 1); }
+    if (m.basic && fxl(u, "kindPeck")) {
+      const low = ctx.team(u).filter(a => a.alive).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
+      if (low && low.hp < low.maxHp) healFlat(ctx, low, Math.max(1, Math.round(low.maxHp * fxv(u, "kindPeck", 0.04, 0.02))), { src: u });
+    }
+    if (moveId === "undertow" && fxl(u, "surgingUndertow") && pre.tgtBroken) { f.surgeN = (f.surgeN || 0) + 1; if (fxl(u, "surgingUndertow") >= 2 || f.surgeN % 2 === 0) gainTide(ctx, u, 1); }
+  }
+  // what a status remembers about the creature that applied it (numbers only: units get saved)
+  function gearStatus(ctx, src, tgt, type) {
+    const s = tgt.st[type], S = STATUS[type]; if (!s || src.side === tgt.side) return;
+    if (S.dot) {
+      let m = 1 + elemGear(src, S.el);   // burn = fire, shock = shock
+      if (type === "poison") m *= 1 + fxv(src, "toxicEdge", 0.25, 0.12);
+      if (type === "bleed") m *= 1 + fxv(src, "deepCuts", 0.25, 0.12);
+      if (src.fxTurns <= 2) m *= 1 + fxv(src, "earlyRot", 0.5, 0.25);
+      s.gm = Math.max(s.gm || 1, m);
+    }
+    if (type === "bleed" && fxl(src, "hungerRed")) { s.hr = fxv(src, "hungerRed", 0.1, 0.05); s.by = ctx.party.indexOf(src); }
+    if (s.mh) s.mhv = Math.max(s.mhv || 0.1, 0.1 + fxv(src, "louderChorus", 0.05, 0.02));
+  }
+  // a shield cast by a creature (Flame Ward, Silver Lining, Plant the Pillar, or a gear shield): Strong Ward makes a Flame Ward bigger, Lingering Ward makes it last longer,
+  // and the buff remembers its caster so Scorching Ward knows who to credit. o.ward = this is a Flame Ward; o.keep = never replace a bigger shield.
+  function castShield(ctx, u, t, val, turns, o = {}) {
+    if (u.fx) { if (o.ward) val = Math.round(val * (1 + fxv(u, "strongWard", 0.3, 0.15))); turns += gearMore(u, "lingeringWard"); }
+    const ex = getBuff(t, "shield"); if (o.keep && ex && ex.val >= val) return;
+    if (val > 0) addBuff(t, "shield", val, turns, u.fx ? { by: u } : undefined);
+  }
+  // Scorching Ward: a shield its caster cast was broken by an attacker, who burns (1 stack; for 1 turn only with two pieces)
+  function gearShieldBreak(ctx, sh, attacker) {
+    const c = sh.by, l = fxl(c, "scorchingWard"); if (!l || !attacker.alive) return;
+    addStatus(ctx, c, attacker, "burn", 1, { sure: 1, dur: l >= 2 ? 0 : 1 });
+  }
+  function gearCleanse(ctx, u, t, types) {   // Healing Flame and Inoculation after a cleansing move
+    if (!u || !u.fx) return;
+    if (fxl(u, "healingFlame")) healFlat(ctx, t, Math.max(1, Math.round(t.maxHp * fxv(u, "healingFlame", 0.08, 0.04))), { src: u });
+    if (fxl(u, "inoculation") && types.length) t.inoc = { types, p: fxv(u, "inoculation", 0.5, 0.25), owner: ctx.party.indexOf(u) };
+  }
   function directHit(ctx, src, tgt, v, note) {
     if (!tgt.alive || v < 1) return; v = Math.round(v); tgt.hp = Math.max(0, tgt.hp - v);
-    ctx.ev.push({ t: "dmg", src, tgt, v, crit: false, absorbed: 0, el: null, kind: "phys", note: note || "" });
+    ctx.ev.push({ t: "dmg", src, tgt, v, crit: false, absorbed: 0, el: null, kind: "phys", note: note || "", hpAfter: tgt.hp });
     if (tgt.hp <= 0) die(ctx, tgt);
   }
   const buffVal = (u, type) => u.buffs.filter(b => b.type === type).reduce((a, b) => a + b.val, 0);
@@ -354,34 +584,38 @@
   }
   const dotUnit = (tgt, type) => {
     const s = tgt.st[type], S = STATUS[type]; let mh = 1;
-    if (Object.values(tgt.st).some(x => x.mh)) mh += 0.1 * DOTS.filter(d => tgt.st[d]).length;
+    const heads = Object.values(tgt.st).filter(x => x.mh); if (heads.length) mh += Math.max(...heads.map(x => x.mhv || 0.1)) * DOTS.filter(d => tgt.st[d]).length;   // Many Heads (Louder Chorus raises mhv)
     return Math.max(1, Math.round(s.n * (1 + 0.18 * s.pw) * S.dot * mh));
   };
   function ctrlRoll(ctx, src, tgt, base) {
     if (src && src.unheard) { src.unheard = false; return true; }
-    let p = base * (1 + (src ? src.stats.lck * 0.004 : 0));
+    let p = base * (1 + (src ? src.stats.lck * 0.004 : 0)) * (src && src.fx ? 1 + fxv(src, "persuasive", 0.15, 0.07) : 1);
     const R = eff(tgt, "res"); p *= 1 - clamp(0.5 * R / (R + (src ? eff(src, "pow") : 20) + 20), 0, 0.5);
-    if (tgt.boss) p *= 0.6 * Math.pow(0.5, tgt.ctrlCount || 0);
+    if (tgt.boss) p *= 0.6 * Math.pow(0.5 + (src && src.fx ? 0.5 * fxv(src, "chainBreaker", 0.25, 0.12) : 0), tgt.ctrlCount || 0);
     if (hasBuff(tgt, "stunImmune")) p = 0;
     if (chance(p)) { if (tgt.boss) tgt.ctrlCount = (tgt.ctrlCount || 0) + 1; return true; }
     ctx.ev.push({ t: "resist", tgt }); return false;
   }
   function removeStatus(tgt, type) { delete tgt.st[type]; }
-  function reaction(ctx, tgt, name, text) { ctx.ev.push({ t: "reaction", tgt, name, text }); }
+  function reaction(ctx, tgt, name, text) { ctx.ev.push({ t: "reaction", tgt, name, text }); if (tgt.breakType === "react" && tgt.alive) countBreak(ctx, tgt, ["react"]); }   // breakType "react": any element reaction on it counts
   function addStatus(ctx, src, tgt, type, n = 1, o = {}) {
     if (!tgt.alive) return false;
     const S = STATUS[type], ev = ctx.ev;
     if (tgt.immune && tgt.immune.includes(type)) { ev.push({ t: "immune", tgt, type }); return false; }
+    if (tgt.evo && src && src.side !== tgt.side && EVO.immune(tgt, type)) { ev.push({ t: "immune", tgt, type }); return false; }   // evolution trait: cannot be burned, poisoned...
     if (o.chance !== undefined && !o.sure) {
-      let p = o.chance * (1 + (src ? src.stats.lck * 0.004 : 0)); const R = eff(tgt, "res");
+      let p = o.chance * (1 + (src ? src.stats.lck * 0.004 : 0)) * (src && src.fx ? 1 + fxv(src, "persuasive", 0.15, 0.07) : 1); const R = eff(tgt, "res");
+      if (tgt.evo && src && src.side !== tgt.side) p = Math.max(0, p - EVO.statusRes(tgt));   // evolution trait: harder to affect
       const rf = clamp(0.5 * R / (R + (src ? eff(src, "pow") + eff(src, "atk") : 30) + 20) + (tgt.sr || 0) + buffVal(tgt, "sres"), 0, 0.8);
       if (!chance(p * (1 - rf))) return false;
     }
+    if (src && src.side !== tgt.side && hasBuff(tgt, "veil")) { tgt.buffs = tgt.buffs.filter(b => b.type !== "veil"); ev.push({ t: "resist", tgt }); say(ctx, "The dawn veil shields " + tgt.name + "."); return false; }   // Dawn Veil
     if (S.ctrl && !o.sure && tgt.boss && !ctrlRoll(ctx, src, tgt, 1)) return false;
     let gearDur = 0;   // gear: Iron Nose Ring, Stoneweather Cloak
     if (src && src.side !== tgt.side && type !== "steam" && tgt.fx) {
       if ((type === "stun" || type === "slow") && chance(fxv(tgt, "ironNose", 0.25, 0.12))) { ev.push({ t: "resist", tgt }); return false; }
       if (chance(fxv(tgt, "hardToRattle", 0.3, 0.15))) { ev.push({ t: "resist", tgt }); return false; }
+      if (tgt.inoc && tgt.inoc.types.includes(type) && chance(tgt.inoc.p)) { ev.push({ t: "resist", tgt }); return false; }   // Inoculation
       const f = fxs(tgt);
       if (fxl(tgt, "thickSkin") && !f.thickDone) { f.thickDone = 1; if (fxl(tgt, "thickSkin") >= 2) { ev.push({ t: "resist", tgt }); say(ctx, tgt.name + " ignores it."); return false; } gearDur = 1; }
       if (fxl(tgt, "shakeOff") && (fxl(tgt, "shakeOff") >= 2 || type === "burn" || type === "poison")) gearDur = gearDur || -1;
@@ -392,33 +626,46 @@
     if (type === "wet" && tgt.st.burn) { removeStatus(tgt, "burn"); if (tgt.alive) { addStatus(ctx, src, tgt, "steam", 1, { sure: 1 }); reactBurst("water", "Steam", tgt.name + " is wreathed in steam! Its Attack drops."); } return true; }
     if (type === "burn" && tgt.st.wet) { removeStatus(tgt, "wet"); addStatus(ctx, src, tgt, "steam", 1, { sure: 1 }); reactBurst("fire", "Steam", tgt.name + " is wreathed in steam! Its Attack drops."); return true; }
     if ((type === "chill" && tgt.st.wet) || (type === "wet" && tgt.st.chill)) {
-      if (!tgt.boss || ctrlRoll(ctx, src, tgt, 0.85)) { removeStatus(tgt, "wet"); removeStatus(tgt, "chill"); addStatus(ctx, src, tgt, "freeze", 1, { sure: 1 }); reactBurst("ice", "Freeze", tgt.name + " freezes solid!"); return true; }
+      if (!tgt.boss || ctrlRoll(ctx, src, tgt, 0.85)) { removeStatus(tgt, "wet"); removeStatus(tgt, "chill"); addStatus(ctx, src, tgt, "freeze", 1, { sure: 1 }); if (src && src.fx && fxl(src, "brittleFreeze")) debuff(ctx, src, tgt, "def", -fxv(src, "brittleFreeze", 0.15, 0.07), 3); reactBurst("ice", "Freeze", tgt.name + " freezes solid!"); return true; }
     }
     if (type === "steam") addBuff(tgt, "atk", -0.25, 2);
     let dur = S.t; if (tgt.moss && S.dot) dur += 2;
+    if (src && src.fx && LONGER[type] && src.side !== tgt.side) dur += gearMore(src, LONGER[type]);   // Slow Burn, Open Wounds, Lingering Damp
+    if (o.dur) dur = o.dur;
     if (gearDur === 1) dur = 1; else if (gearDur === -1) dur = Math.max(1, dur - 1);
-    if (type === "burn" && src && fxl(src, "slowBurn")) { const f = fxs(src); f.burnN = (f.burnN || 0) + 1; if (fxl(src, "slowBurn") >= 2 || f.burnN % 2 === 0) dur += 1; }
     let add = n; if (src && src.ablaze && type === "burn" && !o.off) add += 1;
+    if (src && src.evo && src.side !== tgt.side) { dur += EVO.statusDur(src, type); add += EVO.statusStack(src, type); }   // evolution traits: longer statuses, extra stacks
+    if (type === "poison" && src && src.fx && fxl(src, "virulent")) { const f = fxs(src); if (f.virT !== src.fxTurns) { f.virT = src.fxTurns; if (fxl(src, "virulent") >= 2 || src.fxTurns % 2 === 1) add += 1; } }   // Virulent
     const pw = src ? eff(src, S.stat || "pow") : 10, ex = tgt.st[type];
     if (ex) { ex.n = Math.min(S.max, ex.n + add); ex.t = Math.max(ex.t, dur); ex.pw = Math.max(ex.pw, pw); if (src && src.passive === "manyHeads" && !o.off) ex.mh = true; }
     else tgt.st[type] = { n: Math.min(S.max, add), t: dur, pw, mh: !!(src && src.passive === "manyHeads" && !o.off) };
+    if (src && src.fx) gearStatus(ctx, src, tgt, type);
+    if (src && src.evo && src.side !== tgt.side) EVO.statusApplied(ctx, src, tgt, type);   // evolution trait: stronger damage over time
     ev.push({ t: "status", tgt, type, n: tgt.st[type].n });
+    if (src && src.side !== tgt.side) { if (tgt.breakType === "st_" + type || (tgt.breakType === "st_any" && type !== "wet")) countBreak(ctx, tgt, [tgt.breakType]); if (tgt.hooks) hookRun(tgt, "status", ctx, tgt, type, src); }   // breakType "st_wet" etc.: the status itself breaks it
     return true;
   }
   const DOT_CLEANSE = ["burn", "bleed", "poison", "shock", "chill", "slow", "stun", "freeze", "steam", "petrify"];
-  function cleanse(ctx, tgt, count) {
-    let done = 0;
+  function cleanse(ctx, tgt, count, caster) {   // caster = the creature whose cleansing move this is (Healing Flame, Inoculation)
+    let done = 0; const gone = [];
     const list = DOT_CLEANSE.filter(k => tgt.st[k]).sort((a, b) => (tgt.st[b].n || 1) - (tgt.st[a].n || 1));
-    for (const k of list) { if (count && done >= count) break; delete tgt.st[k]; done++; ctx.ev.push({ t: "cleanse", tgt, type: k }); }
+    for (const k of list) { if (count && done >= count) break; delete tgt.st[k]; gone.push(k); done++; ctx.ev.push({ t: "cleanse", tgt, type: k }); }
     if (!count || done < count) { const bad = tgt.buffs.filter(b => b.val < 0); if (bad.length && (!count || done < count)) { tgt.buffs = tgt.buffs.filter(b => b.val >= 0); done++; } }
     tgt.moss = 0; if (tgt.omen) tgt.omen = null;
+    if (caster) gearCleanse(ctx, caster, tgt, gone);
     return done;
   }
   function debuff(ctx, src, t, stat, val, turns) {
     if (!t.alive) return;
-    const v = val * (t.dbm === undefined ? 1 : t.dbm);
-    addBuff(t, stat, v, turns, { force: 1 });
-    ctx.ev.push({ t: "debuff", tgt: t, stat, val: v, turns });
+    let v = val * (t.dbm === undefined ? 1 : t.dbm), turns2 = turns;
+    if (v < 0 && src && src.side !== t.side && hasBuff(t, "veil")) { t.buffs = t.buffs.filter(b => b.type !== "veil"); ctx.ev.push({ t: "resist", tgt: t }); say(ctx, "The dawn veil shields " + t.name + "."); return; }   // Dawn Veil
+    if (v < 0 && src && src.side !== t.side) {
+      if (src.evo) { const d = EVO.debuffMod(src); v *= d[0]; turns2 += d[1]; }   // evolution traits: stronger and longer debuffs
+      if (src.fx) { v *= 1 + fxv(src, "deepWeakness", 0.25, 0.12) + (stat === "spd" ? fxv(src, "shrillEcho", 0.5, 0.25) : 0); turns2 += gearMore(src, "longMarks"); }   // Deep Weakness, Shrill Echo, Long Marks
+      if (stat === "spd" && t.fx && chance(fxv(t, "ironNose", 0.25, 0.12))) { ctx.ev.push({ t: "resist", tgt: t }); return; }          // Iron Nose Ring
+    }
+    addBuff(t, stat, v, turns2, { force: 1, by: src });
+    ctx.ev.push({ t: "debuff", tgt: t, stat, val: v, turns: turns2 });
   }
 
   // ---------- damage and healing ----------
@@ -427,7 +674,7 @@
     const need = tgt.breakNeed || 1;
     tgt.breakPts = ctx.round - tgt.breakHitRound <= 1 ? tgt.breakPts + 1 : 1; tgt.breakHitRound = ctx.round;
     ctx.ev.push({ t: "breakPt", tgt, pts: tgt.breakPts, need });
-    if (tgt.breakPts >= need) { tgt.broken = 2; tgt.breakPts = 0; ctx.ev.push({ t: "broken", tgt }); }
+    if (tgt.breakPts >= need) { tgt.broken = 2; tgt.breakPts = 0; ctx.ev.push({ t: "broken", tgt }); if (tgt.hooks) hookRun(tgt, "broken", ctx, tgt); }
   }
   function damage(ctx, src, tgt, base, kind, tg = {}) {
     if (!tgt.alive) return 0;
@@ -438,52 +685,53 @@
       ev.push({ t: "reflect", src, tgt }); ev.push({ t: "say", text: tgt.name + " reflects the spell!" });
       return damage(ctx, tgt, src, base * 0.6, kind, { el, refl: 1, off: 1 });
     }
-    const A = eff(src, kind === "phys" ? "atk" : "pow"), D = eff(tgt, kind === "phys" ? "def" : "res");
+    const A = eff(src, kind === "phys" ? "atk" : "pow"), D = eff(tgt, kind === "phys" ? "def" : "res") * (src.fx ? 1 - fxv(src, "armourPiercer", 0.15, 0.07) : 1) * (src.evo ? EVO.pierce(src, kind) : 1);
     let v = base * A * (A / (A + D)) * (0.9 + 0.2 * rnd());
+    // level gap (Danny 2026-10-31): an enemy more than 5 levels below its target hits 4% softer per extra level, never below 35%
+    const gap = src.side === "e" && tgt.side === "p" && src.level && tgt.level ? tgt.level - src.level - 5 : 0; if (gap > 0) v *= Math.max(0.35, 1 - 0.04 * gap);
     if (tg.mult) v *= tg.mult;
     const notes = [];
-    const crit = tg.crit !== undefined ? tg.crit : chance(clamp(0.05 + src.stats.lck * 0.004 - tgt.stats.lck * 0.002, 0.02, 0.6));
-    if (crit) v *= 1.5;
+    let crit = tg.crit !== undefined ? tg.crit : chance(clamp(0.05 + src.stats.lck * 0.004 - tgt.stats.lck * 0.002 + (src.fx ? fxv(src, "critChance", 0.1, 0.05) : 0) + (src.evo ? EVO.critAdd(src, tgt) : 0), 0.02, 0.6));
+    if (tgt.augur && tgt.augur.n > 0 && src.side !== tgt.side && tg.crit === undefined && !crit) { crit = true; tgt.augur.n--; }   // Augur's Eye: the next hits on the marked enemy are crits
+    if (crit) v *= 1.5 + (src.fx ? fxv(src, "critDmg", 0.3, 0.15) : 0) + (src.evo ? src.evo.critDmg : 0);
     const em = elemMult(tgt, el);
     if (em !== 1) { v *= em; notes.push(em > 1.2 ? "WEAK" : em < 0.8 ? "RESIST" : ""); }
     if (kind === "phys" && tgt.pr) v *= 1 - tgt.pr;
     if (tgt.swarm) v *= tg.aoe ? 1.6 : 0.75;
-    // gear set bonuses
-    if (src.fx) {
-      if (fxl(src, "fullStrength") && src.hp >= src.maxHp) v *= 1 + fxv(src, "fullStrength", 0.2, 0.1);
-      if (el === "fire" && fxl(src, "emberHeart")) v *= 1 + fxv(src, "emberHeart", 0.2, 0.1);
-      if (tg.cheap && fxl(src, "cheapCruelty")) v *= 1 + fxv(src, "cheapCruelty", 0.25, 0.12);
-      if (src.opening) v *= 1 + src.opening;
-      if (src.spellBonus) v *= 1 + src.spellBonus;
-    }
-    if (tgt.fx) {
-      if (el && fxl(tgt, "warded")) v *= 1 - fxv(tgt, "warded", 0.15, 0.07);
-      if (el === "fire" && fxl(tgt, "ashenSkin")) v *= 1 - fxv(tgt, "ashenSkin", 0.2, 0.1);
-      if (fxl(tgt, "shieldBrother") && ctx.lastRedirect === tgt && src.side !== tgt.side) v *= 1 - fxv(tgt, "shieldBrother", 0.25, 0.12);
-    }
+    // gear set bonuses (see gearOut / gearIn)
+    const gm = src.fx ? gearOut(ctx, src, tgt, tg, kind, el) : 1;   // "+X% damage" gear bonuses also scale the flat part of a hit (Defense-based damage, stored Wrath)
+    v *= gm;
+    if (src.dmgMult) v *= src.dmgMult;   // BALANCE (2026-10-31): enemy damage by level and kind, see DMG below
+    if (tgt.fx) v *= gearIn(ctx, src, tgt, tg, kind, el);
+    if (src.evo) v *= EVO.out(ctx, src, tgt, tg, kind, el);                    // evolution traits: damage dealt
+    if (tgt.evo || (ctx.evoTeam && tgt.side === "p")) v *= EVO.inc(ctx, src, tgt, tg, kind, el);   // evolution traits: damage taken (own and team-wide)
     const passives = !tg.off;
     if (tgt.broken) v *= 1.5 + (src.passive === "rampage" && passives ? 0.25 : 0);
     else if (tgt.frontShield && !(tgt.shieldDown > 0)) v *= 1 - tgt.frontShield;
     if (tgt.coverBy && ctx.foes.some(f => f.alive && f !== tgt && f.id === tgt.coverBy)) { v *= 0.6; notes.push("COVERED"); }
     v *= 1 - Math.min(0.6, Math.max(0, buffVal(tgt, "dr")));
-    v *= 1 + buffVal(tgt, "vuln");
-    if (tgt.side === "e" && passives !== false && ctx.party.some(p => p.alive && p.passive === "exposed")) v *= 1 + Math.min(0.25, 0.05 * debuffCount(tgt));
+    v *= 1 + buffVal(tgt, "vuln") + buffVal(tgt, "marked");
+    if (tgt.hooks) { const hm = hookRun(tgt, "inMult", ctx, tgt, src, { kind, el, tg, v }); if (typeof hm === "number") v *= hm; }      // boss rules: damage taken (roots, airborne, front guards...)
+    if (src.hooks) { const hm = hookRun(src, "outMult", ctx, src, tgt, { kind, el, tg, v }); if (typeof hm === "number") v *= hm; }     // boss rules: damage dealt
+    if (tgt.side === "e" && passives !== false && ctx.party.some(p => p.alive && p.passive === "exposed")) v *= 1 + Math.min(0.25, exposedPer(ctx) * debuffCount(tgt));
+    const fv = tgt.side === "e" ? 1 + feetVuln(tgt) : 1; v *= fv;   // Heavy Feet
+    if (tgt.side === "p" && ctx.foes.some(f => f.alive && f.passive === "exposed")) v *= 1 + Math.min(0.25, 0.05 * debuffCount(tgt));   // a Gorgon general's Exposed works on the party too
     if (src.grudge && src.grudge.tgt === tgt) v *= 1 + 0.1 * src.grudge.n;
     if (tgt.notes > 0 && src.side === "p" && src !== tgt.notesBy) { v *= 1.15; tgt.notes--; }
     if (tgt.terrorOn && tg.strongHit) v *= 0.8;
     // reactions with the element/physical hit
     if (!tg.noReact) {
       const combo = src.passive === "comboMaster" && passives ? comboMult(src) : 1;
-      if (el === "shock" && tgt.st.wet) { v *= 2 * combo; removeStatus(tgt, "wet"); reaction(ctx, tgt, "Conductive", "Wet + shock: double damage!"); if (chance(0.3)) addStatus(ctx, src, tgt, "stun", 1, { chance: 1, off: !passives }) ; }
+      if (el === "shock" && tgt.st.wet) { v *= (2 + (src.fx ? fxv(src, "wetConductor", 0.5, 0.25) : 0)) * combo; removeStatus(tgt, "wet"); reaction(ctx, tgt, "Conductive", "Wet + shock: double damage!"); if (chance(0.3)) addStatus(ctx, src, tgt, "stun", 1, { chance: 1, off: !passives }) ; }
       else if (kind === "phys" && tg.strong && (tgt.st.chill || tgt.st.freeze)) { v *= 1.6 * combo; removeStatus(tgt, "chill"); removeStatus(tgt, "freeze"); reaction(ctx, tgt, "Shatter", "Chill + a heavy blow: Shatter!"); }
     }
-    if (tg.bonus) v += tg.bonus;
+    if (tg.bonus) v += tg.bonus * gm * fv;
     v = Math.max(1, Math.round(v));
     // hounds at the gate: a share goes to the protector
     const hd = getBuff(tgt, "hounds");
     if (hd && hd.owner && hd.owner.alive && hd.owner !== tgt) {
       const sh = Math.round(v * 0.4); v -= sh; hd.owner.hp = Math.max(0, hd.owner.hp - sh);
-      ev.push({ t: "dmg", src, tgt: hd.owner, v: sh, crit: false, absorbed: 0, el, note: "HOUNDS" });
+      ev.push({ t: "dmg", src, tgt: hd.owner, v: sh, crit: false, absorbed: 0, el, note: "HOUNDS", hpAfter: hd.owner.hp });
       if ((hd.owner.houndTide || 0) < 2) { hd.owner.houndTide = (hd.owner.houndTide || 0) + 1; gainTide(ctx, hd.owner, 1); }
       if (hd.owner.hp <= 0) die(ctx, hd.owner);
     }
@@ -491,10 +739,18 @@
     if (dc && src.side !== tgt.side) { v = Math.max(1, Math.round(v * 0.5)); tgt.buffs = tgt.buffs.filter(b => b !== dc); const pe = tgt.lastEl; const map = { fire: "burn", water: "wet", ice: "chill", shock: "shock" }; if (pe && map[pe] && src.alive) addStatus(ctx, tgt, src, map[pe], 1, { sure: 1 }); }
     let absorbed = 0;
     const sh = getBuff(tgt, "shield");
-    if (sh) { absorbed = Math.min(sh.val, v); sh.val -= absorbed; v -= absorbed; if (sh.val <= 0) tgt.buffs = tgt.buffs.filter(b => b !== sh); }
+    let shieldGone = null;
+    if (sh) { absorbed = Math.min(sh.val, v); sh.val -= absorbed; v -= absorbed; if (sh.val <= 0) { tgt.buffs = tgt.buffs.filter(b => b !== sh); shieldGone = sh; } }
+    let held = false; if (v >= tgt.hp && tgt.hp > 1 && hasBuff(tgt, "endure")) { v = tgt.hp - 1; held = true; tgt.buffs = tgt.buffs.filter(b => b.type !== "endure"); }   // Unbowed: one blow cannot defeat it
     tgt.hp = Math.max(0, tgt.hp - v);
-    ev.push({ t: "dmg", src, tgt, v, crit, absorbed, el, kind, note: notes.filter(Boolean).join(" ") });
+    ev.push({ t: "dmg", src, tgt, v, crit, absorbed, el, kind, note: notes.filter(Boolean).join(" "), hpAfter: tgt.hp });
     tgt.lastHit = v + absorbed;
+    if (held) say(ctx, tgt.name + " holds on!");
+    const th = getBuff(tgt, "thorns"); if (th && src.side !== tgt.side && src.alive && !tg.aoe && !tg.refl && !tg.counterHit && v > 0) directHit(ctx, tgt, src, v * th.val, "THORNS");   // Thornwall
+    if (src.evo || tgt.evo) EVO.hit(ctx, src, tgt, v, crit, kind, el, tg, absorbed);   // evolution traits: after a hit landed
+    if (src.fx || tgt.fx) gearHit(ctx, src, tgt, v, absorbed, crit);   // gear: Reward the Hunt, Swift Recovery, Absorb, Reprisal
+    if (shieldGone && shieldGone.by && shieldGone.by.fx && src.side !== tgt.side) gearShieldBreak(ctx, shieldGone, src);   // gear: Scorching Ward
+    if (tgt.hooks) hookRun(tgt, "hit", ctx, tgt, src, v, { kind, el, tg, absorbed });
     if (kind === "phys" && fxl(tgt, "hornCounter") && src.side !== tgt.side && src.alive && !tg.refl && tgt.hp > 0) directHit(ctx, tgt, src, v * fxv(tgt, "hornCounter", 0.15, 0.08), "HORN COUNTER");
     // on-hit effects
     const ws = getBuff(tgt, "wrathStore"); if (ws) ws.val += v;
@@ -502,57 +758,78 @@
     if (tgt.passive === "stoneskin" && tgt.alive && tgt.stoneSkin < 2) { tgt.mp = Math.min(tgt.maxMp, tgt.mp + 1); tgt.stoneSkin++; }
     if (hasBuff(tgt, "braceDeep") && (tgt.braceTide || 0) < 2) { tgt.braceTide = (tgt.braceTide || 0) + 1; gainTide(ctx, tgt, 1); }
     if (tgt.grudge && tgt.grudge.tgt === src && tgt.grudge.n < 4) tgt.grudge.n++;
-    if (hasBuff(tgt, "dust") && tgt.alive) { const d = getBuff(tgt, "dust"); const r = Math.min(tgt.maxHp - tgt.hp, Math.round(v * 0.2)); if (r > 0) { tgt.hp += r; ev.push({ t: "heal", tgt, v: r }); } if (d.owner === tgt) { [...ctx.party].forEach(a => (a.buffs = a.buffs.filter(b => b.type !== "dust"))); } }
+    if (hasBuff(tgt, "dust") && tgt.alive) { const d = getBuff(tgt, "dust"); const r = Math.min(tgt.maxHp - tgt.hp, Math.round(v * 0.2 * (d.owner && d.owner.fx ? healBoost(d.owner) : 1))); if (r > 0) { tgt.hp += r; ev.push({ t: "heal", tgt, v: r, hpAfter: tgt.hp }); } if (d.owner === tgt) { [...ctx.party].forEach(a => (a.buffs = a.buffs.filter(b => b.type !== "dust"))); } }
     if (hasBuff(tgt, "redHot") && kind === "phys" && src.side !== tgt.side && src.alive) addStatus(ctx, tgt, src, "burn", 1, { sure: 1 });
     if (src.passive === "relentless" && passives && src.side === "p" && !tg.refl) { src.hitsTurn = (src.hitsTurn || 0) + 1; if (src.hitsTurn % 3 === 0) { src.mp = Math.min(src.maxMp, src.mp + 1); } }
     if (tg.bk && tg.strong) {
       countBreak(ctx, tgt, tg.bk);
-      if (fxl(src, "deadEnd") && tg.bk.includes("impact") && tgt.alive && !tgt.broken) {   // Dead End: impact moves count as 2 hits
-        const f = fxs(src); if (fxl(src, "deadEnd") >= 2 || !f.deadTurn) { f.deadTurn = 1; countBreak(ctx, tgt, tg.bk); }
-      }
+      if (src.fx) gearBreak(ctx, src, tgt, tg);   // gear: Dead End (impact) and Shell Cracker (shell) count as 2 hits
     }
     if (tgt.hp <= 0) die(ctx, tgt);
     else {
-      if (hasBuff(tgt, "counter") && src.alive && src.side !== tgt.side && !tg.counterHit) { ev.push({ t: "say", text: tgt.name + " counters!" }); damage(ctx, tgt, src, 0.6, "phys", { counterHit: 1, noReact: 1, off: 1 }); }
+      if (hasBuff(tgt, "counter") && src.alive && src.side !== tgt.side && !tg.counterHit) { ev.push({ t: "say", text: tgt.name + " counters!" }); damage(ctx, tgt, src, 0.6 * (1 + fxv(tgt, "spikedFacing", 0.4, 0.2)), "phys", { counterHit: 1, noReact: 1, off: 1 }); }
     }
     return v;
   }
   function die(ctx, u) {
+    if (u.hooks && hookRun(u, "die", ctx, u) === false) return;   // a boss rule can refuse the death (and set hp itself)
+    if (u.evo && EVO.die(ctx, u) === false) return;               // evolution trait: a blow that would defeat it leaves it on 1 HP (once per fight)
     if (u.phases && u.phases.length) {
       const p = u.phases.shift();
       Object.assign(u, p); u.maxHp = maxHpOf(u.stats, u.level, u.hpMult); u.hp = u.maxHp;
-      u.broken = 0; u.breakPts = 0; u.buffs = []; u.st = {}; u.charging = null; u.phaseNo = (u.phaseNo || 1) + 1; u.ctrlCount = 0; u.shieldDown = 0;
+      u.broken = 0; u.breakPts = 0; u.buffs = []; u.st = {}; u.charging = null; u.phaseNo = (u.phaseNo || 1) + 1; u.ctrlCount = 0; u.shieldDown = 0; u.growN = 0; u.loseAct = 0;
       ctx.telegraph = null; ctx.ev.push({ t: "phase", tgt: u, text: p.text });
+      if (u.hooks) hookRun(u, "phase", ctx, u);
       return;
     }
-    u.hp = 0; u.alive = false; u.buffs = []; u.st = {}; u.tide = 0; u.charging = null; u.runes = null;
+    if (u.side === "e" && u.passive === "ashes" && !u.ashesUsed && !u.broken) {   // an enemy Phoenix rises at once (a Phoenix that is broken cannot)
+      u.ashesUsed = true; u.hp = Math.max(1, Math.round(u.maxHp * (u.riseFrac || 0.25))); u.st = {}; u.buffs = []; u.charging = null; u.broken = 0; u.breakPts = 0;
+      ctx.ev.push({ t: "revive", tgt: u, text: u.name + " rises from the ashes!" }); ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null; return;
+    }
+    if (u.fx && u.tide) u.keepTide = Math.floor(u.tide * fxv(u, "salvage", 0.5, 0.25));   // gear: Salvage the Deep
+    u.hp = 0; u.alive = false; u.buffs = []; u.st = {}; u.tide = 0; u.charging = null; u.runes = null; u.held = null;
     ctx.ev.push({ t: "ko", tgt: u });
-    if (u.passive === "ashes" && !u.ashesUsed) { u.ashesUsed = true; u.rise = true; }
+    if (u.passive === "ashes" && !u.ashesUsed && !(u.side === "e" && u.broken)) { u.ashesUsed = true; u.rise = true; }
     if (u.side === "p") ctx.party.forEach(a => { if (a.sun && a.sun.owner === u) a.sun = null; });
+    if (u.side === "p") ctx.party.forEach(a => { if (a.evo && a !== u && a.alive) EVO.allyDown(ctx, a, u); });   // evolution trait: vengeance
+    if (u.side === "e") {
+      // enemy-side rules: rise again while a named ally lives, linked deaths, allies reacting
+      if (u.riseWhile && (u.riseN || 0) < (u.riseMax || 99) && ctx.foes.some(f => f.alive && f !== u && f.id === u.riseWhile)) { u.rise = true; u.riseN = (u.riseN || 0) + 1; u.riseIn = u.riseAfter || 0; }
+      ctx.foes.forEach(f => { if (f !== u && f.alive && f.dieWith && f.dieWith === u.id) { f.hp = 0; die(ctx, f); } });
+      ctx.foes.forEach(f => { if (f !== u && f.alive && f.hooks) hookRun(f, "allyDie", ctx, f, u); });
+    }
     ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null;
   }
   function gainTide(ctx, u, n) {
     if (!u || !u.alive || u.style !== "leviathan" || !n) return;
-    const before = u.tide; u.tide = Math.min(5, u.tide + n);
+    const before = u.tide; u.tide = Math.min(gearTideMax(u), u.tide + n);   // 5 Tide, 6 with Deeper Reservoir
     if (u.tide !== before) ctx.ev.push({ t: "tide", tgt: u, v: u.tide, n: u.tide - before });
   }
   function heal(ctx, src, tgt, base, o = {}) {
     if (!tgt.alive) return 0;
     let v = Math.round(base * eff(src, "pow") * 0.7 * (0.9 + 0.2 * rnd()));
     if (tgt.moss) v = Math.round(v / 2);
-    return healFlat(ctx, tgt, v, o);
+    return healFlat(ctx, tgt, v, Object.assign({ src }, o));
   }
+  // o.src = the healer (gear: Radiant Healing makes its healing bigger, Overflowing Light turns the overflow into a shield); o.silent = no Moonlit Antlers Tide
   function healFlat(ctx, tgt, v, o = {}) {
     if (!tgt.alive) return 0;
+    const hs = o.src && o.src.fx ? o.src : null;
+    if (hs) v = Math.round(v * healBoost(hs));
+    if (o.src && o.src.evo) v = Math.round(v * EVO.healMult(o.src));   // evolution traits: stronger healing
     const real = Math.max(0, Math.min(tgt.maxHp - tgt.hp, v));
     tgt.hp += real; ctx.lastOver = v - real;
-    ctx.ev.push({ t: "heal", tgt, v: real });
+    ctx.ev.push({ t: "heal", tgt, v: real, hpAfter: tgt.hp });
+    if (o.src && o.src.evo) EVO.healed(ctx, o.src, tgt, real, v - real);   // evolution traits: overflow shield, remembers the heal
+    if (hs && v > real && fxl(hs, "overflowingLight")) castShield(ctx, hs, tgt, Math.min(v - real, Math.round(tgt.maxHp * fxv(hs, "overflowingLight", 0.1, 0.05))), 2, { keep: 1 });
     if (real > 0 && !o.silent) ctx.team(tgt).forEach(a => { if (a.alive && a !== undefined && hasBuff(a, "antlers") && (a.antTide || 0) < 2) { a.antTide = (a.antTide || 0) + 1; gainTide(ctx, a, 1); } });
     return real;
   }
-  function revive(ctx, tgt, pct) {
+  function revive(ctx, tgt, pct, by) {   // by = the creature whose move revives (gear: Ashen Mantle gives the revived a shield)
     tgt.alive = true; tgt.rise = false; tgt.hp = Math.max(1, Math.round(tgt.maxHp * pct)); tgt.st = {}; tgt.buffs = [];
+    if (tgt.keepTide) { tgt.tide = tgt.keepTide; tgt.keepTide = 0; }   // gear: Salvage the Deep
     ctx.ev.push({ t: "revive", tgt });
+    if (by && by.fx && fxl(by, "ashenMantle")) castShield(ctx, by, tgt, Math.round(tgt.maxHp * fxv(by, "ashenMantle", 0.15, 0.08)), 2);
   }
   // push an enemy's turn to the end of this round (only if it has not acted yet)
   function delayTurn(ctx, t, text) {
@@ -567,14 +844,15 @@
     const el = m.el === "self" ? u.element : m.el;
     if (u.attune && el && m.kind !== "phys" && el === u.attune) c -= 1;
     if (u.moodEl && el === u.moodEl && m.kind !== "phys") c -= 1;
-    if (fxl(u, "thrifty") && !u.spellsTurn && !m.basic && (fxl(u, "thrifty") >= 2 || (u.fxTurns || 0) % 2 === 1)) c -= 1;
+    if (u.fx) c -= costCut(u, m, el);   // gear: Thrifty Caster, Lean Brew, Frugal Light, Quick Purge, Cheap Stone, Fire Thrift, Cheap Thunder
+    if (u.evo) c -= EVO.costCut(u, m);   // evolution trait: the first move each turn costs less
     return Math.max(1, c);
   }
   function canUse(ctx, u, id) {
     const m = MOVES[id]; if (!m || !u.alive) return false;
     if (u.mp < mpCost(u, id)) return false;
-    if (m.hpCost && u.hp <= Math.round(u.maxHp * m.hpCost) + 1) return false;
-    if (m.hpCostPct && u.hp <= Math.round(u.maxHp * m.hpCostPct) + 1) return false;
+    if ((m.hpCost || m.hpCostPct) && u.hp <= Math.round(u.maxHp * hpFrac(u, m)) + 1) return false;
+    if (m.needTide && !(u.tide >= m.needTide)) return false;
     if (m.target === "allyDown" && !ctx.party.some(p => !p.alive && !p.rise)) return false;
     if ((m.target === "enemy" || m.target === "allEnemies") && !ctx.foes.some(f => f.alive)) return false;
     return true;
@@ -601,23 +879,26 @@
       if (!t.alive) return;
       for (let h = 0, n = m.hits || 1; h < n && t.alive; h++) {
         let base = (o.p !== undefined ? o.p : m.p) * (o.pmul || 1);
-        const tg = { el: m.el, bk, strong, off, aoe, move: m.id, strongHit: m.mp >= 3, cheap: m.mp === 1 };
+        const tg = { el: m.el, bk, strong, off, aoe, move: m.id, strongHit: m.mp >= 3, cheap: m.mp === 1, spell: m.kind !== "phys" };
         if (m.bonusDef) tg.bonus = eff(u, "def") * m.bonusDef;
         if (m.basic && fxl(u, "pillarFist")) tg.bonus = (tg.bonus || 0) + eff(u, "def") * fxv(u, "pillarFist", 0.25, 0.12);
-        const ws = getBuff(u, "wrathStore"); if (ws && ws.val > 0 && h === 0) { tg.bonus = (tg.bonus || 0) + ws.val; ws.val = 0; u.buffs = u.buffs.filter(b => b !== ws); }
-        if (u.diveReady && h === 0) { base *= 1.6; }
+        const ws = getBuff(u, "wrathStore"); if (ws && ws.val > 0 && h === 0) { tg.bonus = (tg.bonus || 0) + ws.val * (1 + fxv(u, "bottledFury", 0.5, 0.25)); ws.val = 0; u.buffs = u.buffs.filter(b => b !== ws); }   // Bottled Fury
+        if (u.diveReady && h === 0) { base *= 1.6 * (1 + fxv(u, "deathFromAbove", 0.5, 0.25)); }   // Death From Above
+        if (h > 0 && u.fx) base *= 1 + Math.min(fxv(u, "hundredCuts", 0.3, 0.15), h * fxv(u, "hundredCuts", 0.1, 0.05));   // Hundred Cuts: hit 2 +10%, hit 3 +20%, later +30%
         if (u.gallop && el === "shock") base *= 1 + 0.15 * u.gallop.n;
+        if (u.psyche && m.kind !== "phys" && !m.basic && (m.p || 0) > 0) base *= 1 + u.psyche;   // Storm Gathering
         if (o.crit !== undefined) tg.crit = o.crit;
         if (o.pre) o.pre(tg, h);
         total += damage(ctx, u, t, base, m.kind, tg);
         if (m.stEach && t.alive && m.st) m.st.forEach(([ty, n, ch]) => addStatus(ctx, u, t, ty, n, { chance: ch, off }));
       }
       if (t.alive && m.st && !m.stEach) m.st.forEach(([ty, n, ch]) => addStatus(ctx, u, t, ty, n, { chance: ch, off }));
-      if (t.alive && m.db) m.db.forEach(([s, v, tu]) => debuff(ctx, u, t, s, v, tu));
-      if (m.db && m.bk) countBreak(ctx, t, m.bk);
+      if (t.alive && m.db) m.db.forEach(([s, v, tu]) => debuff(ctx, u, t, s, DB_GEAR[m.id] ? v * (1 + fxv(u, DB_GEAR[m.id], 0.5, 0.25)) : v, tu));   // Cracking, Quiet Hiss: 50% (25%) stronger
+      if (m.db && m.bk && !(strong && (o.p !== undefined ? o.p : m.p) > 0)) countBreak(ctx, t, m.bk);   // a damaging strong move already counted its break in damage(): count once, not twice
       if (m.basic && u.ablaze && t.alive) addStatus(ctx, u, t, "burn", 1, { sure: 1 });
     });
     if (u.diveReady) u.diveReady = false;
+    if (u.psyche && m.kind !== "phys" && !m.basic && (m.p || 0) > 0) u.psyche = 0;
     if (m.tide) gainTide(ctx, u, m.tide);
     return total;
   }
@@ -625,6 +906,7 @@
     const m = MOVES[moveId]; if (!m) return;
     const ev = ctx.ev;
     const mp0 = u.mp;
+    if (u.evo) EVO.beforeMove(ctx, u, m, moveId, target);   // evolution traits: remembers the state before the move
     u.mp = Math.max(0, u.mp - mpCost(u, moveId));
     if (m.mp && !m.basic) u.spellsTurn = (u.spellsTurn || 0) + 1;
     const el = m.el === "self" ? u.element : m.el;
@@ -636,8 +918,7 @@
     // the one-shot cost reductions are spent by a matching spell
     if (u.attune && el === u.attune && m.kind !== "phys" && m.mp) u.attune = null;
     if (u.moodEl && el === u.moodEl && m.kind !== "phys" && m.mp) u.moodEl = null;
-    if (m.hpCost) { const c = Math.round(u.maxHp * m.hpCost); u.hp = Math.max(1, u.hp - c); ev.push({ t: "selfDmg", tgt: u, v: c }); }
-    if (m.hpCostPct) { const c = Math.round(u.maxHp * m.hpCostPct); u.hp = Math.max(1, u.hp - c); ev.push({ t: "selfDmg", tgt: u, v: c }); }
+    if (m.hpCost || m.hpCostPct) { const c = Math.round(u.maxHp * hpFrac(u, m)); u.hp = Math.max(1, u.hp - c); ev.push({ t: "selfDmg", tgt: u, v: c }); }   // Sand Underfoot makes it cheaper
     ev.push({ t: "use", src: u, move: m.name, moveId, grp: m.grp, tkind: m.target, basic: !!m.basic, tgt: target, el });
     u.lastMove = moveId;
     if (m.basic) {
@@ -648,13 +929,18 @@
         if (fxl(u, "readyHands") === 1 && !f.readyUsed) { f.readyUsed = 1; u.mp = Math.min(u.maxMp, u.mp + 1); }
       }
     }
+    const puller = m.target === "enemy" ? ctx.foes.find(f => f.alive && f.pulling > 0) : null;
+    if (puller && target && target !== puller && target.side === "e") { target = puller; say(ctx, puller.name + " draws the blow!"); }
     const tgts = targetsOf(ctx, u, m, target);
+    const pre = u.fx ? gearPre(ctx, u, m, target, el) : null;   // gear: bonuses that last for this one move
     if (m.basic && u.style === "leviathan") { /* Tide comes from m.tide in genericAttack */ }
     if (m.fx && FX[m.fx]) FX[m.fx](ctx, u, m, target, tgts, opt); else genericAttack(ctx, u, m, tgts);
+    if (pre) gearPost(ctx, u, m, moveId, el, pre);
     if (u.gallop && moveId !== "staticGallop") { if (el === "shock" && m.mp) u.gallop.n = Math.min(4, u.gallop.n + 1); else if (m.mp) u.gallop = null; }
     if (m.kind !== "phys" && el && m.mp) u.lastEl = el;
     u.opening = 0; u.spellBonus = 0;
     if (u.unheard && (m.fx === "coil" || m.fx === "stoneGaze" || m.st || m.db)) u.unheard = false;
+    if (u.evo) EVO.afterMove(ctx, u, m, moveId, target);   // evolution traits and the upgraded personal move's riders
   }
 
   // ---------- special effects ----------
@@ -664,21 +950,23 @@
     roar(c, u) { hold(u, u, "taunt", 1); say(c, u.name + " roars. All eyes are on it!"); },
     bloodrage(c, u) { addBuff(u, "atk", 0.3, 2); addBuff(u, "def", -0.3, 2, { force: 1 }); say(c, u.name + " is filled with rage."); },
     wrath(c, u) { addBuff(u, "wrathStore", 0, 3); say(c, u.name + " bottles up its anger."); },
-    tailwind(c, u, m, t) { addBuff(t, "spd", 0.3, 2); c.ev.push({ t: "buff", tgt: t, stat: "spd", val: 0.3 }); say(c, t.name + " feels the wind at its back."); },
-    dive(c, u) { hold(u, u, "dr", 0.3); u.diveReady = true; say(c, u.name + " soars out of reach."); },
-    hitAndRun(c, u, m, t, ts) { genericAttack(c, u, m, ts); hold(u, u, "dr", 0.25); },
+    tailwind(c, u, m, t) { const v = 0.3 * (1 + fxv(u, "tailwindWeave", 0.5, 0.25)); addBuff(t, "spd", v, 2); c.ev.push({ t: "buff", tgt: t, stat: "spd", val: v }); say(c, t.name + " feels the wind at its back."); },   // Tailwind Weave
+    dive(c, u) { hold(u, u, "dr", 0.3 + fxv(u, "glancingFeathers", 0.15, 0.08)); u.diveReady = true; say(c, u.name + " soars out of reach."); },   // Glancing Feathers
+    hitAndRun(c, u, m, t, ts) { genericAttack(c, u, m, ts); hold(u, u, "dr", 0.25 + fxv(u, "glancingFeathers", 0.15, 0.08)); },
     snatch(c, u, m, t) {
       const b = t.buffs.find(x => x.val > 0 && ["atk", "def", "pow", "res", "spd", "dr", "shield", "taunt"].includes(x.type));
       if (!b) { say(c, "There is nothing to snatch."); return; }
-      t.buffs = t.buffs.filter(x => x !== b); addBuff(u, b.type, b.val, b.turns > 50 ? 2 : b.turns, { force: 1 }); say(c, u.name + " snatches " + t.name + "'s " + b.type + " boost!");
+      t.buffs = t.buffs.filter(x => x !== b);
+      if (fxl(u, "thiefsHands")) { addBuff(u, b.type, b.val, fxl(u, "thiefsHands") >= 2 ? (b.turns > 50 ? 2 : b.turns) : 1, { force: 1 }); say(c, u.name + " snatches " + t.name + "'s " + b.type + " boost!"); }   // Thief's Hands: you keep what you took
+      else say(c, u.name + " strips " + t.name + "'s " + b.type + " boost!");
     },
-    fester(c, u, m, t) { DOTS.forEach(d => t.st[d] && tickOne(c, t, d, "FESTER")); },
+    fester(c, u, m, t) { const extra = fxv(u, "quickenedRot", 0.5, 0.25); DOTS.forEach(d => { if (t.st[d]) { tickOne(c, t, d, "FESTER"); if (extra && t.st[d]) tickOne(c, t, d, "FESTER", extra); } }); },   // Quickened Rot: 1.5 (1.25) ticks
     rupture(c, u, m, t) {
       const b = t.st.bleed, n = b ? b.n : 0; delete t.st.bleed;
-      genericAttack(c, u, m, [t], { p: 0.7 + 0.45 * n, strong: true }); if (!n) say(c, "No bleed to burst."); else say(c, "The wounds burst open!");
+      genericAttack(c, u, m, [t], { p: (0.7 + 0.45 * n) * (1 + fxv(u, "ruptureRite", 0.3, 0.15)), strong: true }); if (!n) say(c, "No bleed to burst."); else say(c, "The wounds burst open!");   // Rupture Rite
     },
-    regrow(c, u) { addBuff(u, "hot", Math.round(0.9 * eff(u, "pow") * 0.7), 3); say(c, u.name + " regrows a head."); },
-    challenge(c, u) { addBuff(u, "taunt", 1, 2); say(c, u.name + " challenges the enemy!"); },
+    regrow(c, u) { addBuff(u, "hot", Math.round(0.9 * eff(u, "pow") * 0.7 * healBoost(u) * (1 + fxv(u, "regrowth", 0.5, 0.25))), 3); say(c, u.name + " regrows a head."); },   // Radiant Healing, Regrowth
+    challenge(c, u) { addBuff(u, "taunt", 1, 2 + gearMore(u, "provocation"), { ch: 1 }); say(c, u.name + " challenges the enemy!"); },   // Provocation; ch marks it for Heavy Sleeper
     fortify(c, u) { addBuff(u, "def", 0.4, 2); addBuff(u, "res", 0.4, 2); say(c, u.name + " hardens its shell."); },
     bulwark(c, u, m, t) { hold(u, t, "cover", 1, { by: u }); say(c, u.name + " steps in front of " + (t === u ? "itself" : t.name) + "."); },
     counterSt(c, u) { hold(u, u, "counter", 1); say(c, u.name + " takes a counter stance."); },
@@ -686,33 +974,34 @@
     earthshaker(c, u, m, t, ts) { genericAttack(c, u, m, ts, { pmul: 1 + fxv(u, "earthquake", 0.3, 0.15) }); ts.forEach(x => x.alive && addStatus(c, u, x, "stun", 1, { chance: 0.15 + fxv(u, "earthquake", 0.10, 0.05) })); },
     unbreakable(c, u) { u.buffs = u.buffs.filter(b => b.val >= 0); ["stun", "freeze", "slow", "chill", "steam", "petrify"].forEach(k => delete u.st[k]); addBuff(u, "stunImmune", 1, 2); say(c, u.name + " stands unbreakable."); },
     warmLight(c, u, m, t) { heal(c, u, t, 3.4); },
-    rejuvenate(c, u, m, t) { addBuff(t, "hot", Math.round(0.9 * eff(u, "pow") * 0.7), 3); c.ev.push({ t: "buff", tgt: t, stat: "regen" }); say(c, t.name + " is wrapped in warm light."); },
-    cleansingFlame(c, u, m, t) { if (!cleanse(c, t, 1)) say(c, "Nothing to cleanse."); },
-    flameWard(c, u, m, t) { addBuff(t, "shield", Math.round(1.6 * eff(u, "pow") * 0.7), 2); c.ev.push({ t: "buff", tgt: t, stat: "shield" }); say(c, t.name + " gets a flame shield."); },
+    rejuvenate(c, u, m, t) { addBuff(t, "hot", Math.round(0.9 * eff(u, "pow") * 0.7 * healBoost(u)), 3); c.ev.push({ t: "buff", tgt: t, stat: "regen" }); say(c, t.name + " is wrapped in warm light."); },
+    cleansingFlame(c, u, m, t) { if (!cleanse(c, t, 1, u)) say(c, "Nothing to cleanse."); },
+    flameWard(c, u, m, t) { castShield(c, u, t, Math.round(1.6 * eff(u, "pow") * 0.7), 2, { ward: 1 }); c.ev.push({ t: "buff", tgt: t, stat: "shield" }); say(c, t.name + " gets a flame shield."); },   // Strong Ward, Lingering Ward, Scorching Ward
     healWave(c, u, m, t, ts) { teamHeal(c, u, ts, 1.1); },
-    rebirth(c, u, m, t) { revive(c, t, 0.3); },
-    revive(c, u, m, t) { revive(c, t, 0.2); },
-    purge(c, u, m, t, ts) { ts.forEach(a => cleanse(c, a, 0)); say(c, "A clean flame washes over the team."); },
-    sunfire(c, u, m, t, ts) { const d = genericAttack(c, u, m, [t]); ctxTeam(c, u).forEach(a => a.alive && healFlat(c, a, Math.round(d * 0.3))); },
+    rebirth(c, u, m, t) { revive(c, t, fxv(u, "rebirthRite", 0.5, 0.4) || 0.3, u); },   // Rebirth Rite
+    revive(c, u, m, t) { revive(c, t, 0.2, u); },
+    purge(c, u, m, t, ts) { ts.forEach(a => cleanse(c, a, 0, u)); say(c, "A clean flame washes over the team."); },
+    sunfire(c, u, m, t, ts) { const d = genericAttack(c, u, m, [t], { pmul: 1 + fxv(u, "brighterSun", 0.25, 0.12) }); ctxTeam(c, u).forEach(a => a.alive && healFlat(c, a, Math.round(d * 0.3 * (1 + fxv(u, "brighterSun", 0.25, 0.12))), { src: u })); },   // Brighter Sun: more damage, more healing
     shatterShield(c, u, m, t, ts) {
       genericAttack(c, u, m, ts); t.buffs = t.buffs.filter(b => !["shield", "dr"].includes(b.type)); if (t.frontShield) { t.shieldDown = 2; say(c, t.name + "'s barrier cracks!"); }
     },
-    coil(c, u, m, t) { if (ctrlRoll(c, u, t, 0.9)) { t.loseAct = (t.loseAct || 0) + 1; c.ev.push({ t: "status", tgt: t, type: "coil" }); say(c, t.name + " is wrapped up and loses an action!"); } },
-    stoneGaze(c, u, m, t) { if (ctrlRoll(c, u, t, 0.7)) addStatus(c, u, t, "stun", 1, { sure: 1 }); },
-    curseOfStone(c, u, m, t) { t.buffs = t.buffs.filter(b => b.val <= 0); t.noBuff = 2; say(c, "Stone seals " + t.name + "'s power."); c.ev.push({ t: "status", tgt: t, type: "curse" }); },
+    coil(c, u, m, t) { if (ctrlRoll(c, u, t, 0.9)) { t.loseAct = (t.loseAct || 0) + 1; c.ev.push({ t: "status", tgt: t, type: "coil" }); say(c, t.name + " is wrapped up and loses an action!"); if (fxl(u, "tighterCoil")) debuff(c, u, t, "spd", -fxv(u, "tighterCoil", 0.2, 0.1), 2); } },   // Tighter Coil
+    stoneGaze(c, u, m, t) { if (ctrlRoll(c, u, t, 0.7 + fxv(u, "hardStare", 0.2, 0.1))) addStatus(c, u, t, "stun", 1, { sure: 1 }); },   // Hard Stare
+    curseOfStone(c, u, m, t) { t.buffs = t.buffs.filter(b => b.val <= 0); t.noBuff = 2 + gearMore(u, "lastingCurse"); say(c, "Stone seals " + t.name + "'s power."); c.ev.push({ t: "status", tgt: t, type: "curse" }); },   // Lasting Curse
     attune(c, u) { if (u.lastEl) { u.attune = u.lastEl; if (fxl(u, "chargedAttune")) u.attuneBonus = fxv(u, "chargedAttune", 0.15, 0.07); say(c, u.name + " attunes to " + u.lastEl + "."); } else say(c, "Nothing to attune to yet."); },
     detonate(c, u, m, t) {
       let n = 0; ["burn", "chill", "shock"].forEach(k => { if (t.st[k]) { n += t.st[k].n; delete t.st[k]; } }); if (t.st.wet) { n += 1; delete t.st.wet; }
       genericAttack(c, u, m, [t], { p: (0.8 + 0.4 * n) * (1 + fxv(u, "sharperDetonate", 0.3, 0.15)), strong: true, pre: tg => { tg.noReact = 1; if (u.passive === "comboMaster") tg.mult = comboMult(u); } }); if (n) reaction(c, t, "Detonate", n + " marks detonate!");
     },
-    deepBreath(c, u, m) { gainTide(c, u, m.tide); },
+    deepBreath(c, u, m) { gainTide(c, u, m.tide + gearMore(u, "longBreath")); },   // Long Breath: +1 Tide
     maelstrom(c, u, m, t, ts) { release(c, u, m, ts); },
     tidalWave(c, u, m, t, ts) { release(c, u, m, ts); },
     swell(c, u) { addBuff(u, "swell", 1, 3); say(c, u.name + " gathers the deep."); },
     braceDeep(c, u) { hold(u, u, "dr", 0.35); hold(u, u, "braceDeep", 1); u.braceTide = 0; say(c, u.name + " braces against the current."); },
-    riptide(c, u, m, t, ts) { genericAttack(c, u, m, ts); if (t.alive) delayTurn(c, t, "The riptide drags " + t.name + " back!"); },
+    riptide(c, u, m, t, ts) { genericAttack(c, u, m, ts); if (t.alive) { delayTurn(c, t, "The riptide drags " + t.name + " back!"); if (fxl(u, "draggingCurrent")) debuff(c, u, t, "spd", -fxv(u, "draggingCurrent", 0.15, 0.07), 2); } },   // Dragging Current
     abyssal(c, u, m, t, ts) {
-      genericAttack(c, u, m, ts); const take = Math.min(2, t.mp || 0); if (take) t.mp -= take; u.mp = Math.min(u.maxMp, u.mp + (take || 1)); say(c, u.name + " drains " + (take || 1) + " MP.");
+      genericAttack(c, u, m, ts); const take = Math.min(2, t.mp || 0); if (take) t.mp -= take; const got = (take || 1) + gearMore(u, "longHunger");   // Long Hunger: 1 more MP
+      u.mp = Math.min(u.maxMp, u.mp + got); say(c, u.name + " drains " + got + " MP.");
     },
     // ----- personal moves -----
     twoHeads(c, u, m, t, ts, opt) {
@@ -729,7 +1018,7 @@
     },
     smotheringMoss(c, u, m, t, ts) { genericAttack(c, u, m, ts); if (t.alive) { t.moss = 3; Object.keys(t.st).forEach(k => STATUS[k].dot && (t.st[k].t += 2)); say(c, t.name + " is smothered in moss."); } },
     unheardApproach(c, u) { u.unheard = true; say(c, u.name + " slips into the shadows."); },
-    goldenFleece(c, u, m, t) { healFlat(c, t, Math.round(t.maxHp * 0.3)); },
+    goldenFleece(c, u, m, t) { healFlat(c, t, Math.round(t.maxHp * 0.3), { src: u }); },
     jokersGambit(c, u, m, t, ts) {
       const r = Math.floor(rnd() * 3);
       if (r === 0) { say(c, "Joker's Gambit: a flurry!"); for (let i = 0; i < 4 && t.alive; i++) damage(c, u, t, 0.45, "phys", {}); }
@@ -744,7 +1033,7 @@
     ammitsFeast(c, u, m, t, ts) { const was = t.broken; const d = genericAttack(c, u, m, ts); healFlat(c, u, Math.round(d * (was ? 0.4 : 0.2))); },
     featherCushion(c, u, m, t, ts) { genericAttack(c, u, m, ts); const low = ctxTeam(c, u).filter(a => a.alive).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (low) hold(u, low, "dr", 0.25); },
     dirtyLaundry(c, u, m, t) { const k = Math.min(5, debuffCount(t)); if (!k) { say(c, "Nothing to gossip about."); return; } debuff(c, u, t, "atk", -0.08 * k, 2); debuff(c, u, t, "def", -0.08 * k, 2); },
-    plantThePillar(c, u, m, t, ts) { ts.forEach(a => addBuff(a, "shield", Math.round(1.5 * eff(u, "def")), 3)); u.loseAct = (u.loseAct || 0) + 1; say(c, "A great pillar shelters the team."); },
+    plantThePillar(c, u, m, t, ts) { ts.forEach(a => castShield(c, u, a, Math.round(1.5 * eff(u, "def")), 3)); u.loseAct = (u.loseAct || 0) + 1; say(c, "A great pillar shelters the team."); },
     sunAscending(c, u, m, t, ts) { u.sun = { n: 0, left: 3, owner: u }; say(c, "The sun begins to rise."); },
     tipTheBowl(c, u, m, t, ts) { genericAttack(c, u, m, ts); hold(u, u, "vuln", 0.25); },
     ablaze(c, u) { u.ablaze = 3; say(c, u.name + " bursts into flame!"); },
@@ -753,31 +1042,90 @@
       let eaten = Object.keys(t.st).reduce((s, k) => s + (t.st[k].n || 1), 0); eaten = Math.min(3, eaten); t.st = {};
       genericAttack(c, u, m, ts, { pmul: 1 + 0.1 * eaten }); gainTide(c, u, eaten); c.party.concat(c.foes).forEach(a => { if (a.side === u.side) DOTS.forEach(d => delete a.st[d]); });
     },
-    silverLining(c, u, m, t) { heal(c, u, t, 2.2); if (c.lastOver > 0) addBuff(t, "shield", c.lastOver, 3); cleanse(c, t, 1); },
+    silverLining(c, u, m, t) { heal(c, u, t, 2.2); if (c.lastOver > 0) castShield(c, u, t, c.lastOver, 3); cleanse(c, t, 1, u); },
     fallingDust(c, u, m, t, ts) { ts.forEach(a => addBuff(a, "dust", 1, 2, { owner: u })); say(c, "Glowing dust drifts down."); },
     moonlitAntlers(c, u) { addBuff(u, "antlers", 1, 3); ctxTeam(c, u).forEach(a => (a.antTide = 0)); say(c, "The antlers shine like a moon."); },
     takeRoot(c, u) { u.rooted = 3; addBuff(u, "dr", 0.2, 3); addBuff(u, "atk", -0.25, 3, { force: 1 }); addBuff(u, "pow", -0.25, 3, { force: 1 }); say(c, u.name + " plants itself."); },
     sealedLetters(c, u, m, t, ts) { genericAttack(c, u, m, ts); if (t.alive) { t.notes = 2; t.notesBy = u; } },
     keeningOmen(c, u, m, t) { t.omen = { t: 3, src: u }; say(c, "A song of mourning rises around " + t.name + "."); },
     redHotBronze(c, u) { addBuff(u, "redHot", 1, 3); say(c, u.name + "'s bronze glows red."); },
-    lament(c, u, m, t) { const v = Math.min(t.lastHit || 0, Math.round(t.maxHp * 0.35)); if (v) healFlat(c, t, v); else say(c, "No fresh wound to mend."); },
+    lament(c, u, m, t) { const v = Math.min(t.lastHit || 0, Math.round(t.maxHp * 0.35)); if (v) healFlat(c, t, v, { src: u }); else say(c, "No fresh wound to mend."); },
     lightTheHearth(c, u) { c.hearth = c.hearth || {}; c.hearth[u.side] = u; say(c, "A hearth fire flickers to life."); },
     nightTerror(c, u, m, t) { t.terrorOn = 3; say(c, "Dread settles over " + t.name + "."); },
     moodScales(c, u, m, t, ts, opt) { const el = opt || u.element; addBuff(u, "ward_" + el, 0.4, 2); u.moodEl = el; say(c, u.name + "'s scales turn " + el + "."); },
     dreamEater(c, u, m, t) { let n = 0; Object.keys(t.st).forEach(k => { if (n < 3 && DOT_CLEANSE.includes(k)) { delete t.st[k]; n++; } }); gainTide(c, u, n); if (!n) say(c, "Nothing to eat."); },
+    // ----- late-game style moves (MOVE-RESEARCH): learn levels 28-60 -----
+    decimate(c, u, m, t, ts) { const low = t.hp / t.maxHp <= 0.35; genericAttack(c, u, m, ts, { pmul: low ? 1.8 : 1 }); if (!t.alive) { u.mp = Math.min(u.maxMp, u.mp + 2); say(c, u.name + " takes heart from the kill."); } },
+    hornStandard(c, u, m, t, ts) { ts.forEach(a => { boost(a, "atk", 0.2, 2); boost(a, "pow", 0.2, 2); c.ev.push({ t: "buff", tgt: a, stat: "atk", val: 0.2 }); }); say(c, "A horned standard rises over the team."); },
+    augurEye(c, u, m, t) { t.augur = { n: 4, t: 2 }; c.ev.push({ t: "mark", src: u, tgt: t, val: 0 }); say(c, u.name + " reads the omens: " + t.name + " cannot hide its weak points."); },
+    hungryVine(c, u, m, t, ts) { genericAttack(c, u, m, ts); if (t.alive) { t.leech = { by: u, t: 3 }; say(c, "A hungry vine roots in " + t.name + "."); } },
+    spreadBlight(c, u, m, t) {
+      const others = ctxOpp(c, u).filter(f => f.alive && f !== t); let n = 0;
+      others.forEach(f => ["burn", "bleed", "poison"].forEach(d => { if (t.st[d] && f.alive && addStatus(c, u, f, d, Math.max(1, Math.floor(t.st[d].n / 2)), { sure: 1 })) n++; }));
+      say(c, n ? "The blight spreads!" : "Nothing to spread.");
+    },
+    thornwall(c, u, m, t, ts) { ts.forEach(a => addBuff(a, "thorns", 0.6, 2)); say(c, "Thorns burst from the ground around the team."); },
+    idolStandIn(c, u, m, t) { const paid = Math.round(u.maxHp * hpFrac(u, m)); castShield(c, u, t, Math.round(paid * (t === u ? 1 : 1.5)), 3); c.ev.push({ t: "buff", tgt: t, stat: "shield" }); say(c, "A stone idol takes " + (t === u ? "its" : t.name + "'s") + " place."); },
+    unbowed(c, u) { addBuff(u, "endure", 1, 2); say(c, u.name + " plants its feet. It will not fall."); },
+    emberWish(c, u, m, t) { (c.later = c.later || []).push({ kind: "wish", src: u, tgt: t, left: 2, pct: 0.5 }); say(c, u.name + " makes a wish for " + (t === u ? "itself" : t.name) + "."); },
+    dawnVeil(c, u, m, t, ts) { c.veils = (c.veils || 0) + 1; ts.forEach(a => addBuff(a, "veil", 1, 3)); say(c, "A veil of dawn light settles on the team."); },
+    heartfireOffering(c, u, m, t, ts) {
+      const paid = Math.round(u.maxHp * hpFrac(u, m));
+      ts.forEach(a => { if (a !== u) { healFlat(c, a, paid, { src: u }); cleanse(c, a, 1, u); } }); say(c, u.name + " gives its own heartfire to the team.");
+    },
+    verdictOfStone(c, u, m, t, ts) { genericAttack(c, u, m, ts); if (t.alive) { const v = Math.min(0.3, 0.1 + 0.04 * debuffCount(t)); addBuff(t, "marked", v, 3, { force: 1, by: u }); c.ev.push({ t: "mark", src: u, tgt: t, val: v }); say(c, "A verdict of stone is passed on " + t.name + "."); } },
+    stormchain(c, u, m, t, ts) { genericAttack(c, u, m, ts); const others = ctxOpp(c, u).filter(f => f.alive && f !== t); if (others.length) { say(c, "The lightning arcs!"); genericAttack(c, u, m, others, { pmul: 0.5 }); } },
+    stormGathering(c, u) { u.psyche = 0.7; say(c, u.name + " gathers the storm."); },
+    cometCall(c, u, m, t) { (c.later = c.later || []).push({ kind: "comet", src: u, tgt: t, left: 2, p: m.p }); say(c, "A comet is falling toward " + t.name + "..."); },
+    ebbTide(c, u, m, t, ts) { const n = u.tide; ts.forEach(a => healFlat(c, a, Math.round(a.maxHp * 0.035 * n), { src: u })); u.tide = 0; c.ev.push({ t: "tide", tgt: u, v: 0, n: 0 }); say(c, "The ebbing tide carries the pain away."); },
+    risingFlood(c, u, m, t, ts) { genericAttack(c, u, m, ts); c.flood = { t: 3, by: u }; say(c, "The water keeps rising."); },
+    weightOfDeep(c, u, m, t, ts) { genericAttack(c, u, m, ts, { pmul: 1 + 0.45 * u.tide }); },
+    // ----- skill-book moves of chapters 6-11 + post-game (SKILLBOOK agent): off-style, so no style or role bonuses -----
+    kelpPoultice(c, u, m, t, ts) { teamHeal(c, u, ts, 0.8); say(c, "Wet kelp is bound over the team's wounds."); },
+    giltShield(c, u, m, t) { castShield(c, u, t, Math.round(t.maxHp * 0.18), 2); c.ev.push({ t: "buff", tgt: t, stat: "shield" }); say(c, "Gold leaf settles over " + (t === u ? u.name : t.name) + " like a second skin."); },
+    bitterRue(c, u, m, t) { if (!cleanse(c, t, 2, u)) say(c, "Nothing to cleanse."); else say(c, "The bitter herb burns the sickness out."); },
+    rootDraught(c, u, m, t) { const before = t.mp; t.mp = Math.min(t.maxMp, t.mp + 3); c.ev.push({ t: "buff", tgt: t, stat: "mp", val: t.mp - before }); say(c, t.name + " drinks the root sap and gains " + (t.mp - before) + " MP."); },
+    staticSnare(c, u, m, t, ts) { genericAttack(c, u, m, ts); if (t.alive && ctrlRoll(c, u, t, 0.5)) addStatus(c, u, t, "stun", 1, { sure: 1 }); },
+    bannerDecoy(c, u) { hold(u, u, "taunt", 1); hold(u, u, "dr", 0.25); say(c, u.name + " waves a scorched banner. All eyes are on it!"); },
+    lanternVigil(c, u, m, t) { addBuff(t, "endure", 1, 2); c.ev.push({ t: "buff", tgt: t, stat: "endure" }); say(c, "A lantern hangs over " + t.name + ". It will not go out."); },
   };
+  const ctxOpp = (c, u) => (u.side === "p" ? c.foes : c.party);
+  // a buff that never replaces a stronger one that lasts as long
+  function boost(a, type, val, turns) { const ex = getBuff(a, type); if (ex && ex.val >= val && ex.turns >= turns && ex.turns < 50) return; addBuff(a, type, val, turns); }
+  // delayed effects (Ember Wish, Comet Call): ctx.later entries count down at the end of each round and land when they reach 0
+  function resolveLater(c) {
+    const keep = [];
+    c.later.forEach(L => {
+      if (--L.left > 0) { keep.push(L); return; }
+      const src = L.src;
+      if (L.kind === "wish") {
+        const t = L.tgt; if (t.alive) healFlat(c, t, Math.round(t.maxHp * L.pct), { src }); else if (!t.rise) { revive(c, t, L.pct, src); say(c, "The wish brings " + t.name + " back!"); }
+      } else if (L.kind === "comet") {
+        let t = L.tgt; if (!t.alive) t = ctxOpp(c, src).filter(f => f.alive).sort((a, b) => b.hp - a.hp)[0]; if (!t) return;
+        c.ev.push({ t: "use", src, move: "Comet Call", moveId: "cometFall", tkind: "enemy", tgt: t, el: "fire", late: 1 }); say(c, "The comet strikes " + t.name + "!");
+        damage(c, src, t, L.p, "spell", { el: "fire", bk: ["fire"], strong: true, strongHit: true, spell: true }); if (t.alive) addStatus(c, src, t, "burn", 2, { sure: 1 });
+      }
+    });
+    c.later = keep;
+  }
   const ctxTeam = (c, u) => (u.side === "p" ? c.party : c.foes);
   function release(c, u, m, ts) {
-    const full = u.tide >= 5 && u.passive === "highWater", mult = 1 + 0.8 * u.tide;
+    const full = u.tide >= 5 && u.passive === "highWater", mult = (1 + 0.8 * u.tide) * (1 + fxv(u, "heavierTide", 0.2, 0.1)), maxed = u.tide >= gearTideMax(u);   // Heavier Tide
     genericAttack(c, u, m, ts, { pmul: mult, strong: true }); u.tide = 0; c.ev.push({ t: "tide", tgt: u, v: 0, n: 0 });
+    if (u.evo) EVO.release(c, u);   // evolution trait: the team heals when it releases Tide
     if (full) ts.forEach(x => x.alive && ctrlRoll(c, u, x, 0.9) && addStatus(c, u, x, "stun", 1, { sure: 1 }));
+    if (maxed && fxl(u, "crashingWave")) ts.forEach(x => x.alive && addStatus(c, u, x, "wet", 1, { sure: 1, dur: fxl(u, "crashingWave") >= 2 ? 0 : 1 }));   // Crashing Wave: a release at maximum Tide soaks the target
   }
-  function tickOne(ctx, u, type, tag) {
+  function tickOne(ctx, u, type, tag, scale = 1) {   // scale: a part of a tick (Quickened Rot adds half a tick)
     if (!u.alive || !u.st[type]) return;
+    const s = u.st[type];
     let v = dotUnit(u, type);
-    const S = STATUS[type]; v = Math.max(1, Math.round(v * elemMult(u, S.el) * (S.el === "fire" && fxl(u, "ashenSkin") ? 1 - fxv(u, "ashenSkin", 0.2, 0.1) : 1)));
+    const S = STATUS[type]; v = Math.max(1, Math.round(v * scale * (s.gm || 1) * elemMult(u, S.el) * (S.el === "fire" && fxl(u, "ashenSkin") ? 1 - fxv(u, "ashenSkin", 0.2, 0.1) : 1) * (S.el && fxl(u, "warded") ? 1 - fxv(u, "warded", 0.15, 0.07) : 1)));   // s.gm = gear boost of whoever applied it; ashenSkin / warded also soften burn, poison and shock
     u.hp = Math.max(0, u.hp - v);
-    ctx.ev.push({ t: "dmg", src: null, tgt: u, v, dot: type, el: S.el || null, note: tag || "" });
+    ctx.ev.push({ t: "dmg", src: null, tgt: u, v, dot: type, el: S.el || null, note: tag || "", hpAfter: u.hp });
+    if (u.fx) u.hurtSince = true;   // Unseen Retreat counts damage over time as damage taken
+    if (u.leech && u.leech.by && u.leech.by.alive) { const lo = ctx.team(u.leech.by).filter(a => a.alive).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (lo) healFlat(ctx, lo, Math.max(1, Math.round(v * 0.8)), { silent: 1, src: u.leech.by }); }   // Hungry Vine
+    if (s.hr) { const h = ctx.party[s.by]; if (h && h.alive && h.fx && h.side !== u.side) healFlat(ctx, h, Math.max(1, Math.round(v * s.hr)), { silent: 1 }); }   // Hunger for Red
     if (type === "poison" && u.shave) { const cap = Math.round((u.baseMaxHp || u.maxHp) * 0.15), cur = (u.baseMaxHp || u.maxHp) - u.maxHp; if (cur < cap) { u.maxHp = Math.max(1, u.maxHp - Math.round((u.baseMaxHp || u.maxHp) * 0.01)); u.hp = Math.min(u.hp, u.maxHp); } }
     if (u.hp <= 0) die(ctx, u);
   }
@@ -799,7 +1147,12 @@
   // self [stat,val,turns], ally [stat,val,turns] (all allies), drain (fraction healed), w weight, if (first | hp<x | hp>x | every:N | alone | ally:id)
   const ENEMIES = {};
   // field (non-boss) enemies are scaled here so one number tunes all random fights: HP x FIELD_HP, ability power x FIELD_DMG
-  const FIELD_HP = 1.25, FIELD_DMG = 1.45;   // 2026-10-29: Danny wants about 4-8 player actions per field enemy (was 15 at 2.4)
+  const FIELD_HP = 1.0, FIELD_DMG = 1.45;   // BALANCE 2026-10-31: FIELD_HP 1.25 -> 1.0 (random fights took 8-10 player actions per enemy, target 4-8 and ~25 s). 2026-10-29: Danny wants about 4-8 player actions per field enemy (was 15 at 2.4)
+  // BALANCE (2026-10-31): extra enemy damage on top of the ability powers, a curve of [level, multiplier] points (linear in between) per kind. Applied in damage() through u.dmgMult. Levels 1-10 (M1) stay at 1.
+  const DMG = { field: [[1, 1.2], [10, 1.7], [14, 1.9], [99, 1.9]], boss: [[5, 1], [8, 1.15], [10, 1.15], [11, 1], [99, 1]], gen: [[10, 1], [14, 1.9], [99, 1.9]], byId: {}, bySlot: { S6: 0.8 },   // byId: extra factor for single bosses (outliers found by the campaign sim)
+    kind: { mid: 2.5, guardian: 2.5, legend: 2.5, cup: 2.2, titan: 1.2, optTitan: 1.2, end: 1.1 },
+    genStyle: { minotaur: 0.78, colossus: 1.35, hydra: 1.2, gorgon: 1.3, leviathan: 1.3, harpy: 1.05, dragon: 1.0, phoenix: 1.0 } };   // kind: extra factor per BOSS_META kind (mid guardian legend cup titan optTitan end); genStyle: per general style
+  function dmgAt(tab, L) { if (L <= tab[0][0]) return tab[0][1]; for (let i = 1; i < tab.length; i++) if (L <= tab[i][0]) { const a = tab[i - 1], b = tab[i]; return a[1] + (b[1] - a[1]) * (L - a[0]) / (b[0] - a[0]); } return tab[tab.length - 1][1]; }
   function en(id, name, profile, o) {
     const d = ENEMIES[id] = Object.assign({ id, name, art: id, profile, actions: 1, hpMult: 0.5 }, o);
     if (!d.boss && !d.legacy) { d.hpMult *= FIELD_HP; d.ab = d.ab.map(a => (a.p ? Object.assign({}, a, { p: +(a.p * FIELD_DMG).toFixed(3) }) : a)); if (d.bigHit) d.bigHit *= FIELD_DMG; }
@@ -844,20 +1197,20 @@
   en("boneBullCalf", "Bone Bull-Calf", "brute", { hpMult: 0.65, immune: ["poison", "bleed"], breakType: "impact", bigEvery: 3, bigHit: 1.5, bigName: "Bone Charge", bigSingle: 1, drops: [["calfHorn", 0.3]], ab: [{ n: "Gore", p: 1.2 }] });
   en("emberScorpion", "Ember Scorpion", "brute", { hpMult: 0.6, rs: { water: -0.5, fire: 0.75 }, breakType: "water", drops: [["cinderglassEmber", 0.2], ["duneclawShard", 0.05]], ab: [{ n: "Burning Sting", p: 1.0, st: ["burn", 2, 0.6], w: 3 }, { n: "Pincer", p: 0.9, w: 1 }] });
   // --- legend L1 and the K1 guardian ---
-  en("duneWhisperer", "The Dune Whisperer", "swift", { hpMult: 1.1, art: "sandstitchJackal", vscale: 1.25, vtint: 0xd8e4ff, rs: { shock: -0.25, fire: 0.25 }, xp: 40, kakal: 20, drops: [],
+  en("duneWhisperer", "The Dune Whisperer", "swift", { hpMult: 1.1, art: "sandstitchJackal", vscale: 1.25, vtint: 0xd8e4ff, rs: { shock: -0.25, fire: 0.25 }, xp: 40, pay: 4, kakal: 20, drops: [],
     ab: [{ n: "Echoed Bite", p: 0.95, st: ["bleed", 1, 0.4], w: 3 }, { n: "Whisper", p: 0.55, k: "spell", db: ["atk", -0.2, 2], w: 2 }, { n: "A Mouthful of Voices", p: 0.35, k: "spell", aoe: 1, db: ["res", -0.15, 2], w: 1 }] });
-  en("mazeGuardian", "Maze Guardian", "brute", { boss: true, hpMult: 3, art: "boneBullCalf", vscale: 1.9, actions: 2, immune: ["poison", "bleed"], breakType: "impact", breakNeed: 2, xp: 90, kakal: 70, drops: [["boneChip", 1]],
+  en("mazeGuardian", "Maze Guardian", "brute", { boss: true, pay: 3.2, hpMult: 3, art: "boneBullCalf", vscale: 1.9, actions: 2, immune: ["poison", "bleed"], breakType: "impact", breakNeed: 2, xp: 90, kakal: 70, drops: [["boneChip", 1]],
     intro: "The Maze's guardian lowers its horns!", bigEvery: 3, bigHit: 0.8, bigName: "Labyrinth Charge", bigSingle: 1,
     ab: [{ n: "Gore", p: 0.62, w: 5 }, { n: "Horn Sweep", p: 0.34, aoe: 1, w: 2 }, { n: "Bellow", p: 0.3, k: "spell", db: ["spd", -0.25, 2], aoe: 1, w: 1 }] });
   // --- bosses ---
   en("raidOptioKarvan", "Raid Optio Karvan", "human", {
-    boss: true, hpMult: 3.2, actions: 2, breakType: "impact", breakNeed: 2, coverBy: "raidShieldbearer", xp: 70, kakal: 60, drops: [["G16", 1]],
+    boss: true, pay: 3.2, hpMult: 3.2, actions: 2, breakType: "impact", breakNeed: 2, coverBy: "raidShieldbearer", xp: 70, kakal: 60, drops: [["G16", 1]],
     intro: "An officer steps out from behind a wall of tower shields. \"Take the scholar's pets alive!\"",
     bigEvery: 4, bigHit: 0.8, bigName: "Legion Charge",
     ab: [{ n: "Gladius Strike", p: 0.85, w: 4 }, { n: "Shield Bash", p: 0.65, db: ["spd", -0.25, 2], w: 2 }, { n: "Rally Cry", ally: ["atk", 0.2, 3], w: 2, if: "hasAlly" }],
   });
   en("duneBearer", "The Dune Bearer", "brute", {
-    boss: true, hpMult: 8, actions: 2, breakType: "impact", breakNeed: 2, xp: 220, kakal: 150, frontShield: 0.25, drops: [["G17", 1]],
+    boss: true, pay: 10, hpMult: 8, actions: 2, breakType: "impact", breakNeed: 2, xp: 220, kakal: 150, frontShield: 0.25, drops: [["G17", 1]],
     bigEvery: 3, bigHit: 0.68, bigName: "Sky-Stone Drop",
     intro: "The sand rises. An ancient giant stands up, a cracked sky-stone strapped to its back.",
     ab: [{ n: "Crush", p: 0.48, w: 7 }, { n: "Sand Sweep", p: 0.296, aoe: 1, w: 3 }],
@@ -873,16 +1226,80 @@
   function makeEnemy(id, level, tag) {
     const d = ENEMIES[id];
     const u = { id, side: "e", name: d.name + (tag || ""), art: d.art || id, level, stats: spread(ENEMY_PROFILES[d.profile], BASE_TOTAL + POINTS_PER_LEVEL * (level - 1)), mp: d.mp || 0, maxMp: d.mp || 0, buffs: [], st: {}, alive: true,
-      broken: 0, breakPts: 0, breakHitRound: -9, boss: !!d.boss, human: HUMAN_IDS.includes(id), phases: d.phases ? d.phases.map(p => ({ ...p })) : null, phaseNo: 1 };
-    ["actions", "hpMult", "breakType", "breakNeed", "frontShield", "bigEvery", "bigHit", "bigName", "bigSingle", "pr", "swarm", "reflect", "coverBy", "ab", "open", "sr", "intro", "vscale", "vtint"].forEach(k => d[k] !== undefined && (u[k] = d[k]));
+      broken: 0, breakPts: 0, breakHitRound: -9, boss: !!d.boss, human: HUMAN_IDS.includes(id) || !!d.human, phases: d.phases ? d.phases.map(p => ({ ...p })) : null, phaseNo: 1 };
+    ["actions", "hpMult", "breakType", "breakNeed", "frontShield", "bigEvery", "bigHit", "bigName", "bigSingle", "pr", "swarm", "reflect", "coverBy", "ab", "open", "sr", "intro", "vscale", "vtint",
+      "grow", "riseWhile", "riseMax", "riseAfter", "riseFrac", "dieWith", "passive", "passiveName", "element", "general", "collar", "slot", "personal", "partOf", "titan", "legend", "sig", "arenaFx", "guards", "airMult", "shellMult", "tollEvery", "rootsMax"].forEach(k => d[k] !== undefined && (u[k] = d[k]));
+    if (d.hooks) u.hooks = d.hooks.slice();
     u.rs = Object.assign({}, d.rs); u.immune = d.immune ? d.immune.slice() : [];
     if (u.breakType && u.breakNeed === undefined) u.breakNeed = 1;
     if (u.boss) { u.dbm = 0.7; }
+    { const bm = u.boss && !u.general && Core.BOSS_META && Core.BOSS_META[id]; u.dmgMult = +(dmgAt(u.general ? DMG.gen : u.boss ? DMG.boss : DMG.field, level) * ((bm && DMG.kind[bm.kind]) || 1) * (DMG.byId[id] || 1)).toFixed(3); }
     u.maxHp = maxHpOf(u.stats, level, u.hpMult); u.hp = u.maxHp;
     u.xp = d.xp !== undefined ? d.xp : Math.round((4 + 2.2 * level) * (0.5 + d.hpMult) * (d.xpMult || 1));
     u.kakal = d.kakal !== undefined ? d.kakal : Math.round(u.xp * 0.7); u.gold = u.kakal; u.drops = d.drops || [];
+    if (d.xpAbs !== undefined) u.xpAbs = d.xpAbs; if (d.goldAbs !== undefined) u.goldAbs = d.goldAbs;
+    if (d.xp === undefined && d.xpAbs === undefined && !d.legacy) { const f = (0.5 + d.hpMult) / 1.125 * (d.xpMult || 1); u.xpAbs = Math.round(fightXpBase(level) * f); if (level > 10) u.goldAbs = d.kakal !== undefined ? Math.round(d.kakal * level / 2) : Math.round(goldBase(level) * f); }   // BALANCE 2026-10-31: levels 1-10 now pay through the same curve (gold keeps the M1 formula)
+    if (d.pay !== undefined && d.xpAbs === undefined) u.xpAbs = Math.round(fightXpBase(level) * d.pay);   // M1 bosses: XP = pay x an average enemy of that level
     return u;
   }
+
+  // ---------- creature generals (RULES-BOSS) ----------
+  // Core.makeGeneral(creatureId, level, { slot, hpMult, soldiers }) -> one enemy unit: a collared creature of an unchosen pack. 2 actions, a telegraphed big move every 3 rounds,
+  // style abilities + its personal move as a signature, a style break (GEN_BREAK), HP 3x a field enemy. u.general = true, u.collar = true (the arena draws the harvesting collar),
+  // u.slot = "S7"..., u.art = the creature id, u.element, u.style. It is never recruitable. Win = collar breaks (Story handles the scene).
+  const GEN_BREAK = {
+    minotaur: ["impact", 2, "guard"], colossus: ["impact", 3, "guard"], harpy: ["slow", 2, "wings"], hydra: ["react", 2, "heads"], phoenix: ["st_any", 2, "flame"],
+    gorgon: ["st_petrify", 1, "gaze"], dragon: ["st_wet", 2, "fire"], leviathan: ["st_wet", 2, "tide"],
+  };
+  const GEN_AB = {   // [name, power, kind, extras]; the creature's element is the "el" of its spells
+    minotaur: [["Gore", 0.62, "phys", { w: 5 }], ["Horn Sweep", 0.34, "phys", { aoe: 1, w: 2 }], ["Bellow", 0.3, "spell", { db: ["spd", -0.25, 2], aoe: 1, w: 1 }]],
+    colossus: [["Stone Fist", 0.66, "phys", { w: 5 }], ["Stone Guard", 0, "phys", { self: ["dr", 0.3, 1], w: 2 }], ["Quake", 0.3, "phys", { aoe: 1, w: 2 }]],
+    harpy: [["Talon Rake", 0.5, "phys", { st: ["bleed", 1, 0.5], w: 5 }], ["Feather Storm", 0.28, "phys", { aoe: 1, w: 2 }], ["Gale Screech", 0.3, "spell", { db: ["spd", -0.25, 2], aoe: 1, w: 1 }]],
+    hydra: [["Venom Bite", 0.55, "phys", { st: ["poison", 1, 0.7], w: 5 }], ["Acid Spit", 0.5, "spell", { st: ["burn", 1, 0.5], w: 3 }], ["Many Heads", 0.3, "spell", { aoe: 1, st: ["poison", 1, 0.5], w: 2 }]],
+    phoenix: [["Ember Peck", 0.55, "spell", { st: ["burn", 1, 0.5], w: 5 }], ["Mending Flame", 0, "spell", { healSelf: 0.12, w: 2, if: "hp<0.7" }], ["Sunburst", 0.3, "spell", { aoe: 1, w: 2 }]],
+    gorgon: [["Serpent Lash", 0.55, "phys", { st: ["bleed", 1, 0.4], w: 5 }], ["Hiss", 0.25, "spell", { db: ["def", -0.2, 2], aoe: 1, w: 2 }], ["Stone Gaze", 0.4, "spell", { st: ["petrify", 1, 0.45], w: 3 }]],
+    dragon: [["Claw", 0.5, "phys", { w: 3 }], ["Elemental Breath", 0.6, "spell", { w: 5 }], ["Wide Breath", 0.3, "spell", { aoe: 1, w: 2 }]],
+    leviathan: [["Tail Slap", 0.62, "phys", { w: 5 }], ["Undertow", 0.4, "spell", { db: ["spd", -0.25, 2], st: ["wet", 1, 0.6], w: 3 }], ["Surge", 0.3, "spell", { aoe: 1, st: ["wet", 1, 0.5], w: 2 }]],
+  };
+  const GEN_HP = 5, GEN_P = 1.5;   // tuned with test-core.js generals: 2-3.5 min, a real risk without good play
+  const GEN_BIG = { minotaur: "Labyrinth Charge", colossus: "Mountain Fall", harpy: "Diving Strike", hydra: "Many-Headed Strike", phoenix: "Sunfire", gorgon: "Stone Stare", dragon: "Dragon Storm", leviathan: "Tidal Wave" };
+  function makeGeneral(creatureId, level, o) {
+    o = o || {}; const c = CREATURES[creatureId]; if (!c) throw new Error("makeGeneral: unknown creature " + creatureId);
+    const gid = "gen_" + creatureId, br = GEN_BREAK[c.style];
+    const prof = {}; STATS.forEach(k => (prof[k] = (STYLES[c.style].w[k] || 0.1) * ((c.t && c.t[k]) || 1))); prof.hp = Math.max(prof.hp, 2.4);
+    ENEMY_PROFILES[gid] = prof;
+    const ab = GEN_AB[c.style].map(([n, p, k, x]) => Object.assign({ n, k, el: k === "spell" ? c.element : undefined }, p ? { p: +(p * GEN_P).toFixed(3) } : {}, x));
+    const pm = MOVES[c.personal];
+    if (pm) ab.push({ n: pm.name, p: +(0.7 * GEN_P).toFixed(3), k: c.style === "minotaur" || c.style === "harpy" || c.style === "colossus" ? "phys" : "spell", el: c.element, w: 2, if: "every:2" });
+    const d = { id: gid, name: c.name, art: creatureId, profile: gid, boss: true, general: true, collar: true, slot: o.slot || null, element: c.element, style: c.style, personal: c.personal,
+      hpMult: o.hpMult || GEN_HP * ({ colossus: 0.72, phoenix: 0.8, leviathan: 0.9 }[c.style] || 1), actions: 2, breakType: br[0], breakNeed: br[1], rs: { [c.element]: 0.25 }, bigEvery: 3, bigHit: 0.7 * GEN_P, bigName: GEN_BIG[c.style], ab, drops: [],
+      intro: c.name + ", collared and snarling, blocks the way.", xp: o.xp, kakal: o.kakal };
+    if (c.style === "phoenix") { d.passive = "ashes"; d.passiveName = "From the Ashes"; }
+    if (c.style === "colossus") d.frontShield = 0.2;
+    ENEMIES[gid] = Object.assign({ id: gid }, d);
+    const u = makeEnemy(gid, level, "");
+    if (o.xp === undefined) { u.xpAbs = Math.round(fightXpBase(level) * 3.2); u.goldAbs = Math.round(goldBase(level) * 3.2); } else { u.xpAbs = o.xp; u.goldAbs = o.kakal !== undefined ? o.kakal : Math.round(o.xp * 0.7); }
+    u.dmgMult = +(dmgAt(DMG.gen, level) * (DMG.genStyle[c.style] || 1) * (DMG.bySlot[o.slot] || 1)).toFixed(3);
+    u.genStyle = c.style; u.moveName = pm ? pm.name : null; u.styleName = c.styleName; u.breakHint = br[2];
+    return u;
+  }
+  // ---------- XP and money curve (RULES-BOSS) ----------
+  // Levels 1-10 keep the M1 formula (xp = e.xp * level / 2 per enemy, see fightXp). From level 11 a default enemy carries `xpAbs` / `goldAbs` (absolute pay), so that an average
+  // field enemy (hpMult 0.625) is worth 1/N of a level: N = 2.2 enemies at L10 (M1 feel), rising to 8 at L30 and 10 at L70+ (about 8-10 fights per level at 1.5 enemies a fight,
+  // plus quests and bosses). Bosses set `xpAbs` themselves (generals 3.2 average enemies, chapter ends 8-10, Titans 6-8).
+  // BALANCE 2026-10-31: points [level, enemies per level] (linear in between). Levels 3-10 slowed down for the bigger chapter 1 (Danny reached L10 before chapter 2); 10-30 starts at 4, not 2.2.
+  const XPN = [[2, 2.9], [3, 16], [5, 22], [6, 22], [7, 16], [10, 16], [12, 12], [99, 12]];   // 2026-10-31 run 3: chapter 1 (3x bigger, about 90 fights) 3 -> 6, chapter 2 (about 45 fights) 6 -> 10; old curve: 2.2 flat to L10   // was 2.2 at L10 rising to 8 at L30 and 10 at L70; 12 flat = about 7-8 fights per level at 1.5 enemies a fight
+  const enemiesPerLevel = L => { if (L <= XPN[0][0]) return XPN[0][1]; for (let i = 1; i < XPN.length; i++) if (L <= XPN[i][0]) { const a = XPN[i - 1], b = XPN[i]; return a[1] + (b[1] - a[1]) * (L - a[0]) / (b[0] - a[0]); } return 10; };
+  // XP falloff by level gap (BALANCE 2026-10-31): an enemy below the party's level pays 15% less per level down to a floor of 10%, one above pays 5% more per level up to +30%. Bosses follow the same rule.
+  const XPG = { down: 0.15, floor: 0.10, up: 0.05, upMax: 0.30 };
+  const xpGap = (enemyLv, partyLv) => { const g = enemyLv - partyLv; return g < 0 ? Math.max(XPG.floor, 1 + XPG.down * g) : Math.min(1 + XPG.upMax, 1 + XPG.up * g); };
+  const fightXpBase = level => Math.round(xpToNext(level) / enemiesPerLevel(level));
+  const ECON_M = [[10, 40], [14, 55], [19, 70], [25, 90], [35, 115], [40, 135], [50, 170], [64, 230], [70, 260], [85, 350]];   // ECONOMY.md: money per fight by level
+  function econM(L) { if (L <= ECON_M[0][0]) return ECON_M[0][1]; for (let i = 1; i < ECON_M.length; i++) if (L <= ECON_M[i][0]) { const a = ECON_M[i - 1], b = ECON_M[i]; return a[1] + (b[1] - a[1]) * (L - a[0]) / (b[0] - a[0]); } return ECON_M[ECON_M.length - 1][1]; }
+  const goldBase = level => Math.round(82 * econM(level) / 40);   // money of one average enemy (82 = what the M1 formula pays at L10)
+  // total XP / kakal of a fight (used by Flow.victory); an enemy with xpAbs/goldAbs pays that, others pay the M1 formula
+  const fightXp = (foes, partyLv) => foes.reduce((s, e) => s + Math.round((e.xpAbs !== undefined ? e.xpAbs : Math.round((e.xp || 6) * e.level / 2)) * (partyLv ? xpGap(e.level, partyLv) : 1)), 0);   // partyLv (optional): XP falloff by level gap
+  const fightGold = foes => foes.reduce((s, e) => s + (e.goldAbs !== undefined ? e.goldAbs : Math.round((e.gold || 4) * e.level / 2)), 0);
 
   // ---------- battle context ----------
   function newBattle(party, foes) {
@@ -890,22 +1307,28 @@
       p.mp = Math.floor(p.stats.foc / 10); p.buffs = []; p.st = {}; p.counter = false; p.rise = false; p.ashesUsed = false; p.stoneSkin = 0; p.tide = 0; p.alive = p.hp > 0;
       p.attune = null; p.moodEl = null; p.unheard = false; p.diveReady = false; p.gallop = null; p.runes = null; p.grudge = null; p.ablaze = 0; p.sun = null; p.tails = 0; p.rooted = 0; p.hitsTurn = 0; p.loseAct = 0; p.maxMp = STYLES[p.style].passive === "highWater" ? 15 : 10;
       p.mp = Math.min(p.mp, p.maxMp); p.lastMove = p.lastMove || null; p.noBuff = 0; p.lastEl = null; p.gcIdx = 0; p.usedItem = false; p.moss = 0; p.omen = null; p.notes = 0; p.shave = false; p.terrorOn = 0; p.endedTurn = false;
-      p.fxs = {}; p.fxTurns = 0; p.spellsTurn = 0; p.opening = 0; p.spellBonus = 0; p.attuneBonus = 0;
+      p.held = null; p.psyche = 0; p.fxs = {}; p.fxTurns = 0; p.spellsTurn = 0; p.opening = 0; p.spellBonus = 0; p.attuneBonus = 0;
+      p.tideMax = 5; p.momBonus = 0; p.repBonus = 0; p.danceBonus = 0; p.moveNo = 0; p.inoc = null; p.keepTide = 0; p.hurtSince = false; p.calm = false;
+      if (p.fx) gearStart(p);   // set bonuses that act at the start of a fight (max MP, Tide, round-1 Speed)
     });
     foes.forEach(f => { f.st = f.st || {}; f.endedTurn = false; f.loseAct = 0; });
-    const ctx = { party, foes, round: 0, telegraph: null, ev: [], order: null, hearth: {}, team: u => (u.side === "p" ? party : foes), opp: u => (u.side === "p" ? foes : party) };
+    const ctx = { party, foes, round: 0, telegraph: null, ev: [], order: null, hearth: {}, later: [], flood: null, team: u => (u.side === "p" ? party : foes), opp: u => (u.side === "p" ? foes : party) };
+    foes.forEach(f => { if (f.hooks && f.alive) hookRun(f, "start", ctx, f); });
+    party.forEach(p => { if (p.evo && EVO.start) EVO.start(ctx, p); });   // evolution traits that act at the start of a fight
     foes.forEach(f => { if (f.open && f.alive) execAb(ctx, f, f.open, party.filter(p => p.alive), false); });
     return ctx;
   }
   function turnOrder(ctx) {
     ctx.foes.forEach(f => (f.chargedThisRound = false));
-    ctx.order = [...ctx.party, ...ctx.foes].filter(u => u.alive).sort((a, b) => eff(b, "spd") - eff(a, "spd") || rnd() - 0.5);
+    const first = u => (ctx.round <= 1 && fxl(u, "firstOut") >= 2 ? 1 : 0);   // gear: First Out (full set) acts first in round 1, ties between such creatures go by Speed
+    ctx.order = [...ctx.party, ...ctx.foes].filter(u => u.alive).sort((a, b) => first(b) - first(a) || eff(b, "spd") - eff(a, "spd") || rnd() - 0.5);
     return ctx.order;
   }
   // called once at the start of every unit's turn: expires "until my next turn" effects, runs start-of-turn effects, returns the number of actions
   function actionsFor(ctx, u) {
     if (!u.alive) return 0;
     u.actedRound = ctx.round; u.endedTurn = false; u.hitsTurn = 0; u.spellsTurn = 0; u.fxTurns = (u.fxTurns || 0) + 1; if (u.fxs) u.fxs.deadTurn = 0;
+    if (u.fx) { u.calm = u.fxTurns > 1 && !u.hurtSince; u.hurtSince = false; }   // gear: Unseen Retreat (no damage taken since the last turn)
     if (u.fx && fxl(u, "cleansing") && (fxl(u, "cleansing") >= 2 || u.fxTurns % 2 === 1)) {
       const k = DOT_CLEANSE.filter(x => u.st[x]).sort((a, b) => (u.st[b].n || 1) - (u.st[a].n || 1))[0];
       if (k) { delete u.st[k]; ctx.ev.push({ t: "cleanse", tgt: u, type: k }); }
@@ -918,22 +1341,33 @@
       u.sun = null; u.tails = 0; u.loseAct = 0; u.endedTurn = true;
       return 0;
     }
+    if (u.side === "e" && u.grow) {   // stacking self-buff: grow = [stat, valuePerStack, maxStacks]
+      u.growN = Math.min(u.grow[2] || 99, (u.growN || 0) + 1); addBuff(u, u.grow[0], u.grow[1] * u.growN, 99, { force: 1 });
+      ctx.ev.push({ t: "buff", tgt: u, stat: u.grow[0], val: u.grow[1] * u.growN });
+    }
+    if (u.held) {   // pinned by a boss: loses its actions until the holder is broken, stunned, dead or the hold runs out
+      const h = u.held;
+      if (!h.by || !h.by.alive || h.by.broken || h.by.st.stun || h.by.st.freeze || h.t <= 0) { u.held = null; ctx.ev.push({ t: "say", text: u.name + " breaks free!" }); }
+      else { h.t--; ctx.ev.push({ t: "say", text: u.name + " is held fast and cannot act!" }); u.endedTurn = true; return 0; }
+    }
     if (hasBuff(u, "swell")) gainTide(ctx, u, 1);
-    if (u.sun && u.sun.left > 0) { const pct = [0.05, 0.1, 0.15][u.sun.n] || 0.15; u.sun.n++; u.sun.left--; ctx.team(u).forEach(a => a.alive && healFlat(ctx, a, Math.round(a.maxHp * pct), { silent: 1 })); if (!u.sun.left) u.sun = null; }
-    const hearthOwner = ctx.hearth[u.side]; if (hearthOwner && hearthOwner.alive) healFlat(ctx, u, Math.round(u.maxHp * 0.03), { silent: 1 });
+    if (u.sun && u.sun.left > 0) { const pct = [0.05, 0.1, 0.15][u.sun.n] || 0.15; u.sun.n++; u.sun.left--; ctx.team(u).forEach(a => a.alive && healFlat(ctx, a, Math.round(a.maxHp * pct), { silent: 1, src: u })); if (!u.sun.left) u.sun = null; }
+    const hearthOwner = ctx.hearth[u.side]; if (hearthOwner && hearthOwner.alive) healFlat(ctx, u, Math.round(u.maxHp * 0.03), { silent: 1, src: hearthOwner });
     if (u.rooted > 0) healFlat(ctx, u, Math.round(u.maxHp * 0.05), { silent: 1 });
+    if (u.evo) EVO.turn(ctx, u);   // evolution traits that act at the start of its turn (healing, rally, cleansing)
     let n;
     if (u.side === "e") n = u.actions || 1;
-    else { const fastest = Math.max(1, ...ctx.foes.filter(f => f.alive).map(f => eff(f, "spd"))); n = 2 + (eff(u, "spd") >= 2 * fastest ? 1 : 0); }
+    else { const fastest = Math.max(1, ...ctx.foes.filter(f => f.alive).map(f => eff(f, "spd"))); n = 2 + (eff(u, "spd") >= 2 * fastest * (1 - fxv(u, "overtake", 0.1, 0.05)) ? 1 : 0); }   // the 3rd action needs 2x the fastest foe's Speed (1.8x / 1.9x with Overtake)
     if (u.st.shock && chance(0.12 * u.st.shock.n)) { n -= 1; ctx.ev.push({ t: "say", text: u.name + " is jolted and loses an action!" }); }
     if (u.loseAct) { n -= u.loseAct; u.loseAct = 0; ctx.ev.push({ t: "say", text: u.name + " loses an action." }); }
+    if (u.hooks) { const x = hookRun(u, "turn", ctx, u); if (typeof x === "number") n += x; }
     return Math.max(0, n);
   }
   function endTurn(ctx, u) {
     if (u.alive) {
       DOTS.forEach(d => u.alive && u.st[d] && tickOne(ctx, u, d));
       const hot = getBuff(u, "hot");
-      if (hot && u.alive) { const v = Math.min(u.maxHp - u.hp, hot.val); u.hp += v; if (v) ctx.ev.push({ t: "heal", tgt: u, v }); }
+      if (hot && u.alive) { const v = Math.min(u.maxHp - u.hp, hot.val); u.hp += v; if (v) ctx.ev.push({ t: "heal", tgt: u, v, hpAfter: u.hp }); }
       if (u.tails > 0 && u.alive) { u.tails--; for (let i = 0; i < 3; i++) { const low = ctx.team(u).filter(a => a.alive).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0]; if (low) heal(ctx, u, low, 0.5); } }
       if (u.ablaze > 0 && u.alive) { const v = Math.max(1, Math.round(u.maxHp * 0.03)); u.hp = Math.max(1, u.hp - v); ctx.ev.push({ t: "selfDmg", tgt: u, v }); }
       if (u.side === "e" && u.broken) { u.broken--; if (!u.broken) ctx.ev.push({ t: "say", text: u.name + " recovers from the break." }); }
@@ -942,6 +1376,7 @@
   }
   function endRound(ctx) {
     const all = ctx.party.concat(ctx.foes);
+    all.forEach(x => { if (x.inoc) x.inoc = null; });   // gear: Inoculation lasts until the end of the round
     all.forEach(x => {
       if (!x.alive) return;
       x.buffs.forEach(b => { if (b.turns < 50) b.turns--; }); x.buffs = x.buffs.filter(b => b.turns > 0);
@@ -950,11 +1385,31 @@
       if (x.noBuff > 0) x.noBuff--; if (x.shieldDown > 0) x.shieldDown--; if (x.moss > 0) x.moss--; if (x.rooted > 0) x.rooted--; if (x.terrorOn > 0) x.terrorOn--; if (x.ablaze > 0) x.ablaze--;
       if (x.notes > 0 && !x.notesBy) x.notes = 0;
       if (x.gallop) { x.gallop.t--; if (x.gallop.t <= 0) x.gallop = null; }
+      if (x.leech) { x.leech.t--; if (x.leech.t <= 0) x.leech = null; }
+      if (x.augur) { x.augur.t--; if (x.augur.t <= 0 || x.augur.n <= 0) x.augur = null; }
       if (x.grudge) { x.grudge.t--; if (x.grudge.t <= 0) x.grudge = null; }
       if (x.runes) { x.runes.t--; if (x.runes.t <= 0) { const n = x.runes.n; x.runes = null; if (n) { ctx.opp(x).filter(f => f.alive).forEach(f => damage(ctx, x, f, 0.5 * n, "phys", { aoe: true, noReact: 1 })); say(ctx, "The runes burst!"); } } }
       if (x.omen) { x.omen.t--; if (x.omen.t <= 0) { const o = x.omen; x.omen = null; say(ctx, "The omen comes true!"); for (let i = 0; i < 3; i++) DOTS.forEach(d => x.alive && x.st[d] && tickOne(ctx, x, d, "OMEN")); } }
     });
-    ctx.party.forEach(p => { if (p.rise) { p.rise = false; p.alive = true; p.hp = Math.round(p.maxHp * 0.25); p.st = {}; p.buffs = []; ctx.ev.push({ t: "revive", tgt: p, text: p.name + " rises from the ashes!" }); } });
+    if (ctx.flood && ctx.flood.t > 0) { ctx.flood.t--; ctx.foes.filter(f => f.alive).forEach(f => addStatus(ctx, ctx.flood.by, f, "wet", 1, { sure: 1 })); }   // Rising Flood
+    if (ctx.later && ctx.later.length) resolveLater(ctx);   // Ember Wish, Comet Call
+    ctx.party.forEach(p => { if (p.rise) {   // From the Ashes (gear: Longer Ember raises the HP, Ashen Mantle adds a shield, Salvage the Deep keeps Tide)
+      p.rise = false; p.alive = true; p.hp = Math.round(p.maxHp * ((p.fx && fxv(p, "longerEmber", 0.4, 0.33)) || 0.25)); p.st = {}; p.buffs = []; if (p.keepTide) { p.tide = p.keepTide; p.keepTide = 0; }
+      ctx.ev.push({ t: "revive", tgt: p, text: p.name + " rises from the ashes!" });
+      if (p.fx && fxl(p, "ashenMantle")) castShield(ctx, p, p, Math.round(p.maxHp * fxv(p, "ashenMantle", 0.15, 0.08)), 2);
+      if (p.evo) EVO.risen(ctx, p);   // evolution trait: rises with more HP and a shield
+    } });
+    ctx.foes.slice().forEach(f => {
+      if (f.pulling > 0) f.pulling--;
+      if (f.alive && f.hooks) hookRun(f, "round", ctx, f);
+      if (!f.alive && f.rise) {   // riseAgain: comes back some rounds after dying, only while the named ally is still alive
+        if (f.riseWhile && !ctx.foes.some(a => a.alive && a !== f && a.id === f.riseWhile)) { f.rise = false; return; }
+        if (f.riseIn > 0) { f.riseIn--; return; }
+        f.rise = false; f.alive = true; f.hp = Math.max(1, Math.round(f.maxHp * (f.riseFrac || 0.5))); f.st = {}; f.buffs = []; f.broken = 0; f.breakPts = 0; f.charging = null;
+        ctx.ev.push({ t: "revive", tgt: f, text: f.name + " rises again!" });
+      }
+    });
+    ctx.party.forEach(p => { if (p.held && (p.held.by && !p.held.by.alive)) p.held = null; });
     ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null;
   }
   const outcome = ctx => (!ctx.foes.some(f => f.alive) ? "win" : !ctx.party.some(p => p.alive) ? "lose" : null);
@@ -967,6 +1422,20 @@
       if (k === "first") return !e.usedFirst;
       if (k === "every") return ctx.round % (+v) === 0;
       if (k === "alone") return ctx.foes.filter(f => f.alive).length === 1;
+      if (k === "broken") return !!e.broken;
+      if (k === "!broken") return !e.broken;
+      if (k === "ally") return ctx.foes.some(f => f.alive && f !== e && f.id === v);
+      if (k === "noally") return !ctx.foes.some(f => f.alive && f !== e && f.id === v);
+      if (k === "deadAlly") return ctx.foes.some(f => !f.alive && f !== e && !f.summoned && !f.rise);
+      if (k === "nobodyHeld") return !ctx.party.some(p => p.alive && p.held && p.held.by === e);
+      if (k === "holding") return ctx.party.some(p => p.alive && p.held && p.held.by === e);
+      if (k === "marked") return ctx.party.some(p => p.alive && hasBuff(p, "marked"));
+      if (k === "nomarked") return !ctx.party.some(p => p.alive && hasBuff(p, "marked"));
+      if (k === "kids<") return (e.kids || []).filter(x => x.alive).length < +v && ctx.foes.filter(f => f.alive).length < 5;
+      if (k === "phase") return (e.phaseNo || 1) === +v;
+      if (k === "round>") return ctx.round > +v;
+      if (k === "hurtAlly") return ctx.foes.some(f => f.alive && f !== e && f.hp / f.maxHp < (+v || 0.6));
+      if (CONDS[k]) return !!CONDS[k](ctx, e, v);
       if (k === "hasAlly") return ctx.foes.some(f => f.alive && f !== e) && !e.rallied;
       if (k.startsWith("hp<")) return e.hp / e.maxHp < +k.slice(3);
       if (k.startsWith("hp>")) return e.hp / e.maxHp > +k.slice(3);
@@ -979,6 +1448,8 @@
     if (taunt.length && !a.aoe) t = pick(taunt);
     else if (a.tgt === "weak") t = targets.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp)[0];
     else if (a.tgt === "front") t = ctx.party.find(x => x.alive) || targets[0];
+    else if (a.tgt === "marked" && targets.some(x => hasBuff(x, "marked"))) t = pick(targets.filter(x => hasBuff(x, "marked")));
+    else if (a.tgt === "held" && targets.some(x => x.held)) t = pick(targets.filter(x => x.held));
     else if (a.tgt === "frail") t = targets.slice().sort((x, y) => eff(x, "def") - eff(y, "def"))[0];
     else if (a.tgt === "strong") t = targets.slice().sort((x, y) => eff(y, "atk") + eff(y, "pow") - eff(x, "atk") - eff(x, "pow"))[0];
     else {
@@ -994,8 +1465,8 @@
     const kind = a.k || "phys", el = a.el || null;
     const strong = !!(big || a.big);
     if (a.if === "hasAlly" || (a.if && a.if.includes("hasAlly"))) e.rallied = true;
-    let tgt = (a.p || a.db) && !a.aoe ? pickTarget(ctx, e, a, targets) : null;
-    ev.push({ t: "use", src: e, move: a.n, big: !!big, tgt: tgt || undefined, el, enemy: true });
+    let tgt = (a.p || a.db || a.hold || a.mark || a.steal) && !a.aoe ? pickTarget(ctx, e, a, targets) : null;
+    ev.push({ t: "use", src: e, move: a.n, big: !!big, tgt: tgt || undefined, el, enemy: true, ab: a });   // ab: the ability data, so src/fx-moves.js can tell area from single target, spell from physical ...
     if (e.terrorOn > 0 && strong) { const v = Math.max(1, Math.round(e.maxHp * 0.05)); e.hp = Math.max(1, e.hp - v); ev.push({ t: "selfDmg", tgt: e, v }); }
     if (a.self) hold(e, e, a.self[0], a.self[1]);
     if (a.ally) ctx.foes.filter(f => f.alive).forEach(f => { addBuff(f, a.ally[0], a.ally[1], a.ally[2], { force: 1 }); ev.push({ t: "buff", tgt: f, stat: a.ally[0], val: a.ally[1] }); });
@@ -1011,11 +1482,46 @@
         if (t.alive && a.db) debuff(ctx, e, t, a.db[0], a.db[1], a.db[2]);
       });
     } else if (a.db && tgt) debuff(ctx, e, tgt, a.db[0], a.db[1], a.db[2]);
+    if (e.alive) abExtras(ctx, e, a, tgt, targets, strong);
+    if (a.fx && EFFECTS[a.fx]) EFFECTS[a.fx](ctx, e, a, tgt, targets, strong);
+  }
+  // ability features beyond damage (RULES-BOSS): hold, steal, mark, pull, healAlly/healSelf/healAll, reviveAlly, summon, empower, cleanseSelf, shield
+  function abExtras(ctx, e, a, tgt, targets, big) {
+    const ev = ctx.ev, mates = ctx.foes.filter(f => f.alive && f !== e);
+    if (a.hold && tgt && tgt.alive && !tgt.held) { tgt.held = { by: e, t: a.hold === true ? 2 : a.hold }; ev.push({ t: "held", src: e, tgt }); say(ctx, e.name + " seizes " + tgt.name + "!"); }
+    if (a.steal && tgt && tgt.alive) {
+      const b = tgt.buffs.find(x => x.val > 0 && x.turns < 50 && x.type !== "taunt" && x.type !== "cover");
+      if (b) { tgt.buffs = tgt.buffs.filter(x => x !== b); addBuff(e, b.type, b.val, b.turns, { force: 1 }); ev.push({ t: "steal", src: e, tgt, stat: b.type }); say(ctx, e.name + " steals " + tgt.name + "'s boost!"); }
+      else if (tgt.mp > 0) { tgt.mp--; ev.push({ t: "steal", src: e, tgt, stat: "mp" }); say(ctx, e.name + " drains a spark of " + tgt.name + "'s energy."); }
+    }
+    if (a.mark && tgt && tgt.alive) { const v = a.mark === true ? 0.3 : a.mark; addBuff(tgt, "marked", v, a.markTurns || 3, { force: 1, by: e }); ev.push({ t: "mark", src: e, tgt, val: v }); say(ctx, e.name + " marks " + tgt.name + "!"); }
+    if (a.pull) { e.pulling = a.pull === true ? 2 : a.pull; ev.push({ t: "pull", src: e }); say(ctx, e.name + " draws every eye to itself!"); }
+    if (a.healSelf) healFlat(ctx, e, Math.round(e.maxHp * a.healSelf), { silent: 1 });
+    if (a.healAlly && mates.length) { const m = mates.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp)[0]; healFlat(ctx, m, Math.round(m.maxHp * a.healAlly), { silent: 1 }); }
+    if (a.healAll) ctx.foes.filter(f => f.alive).forEach(f => healFlat(ctx, f, Math.round(f.maxHp * a.healAll), { silent: 1 }));
+    if (a.reviveAlly && !e.revivedOnce) {
+      const dead = ctx.foes.find(f => !f.alive && f !== e && !f.summoned);
+      if (dead) { e.revivedOnce = true; revive(ctx, dead, a.reviveAlly === true ? 0.5 : a.reviveAlly); ev[ev.length - 1].text = e.name + " calls " + dead.name + " back!"; }
+    }
+    if (a.empower) { const m = mates.slice().sort((x, y) => eff(y, "atk") + eff(y, "pow") - eff(x, "atk") - eff(x, "pow"))[0] || e; addBuff(m, a.empower[0], a.empower[1], a.empower[2], { force: 1 }); ev.push({ t: "buff", tgt: m, stat: a.empower[0], val: a.empower[1] }); say(ctx, e.name + " empowers " + m.name + "!"); }
+    if (a.shield) { const sh = Math.round(e.maxHp * a.shield); addBuff(e, "shield", sh, a.shieldTurns || 3, { force: 1 }); ev.push({ t: "buff", tgt: e, stat: "shield", val: sh }); }
+    if (a.cleanseSelf) { Object.keys(e.st).forEach(k => delete e.st[k]); e.buffs = e.buffs.filter(b => b.val > 0); ev.push({ t: "say", text: e.name + " shakes off every ailment." }); }
+    if (a.summon) {
+      const ids = Array.isArray(a.summon) ? a.summon : [a.summon], max = a.summonMax || 3;
+      e.kids = (e.kids || []).filter(k => k.alive);
+      ids.forEach(id => {
+        if (!ENEMIES[id] || e.kids.length >= max || ctx.foes.filter(f => f.alive).length >= 5) return;
+        const same = ctx.foes.filter(f => f.id === id).length, u = makeEnemy(id, Math.max(1, e.level + (a.sumLv || 0)), same ? " " + ("ABCDEFGHIJKLMNOP"[same] || same + 1) : "");
+        u.summoned = true; u.xpAbs = 0; u.goldAbs = 0; u.xp = 0; u.kakal = 0; u.gold = 0; u.drops = []; u.endedTurn = true; u.actedRound = ctx.round; ctx.foes.push(u); e.kids.push(u);
+        ev.push({ t: "summon", src: e, unit: u }); say(ctx, e.name + " summons " + u.name + "!");
+      });
+    }
   }
   function enemyAct(ctx, e) {
     if (!e.alive || e.endedTurn) return;
     const targets = ctx.party.filter(f => f.alive);
     if (!targets.length) return;
+    if (e.hooks && hookRun(e, "act", ctx, e, targets) === true) return;   // a boss rule took the whole action
     if (e.charging) {
       const ab = e.charging; e.charging = null; ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null;
       execAb(ctx, e, ab, targets, true); return;
@@ -1042,6 +1548,14 @@
     if (itemId === "potion") healFlat(ctx, target, Math.round(target.maxHp * 0.25), { silent: 1 });
     else if (itemId === "antidote") cleanse(ctx, target, 0);
     else if (itemId === "ashenEmber") revive(ctx, target, 0.3);
+    else if (itemId === "tonic") { Object.keys(target.st).forEach(k => { delete target.st[k]; ctx.ev.push({ t: "cleanse", tgt: target, type: k }); }); target.buffs = target.buffs.filter(b => b.val >= 0); target.moss = 0; if (target.omen) target.omen = null; }
+    else if (itemId === "soulDew") { if (ctx.dewUsed) say(ctx, "The dew has already been spent this fight."); else { ctx.dewUsed = true; revive(ctx, target, 1); } }
+    else if (WARDS[itemId]) WARDS[itemId].forEach(el => addBuff(target, "ward_" + el, 0.25, 3, { force: 1 }));
+    else if (BOMBS[itemId] && target && target.alive) {   // thrown by a stand-in with mid-tier Power for the level, so any creature throws it equally well; src null for the status = no break credit
+      const [el, st, n] = BOMBS[itemId], L = Math.max(1, u.level), pow = spread(ENEMY_PROFILES.caster, BASE_TOTAL + POINTS_PER_LEVEL * (L - 1)).pow;
+      if (el) { const thrower = { side: u.side, name: u.name, level: L, stats: { atk: pow, pow, def: 1, res: 1, spd: 1, foc: 1, lck: 1, hp: 1 }, buffs: [], st: {}, alive: true }; damage(ctx, thrower, target, 0.8, "spell", { el, off: 1, noReact: 0 }); }
+      if (target.alive) addStatus(ctx, null, target, st, n, { sure: 1, off: 1 });
+    }
   }
   function usePotion(ctx, u, target) { useItem(ctx, u, "potion", target); }
 
@@ -1141,6 +1655,22 @@
     }
     return null;
   }
+  // the skill-book moves of chapters 6-11 and the post-game: one rule each, used by the Auto button and the harnesses (only when the creature has it in its off-style slot)
+  function autoSkill(ctx, u, S) {
+    const id = u.offMove; if (!id || !MOVES[id] || !MOVES[id].skill || !S.ok(id)) return null;
+    const { foe, lowest, avg, tele, team, foes } = S, frac = a => a.hp / a.maxHp, R = target => ({ move: id, target });
+    switch (id) {
+      case "kelpPoultice": return avg < 0.65 && team.filter(a => frac(a) < 0.7).length >= 2 ? R(u) : null;
+      case "chiselCrack": return team.length > 1 && (foe.boss || (foes.length === 1 && frac(foe) > 0.5)) && !foe.buffs.some(b => b.type === "def" && b.val < 0) ? R(foe) : null;
+      case "giltShield": { const t = (tele ? team : team.filter(a => frac(a) < 0.55)).filter(a => !hasBuff(a, "shield")).sort((a, b) => frac(a) - frac(b))[0]; return t ? R(t) : null; }
+      case "bitterRue": { const sick = team.find(a => DOT_CLEANSE.filter(k => a.st[k]).length + a.buffs.filter(b => b.val < 0 && b.type !== "sres").length >= 2 || (a.st.poison && a.st.poison.n >= 3) || (a.st.burn && a.st.burn.n >= 3)); return sick ? R(sick) : null; }
+      case "rootDraught": { const dry = team.filter(a => a !== u && a.mp <= 1 && a.maxMp - a.mp >= 3).sort((a, b) => a.mp - b.mp)[0]; return dry && u.mp >= 3 ? R(dry) : null; }
+      case "staticSnare": return tele ? { move: id, target: foes.find(f => f.charging) || foe } : null;
+      case "bannerDecoy": return tele && team.length > 1 && frac(u) > 0.7 && !team.some(a => hasBuff(a, "taunt")) ? R(u) : null;
+      case "lanternVigil": { const t = team.filter(a => !hasBuff(a, "endure") && frac(a) < 0.5).sort((a, b) => frac(a) - frac(b))[0]; return t && (foe.boss || tele) ? R(t) : null; }
+    }
+    return null;
+  }
   function autoChoice(ctx, u) {
     const mv = movesOf(u), foes = ctx.foes.filter(f => f.alive), team = ctx.party.filter(a => a.alive);
     const ok = id => mv.includes(id) && canUse(ctx, u, id);
@@ -1165,12 +1695,14 @@
       }
     }
     const pers = autoPersonal(ctx, u, S);
+    const skl = autoSkill(ctx, u, S); if (skl) return skl;   // the off-style skill-book move, when its moment has come
     switch (u.style) {
       case "phoenix": {
         const down = team.length < ctx.party.length ? ctx.party.find(a => !a.alive && !a.rise) : null;
         if (down && ok("rebirth")) return R("rebirth", down);
         if (down && ok("revive")) return R("revive", down);
         const lr = lowest.hp / lowest.maxHp;
+        if (team.length > 1 && u.hp / u.maxHp > 0.65 && team.every(a => a === u || a.hp / a.maxHp < 0.5) && ok("heartfireOffering")) return R("heartfireOffering", u);
         if (avg < 0.6 && ok("healWave")) return R("healWave", u);
         if (lr < 0.5 && pers && pers.move !== "silverLining") { /* personal heals below */ }
         if (lr < 0.55 && ok("silverLining")) return R("silverLining", lowest);
@@ -1180,6 +1712,9 @@
         if (dotted && ok("cleansingFlame")) return R("cleansingFlame", dotted);
         if (tele && ok("flameWard") && !hasBuff(lowest, "shield")) return R("flameWard", lowest);
         if (pers && ["nineTails", "sunAscending", "fallingDust", "lightTheHearth", "lamentOfThePod", "moonlitAntlers"].includes(pers.move)) return pers;
+        const wishFor = a => (ctx.later || []).some(L => L.kind === "wish" && L.tgt === a);
+        if (lr < 0.55 && !wishFor(lowest) && ok("emberWish")) return R("emberWish", lowest);
+        if (foe.boss && u.mp >= 4 && (ctx.veils || 0) < 2 && !team.some(a => hasBuff(a, "veil")) && foes.some(f => (f.ab || []).some(a => a.st || a.db || a.hold)) && ok("dawnVeil")) return R("dawnVeil", u);
         if (lr < 0.75 && !hasBuff(lowest, "hot") && ok("rejuvenate")) return R("rejuvenate", lowest);
         if (avg > 0.85 && u.mp >= 5 && ok("sunfire")) return R("sunfire", F("sunfire"));
         if (pers && pers.move === "sealedLetters") return pers;
@@ -1190,6 +1725,10 @@
         if (tele && ok("shieldWall") && !team.some(a => hasBuff(a, "dr"))) return R("shieldWall", u);
         if (tele && p2 && p2.move === "plantThePillar") return p2;
         const hurt = team.find(a => a !== u && a.hp / a.maxHp < 0.45);
+        if (u.hp / u.maxHp < 0.45 && !hasBuff(u, "endure") && ok("unbowed")) return R("unbowed", u);
+        const shaky = team.find(a => a !== u && a.hp / a.maxHp < 0.6 && !hasBuff(a, "shield"));
+        if (shaky && u.hp / u.maxHp > 0.65 && ok("idolStandIn")) return R("idolStandIn", shaky);
+        if (foes.length > 1 && !team.some(a => hasBuff(a, "thorns")) && ok("thornwall")) return R("thornwall", u);
         if (hurt && ok("bulwark") && !team.some(a => hasBuff(a, "cover"))) return R("bulwark", hurt);
         if (!hasBuff(u, "taunt") && ok("challenge") && (foe.boss || foes.length === 1) && team.length > 1) return R("challenge", u);
         if (p2 && ["erodingRune", "serpentSpout", "redHotBronze", "plantThePillar"].includes(p2.move) && u.mp >= 3) return p2;
@@ -1201,6 +1740,9 @@
         return R(basic, F(basic));
       }
       case "minotaur": {
+        const lowFoe = foes.filter(f => f.hp / f.maxHp <= 0.35).sort((a, b) => a.hp - b.hp)[0];
+        if (lowFoe && u.mp >= 3 && ok("decimate")) return R("decimate", lowFoe);
+        if ((foe.boss || foes.length > 1) && u.mp >= 3 && !team.some(a => buffVal(a, "atk") >= 0.2) && ok("hornStandard")) return R("hornStandard", u);
         if (foe.broken || (foes.length === 1 && foe.hp / foe.maxHp < 0.25)) {
           if (u.hp / u.maxHp > 0.6 && ok("reckless")) return R("reckless", foe);
           if (ok("hoofStomp")) return R("hoofStomp", foe);
@@ -1218,6 +1760,8 @@
       case "harpy": {
         if (tele && ok("dive") && !u.diveReady) return R("dive", u);
         if (u.diveReady && ok("featherVolley")) return R("featherVolley", foe);
+        if (foes.length > 1 && !foes.some(f => hasBuff(f, "spd")) && ok("scatterGale")) return R("scatterGale", u);
+        if (foe.boss && team.length > 1 && !foe.augur && u.mp >= 2 && ok("augurEye")) return R("augurEye", foe);
         if (foes.length > 1 && ok("cyclone")) return R("cyclone", u);
         const slowAlly = team.filter(a => a !== u && a.style !== "phoenix" && !hasBuff(a, "spd")).sort((a, b) => eff(a, "spd") - eff(b, "spd"))[0];
         if (slowAlly && ok("tailwind") && u.mp >= 4 && team.length > 2) return R("tailwind", slowAlly);
@@ -1232,7 +1776,10 @@
         const t = foe.boss || foes.length === 1 ? foe : weak;
         if (u.hp / u.maxHp < 0.5 && ok("regrow") && !hasBuff(u, "hot")) return R("regrow", u);
         if (foes.length > 1 && ok("plagueCloud") && foes.some(f => fresh(f, "poison"))) return R("plagueCloud", u);
+        if (foes.length > 1 && ok("spreadBlight")) { const src = foes.find(f => ["burn", "bleed", "poison"].some(d => f.st[d] && f.st[d].n >= 2) && foes.some(g => g !== f && ["burn", "bleed", "poison"].some(d => f.st[d] && !g.st[d]))); if (src) return R("spreadBlight", src); }
         if (t.st.bleed && t.st.bleed.n >= 3 && ok("rupture")) return R("rupture", t);
+        if (ok("hungryVine") && dotCount(t) >= 3 && !t.leech && lowest.hp / lowest.maxHp < 0.8) return R("hungryVine", t);
+        if (mv.includes("tripleFang") && ["bleed", "poison", "burn"].filter(s => fresh(t, s)).length >= 2) { if (ok("tripleFang")) return R("tripleFang", t); if (u.mp < 3) return R(basic, F(basic)); }   // save up for the three-status bite
         if (dotCount(t) >= 5 && ok("fester")) return R("fester", t);
         if (ok("corrode") && !hasBuff(t, "sres") && t.boss) return R("corrode", t);
         if (ok("searingBreath") && fresh(t, "burn")) return R("searingBreath", t);
@@ -1249,6 +1796,8 @@
         if (tele && ok("stoneGaze")) { const c = foes.find(f => f.charging) || t; return R("stoneGaze", c); }
         if (ok("shatterShield") && (t.frontShield && !t.broken && !t.shieldDown || t.buffs.some(b => b.type === "shield"))) return R("shatterShield", t);
         if (ok("curseOfStone") && t.boss && t.buffs.some(b => b.val > 0)) return R("curseOfStone", t);
+        if (ok("verdictOfStone") && t.boss && !hasBuff(t, "marked")) return R("verdictOfStone", t);
+        if (foes.length > 1 && !foes.every(f => hasBuff(f, "atk")) && ok("hissingChoir")) return R("hissingChoir", u);
         if (ok("venomMark") && !hasBuff(t, "res")) return R("venomMark", t);
         if (ok("hiss") && !hasBuff(t, "atk") && (t.boss || t.hp / t.maxHp > 0.5)) return R("hiss", t);
         if (ok("crackArmour") && !hasBuff(t, "def") && (t.boss || t.hp / t.maxHp > 0.5)) return R("crackArmour", t);
@@ -1260,8 +1809,12 @@
       }
       case "dragon": {
         const t = foe;
+        if (foes.length > 1 && foes.some(f => f.st.wet) && ok("stormchain")) return R("stormchain", t);
+        if (t.boss && u.mp >= 4 && !u.psyche && ok("stormGathering")) return R("stormGathering", u);
+        if (t.boss && u.mp >= 3 && t.hp / t.maxHp > 0.35 && !(ctx.later || []).some(L => L.kind === "comet") && ok("cometCall")) return R("cometCall", t);
         if (foes.length > 1 && ok("inferno") && u.mp >= 3) return R("inferno", u);
         if (foes.length > 1 && ok("blizzard") && u.mp >= 3) return R("blizzard", u);
+        if (foes.length > 1 && ok("stormchain")) return R("stormchain", t);
         const marks = (t.st.burn ? t.st.burn.n : 0) + (t.st.chill ? t.st.chill.n : 0) + (t.st.shock ? t.st.shock.n : 0) + (t.st.wet ? 1 : 0);
         if (marks >= 4 && ok("detonate")) return R("detonate", t);
         const wetOk = !(t.reflect && t.reflect.includes("shock"));
@@ -1281,6 +1834,9 @@
         const big = foes.slice().sort((a, b) => b.hp - a.hp)[0];
         const need = foes.length === 1 && foe.hp / foe.maxHp < 0.3 ? 2 : 3;
         if (tele && ok("braceDeep") && !hasBuff(u, "braceDeep")) return R("braceDeep", u);
+        if (avg < 0.55 && u.tide >= 2 && ok("ebbTide")) return R("ebbTide", u);
+        if ((foe.boss || foes.length > 1) && !(ctx.flood && ctx.flood.t > 0) && u.mp >= 4 && ctx.party.some(a => a !== u && a.alive && (a.element === "shock" || a.element === "ice" || a.offMove === "coldSnap")) && ok("risingFlood")) return R("risingFlood", u);
+        if (foe.boss && u.tide >= 3 && u.tide < 5 && u.mp >= 3 && ok("weightOfDeep")) return R("weightOfDeep", foe);
         if (foes.length > 1 && u.tide >= need && ok("tidalWave")) return R("tidalWave", u);
         if (u.tide >= need && ok("maelstrom")) return R("maelstrom", foe.boss ? foe : F("maelstrom"));
         if (u.tide >= 5 && ok("tidalWave")) return R("tidalWave", u);
@@ -1335,12 +1891,15 @@
   function statusList(u) {
     const out = Object.keys(u.st).map(k => ({ type: k, name: STATUS[k] ? STATUS[k].name : k, n: u.st[k].n, turns: u.st[k].t }));
     if (u.tide) out.push({ type: "tide", name: "Tide", n: u.tide });
-    u.buffs.forEach(b => { if (["wrathStore", "swell", "stunImmune", "hounds", "cover", "decoy", "antlers", "dust", "braceDeep", "counter", "redHot"].includes(b.type) || b.type.startsWith("ward_")) out.push({ type: b.type, name: b.type, n: 0, turns: b.turns < 50 ? b.turns : 0, buff: true }); else out.push({ type: b.type, name: b.type, n: 0, val: b.val, turns: b.turns < 50 ? b.turns : 0, buff: true }); });
+    u.buffs.forEach(b => { if (["wrathStore", "swell", "stunImmune", "hounds", "cover", "decoy", "antlers", "dust", "braceDeep", "counter", "redHot", "thorns", "endure", "veil"].includes(b.type) || b.type.startsWith("ward_")) out.push({ type: b.type, name: b.type, n: 0, turns: b.turns < 50 ? b.turns : 0, buff: true }); else out.push({ type: b.type, name: b.type, n: 0, val: b.val, turns: b.turns < 50 ? b.turns : 0, buff: true }); });
     return out;
   }
 
-  const Core = { STATS, STAT_NAMES, STYLES, STYLE_WEIGHTS, CREATURES, PACKS, LAB_EXTRAS, MOVES, STYLE_MOVES, ENEMIES, ENEMY_PROFILES, ENCOUNTERS, SKILLBOOK, ITEMS, MATERIALS, STATUS,
+  const Core = { DMG, PLAYER_FX: FX, STATS, STAT_NAMES, STYLES, STYLE_WEIGHTS, CREATURES, PACKS, LAB_EXTRAS, MOVES, STYLE_MOVES, ENEMIES, ENEMY_PROFILES, ENCOUNTERS, SKILLBOOK, ITEMS, MATERIALS, STATUS,
+    makeGeneral, GEN_BREAK, XPN, XPG, xpGap, fightXpBase, fightXp, fightGold, goldBase, enemiesPerLevel, itemOk, HOOKS, CONDS, EFFECTS, hookRun, abExtras, revive, healFlat, addBuff, addStatus, damage, debuff, say, die, defEnemy: en, encT: T,   // content files (src/rules/*.js) add enemies with Core.defEnemy(id, name, profile, o) and tables with Core.ENCOUNTERS[id] = [Core.encT(foes, weight, lo, hi), ...]
     makeCreature, makeEnemy, makeFoes, rollEncounter, rollEncounterSpec, karvanFight, rewards, movesOf, setOffMove, isOffStyle, mpCost, canUse, newBattle, useMove, useItem, usePotion, enemyAct,
-    turnOrder, actionsFor, endTurn, endRound, outcome, autoChoice, autoItem, focus, giveXp, spendPoint, xpToNext, eff, hasBuff, buffVal, maxHpOf, statusList, elemMult, spread };
+    turnOrder, actionsFor, endTurn, endRound, outcome, autoChoice, autoItem, focus, giveXp, spendPoint, xpToNext, eff, hasBuff, buffVal, maxHpOf, statusList, elemMult, spread,
+    EVO, EVOAPI: { gainTide, hold, countBreak, delayTurn, directHit, getBuff, cleanse, healFlat, addBuff, addStatus, debuff, say, die, pick, chance, clamp } };
+  Core.GEAR = { HEAL_MOVES, poisonMove, gearTideMax };   // for the party screen (set bonus requirements) and test-gear.js
   if (typeof module !== "undefined") module.exports = Core; else root.Core = Core;
 })(typeof window !== "undefined" ? window : globalThis);

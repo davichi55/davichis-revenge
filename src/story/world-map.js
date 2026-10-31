@@ -91,11 +91,11 @@
   S.chest.hollowLoreChest = async F => { if (F.f("c.hollow")) return false; F.set("c.hollow"); F.give("sunwater", 3); F.gold(60); await UI.say([["narr", "A builder chest with a rune on the lid. Inside: three flasks and a handful of old coins."]]); };
 
   // each D trigger fires once; these say when the story step is really finished (otherwise the trigger is given back)
-  S.done = {
+  S.done = Object.assign(S.done || {}, {   // (chapter files may have registered their own entries before this file runs)
     cellarTutorial: F => F.f("pro.l2"), undercroftDeep: F => F.f("pro.lessons"), packChoice: F => F.f("pro.packed"), raidStart: () => true,
     dunesArrival: F => F.f("ch1.start"), karvanAmbush: F => F.f("ci.karvan"), duskWhisperer: F => F.f("l1.done") || !F.f("dunes.dusk"),
     k1Cage: F => F.f("k1.done"), duneBearer: F => F.f("bear.done"), hollowDoor: F => F.f("hol.seen"), boatToIxcalo: F => F.f("m1.done"),
-  };
+  });
   // the shared rumour tables use town keys; the world uses these region ids
   S.townOf = { orun: "orun", sandpiper: "sandpiper", amberWells: "amber", saltgate: "saltgate" };
 })();

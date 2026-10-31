@@ -129,7 +129,7 @@ const UI = (() => {
         if (L.sfx && window.Audio && Audio.sfx) try { Audio.sfx(L.sfx); } catch (e) {}
       };
       const adv = () => { if (!done) { pos = full.length; ovl.querySelector(".tx").textContent = full; done = true; ovl.querySelector(".nx").style.display = ""; clearInterval(timer); } else next(); };
-      m.key = e => { if (["Enter", " ", "e", "E", "ArrowDown", "z", "Z"].includes(e.key)) adv(); };
+      m.key = e => { if (["Enter", " ", "e", "E", "ArrowDown", "z", "Z"].includes(e.key)) adv(); else if (e.key === "Escape" && opts.escSkips) finish(); };   // Cinema: Esc skips the rest of this dialogue
       ovl.addEventListener("pointerdown", adv);
       stack.push(m); next();
     });

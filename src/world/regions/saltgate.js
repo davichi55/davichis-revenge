@@ -11,8 +11,8 @@
       ["floor", R(1150, 300, 330, 56)], ["floor", R(1480, 270, 170, 120)], ["floor", R(1460, 610, 190, 120)], ["floor", R(1160, 640, 300, 56)], ["floor", R(1170, 900, 240, 56)], ["paved", R(1100, 150, 120, 900)],
       ["road", L([[0, 560], [200, 560]], 110)], ["wall", R(60, 90, 1100, 26)], ["wall", R(60, 1010, 1100, 26)], ["wall", R(60, 90, 26, 400)], ["wall", R(60, 650, 26, 386)],
     ],
-    entries: { start: { x: 190, y: 580, face: "right" }, from_basin: { x: 190, y: 580, face: "right" } },
-    exits: [{ rect: [40, 500, 60, 120], to: "amberBasin", entry: "from_saltgate", push: [1, 0] }],
+    entries: { start: { x: 190, y: 580, face: "right" }, from_basin: { x: 190, y: 580, face: "right" }, from_sea: { x: 1290, y: 930, face: "left" }, inn: { x: 470, y: 410, face: "down" } },
+    exits: [{ rect: [40, 500, 60, 120], to: "amberBasin", entry: "from_saltgate", push: [1, 0] }, { rect: [1350, 902, 56, 52], to: "weepingSea", entry: "from_saltgate", push: [-1, 0], floor: "floor", show: "ship" }],
     triggers: [{ id: "boatToIxcalo", rect: [1400, 290, 70, 76] }],
     props: [
       ["harborInn", 460, 300], ["customsHouse", 760, 260], ["dockWarehouse", 960, 420], ["harborHouse", 300, 780], ["harborHouse", 560, 800], ["harborHouse", 830, 820], ["harborHouse", 300, 220], ["harborHouse", 170, 900],
@@ -27,6 +27,7 @@
       { id: "merchant", art: "merchant", name: "Merchant", x: 640, y: 596 },
       { id: "customsOfficer", art: "npcLegionGuard", name: "Customs officer", x: 760, y: 312 },
       { id: "smuggler", art: "npcHooded", name: "Hooded man", x: 1330, y: 330 },
+      { id: "caravanMaster", art: "npcTrader", name: "Caravan master", x: 300, y: 590, show: ["ch5.start", "!ch5.orun"] },
       { id: "r1", art: "npcSailor", name: "Sailor", x: 1000, y: 580 },
       { id: "r2", art: "npcFisher", name: "Fisherman", x: 1250, y: 720 },
       { id: "r3", art: "npcDockhand", name: "Dockhand", x: 900, y: 880 },

@@ -20,7 +20,16 @@
     await UI.say([["narr", "Night in the Whisperglass Dunes. Behind you Orun burns gold against the stars. The glass sand hums under your boots, a thin high note, like a wet finger on a cup."]]);
     await F.banter("flee");
     F.music("raid");
-    await UI.say([["narr", "Torchlight on the ridge. Imperial raiders, spread out in a line, hunting for runaways."], ["soldier", "There! Beasts and a tin man! Take them alive if you can."]]);
+    await Cinema.stage(async c => {
+      const h = c.hero; c.tint("#301810", 0.25, 600);
+      [["r1", "raidShieldbearer", 300, -30], ["r2", "raidSlinger", 340, 25], ["r3", "raidTorchbearer", 380, -5]].forEach(([id, art, dx, dy], i) => c.actor(id, { art, x: h.x + dx + 160, y: h.y + dy, light: id === "r3" ? 110 : 0 }));
+      await c.say([["narr", "Torchlight on the ridge. Imperial raiders, spread out in a line, hunting for runaways."]]);
+      c.sfx("encounter"); c.fx("fire", h.x + 540, h.y - 5);
+      await Promise.all([c.walk("r1", h.x + 130, h.y - 30, 1300), c.walk("r2", h.x + 175, h.y + 25, 1400), c.walk("r3", h.x + 215, h.y - 5, 1500)]);
+      c.emote("r1", "!"); c.shake(2, 250);
+      await c.say([["soldier", "There! Beasts and a tin man! Take them alive if you can."]]);
+      ["r1", "r2", "r3"].forEach(id => c.remove(id));
+    });
     const res = await F.fight([F.mkEnemy("raidShieldbearer", 3, " A"), F.mkEnemy("raidSlinger", 3, " B")], { intro: "Imperial raiders cut you off!" });
     F.music("dunes");
     if (res === "win") await UI.say([["hero", "(Tower shields. The blows slide off them. Spells would bite deeper.)"], ["narr", "You note it in the Field Journal: Raid Shieldbearer, Raid Slinger."]]);
@@ -60,17 +69,26 @@
   S.trigger.karvan = async F => {
     if (F.f("ci.karvan")) return;
     F.music("raid");
-    await UI.say([
-      ["narr", "The far end of the cistern: a gate of green bronze, and in front of it a line of shields."],
-      ["karvan", "Halt. Optio Karvan, Ninth Cohort. You are Ithiel's apprentice. And that is his satchel."],
-      ["hero", "..."],
-      ["karvan", "No answer? There is a boy under that helm, is there not? Hand over the satchel and your beasts keep their teeth."],
-      ["hero", "No."],
-      ["karvan", "Shields up, then. We were told you would come this way."],
-      ["hero", "Told by whom?"],
-      ["karvan", "The road tells everyone everything. Shields!"],
-    ]);
+    await Cinema.stage(async c => {
+      const h = c.hero;
+      c.actor("k", { art: "raidOptioKarvan", x: h.x + 330, y: h.y, h: 84 });
+      c.actor("s1", { art: "raidShieldbearer", x: h.x + 300, y: h.y - 34 }); c.actor("s2", { art: "raidShieldbearer", x: h.x + 300, y: h.y + 34 });
+      await c.say([["narr", "The far end of the cistern: a gate of green bronze, and in front of it a line of shields."]]);
+      await Promise.all([c.walk("k", h.x + 200, h.y, 900), c.walk("s1", h.x + 180, h.y - 34, 900), c.walk("s2", h.x + 180, h.y + 34, 900)]);
+      await c.say([
+        ["karvan", "Halt. Optio Karvan, Ninth Cohort. You are Ithiel's apprentice. And that is his satchel."],
+        ["hero", "..."],
+        ["karvan", "No answer? There is a boy under that helm, is there not? Hand over the satchel and your beasts keep their teeth."],
+        ["hero", "No."],
+        ["karvan", "Shields up, then. We were told you would come this way."],
+        ["hero", "Told by whom?"],
+      ]);
+      c.emote("hero", "anger"); c.shake(3, 300); c.sfx("hitHeavy");
+      await c.say([["karvan", "The road tells everyone everything. Shields!"]]);
+      ["k", "s1", "s2"].forEach(id => c.remove(id));
+    });
     await F.banter("karvan");
+    await Cinema.boss({ id: "raidOptioKarvan", name: "Optio Karvan", title: "Ninth Cohort", bg: "cistern", music: "boss" });
     const res = await F.boss([F.mkEnemy("raidOptioKarvan", 6), F.mkEnemy("raidShieldbearer", 5, " A"), F.mkEnemy("raidShieldbearer", 5, " B")], { intro: "Optio Karvan raises his shield wall!", music: "boss" });
     if (res !== "win") return;
     F.set("ci.karvan"); F.giveGear("G16", 3); G.ch = 2; F.questDone("m_cistern");

@@ -365,5 +365,2675 @@
   "scale": 1.2,
   "kind": "boss",
   "human": true
+ },
+ "mudbackBasilisk": {
+  "file": "models/mudbackBasilisk.glb",
+  "yaw": 0.785,
+  "scale": 0.85,
+  "kind": "enemy",
+  "aspect": 1.939
+ },
+ "riverSiren": {
+  "file": "models/riverSiren.glb",
+  "yaw": 4.014,
+  "scale": 1.05,
+  "kind": "enemy",
+  "aspect": 0.629
+ },
+ "reedmoth": {
+  "file": "models/reedmoth.glb",
+  "yaw": 1.527,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.548
+ },
+ "bogTrollPup": {
+  "file": "models/bogTrollPup.glb",
+  "yaw": 1.571,
+  "scale": 0.85,
+  "kind": "enemy",
+  "aspect": 1.746
+ },
+ "heronWraith": {
+  "file": "models/heronWraith.glb",
+  "yaw": 0,
+  "scale": 1.15,
+  "kind": "enemy",
+  "aspect": 0.708
+ },
+ "pearlBackedSnapper": {
+  "file": "models/pearlBackedSnapper.glb",
+  "yaw": 1.571,
+  "scale": 0.8,
+  "kind": "enemy",
+  "aspect": 2.167
+ },
+ "tideHag": {
+  "file": "models/tideHag.glb",
+  "yaw": 1.658,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.891
+ },
+ "glowCrab": {
+  "file": "models/glowCrab.glb",
+  "yaw": 1.571,
+  "scale": 0.75,
+  "kind": "enemy",
+  "aspect": 1.622
+ },
+ "mangroveImp": {
+  "file": "models/mangroveImp.glb",
+  "yaw": 1.571,
+  "scale": 0.7,
+  "kind": "enemy",
+  "aspect": 0.765
+ },
+ "whisperfish": {
+  "file": "models/whisperfish.glb",
+  "yaw": 1.571,
+  "scale": 0.85,
+  "kind": "enemy",
+  "aspect": 1.242
+ },
+ "gildedTapirSprite": {
+  "file": "models/gildedTapirSprite.glb",
+  "yaw": 0,
+  "scale": 1.05,
+  "kind": "enemy",
+  "aspect": 1.518
+ },
+ "vineChimera": {
+  "file": "models/vineChimera.glb",
+  "yaw": 6.196,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.298
+ },
+ "jungleHarpy": {
+  "file": "models/jungleHarpy.glb",
+  "yaw": 0,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.086
+ },
+ "sporeSatyr": {
+  "file": "models/sporeSatyr.glb",
+  "yaw": 1.527,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.584
+ },
+ "emberToucan": {
+  "file": "models/emberToucan.glb",
+  "yaw": 0,
+  "scale": 0.85,
+  "kind": "enemy",
+  "aspect": 1.247
+ },
+ "stranglerNaga": {
+  "file": "models/stranglerNaga.glb",
+  "yaw": 0.524,
+  "scale": 1.05,
+  "kind": "enemy",
+  "aspect": 1.355
+ },
+ "kapokTroll": {
+  "file": "models/kapokTroll.glb",
+  "yaw": 1.571,
+  "scale": 1.3,
+  "kind": "enemy",
+  "aspect": 0.598
+ },
+ "legionShieldbearer": {
+  "file": "models/legionShieldbearer.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.742
+ },
+ "legionSpearman": {
+  "file": "models/legionSpearman.glb",
+  "yaw": 1.571,
+  "scale": 0.908,
+  "kind": "human",
+  "aspect": 1.367
+ },
+ "legionArcher": {
+  "file": "models/legionArcher.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.794
+ },
+ "legionOptio": {
+  "file": "models/legionOptio.glb",
+  "yaw": 1.571,
+  "scale": 1.05,
+  "kind": "human",
+  "aspect": 0.308
+ },
+ "jaguarCohortElite": {
+  "file": "models/jaguarCohortElite.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.731
+ },
+ "featherWyvern": {
+  "file": "models/featherWyvern.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.16
+ },
+ "lanternBatKnight": {
+  "file": "models/lanternBatKnight.glb",
+  "yaw": 0.262,
+  "scale": 0.9,
+  "kind": "enemy",
+  "aspect": 1.004
+ },
+ "ropeSpiderMaiden": {
+  "file": "models/ropeSpiderMaiden.glb",
+  "yaw": 1.527,
+  "scale": 1.116,
+  "kind": "enemy",
+  "aspect": 1.585
+ },
+ "orchidDryad": {
+  "file": "models/orchidDryad.glb",
+  "yaw": 4.8,
+  "scale": 1.05,
+  "kind": "enemy",
+  "aspect": 0.367
+ },
+ "cloudRam": {
+  "file": "models/cloudRam.glb",
+  "yaw": 1.265,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.034
+ },
+ "skyEel": {
+  "file": "models/skyEel.glb",
+  "yaw": 4.8,
+  "scale": 0.9,
+  "kind": "enemy",
+  "aspect": 0.797
+ },
+ "legionMarksman": {
+  "file": "models/legionMarksman.glb",
+  "yaw": 0.96,
+  "scale": 0.762,
+  "kind": "human",
+  "aspect": 1.629
+ },
+ "sporerootCrawler": {
+  "file": "models/sporerootCrawler.glb",
+  "yaw": 4.669,
+  "scale": 0.8,
+  "kind": "enemy",
+  "aspect": 1.876
+ },
+ "gloomMushroomShaman": {
+  "file": "models/gloomMushroomShaman.glb",
+  "yaw": 0.698,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.962
+ },
+ "caveGargoyle": {
+  "file": "models/caveGargoyle.glb",
+  "yaw": 0.698,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.046
+ },
+ "fungusTroll": {
+  "file": "models/fungusTroll.glb",
+  "yaw": 1.571,
+  "scale": 1.3,
+  "kind": "enemy",
+  "aspect": 0.602
+ },
+ "drippingMimic": {
+  "file": "models/drippingMimic.glb",
+  "yaw": 1.4,
+  "scale": 0.8,
+  "kind": "enemy",
+  "aspect": 1.174
+ },
+ "steamSprite": {
+  "file": "models/steamSprite.glb",
+  "yaw": 4.407,
+  "scale": 0.7,
+  "kind": "enemy",
+  "aspect": 0.873
+ },
+ "hotspringToad": {
+  "file": "models/hotspringToad.glb",
+  "yaw": 1.571,
+  "scale": 0.75,
+  "kind": "enemy",
+  "aspect": 1.134
+ },
+ "pyramidAcolyte": {
+  "file": "models/pyramidAcolyte.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.422
+ },
+ "plumedWatcher": {
+  "file": "models/plumedWatcher.glb",
+  "yaw": 1.571,
+  "scale": 1.25,
+  "kind": "enemy",
+  "aspect": 0.533
+ },
+ "kessaVorn": {
+  "file": "models/kessaVorn.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.382
+ },
+ "dorrinHale": {
+  "file": "models/dorrinHale.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "human",
+  "aspect": 0.552
+ },
+ "mayleTarn": {
+  "file": "models/mayleTarn.glb",
+  "yaw": 1.571,
+  "scale": 0.95,
+  "kind": "human",
+  "aspect": 0.386
+ },
+ "quillshade": {
+  "file": "models/quillshade.glb",
+  "yaw": 0.611,
+  "scale": 0.9,
+  "kind": "creature",
+  "aspect": 1.563
+ },
+ "fortCenturion": {
+  "file": "models/fortCenturion.glb",
+  "yaw": 1.571,
+  "scale": 0.7,
+  "kind": "boss",
+  "aspect": 0.732,
+  "human": true
+ },
+ "windhollowGuardian": {
+  "file": "models/windhollowGuardian.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "boss",
+  "aspect": 1.395
+ },
+ "plumedCoil": {
+  "file": "models/plumedCoil.glb",
+  "yaw": 0,
+  "scale": 1.6,
+  "kind": "boss",
+  "aspect": 0.767
+ },
+ "shearwing": {
+  "file": "models/shearwing.glb",
+  "yaw": 0.175,
+  "scale": 0.8,
+  "kind": "boss",
+  "aspect": 1.752
+ },
+ "motherGlowmoth": {
+  "file": "models/motherGlowmoth.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "boss",
+  "aspect": 0.768
+ },
+ "palaceGuard": {
+  "file": "models/palaceGuard.glb",
+  "yaw": 1.6,
+  "scale": 1.15,
+  "kind": "human"
+ },
+ "eagleCohortArcher": {
+  "file": "models/eagleCohortArcher.glb",
+  "yaw": 1.62,
+  "scale": 1,
+  "kind": "human"
+ },
+ "courtPriest": {
+  "file": "models/courtPriest.glb",
+  "yaw": 1.5,
+  "scale": 1.05,
+  "kind": "human"
+ },
+ "templeHound": {
+  "file": "models/templeHound.glb",
+  "yaw": 1.62,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "sewerNaga": {
+  "file": "models/sewerNaga.glb",
+  "yaw": 1.54,
+  "scale": 1.15,
+  "kind": "enemy"
+ },
+ "ratChimera": {
+  "file": "models/ratChimera.glb",
+  "yaw": 1.9,
+  "scale": 0.95,
+  "kind": "enemy"
+ },
+ "drownedSlaveWraith": {
+  "file": "models/drownedSlaveWraith.glb",
+  "yaw": 1.62,
+  "scale": 1.05,
+  "kind": "enemy"
+ },
+ "centurion": {
+  "file": "models/centurion.glb",
+  "yaw": 1.5,
+  "scale": 1.2,
+  "kind": "human"
+ },
+ "supplyConvoyGuard": {
+  "file": "models/supplyConvoyGuard.glb",
+  "yaw": 1.4,
+  "scale": 1.05,
+  "kind": "human"
+ },
+ "saltGargoyle": {
+  "file": "models/saltGargoyle.glb",
+  "yaw": 1.57,
+  "scale": 1.1,
+  "kind": "enemy"
+ },
+ "orchardSatyr": {
+  "file": "models/orchardSatyr.glb",
+  "yaw": 1.5,
+  "scale": 1.05,
+  "kind": "enemy"
+ },
+ "overseersHound": {
+  "file": "models/overseersHound.glb",
+  "yaw": 1.57,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "sunmawCultist": {
+  "file": "models/sunmawCultist.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "human"
+ },
+ "veiledCisternGuardian": {
+  "file": "models/veiledCisternGuardian.glb",
+  "yaw": 1.5,
+  "scale": 1,
+  "kind": "boss"
+ },
+ "ghostOfTheNinthLegion": {
+  "file": "models/ghostOfTheNinthLegion.glb",
+  "yaw": 1.45,
+  "scale": 0.8,
+  "kind": "boss"
+ },
+ "spearTwinA": {
+  "file": "models/spearTwinA.glb",
+  "yaw": 1.5,
+  "scale": 1.25,
+  "kind": "human"
+ },
+ "spearTwinB": {
+  "file": "models/spearTwinB.glb",
+  "yaw": 1.45,
+  "scale": 1.25,
+  "kind": "human"
+ },
+ "prisonGuard": {
+  "file": "models/prisonGuard.glb",
+  "yaw": 1.45,
+  "scale": 1.1,
+  "kind": "human"
+ },
+ "warderSpearman": {
+  "file": "models/warderSpearman.glb",
+  "yaw": 1.55,
+  "scale": 1.05,
+  "kind": "human"
+ },
+ "collarSmith": {
+  "file": "models/collarSmith.glb",
+  "yaw": 1.41,
+  "scale": 1.1,
+  "kind": "human"
+ },
+ "prisonHound": {
+  "file": "models/prisonHound.glb",
+  "yaw": 1.57,
+  "scale": 0.95,
+  "kind": "enemy"
+ },
+ "rootWorm": {
+  "file": "models/rootWorm.glb",
+  "yaw": 1.57,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "rootboundTroll": {
+  "file": "models/rootboundTroll.glb",
+  "yaw": 1.59,
+  "scale": 1.35,
+  "kind": "enemy"
+ },
+ "gnawling": {
+  "file": "models/gnawling.glb",
+  "yaw": 1.35,
+  "scale": 0.85,
+  "kind": "enemy"
+ },
+ "blackMirrorWraith": {
+  "file": "models/blackMirrorWraith.glb",
+  "yaw": 1.57,
+  "scale": 1.05,
+  "kind": "enemy"
+ },
+ "thornbackDragonet": {
+  "file": "models/thornbackDragonet.glb",
+  "yaw": 1,
+  "scale": 0.95,
+  "kind": "enemy"
+ },
+ "rootGnawer": {
+  "file": "models/rootGnawer.glb",
+  "yaw": 1.51,
+  "scale": 1.45,
+  "kind": "boss"
+ },
+ "hollowNestGuardian": {
+  "file": "models/hollowNestGuardian.glb",
+  "yaw": 1.58,
+  "scale": 1,
+  "kind": "boss"
+ },
+ "emberwick": {
+  "file": "models/emberwick.glb",
+  "yaw": 0,
+  "scale": 0.8,
+  "kind": "creature"
+ },
+ "mothmara": {
+  "file": "models/mothmara.glb",
+  "yaw": 1.55,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "hearthkin": {
+  "file": "models/hearthkin.glb",
+  "yaw": 1.5,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "standardBearer": {
+  "file": "models/standardBearer.glb",
+  "yaw": 1.48,
+  "scale": 1.2,
+  "kind": "human"
+ },
+ "siegeBallista": {
+  "file": "models/siegeBallista.glb",
+  "yaw": 3.14,
+  "scale": 1.35,
+  "kind": "enemy"
+ },
+ "stormRoc": {
+  "file": "models/stormRoc.glb",
+  "yaw": 0,
+  "scale": 1.3,
+  "kind": "enemy"
+ },
+ "thunderRamCalf": {
+  "file": "models/thunderRamCalf.glb",
+  "yaw": 3.14,
+  "scale": 0.95,
+  "kind": "enemy"
+ },
+ "galeHarpy": {
+  "file": "models/galeHarpy.glb",
+  "yaw": 1.51,
+  "scale": 1.05,
+  "kind": "enemy"
+ },
+ "lightningWolf": {
+  "file": "models/lightningWolf.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "spiritPriest": {
+  "file": "models/spiritPriest.glb",
+  "yaw": 1.51,
+  "scale": 1.1,
+  "kind": "enemy"
+ },
+ "prismGuardian": {
+  "file": "models/prismGuardian.glb",
+  "yaw": 1.64,
+  "scale": 1,
+  "kind": "boss"
+ },
+ "mentorIthiel": {
+  "file": "models/mentorIthiel.glb",
+  "yaw": 0,
+  "scale": 1.1,
+  "kind": "human"
+ },
+ "mentorConstructA": {
+  "file": "models/mentorConstructA.glb",
+  "yaw": 1.57,
+  "scale": 1.3,
+  "kind": "enemy"
+ },
+ "mentorConstructB": {
+  "file": "models/mentorConstructB.glb",
+  "yaw": 1,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "mentorConstructC": {
+  "file": "models/mentorConstructC.glb",
+  "yaw": 0,
+  "scale": 1.1,
+  "kind": "enemy"
+ },
+ "stormRam": {
+  "file": "models/stormRam.glb",
+  "yaw": -0.01,
+  "scale": 1.25,
+  "kind": "boss"
+ },
+ "veilStag": {
+  "file": "models/veilStag.glb",
+  "yaw": 1.57,
+  "scale": 0.7,
+  "kind": "boss"
+ },
+ "naumachiaAdmiral": {
+  "file": "models/naumachiaAdmiral.glb",
+  "yaw": 1.57,
+  "scale": 1.3,
+  "kind": "human"
+ },
+ "sunPriestGolem": {
+  "file": "models/sunPriestGolem.glb",
+  "yaw": 1.56,
+  "scale": 1.4,
+  "kind": "enemy"
+ },
+ "obsidianChimera": {
+  "file": "models/obsidianChimera.glb",
+  "yaw": 0,
+  "scale": 1.3,
+  "kind": "enemy"
+ },
+ "bloodAltarWraith": {
+  "file": "models/bloodAltarWraith.glb",
+  "yaw": 1.29,
+  "scale": 1.1,
+  "kind": "enemy"
+ },
+ "eclipseMoth": {
+  "file": "models/eclipseMoth.glb",
+  "yaw": 1.57,
+  "scale": 0.95,
+  "kind": "enemy"
+ },
+ "shadowMinotaur": {
+  "file": "models/shadowMinotaur.glb",
+  "yaw": 1.57,
+  "scale": 1.35,
+  "kind": "enemy"
+ },
+ "pyramidNaga": {
+  "file": "models/pyramidNaga.glb",
+  "yaw": 1.57,
+  "scale": 1.2,
+  "kind": "enemy"
+ },
+ "emperorDavichi": {
+  "file": "models/emperorDavichi.glb",
+  "yaw": 0,
+  "scale": 1.45,
+  "kind": "human"
+ },
+ "sunEater": {
+  "file": "models/sunEater.glb",
+  "yaw": 0.01,
+  "scale": 1.6,
+  "kind": "boss"
+ },
+ "lastWarden": {
+  "file": "models/lastWarden.glb",
+  "yaw": 1.5,
+  "scale": 1,
+  "kind": "boss"
+ },
+ "mawmotherOfTheDeep": {
+  "file": "models/mawmotherOfTheDeep.glb",
+  "yaw": -1.58,
+  "scale": 1.5,
+  "kind": "boss"
+ },
+ "lanternDeepGuardian": {
+  "file": "models/lanternDeepGuardian.glb",
+  "yaw": 1.57,
+  "scale": 1.1,
+  "kind": "boss"
+ },
+ "kirinth": {
+  "file": "models/kirinth.glb",
+  "yaw": 0,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "bakuroth": {
+  "file": "models/bakuroth.glb",
+  "yaw": 1.57,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "grandChampion": {
+  "file": "models/grandChampion.glb",
+  "yaw": 1.55,
+  "scale": 1.35,
+  "kind": "human"
+ },
+ "kitsuneva__foxfireMatron": {
+  "file": "models/kitsuneva__foxfireMatron.glb",
+  "yaw": 1.73,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "kitsuneva__inariHeartfire": {
+  "file": "models/kitsuneva__inariHeartfire.glb",
+  "yaw": 1.57,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "kitsuneva__nineTailedSolstice": {
+  "file": "models/kitsuneva__nineTailedSolstice.glb",
+  "yaw": 1.58,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "ninthLegionShade": {
+  "file": "models/ninthLegionShade.glb",
+  "yaw": 1.5,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "hollowNestSpawn": {
+  "file": "models/hollowNestSpawn.glb",
+  "yaw": 0,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "emperorGuard": {
+  "file": "models/emperorGuard.glb",
+  "yaw": 1.57,
+  "scale": 1.15,
+  "kind": "human"
+ },
+ "naumachiaSailor": {
+  "file": "models/naumachiaSailor.glb",
+  "yaw": 1.57,
+  "scale": 1.05,
+  "kind": "human"
+ },
+ "sunTendril": {
+  "file": "models/sunTendril.glb",
+  "yaw": 1.57,
+  "scale": 1.3,
+  "kind": "enemy"
+ },
+ "deepLantern": {
+  "file": "models/deepLantern.glb",
+  "yaw": 1,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "dreadShadeAdd": {
+  "file": "models/dreadShadeAdd.glb",
+  "yaw": 1.57,
+  "scale": 1.05,
+  "kind": "enemy"
+ },
+ "grandChampionPet": {
+  "file": "models/grandChampionPet.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "legionTribune": {
+  "file": "models/legionTribune.glb",
+  "yaw": 1.571,
+  "scale": 1.05,
+  "kind": "human",
+  "aspect": 0.484
+ },
+ "houndOfTheCohort": {
+  "file": "models/houndOfTheCohort.glb",
+  "yaw": 0.785,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.205
+ },
+ "academyWardenConstruct": {
+  "file": "models/academyWardenConstruct.glb",
+  "yaw": 1.571,
+  "scale": 1.3,
+  "kind": "enemy",
+  "aspect": 0.803
+ },
+ "frostWisp": {
+  "file": "models/frostWisp.glb",
+  "yaw": 0.96,
+  "scale": 0.65,
+  "kind": "enemy",
+  "aspect": 1.224
+ },
+ "rimeBasilisk": {
+  "file": "models/rimeBasilisk.glb",
+  "yaw": 0.96,
+  "scale": 0.95,
+  "kind": "enemy",
+  "aspect": 1.457
+ },
+ "archiveWraith": {
+  "file": "models/archiveWraith.glb",
+  "yaw": 1.571,
+  "scale": 1.05,
+  "kind": "enemy",
+  "aspect": 0.518
+ },
+ "crystalGargoyle": {
+  "file": "models/crystalGargoyle.glb",
+  "yaw": 1.571,
+  "scale": 1.05,
+  "kind": "enemy",
+  "aspect": 1.151
+ },
+ "vaultHound": {
+  "file": "models/vaultHound.glb",
+  "yaw": 2.269,
+  "scale": 0.85,
+  "kind": "enemy",
+  "aspect": 1.64
+ },
+ "oasisSphinxGuard": {
+  "file": "models/oasisSphinxGuard.glb",
+  "yaw": 1.527,
+  "scale": 1.2,
+  "kind": "enemy",
+  "aspect": 1.412
+ },
+ "mesaRoc": {
+  "file": "models/mesaRoc.glb",
+  "yaw": 0,
+  "scale": 1.35,
+  "kind": "enemy",
+  "aspect": 1.096
+ },
+ "brassAutomaton": {
+  "file": "models/brassAutomaton.glb",
+  "yaw": 1.571,
+  "scale": 1.15,
+  "kind": "enemy",
+  "aspect": 0.508
+ },
+ "sandWyrmling": {
+  "file": "models/sandWyrmling.glb",
+  "yaw": 1.265,
+  "scale": 0.8,
+  "kind": "enemy",
+  "aspect": 1.384
+ },
+ "seaGullHarpy": {
+  "file": "models/seaGullHarpy.glb",
+  "yaw": 1.571,
+  "scale": 0.95,
+  "kind": "enemy",
+  "aspect": 0.55
+ },
+ "krakenWhelp": {
+  "file": "models/krakenWhelp.glb",
+  "yaw": 1.658,
+  "scale": 0.9,
+  "kind": "enemy",
+  "aspect": 1.27
+ },
+ "gullLord": {
+  "file": "models/gullLord.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.133
+ },
+ "sirenEel": {
+  "file": "models/sirenEel.glb",
+  "yaw": 1.527,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.656
+ },
+ "saltHydraChick": {
+  "file": "models/saltHydraChick.glb",
+  "yaw": 1.876,
+  "scale": 0.8,
+  "kind": "enemy",
+  "aspect": 1.113
+ },
+ "mermaidShaman": {
+  "file": "models/mermaidShaman.glb",
+  "yaw": 1.047,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.656
+ },
+ "patrolGalley": {
+  "file": "models/patrolGalley.glb",
+  "yaw": 4.712,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.248
+ },
+ "scyllaHound": {
+  "file": "models/scyllaHound.glb",
+  "yaw": 6.196,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.827
+ },
+ "whirlpoolImp": {
+  "file": "models/whirlpoolImp.glb",
+  "yaw": 1.571,
+  "scale": 0.7,
+  "kind": "enemy",
+  "aspect": 0.457
+ },
+ "caveCrabKnight": {
+  "file": "models/caveCrabKnight.glb",
+  "yaw": 1.614,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 1.693
+ },
+ "drownedSailorWraith": {
+  "file": "models/drownedSailorWraith.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.392
+ },
+ "ashImp": {
+  "file": "models/ashImp.glb",
+  "yaw": 0.524,
+  "scale": 0.65,
+  "kind": "enemy",
+  "aspect": 0.832
+ },
+ "lavaBoarling": {
+  "file": "models/lavaBoarling.glb",
+  "yaw": 1.527,
+  "scale": 0.9,
+  "kind": "enemy",
+  "aspect": 1.579
+ },
+ "cinderGargoyle": {
+  "file": "models/cinderGargoyle.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "enemy",
+  "aspect": 0.912
+ },
+ "smokePhoenixChick": {
+  "file": "models/smokePhoenixChick.glb",
+  "yaw": 1.484,
+  "scale": 0.7,
+  "kind": "enemy",
+  "aspect": 1.439
+ },
+ "basaltTroll": {
+  "file": "models/basaltTroll.glb",
+  "yaw": 1.571,
+  "scale": 1.3,
+  "kind": "enemy",
+  "aspect": 0.723
+ },
+ "salamanderKnight": {
+  "file": "models/salamanderKnight.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "enemy",
+  "aspect": 0.791
+ },
+ "obsidianJackal": {
+  "file": "models/obsidianJackal.glb",
+  "yaw": 0,
+  "scale": 0.95,
+  "kind": "enemy",
+  "aspect": 1.469
+ },
+ "gloomcapWalker": {
+  "file": "models/gloomcapWalker.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "enemy",
+  "aspect": 0.63
+ },
+ "boneCerberusPup": {
+  "file": "models/boneCerberusPup.glb",
+  "yaw": 1.484,
+  "scale": 0.9,
+  "kind": "enemy",
+  "aspect": 1.293
+ },
+ "ferryGhoul": {
+  "file": "models/ferryGhoul.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "enemy",
+  "aspect": 0.389
+ },
+ "shadeLamia": {
+  "file": "models/shadeLamia.glb",
+  "yaw": 1.571,
+  "scale": 1.15,
+  "kind": "enemy",
+  "aspect": 0.519
+ },
+ "paleMinotaurShade": {
+  "file": "models/paleMinotaurShade.glb",
+  "yaw": 1.571,
+  "scale": 1.3,
+  "kind": "enemy",
+  "aspect": 0.837
+ },
+ "tombScarab": {
+  "file": "models/tombScarab.glb",
+  "yaw": 1.571,
+  "scale": 0.815,
+  "kind": "enemy",
+  "aspect": 2.172
+ },
+ "arenaLionWolf": {
+  "file": "models/arenaLionWolf.glb",
+  "yaw": 0,
+  "scale": 1.1,
+  "kind": "enemy",
+  "aspect": 1.399
+ },
+ "arenaBoarBull": {
+  "file": "models/arenaBoarBull.glb",
+  "yaw": 1.571,
+  "scale": 1.156,
+  "kind": "enemy",
+  "aspect": 1.531
+ },
+ "mirequeen": {
+  "file": "models/mirequeen.glb",
+  "yaw": 0.2,
+  "scale": 1.105,
+  "kind": "creature",
+  "aspect": 1.436
+ },
+ "brassbone": {
+  "file": "models/brassbone.glb",
+  "yaw": 1.571,
+  "scale": 1.3,
+  "kind": "creature",
+  "aspect": 0.361
+ },
+ "selkira": {
+  "file": "models/selkira.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "creature",
+  "aspect": 1.578
+ },
+ "bronzeChampion": {
+  "file": "models/bronzeChampion.glb",
+  "yaw": 0,
+  "scale": 0.7,
+  "kind": "boss",
+  "aspect": 0.495,
+  "human": true
+ },
+ "bronzeBeast": {
+  "file": "models/bronzeBeast.glb",
+  "yaw": 0,
+  "scale": 0.9,
+  "kind": "boss",
+  "aspect": 1.28
+ },
+ "drownedShrineGuardian": {
+  "file": "models/drownedShrineGuardian.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "boss",
+  "aspect": 0.504
+ },
+ "stoneGiant": {
+  "file": "models/stoneGiant.glb",
+  "yaw": 1.571,
+  "scale": 1.2,
+  "kind": "boss",
+  "aspect": 0.394
+ },
+ "sunbirdGuardian": {
+  "file": "models/sunbirdGuardian.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "boss",
+  "aspect": 0.913
+ },
+ "motherOfTheMaelstrom": {
+  "file": "models/motherOfTheMaelstrom.glb",
+  "yaw": 1.571,
+  "scale": 1.7,
+  "kind": "boss",
+  "aspect": 0.51
+ },
+ "emberWolf": {
+  "file": "models/emberWolf.glb",
+  "yaw": 1.571,
+  "scale": 1.1,
+  "kind": "boss",
+  "aspect": 1.568
+ },
+ "gateHound": {
+  "file": "models/gateHound.glb",
+  "yaw": 1.44,
+  "scale": 1.1,
+  "kind": "boss",
+  "aspect": 1.538
+ },
+ "oldHollowbell": {
+  "file": "models/oldHollowbell.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "boss",
+  "aspect": 1.197
+ },
+ "blackPearlHermit": {
+  "file": "models/blackPearlHermit.glb",
+  "yaw": 1.265,
+  "scale": 0.8,
+  "kind": "boss",
+  "aspect": 1.189
+ },
+ "lionWolf": {
+  "file": "models/lionWolf.glb",
+  "yaw": 0,
+  "scale": 1.1,
+  "kind": "enemy",
+  "aspect": 1.399
+ },
+ "boarBull": {
+  "file": "models/boarBull.glb",
+  "yaw": 1.571,
+  "scale": 1.156,
+  "kind": "enemy",
+  "aspect": 1.531
+ },
+ "fenLeech": {
+  "file": "models/fenLeech.glb",
+  "yaw": 1.571,
+  "scale": 0.85,
+  "kind": "enemy",
+  "aspect": 1.796
+ },
+ "bogLantern": {
+  "file": "models/bogLantern.glb",
+  "yaw": 1.571,
+  "scale": 0.65,
+  "kind": "enemy",
+  "aspect": 0.506
+ },
+ "giantstoneSentry": {
+  "file": "models/giantstoneSentry.glb",
+  "yaw": 1.571,
+  "scale": 1.5,
+  "kind": "enemy",
+  "aspect": 0.587
+ },
+ "chiselImp": {
+  "file": "models/chiselImp.glb",
+  "yaw": 1.571,
+  "scale": 0.7,
+  "kind": "enemy",
+  "aspect": 0.796
+ },
+ "emberhawk": {
+  "file": "models/emberhawk.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "enemy",
+  "aspect": 1.269
+ },
+ "sunbirdChick": {
+  "file": "models/sunbirdChick.glb",
+  "yaw": 1.571,
+  "scale": 0.6,
+  "kind": "enemy",
+  "aspect": 0.924
+ },
+ "gazeStatue": {
+  "file": "models/gazeStatue.glb",
+  "yaw": 1.4,
+  "scale": 1.2,
+  "kind": "enemy"
+ },
+ "mirrorShade": {
+  "file": "models/mirrorShade.glb",
+  "yaw": 0.8,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "glassSerpent": {
+  "file": "models/glassSerpent.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "ashwingOwl": {
+  "file": "models/ashwingOwl.glb",
+  "yaw": 1.57,
+  "scale": 1.1,
+  "kind": "enemy"
+ },
+ "cinderMothSwarm": {
+  "file": "models/cinderMothSwarm.glb",
+  "yaw": 0,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "vaulthorn": {
+  "file": "models/vaulthorn.glb",
+  "yaw": 1.57,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "legionSlinger": {
+  "file": "models/legionSlinger.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "human"
+ },
+ "candleWraith": {
+  "file": "models/candleWraith.glb",
+  "yaw": 1.57,
+  "scale": 1.15,
+  "kind": "enemy"
+ },
+ "boneChoir": {
+  "file": "models/boneChoir.glb",
+  "yaw": 1,
+  "scale": 1.1,
+  "kind": "enemy"
+ },
+ "prismSprite": {
+  "file": "models/prismSprite.glb",
+  "yaw": 0,
+  "scale": 0.7,
+  "kind": "enemy"
+ },
+ "refractionGolem": {
+  "file": "models/refractionGolem.glb",
+  "yaw": 1.35,
+  "scale": 1.3,
+  "kind": "enemy"
+ },
+ "mirrorMoth": {
+  "file": "models/mirrorMoth.glb",
+  "yaw": 1.57,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "starMetalGolem": {
+  "file": "models/starMetalGolem.glb",
+  "yaw": 1.3,
+  "scale": 1.4,
+  "kind": "enemy"
+ },
+ "cometFox": {
+  "file": "models/cometFox.glb",
+  "yaw": 1.57,
+  "scale": 0.85,
+  "kind": "enemy"
+ },
+ "craterBloom": {
+  "file": "models/craterBloom.glb",
+  "yaw": 0,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "meteorBoar": {
+  "file": "models/meteorBoar.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "voidMoth": {
+  "file": "models/voidMoth.glb",
+  "yaw": 1.3,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "hollowLens": {
+  "file": "models/hollowLens.glb",
+  "yaw": 0.9,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "staredrinker": {
+  "file": "models/staredrinker.glb",
+  "yaw": 1.4,
+  "scale": 1.5,
+  "kind": "enemy"
+ },
+ "emberwoodSentinel": {
+  "file": "models/emberwoodSentinel.glb",
+  "yaw": 1.4,
+  "scale": 1.4,
+  "kind": "enemy"
+ },
+ "drownedSentry": {
+  "file": "models/drownedSentry.glb",
+  "yaw": 1.57,
+  "scale": 1.3,
+  "kind": "enemy"
+ },
+ "lanternEel": {
+  "file": "models/lanternEel.glb",
+  "yaw": 1.2,
+  "scale": 1,
+  "kind": "enemy"
+ },
+ "builderWraith": {
+  "file": "models/builderWraith.glb",
+  "yaw": 1.57,
+  "scale": 1.1,
+  "kind": "enemy"
+ },
+ "coralColossus": {
+  "file": "models/coralColossus.glb",
+  "yaw": 1.4,
+  "scale": 1.6,
+  "kind": "enemy"
+ },
+ "abyssalCrab": {
+  "file": "models/abyssalCrab.glb",
+  "yaw": 1.57,
+  "scale": 1.3,
+  "kind": "enemy"
+ },
+ "deepGlowfish": {
+  "file": "models/deepGlowfish.glb",
+  "yaw": 1.57,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "lanternJelly": {
+  "file": "models/lanternJelly.glb",
+  "yaw": 3.14,
+  "scale": 0.9,
+  "kind": "enemy"
+ },
+ "trenchHorror": {
+  "file": "models/trenchHorror.glb",
+  "yaw": 0,
+  "scale": 1.3,
+  "kind": "enemy"
+ },
+ "lightlessMaw": {
+  "file": "models/lightlessMaw.glb",
+  "yaw": 1.2,
+  "scale": 1.2,
+  "kind": "enemy"
+ },
+ "legionCenturion": {
+  "file": "models/centurion.glb",
+  "yaw": 1.5,
+  "scale": 1.2,
+  "kind": "human"
+ },
+ "glowMoth": {
+  "file": "models/glowMoth.glb",
+  "yaw": 1.571,
+  "scale": 0.5,
+  "kind": "enemy",
+  "aspect": 0.705
+ },
+ "maelstromHead": {
+  "file": "models/maelstromHead.glb",
+  "yaw": 1.571,
+  "scale": 0.8,
+  "kind": "boss",
+  "aspect": 0.719
+ },
+ "gateHoundHead": {
+  "file": "models/gateHoundHead.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "boss",
+  "aspect": 1.727
+ },
+ "marketOverseer": {
+  "file": "models/marketOverseer.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.61
+ },
+ "netFighter": {
+  "file": "models/netFighter.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "human",
+  "aspect": 0.816
+ },
+ "cellGhost": {
+  "file": "models/cellGhost.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.557
+ },
+ "horncinder__ironhorn": {
+  "file": "models/horncinder__ironhorn.glb",
+  "yaw": -1.13,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "horncinder__blazehorn": {
+  "file": "models/horncinder__blazehorn.glb",
+  "yaw": -0.35,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "horncinder__bronzeAsterion": {
+  "file": "models/horncinder__bronzeAsterion.glb",
+  "yaw": -1.13,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "horncinder__chimeraAshbringer": {
+  "file": "models/horncinder__chimeraAshbringer.glb",
+  "yaw": 2.621,
+  "scale": 1.206,
+  "kind": "creature"
+ },
+ "horncinder__asterionEternal": {
+  "file": "models/horncinder__asterionEternal.glb",
+  "yaw": 0.26,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "horncinder__sunhorn": {
+  "file": "models/horncinder__sunhorn.glb",
+  "yaw": 0.22,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "skarnwolf__rimefang": {
+  "file": "models/skarnwolf__rimefang.glb",
+  "yaw": -0.44,
+  "scale": 1.107,
+  "kind": "creature"
+ },
+ "skarnwolf__chainbreaker": {
+  "file": "models/skarnwolf__chainbreaker.glb",
+  "yaw": -0.35,
+  "scale": 1.064,
+  "kind": "creature"
+ },
+ "skarnwolf__fenrirFrostjaw": {
+  "file": "models/skarnwolf__fenrirFrostjaw.glb",
+  "yaw": 0.65,
+  "scale": 1.179,
+  "kind": "creature"
+ },
+ "skarnwolf__gleipnirsEnd": {
+  "file": "models/skarnwolf__gleipnirsEnd.glb",
+  "yaw": -0.44,
+  "scale": 1.105,
+  "kind": "creature"
+ },
+ "skarnwolf__fenrirUnchained": {
+  "file": "models/skarnwolf__fenrirUnchained.glb",
+  "yaw": -0.22,
+  "scale": 1.095,
+  "kind": "creature"
+ },
+ "skarnwolf__frostbreath": {
+  "file": "models/skarnwolf__frostbreath.glb",
+  "yaw": 1.96,
+  "scale": 1.075,
+  "kind": "creature"
+ },
+ "crushjaw__feastmaw": {
+  "file": "models/crushjaw__feastmaw.glb",
+  "yaw": -0.61,
+  "scale": 1.276,
+  "kind": "creature"
+ },
+ "crushjaw__scalehide": {
+  "file": "models/crushjaw__scalehide.glb",
+  "yaw": 0.96,
+  "scale": 1.228,
+  "kind": "creature"
+ },
+ "crushjaw__heartEater": {
+  "file": "models/crushjaw__heartEater.glb",
+  "yaw": 2.27,
+  "scale": 1.383,
+  "kind": "creature"
+ },
+ "crushjaw__balanceBearer": {
+  "file": "models/crushjaw__balanceBearer.glb",
+  "yaw": 2.4,
+  "scale": 1.5,
+  "kind": "creature"
+ },
+ "crushjaw__ammitTheDevourer": {
+  "file": "models/crushjaw__ammitTheDevourer.glb",
+  "yaw": 0.65,
+  "scale": 1.371,
+  "kind": "creature"
+ },
+ "crushjaw__rotjaw": {
+  "file": "models/crushjaw__rotjaw.glb",
+  "yaw": 2.27,
+  "scale": 1.352,
+  "kind": "creature"
+ },
+ "bramblehoof__oakhide": {
+  "file": "models/bramblehoof__oakhide.glb",
+  "yaw": 0.96,
+  "scale": 1.134,
+  "kind": "creature"
+ },
+ "bramblehoof__mossmantle": {
+  "file": "models/bramblehoof__mossmantle.glb",
+  "yaw": 0.92,
+  "scale": 1.229,
+  "kind": "creature"
+ },
+ "bramblehoof__elderwoodWarden": {
+  "file": "models/bramblehoof__elderwoodWarden.glb",
+  "yaw": 2.92,
+  "scale": 1.098,
+  "kind": "creature"
+ },
+ "bramblehoof__sporelordLeshy": {
+  "file": "models/bramblehoof__sporelordLeshy.glb",
+  "yaw": -0.79,
+  "scale": 1.258,
+  "kind": "creature"
+ },
+ "bramblehoof__wildwoodSovereign": {
+  "file": "models/bramblehoof__wildwoodSovereign.glb",
+  "yaw": 1.09,
+  "scale": 1.201,
+  "kind": "creature"
+ },
+ "bramblehoof__greenwarden": {
+  "file": "models/bramblehoof__greenwarden.glb",
+  "yaw": -0.61,
+  "scale": 1.198,
+  "kind": "creature"
+ },
+ "quillshade__scrollrunner": {
+  "file": "models/quillshade__scrollrunner.glb",
+  "yaw": 2.44,
+  "scale": 0.931,
+  "kind": "creature"
+ },
+ "quillshade__ravenCourier": {
+  "file": "models/quillshade__ravenCourier.glb",
+  "yaw": 0.57,
+  "scale": 0.96,
+  "kind": "creature"
+ },
+ "quillshade__worldTreeMessenger": {
+  "file": "models/quillshade__worldTreeMessenger.glb",
+  "yaw": 0.61,
+  "scale": 0.803,
+  "kind": "creature"
+ },
+ "quillshade__muninnsHeir": {
+  "file": "models/quillshade__muninnsHeir.glb",
+  "yaw": 0.79,
+  "scale": 0.845,
+  "kind": "creature"
+ },
+ "quillshade__ratatoskrHighHerald": {
+  "file": "models/quillshade__ratatoskrHighHerald.glb",
+  "yaw": 2.66,
+  "scale": 0.869,
+  "kind": "creature"
+ },
+ "quillshade__whisperscribe": {
+  "file": "models/quillshade__whisperscribe.glb",
+  "yaw": 0.7,
+  "scale": 0.836,
+  "kind": "creature"
+ },
+ "skyrend__galeGriffin": {
+  "file": "models/skyrend__galeGriffin.glb",
+  "yaw": 0.519,
+  "scale": 1.032,
+  "kind": "creature"
+ },
+ "skyrend__wildcardWing": {
+  "file": "models/skyrend__wildcardWing.glb",
+  "yaw": 1.09,
+  "scale": 1.082,
+  "kind": "creature"
+ },
+ "skyrend__stormJester": {
+  "file": "models/skyrend__stormJester.glb",
+  "yaw": 2.36,
+  "scale": 1.113,
+  "kind": "creature"
+ },
+ "skyrend__tempestGryphon": {
+  "file": "models/skyrend__tempestGryphon.glb",
+  "yaw": 0.61,
+  "scale": 1.041,
+  "kind": "creature"
+ },
+ "skyrend__skylordOfFortune": {
+  "file": "models/skyrend__skylordOfFortune.glb",
+  "yaw": 2.84,
+  "scale": 0.88,
+  "kind": "creature"
+ },
+ "skyrend__thunderheart": {
+  "file": "models/skyrend__thunderheart.glb",
+  "yaw": 1.88,
+  "scale": 0.961,
+  "kind": "creature"
+ },
+ "vespera__velvetSphinx": {
+  "file": "models/vespera__velvetSphinx.glb",
+  "yaw": 1.571,
+  "scale": 0.836,
+  "kind": "creature"
+ },
+ "vespera__razorwing": {
+  "file": "models/vespera__razorwing.glb",
+  "yaw": 1.22,
+  "scale": 1.035,
+  "kind": "creature"
+ },
+ "vespera__riddlemistress": {
+  "file": "models/vespera__riddlemistress.glb",
+  "yaw": -2.44,
+  "scale": 1.038,
+  "kind": "creature"
+ },
+ "vespera__shadowtalonHarridan": {
+  "file": "models/vespera__shadowtalonHarridan.glb",
+  "yaw": 2.14,
+  "scale": 0.875,
+  "kind": "creature"
+ },
+ "vespera__nemesisSphinx": {
+  "file": "models/vespera__nemesisSphinx.glb",
+  "yaw": 1,
+  "scale": 0.933,
+  "kind": "creature"
+ },
+ "vespera__venomwing": {
+  "file": "models/vespera__venomwing.glb",
+  "yaw": -1.83,
+  "scale": 0.8,
+  "kind": "creature"
+ },
+ "zephyrra__featherward": {
+  "file": "models/zephyrra__featherward.glb",
+  "yaw": 0.7,
+  "scale": 0.879,
+  "kind": "creature"
+ },
+ "zephyrra__galeHare": {
+  "file": "models/zephyrra__galeHare.glb",
+  "yaw": 0.83,
+  "scale": 1.004,
+  "kind": "creature"
+ },
+ "zephyrra__valkyrieHare": {
+  "file": "models/zephyrra__valkyrieHare.glb",
+  "yaw": 0.96,
+  "scale": 0.867,
+  "kind": "creature"
+ },
+ "zephyrra__cloudMother": {
+  "file": "models/zephyrra__cloudMother.glb",
+  "yaw": 2.27,
+  "scale": 0.828,
+  "kind": "creature"
+ },
+ "zephyrra__windsingerOfAsgard": {
+  "file": "models/zephyrra__windsingerOfAsgard.glb",
+  "yaw": 2.05,
+  "scale": 0.845,
+  "kind": "creature"
+ },
+ "zephyrra__hearthfeather": {
+  "file": "models/zephyrra__hearthfeather.glb",
+  "yaw": 0.7,
+  "scale": 0.916,
+  "kind": "creature"
+ },
+ "mossmaw__bogbristle": {
+  "file": "models/mossmaw__bogbristle.glb",
+  "yaw": -0.7,
+  "scale": 1.166,
+  "kind": "creature"
+ },
+ "mossmaw__rotbloom": {
+  "file": "models/mossmaw__rotbloom.glb",
+  "yaw": -0.7,
+  "scale": 1.073,
+  "kind": "creature"
+ },
+ "mossmaw__ancientBogGuardian": {
+  "file": "models/mossmaw__ancientBogGuardian.glb",
+  "yaw": 0.74,
+  "scale": 1.191,
+  "kind": "creature"
+ },
+ "mossmaw__witherbloomHydra": {
+  "file": "models/mossmaw__witherbloomHydra.glb",
+  "yaw": 0.61,
+  "scale": 1.155,
+  "kind": "creature"
+ },
+ "mossmaw__erymanthianVerdant": {
+  "file": "models/mossmaw__erymanthianVerdant.glb",
+  "yaw": 0.92,
+  "scale": 1.163,
+  "kind": "creature"
+ },
+ "mossmaw__mossguard": {
+  "file": "models/mossmaw__mossguard.glb",
+  "yaw": 0.83,
+  "scale": 1.141,
+  "kind": "creature"
+ },
+ "rotfang__gnawroot": {
+  "file": "models/rotfang__gnawroot.glb",
+  "yaw": 1,
+  "scale": 1.171,
+  "kind": "creature"
+ },
+ "rotfang__blightdrake": {
+  "file": "models/rotfang__blightdrake.glb",
+  "yaw": 2.36,
+  "scale": 1.193,
+  "kind": "creature"
+ },
+ "rotfang__worldRootGnawer": {
+  "file": "models/rotfang__worldRootGnawer.glb",
+  "yaw": -0.74,
+  "scale": 1.375,
+  "kind": "creature"
+ },
+ "rotfang__plaguewyrm": {
+  "file": "models/rotfang__plaguewyrm.glb",
+  "yaw": 0.65,
+  "scale": 1.208,
+  "kind": "creature"
+ },
+ "rotfang__nidhoggUnbound": {
+  "file": "models/rotfang__nidhoggUnbound.glb",
+  "yaw": -0.92,
+  "scale": 1.338,
+  "kind": "creature"
+ },
+ "rotfang__chargeWyrm": {
+  "file": "models/rotfang__chargeWyrm.glb",
+  "yaw": -0.65,
+  "scale": 1.29,
+  "kind": "creature"
+ },
+ "smolderhead__emberquill": {
+  "file": "models/smolderhead__emberquill.glb",
+  "yaw": -0.35,
+  "scale": 1.028,
+  "kind": "creature"
+ },
+ "smolderhead__ashenSalamander": {
+  "file": "models/smolderhead__ashenSalamander.glb",
+  "yaw": -0.57,
+  "scale": 1.158,
+  "kind": "creature"
+ },
+ "smolderhead__pyreHydra": {
+  "file": "models/smolderhead__pyreHydra.glb",
+  "yaw": -0.65,
+  "scale": 1.036,
+  "kind": "creature"
+ },
+ "smolderhead__cinderGargantua": {
+  "file": "models/smolderhead__cinderGargantua.glb",
+  "yaw": -0.65,
+  "scale": 1.185,
+  "kind": "creature"
+ },
+ "smolderhead__vesuvianHydra": {
+  "file": "models/smolderhead__vesuvianHydra.glb",
+  "yaw": -1.66,
+  "scale": 1.144,
+  "kind": "creature"
+ },
+ "smolderhead__steamhead": {
+  "file": "models/smolderhead__steamhead.glb",
+  "yaw": 1.13,
+  "scale": 1.118,
+  "kind": "creature"
+ },
+ "mirequeen__dirgeLizard": {
+  "file": "models/mirequeen__dirgeLizard.glb",
+  "yaw": -0.52,
+  "scale": 1.123,
+  "kind": "creature"
+ },
+ "mirequeen__bansheeMarshal": {
+  "file": "models/mirequeen__bansheeMarshal.glb",
+  "yaw": -0.57,
+  "scale": 1.285,
+  "kind": "creature"
+ },
+ "mirequeen__widowOfTheFen": {
+  "file": "models/mirequeen__widowOfTheFen.glb",
+  "yaw": 1.18,
+  "scale": 1.156,
+  "kind": "creature"
+ },
+ "mirequeen__keenOfThousand": {
+  "file": "models/mirequeen__keenOfThousand.glb",
+  "yaw": 2.23,
+  "scale": 1.199,
+  "kind": "creature"
+ },
+ "mirequeen__queenOfAllWidows": {
+  "file": "models/mirequeen__queenOfAllWidows.glb",
+  "yaw": -2.4,
+  "scale": 1.328,
+  "kind": "creature"
+ },
+ "mirequeen__gazewitch": {
+  "file": "models/mirequeen__gazewitch.glb",
+  "yaw": -0.26,
+  "scale": 1.147,
+  "kind": "creature"
+ },
+ "shellmund__runeShell": {
+  "file": "models/shellmund__runeShell.glb",
+  "yaw": -1.922,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "shellmund__trollwarden": {
+  "file": "models/shellmund__trollwarden.glb",
+  "yaw": 2.011,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "shellmund__monolithTortoise": {
+  "file": "models/shellmund__monolithTortoise.glb",
+  "yaw": 0.701,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "shellmund__mountainMother": {
+  "file": "models/shellmund__mountainMother.glb",
+  "yaw": 2.66,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "shellmund__genbuOfTheDeep": {
+  "file": "models/shellmund__genbuOfTheDeep.glb",
+  "yaw": -0.57,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "shellmund__gorgonShell": {
+  "file": "models/shellmund__gorgonShell.glb",
+  "yaw": 0.31,
+  "scale": 1.25,
+  "kind": "creature"
+ },
+ "bulwyrm__templeGolem": {
+  "file": "models/bulwyrm__templeGolem.glb",
+  "yaw": -2.352,
+  "scale": 1.083,
+  "kind": "creature"
+ },
+ "bulwyrm__fountainGuard": {
+  "file": "models/bulwyrm__fountainGuard.glb",
+  "yaw": 2.011,
+  "scale": 1.195,
+  "kind": "creature"
+ },
+ "bulwyrm__harbourColossus": {
+  "file": "models/bulwyrm__harbourColossus.glb",
+  "yaw": 2.091,
+  "scale": 1.156,
+  "kind": "creature"
+ },
+ "bulwyrm__cascadeTitan": {
+  "file": "models/bulwyrm__cascadeTitan.glb",
+  "yaw": 2.97,
+  "scale": 1.04,
+  "kind": "creature"
+ },
+ "bulwyrm__talosOfTheTides": {
+  "file": "models/bulwyrm__talosOfTheTides.glb",
+  "yaw": 0.44,
+  "scale": 1.046,
+  "kind": "creature"
+ },
+ "bulwyrm__drakegolem": {
+  "file": "models/bulwyrm__drakegolem.glb",
+  "yaw": 2.53,
+  "scale": 1.059,
+  "kind": "creature"
+ },
+ "atlacrab__pillarBearer": {
+  "file": "models/atlacrab__pillarBearer.glb",
+  "yaw": 2.57,
+  "scale": 1.235,
+  "kind": "creature"
+ },
+ "atlacrab__tideAnchor": {
+  "file": "models/atlacrab__tideAnchor.glb",
+  "yaw": 0.39,
+  "scale": 1.197,
+  "kind": "creature"
+ },
+ "atlacrab__atlasBreaker": {
+  "file": "models/atlacrab__atlasBreaker.glb",
+  "yaw": 1,
+  "scale": 1.267,
+  "kind": "creature"
+ },
+ "atlacrab__lighthouseCrab": {
+  "file": "models/atlacrab__lighthouseCrab.glb",
+  "yaw": 0.26,
+  "scale": 1.288,
+  "kind": "creature"
+ },
+ "atlacrab__krakenAtlas": {
+  "file": "models/atlacrab__krakenAtlas.glb",
+  "yaw": 0.87,
+  "scale": 1.034,
+  "kind": "creature"
+ },
+ "atlacrab__tidebulwark": {
+  "file": "models/atlacrab__tidebulwark.glb",
+  "yaw": 2.57,
+  "scale": 1.255,
+  "kind": "creature"
+ },
+ "brassbone__forgeGuard": {
+  "file": "models/brassbone__forgeGuard.glb",
+  "yaw": 0.61,
+  "scale": 1.04,
+  "kind": "creature"
+ },
+ "brassbone__ivoryBulwark": {
+  "file": "models/brassbone__ivoryBulwark.glb",
+  "yaw": 1,
+  "scale": 1.081,
+  "kind": "creature"
+ },
+ "brassbone__talosForgeLord": {
+  "file": "models/brassbone__talosForgeLord.glb",
+  "yaw": 0.57,
+  "scale": 1.04,
+  "kind": "creature"
+ },
+ "brassbone__gashadokuroTitan": {
+  "file": "models/brassbone__gashadokuroTitan.glb",
+  "yaw": 0.83,
+  "scale": 1.04,
+  "kind": "creature"
+ },
+ "brassbone__talosUnforged": {
+  "file": "models/brassbone__talosUnforged.glb",
+  "yaw": 2.4,
+  "scale": 1.145,
+  "kind": "creature"
+ },
+ "brassbone__bullbrass": {
+  "file": "models/brassbone__bullbrass.glb",
+  "yaw": 2.62,
+  "scale": 1.04,
+  "kind": "creature"
+ },
+ "kitsuneva__windTailVixen": {
+  "file": "models/kitsuneva__windTailVixen.glb",
+  "yaw": 1.61,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "kitsuneva__dawnTail": {
+  "file": "models/kitsuneva__dawnTail.glb",
+  "yaw": 1.21,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "kitsuneva__emberCharmer": {
+  "file": "models/kitsuneva__emberCharmer.glb",
+  "yaw": 1.57,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "glimmerkoi__scholarKoi": {
+  "file": "models/glimmerkoi__scholarKoi.glb",
+  "yaw": -1.42,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "glimmerkoi__rapidsKoi": {
+  "file": "models/glimmerkoi__rapidsKoi.glb",
+  "yaw": -0.02,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "glimmerkoi__dragonGateScholar": {
+  "file": "models/glimmerkoi__dragonGateScholar.glb",
+  "yaw": 0.87,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "glimmerkoi__torrentSerpent": {
+  "file": "models/glimmerkoi__torrentSerpent.glb",
+  "yaw": 2.76,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "glimmerkoi__ryujinAscendant": {
+  "file": "models/glimmerkoi__ryujinAscendant.glb",
+  "yaw": 1.47,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "glimmerkoi__tideKoi": {
+  "file": "models/glimmerkoi__tideKoi.glb",
+  "yaw": 0.58,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "nightveil__hushedOwl": {
+  "file": "models/nightveil__hushedOwl.glb",
+  "yaw": 1.41,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "nightveil__venomSeer": {
+  "file": "models/nightveil__venomSeer.glb",
+  "yaw": 1.52,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "nightveil__midnightAugur": {
+  "file": "models/nightveil__midnightAugur.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "nightveil__medusaOwl": {
+  "file": "models/nightveil__medusaOwl.glb",
+  "yaw": 0,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "nightveil__athenaNoctua": {
+  "file": "models/nightveil__athenaNoctua.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "nightveil__nightwing": {
+  "file": "models/nightveil__nightwing.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "emberlamb__fleeceKeeper": {
+  "file": "models/emberlamb__fleeceKeeper.glb",
+  "yaw": 0,
+  "scale": 0.95,
+  "kind": "creature"
+ },
+ "emberlamb__shepherdsFlame": {
+  "file": "models/emberlamb__shepherdsFlame.glb",
+  "yaw": 1.56,
+  "scale": 0.95,
+  "kind": "creature"
+ },
+ "emberlamb__ramOfColchis": {
+  "file": "models/emberlamb__ramOfColchis.glb",
+  "yaw": 0,
+  "scale": 0.95,
+  "kind": "creature"
+ },
+ "emberlamb__hearthShepherd": {
+  "file": "models/emberlamb__hearthShepherd.glb",
+  "yaw": 1.57,
+  "scale": 0.95,
+  "kind": "creature"
+ },
+ "emberlamb__aureateFlock": {
+  "file": "models/emberlamb__aureateFlock.glb",
+  "yaw": 0,
+  "scale": 0.95,
+  "kind": "creature"
+ },
+ "emberlamb__bastionLamb": {
+  "file": "models/emberlamb__bastionLamb.glb",
+  "yaw": 0,
+  "scale": 0.95,
+  "kind": "creature"
+ },
+ "volthorn__sparkRunner": {
+  "file": "models/volthorn__sparkRunner.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "volthorn__stormcaller": {
+  "file": "models/volthorn__stormcaller.glb",
+  "yaw": 0,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "volthorn__thunderstrideStallion": {
+  "file": "models/volthorn__thunderstrideStallion.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "volthorn__tempestSleipnir": {
+  "file": "models/volthorn__tempestSleipnir.glb",
+  "yaw": -0.01,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "volthorn__allfatherSteed": {
+  "file": "models/volthorn__allfatherSteed.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "volthorn__chargehoof": {
+  "file": "models/volthorn__chargehoof.glb",
+  "yaw": 0,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "brinegrave__kennelWarden": {
+  "file": "models/brinegrave__kennelWarden.glb",
+  "yaw": -0.24,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "brinegrave__houndsOfTheDeep": {
+  "file": "models/brinegrave__houndsOfTheDeep.glb",
+  "yaw": -0.38,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "brinegrave__scyllaWarden": {
+  "file": "models/brinegrave__scyllaWarden.glb",
+  "yaw": -1.68,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "brinegrave__packOfTheAbyss": {
+  "file": "models/brinegrave__packOfTheAbyss.glb",
+  "yaw": -0.11,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "brinegrave__cerberusOfTheTide": {
+  "file": "models/brinegrave__cerberusOfTheTide.glb",
+  "yaw": -1.1,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "brinegrave__bulwarkHound": {
+  "file": "models/brinegrave__bulwarkHound.glb",
+  "yaw": -0.36,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "stillgaze__riddlecrow": {
+  "file": "models/stillgaze__riddlecrow.glb",
+  "yaw": 0,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "stillgaze__swiftCockatrice": {
+  "file": "models/stillgaze__swiftCockatrice.glb",
+  "yaw": 0.03,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "stillgaze__sphinxOfTheDust": {
+  "file": "models/stillgaze__sphinxOfTheDust.glb",
+  "yaw": 1.572,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "stillgaze__basiliskCrowned": {
+  "file": "models/stillgaze__basiliskCrowned.glb",
+  "yaw": 0.47,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "stillgaze__chimeraOfRiddles": {
+  "file": "models/stillgaze__chimeraOfRiddles.glb",
+  "yaw": 1.54,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "stillgaze__stoneShield": {
+  "file": "models/stillgaze__stoneShield.glb",
+  "yaw": 1.59,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "duskcoil__whisperRaven": {
+  "file": "models/duskcoil__whisperRaven.glb",
+  "yaw": 0,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "duskcoil__coilmonger": {
+  "file": "models/duskcoil__coilmonger.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "duskcoil__huginnsConfidant": {
+  "file": "models/duskcoil__huginnsConfidant.glb",
+  "yaw": 0,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "duskcoil__wyrmOfSecrets": {
+  "file": "models/duskcoil__wyrmOfSecrets.glb",
+  "yaw": 3.14,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "duskcoil__odinsInformant": {
+  "file": "models/duskcoil__odinsInformant.glb",
+  "yaw": 0.01,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "duskcoil__rotLaundress": {
+  "file": "models/duskcoil__rotLaundress.glb",
+  "yaw": -0.17,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "solenne__dawnScarab": {
+  "file": "models/solenne__dawnScarab.glb",
+  "yaw": 1.54,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "solenne__templeSentinel": {
+  "file": "models/solenne__templeSentinel.glb",
+  "yaw": 1.57,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "solenne__kheprisBlessing": {
+  "file": "models/solenne__kheprisBlessing.glb",
+  "yaw": 1.57,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "solenne__pharaohsScarab": {
+  "file": "models/solenne__pharaohsScarab.glb",
+  "yaw": -1.57,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "solenne__solarBarque": {
+  "file": "models/solenne__solarBarque.glb",
+  "yaw": 1.58,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "solenne__cinderScarab": {
+  "file": "models/solenne__cinderScarab.glb",
+  "yaw": -1.56,
+  "scale": 0.9,
+  "kind": "creature"
+ },
+ "kappadeep__bowlKeeper": {
+  "file": "models/kappadeep__bowlKeeper.glb",
+  "yaw": 1.57,
+  "scale": 1.3,
+  "kind": "creature"
+ },
+ "kappadeep__sleepyTidecaller": {
+  "file": "models/kappadeep__sleepyTidecaller.glb",
+  "yaw": 1.57,
+  "scale": 1.3,
+  "kind": "creature"
+ },
+ "kappadeep__wellOfAges": {
+  "file": "models/kappadeep__wellOfAges.glb",
+  "yaw": 1.61,
+  "scale": 1.3,
+  "kind": "creature"
+ },
+ "kappadeep__riverElderTide": {
+  "file": "models/kappadeep__riverElderTide.glb",
+  "yaw": 1.26,
+  "scale": 1.3,
+  "kind": "creature"
+ },
+ "kappadeep__suijinOfTheDeep": {
+  "file": "models/kappadeep__suijinOfTheDeep.glb",
+  "yaw": 0,
+  "scale": 1.3,
+  "kind": "creature"
+ },
+ "kappadeep__bowlSage": {
+  "file": "models/kappadeep__bowlSage.glb",
+  "yaw": 1.55,
+  "scale": 1.3,
+  "kind": "creature"
+ },
+ "pyrewisp__lanternJackal": {
+  "file": "models/pyrewisp__lanternJackal.glb",
+  "yaw": 1.03,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "pyrewisp__willOWhisp": {
+  "file": "models/pyrewisp__willOWhisp.glb",
+  "yaw": 1.572,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "pyrewisp__anubisFlameKeeper": {
+  "file": "models/pyrewisp__anubisFlameKeeper.glb",
+  "yaw": -1.06,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "pyrewisp__jackoLanternKing": {
+  "file": "models/pyrewisp__jackoLanternKing.glb",
+  "yaw": 1.572,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "pyrewisp__lordOfFalseDawn": {
+  "file": "models/pyrewisp__lordOfFalseDawn.glb",
+  "yaw": 1.592,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "pyrewisp__gloomwisp": {
+  "file": "models/pyrewisp__gloomwisp.glb",
+  "yaw": 1.572,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "mawdeep__whirlmaw": {
+  "file": "models/mawdeep__whirlmaw.glb",
+  "yaw": 1.57,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "mawdeep__tidepoolToad": {
+  "file": "models/mawdeep__tidepoolToad.glb",
+  "yaw": 1.55,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "mawdeep__charybdisGlutton": {
+  "file": "models/mawdeep__charybdisGlutton.glb",
+  "yaw": 1.57,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "mawdeep__toadOfTheGulf": {
+  "file": "models/mawdeep__toadOfTheGulf.glb",
+  "yaw": 1.58,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "mawdeep__maelstromLeviathan": {
+  "file": "models/mawdeep__maelstromLeviathan.glb",
+  "yaw": 1.55,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "mawdeep__fenGlutton": {
+  "file": "models/mawdeep__fenGlutton.glb",
+  "yaw": 1.57,
+  "scale": 1.2,
+  "kind": "creature"
+ },
+ "auroracorn__prismHorn": {
+  "file": "models/auroracorn__prismHorn.glb",
+  "yaw": 0,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "auroracorn__swanguard": {
+  "file": "models/auroracorn__swanguard.glb",
+  "yaw": 3.14,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "auroracorn__rainbowBridgeWarden": {
+  "file": "models/auroracorn__rainbowBridgeWarden.glb",
+  "yaw": 0,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "auroracorn__valkyrieUnicorn": {
+  "file": "models/auroracorn__valkyrieUnicorn.glb",
+  "yaw": -1.57,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "auroracorn__auroraSovereign": {
+  "file": "models/auroracorn__auroraSovereign.glb",
+  "yaw": 0,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "auroracorn__galeUnicorn": {
+  "file": "models/auroracorn__galeUnicorn.glb",
+  "yaw": 1.57,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "lumoth__duskDuster": {
+  "file": "models/lumoth__duskDuster.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "lumoth__moonMothling": {
+  "file": "models/lumoth__moonMothling.glb",
+  "yaw": 1.6,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "lumoth__nightlightGaruda": {
+  "file": "models/lumoth__nightlightGaruda.glb",
+  "yaw": 0.01,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "lumoth__lunaMother": {
+  "file": "models/lumoth__lunaMother.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "lumoth__empressOfTheNight": {
+  "file": "models/lumoth__empressOfTheNight.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "lumoth__venomDuster": {
+  "file": "models/lumoth__venomDuster.glb",
+  "yaw": 1.58,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "sunkenhorn__coralStag": {
+  "file": "models/sunkenhorn__coralStag.glb",
+  "yaw": 3.08,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "sunkenhorn__moonwaleStag": {
+  "file": "models/sunkenhorn__moonwaleStag.glb",
+  "yaw": 1.57,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "sunkenhorn__bakunawaElder": {
+  "file": "models/sunkenhorn__bakunawaElder.glb",
+  "yaw": 1.57,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "sunkenhorn__lunarLeviathanStag": {
+  "file": "models/sunkenhorn__lunarLeviathanStag.glb",
+  "yaw": 1.57,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "sunkenhorn__moonSwallower": {
+  "file": "models/sunkenhorn__moonSwallower.glb",
+  "yaw": 1.57,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "sunkenhorn__hearthDeepStag": {
+  "file": "models/sunkenhorn__hearthDeepStag.glb",
+  "yaw": 1.58,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "selkira__lotusSelkie": {
+  "file": "models/selkira__lotusSelkie.glb",
+  "yaw": -3.08,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "selkira__tideCantor": {
+  "file": "models/selkira__tideCantor.glb",
+  "yaw": 3.12,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "selkira__silkieOfTheLostPod": {
+  "file": "models/selkira__silkieOfTheLostPod.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "selkira__wavesingerLament": {
+  "file": "models/selkira__wavesingerLament.glb",
+  "yaw": 0,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "selkira__queenOfTheSealfolk": {
+  "file": "models/selkira__queenOfTheSealfolk.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "selkira__maelstromSelkie": {
+  "file": "models/selkira__maelstromSelkie.glb",
+  "yaw": 1.57,
+  "scale": 1,
+  "kind": "creature"
+ },
+ "hearthkin__emberbelly": {
+  "file": "models/hearthkin__emberbelly.glb",
+  "yaw": 0.47,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "hearthkin__cinderSprite": {
+  "file": "models/hearthkin__cinderSprite.glb",
+  "yaw": -1.59,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "hearthkin__domovoiElder": {
+  "file": "models/hearthkin__domovoiElder.glb",
+  "yaw": 0.45,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "hearthkin__ashHearthSpirit": {
+  "file": "models/hearthkin__ashHearthSpirit.glb",
+  "yaw": 1.56,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "hearthkin__heartOfTheHome": {
+  "file": "models/hearthkin__heartOfTheHome.glb",
+  "yaw": 0.31,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "hearthkin__stoutHearth": {
+  "file": "models/hearthkin__stoutHearth.glb",
+  "yaw": 0.9,
+  "scale": 0.75,
+  "kind": "creature"
+ },
+ "mothmara__dreadMare": {
+  "file": "models/mothmara__dreadMare.glb",
+  "yaw": 1.57,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "mothmara__nightmareCharger": {
+  "file": "models/mothmara__nightmareCharger.glb",
+  "yaw": 0.01,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "mothmara__vigilMare": {
+  "file": "models/mothmara__vigilMare.glb",
+  "yaw": 1.57,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "mothmara__wildHuntMare": {
+  "file": "models/mothmara__wildHuntMare.glb",
+  "yaw": 1.56,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "mothmara__hecatesMare": {
+  "file": "models/mothmara__hecatesMare.glb",
+  "yaw": 0.01,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "mothmara__tidemare": {
+  "file": "models/mothmara__tidemare.glb",
+  "yaw": 0.01,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "kirinth__moodweaver": {
+  "file": "models/kirinth__moodweaver.glb",
+  "yaw": 1.54,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "kirinth__sanctuaryQilin": {
+  "file": "models/kirinth__sanctuaryQilin.glb",
+  "yaw": 3.14,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "kirinth__spiritOfFourElements": {
+  "file": "models/kirinth__spiritOfFourElements.glb",
+  "yaw": 1.57,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "kirinth__templeGuardianQilin": {
+  "file": "models/kirinth__templeGuardianQilin.glb",
+  "yaw": 3.142,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "kirinth__kirinOfTheFourWinds": {
+  "file": "models/kirinth__kirinOfTheFourWinds.glb",
+  "yaw": 3.142,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "kirinth__hearthQilin": {
+  "file": "models/kirinth__hearthQilin.glb",
+  "yaw": 0.78,
+  "scale": 1.1,
+  "kind": "creature"
+ },
+ "bakuroth__dreamdrinker": {
+  "file": "models/bakuroth__dreamdrinker.glb",
+  "yaw": 0.02,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "bakuroth__fallingStarTapir": {
+  "file": "models/bakuroth__fallingStarTapir.glb",
+  "yaw": 1.58,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "bakuroth__nightmareFeeder": {
+  "file": "models/bakuroth__nightmareFeeder.glb",
+  "yaw": 1.57,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "bakuroth__starSwallower": {
+  "file": "models/bakuroth__starSwallower.glb",
+  "yaw": 1.57,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "bakuroth__bakuOfTheFirstDream": {
+  "file": "models/bakuroth__bakuOfTheFirstDream.glb",
+  "yaw": 1.57,
+  "scale": 1.4,
+  "kind": "creature"
+ },
+ "bakuroth__dreadEater": {
+  "file": "models/bakuroth__dreadEater.glb",
+  "yaw": 1.57,
+  "scale": 1.4,
+  "kind": "creature"
  }
 }

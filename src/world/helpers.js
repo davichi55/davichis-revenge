@@ -50,7 +50,7 @@
     const list = (r.guide || []).slice(), rim = r.rim === undefined ? 40 : r.rim, W = r.w, H = r.h;
     if (rim) list.push(["rock", S.R(0, 0, W, rim)], ["rock", S.R(0, H - rim, W, rim)], ["rock", S.R(0, 0, rim, H)], ["rock", S.R(W - rim, 0, rim, H)]);
     for (const e of r.exits || []) {
-      const [x, y, w, h] = e.rect, cx = x + w / 2, cy = y + h / 2, t = e.floor || "road";
+      const [x, y, w, h] = e.rect, cx = x + w / 2, cy = y + h / 2, t = e.floor || (r.boat ? "water" : "road");   // boat maps (SYSTEMS): docks and channels are water
       const dl = cx, dr = W - cx, dt = cy, db = H - cy, m = Math.min(dl, dr, dt, db);
       if (m > rim + 60) { list.push([t, S.R(x, y, w, h)]); continue; }
       if (m === dl) list.push([t, S.R(0, y, x + w, h)]); else if (m === dr) list.push([t, S.R(x, y, W - x, h)]);

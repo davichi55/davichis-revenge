@@ -1,296 +1,1869 @@
 {
- "battle": {
-  "file": "music/battle.mp3",
+ "title": {
+  "file": "music/title.mp3",
   "type": "music",
   "loop": true,
-  "vol": 0.75,
-  "seconds": 75
- },
- "battleSoldiers": {
-  "file": "music/battleSoldiers.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.75,
-  "seconds": 75.1
- },
- "boss": {
-  "file": "music/boss.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.8,
-  "seconds": 90.1
- },
- "desert": {
-  "file": "music/desert.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.7,
-  "seconds": 100.1
- },
- "dunes": {
-  "file": "music/dunes.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.7,
-  "seconds": 90.1
- },
- "dungeon": {
-  "file": "music/dungeon.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.7,
-  "seconds": 90.1
- },
- "gameover": {
-  "file": "music/gameover.mp3",
-  "type": "music",
-  "loop": false,
-  "vol": 0.8,
-  "seconds": 11.6
- },
- "oasis": {
-  "file": "music/oasis.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.7,
-  "seconds": 75.1
- },
- "packChoice": {
-  "file": "music/packChoice.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.7,
-  "seconds": 75.1
- },
- "raid": {
-  "file": "music/raid.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.8,
-  "seconds": 75.1
- },
- "ruins": {
-  "file": "music/ruins.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.7,
-  "seconds": 90
- },
- "sad": {
-  "file": "music/sad.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.7,
-  "seconds": 60
+  "vol": 0.71,
+  "seconds": 90.1,
+  "cat": "story",
+  "start": 0.76,
+  "end": 87.69
  },
  "story": {
   "file": "music/story.mp3",
   "type": "music",
   "loop": true,
-  "vol": 0.7,
-  "seconds": 75.1
+  "vol": 0.73,
+  "seconds": 75.05,
+  "cat": "calm",
+  "end": 73.35
  },
- "titan": {
-  "file": "music/titan.mp3",
+ "sad": {
+  "file": "music/sad.mp3",
   "type": "music",
   "loop": true,
-  "vol": 0.85,
-  "seconds": 100.1
- },
- "title": {
-  "file": "music/title.mp3",
-  "type": "music",
-  "loop": true,
-  "vol": 0.8,
-  "seconds": 90.1
+  "vol": 0.77,
+  "seconds": 60.03,
+  "cat": "calm"
  },
  "town": {
   "file": "music/town.mp3",
   "type": "music",
   "loop": true,
-  "vol": 0.7,
-  "seconds": 90
+  "vol": 0.6,
+  "seconds": 89.99,
+  "cat": "calm",
+  "amb": "ambCrowd"
+ },
+ "desert": {
+  "file": "music/desert.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.66,
+  "seconds": 100.08,
+  "cat": "explore",
+  "amb": "ambWind",
+  "start": 0.56,
+  "end": 96.61
+ },
+ "dunes": {
+  "file": "music/dunes.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.59,
+  "seconds": 90.12,
+  "cat": "explore",
+  "amb": "ambWind",
+  "start": 0.22,
+  "end": 89.68
+ },
+ "oasis": {
+  "file": "music/oasis.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.67,
+  "seconds": 75.05,
+  "cat": "calm",
+  "amb": "ambRiver",
+  "end": 72.38
+ },
+ "dungeon": {
+  "file": "music/dungeon.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.79,
+  "seconds": 90.1,
+  "cat": "explore",
+  "amb": "ambCave",
+  "start": 0.51,
+  "end": 88.82
+ },
+ "ruins": {
+  "file": "music/ruins.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.94,
+  "seconds": 90.04,
+  "cat": "explore",
+  "start": 1.03,
+  "end": 87.06
+ },
+ "battle": {
+  "file": "music/battle.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.65,
+  "seconds": 75,
+  "cat": "battle"
+ },
+ "battleSoldiers": {
+  "file": "music/battleSoldiers.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.84,
+  "seconds": 75.05,
+  "cat": "battle",
+  "end": 74.87
+ },
+ "boss": {
+  "file": "music/boss.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.83,
+  "seconds": 90.1,
+  "cat": "boss",
+  "end": 86.27
+ },
+ "titan": {
+  "file": "music/titan.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.94,
+  "seconds": 100.08,
+  "cat": "titan",
+  "start": 0.38,
+  "end": 98.25
  },
  "victory": {
   "file": "music/victory.mp3",
   "type": "music",
   "loop": false,
-  "vol": 0.9,
-  "seconds": 8
+  "vol": 0.83,
+  "seconds": 8.02,
+  "cat": "sting"
  },
- "break": {
-  "file": "sfx/break.mp3",
-  "type": "sfx",
+ "gameover": {
+  "file": "music/gameover.mp3",
+  "type": "music",
   "loop": false,
-  "vol": 0.9,
-  "seconds": 1.2
+  "vol": 1,
+  "seconds": 11.55,
+  "cat": "sting"
  },
- "buff": {
-  "file": "sfx/buff.mp3",
-  "type": "sfx",
-  "loop": false,
+ "packChoice": {
+  "file": "music/packChoice.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.62,
+  "seconds": 75.05,
+  "cat": "calm"
+ },
+ "raid": {
+  "file": "music/raid.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.72,
+  "seconds": 75.05,
+  "cat": "battle",
+  "end": 74.69
+ },
+ "shore": {
+  "file": "music/shore.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.69,
+  "seconds": 75.05,
+  "cat": "explore",
+  "amb": "ambSea",
+  "start": 1.01,
+  "end": 72.99
+ },
+ "river": {
+  "file": "music/river.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.62,
+  "seconds": 75.05,
+  "cat": "explore",
+  "amb": "ambRiver",
+  "end": 73.81
+ },
+ "jungle": {
+  "file": "music/jungle.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.62,
+  "seconds": 90.04,
+  "cat": "explore",
+  "amb": "ambJungle",
+  "start": 0.21,
+  "end": 88.73
+ },
+ "fort": {
+  "file": "music/fort.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.81,
+  "seconds": 75.05,
+  "cat": "explore"
+ },
+ "pyramid": {
+  "file": "music/pyramid.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.62,
+  "seconds": 90.1,
+  "cat": "explore",
+  "amb": "ambWind",
+  "end": 89.27
+ },
+ "canopy": {
+  "file": "music/canopy.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.62,
+  "seconds": 75.05,
+  "cat": "explore",
+  "amb": "ambJungle"
+ },
+ "treetopTown": {
+  "file": "music/treetopTown.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.65,
+  "seconds": 70.06,
+  "cat": "calm",
+  "amb": "ambJungle",
+  "end": 67.44
+ },
+ "marigold": {
+  "file": "music/marigold.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.81,
+  "seconds": 75.05,
+  "cat": "calm"
+ },
+ "sporeCave": {
+  "file": "music/sporeCave.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.79,
+  "seconds": 75.05,
+  "cat": "explore",
+  "amb": "ambCave"
+ },
+ "aviary": {
+  "file": "music/aviary.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.62,
+  "seconds": 90.04,
+  "cat": "explore",
+  "amb": "ambWind",
+  "start": 2.13,
+  "end": 88.33
+ },
+ "battleJungle": {
+  "file": "music/battleJungle.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.79,
+  "seconds": 75.08,
+  "cat": "battle",
+  "end": 73.57
+ },
+ "general": {
+  "file": "music/general.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.81,
+  "seconds": 90.1,
+  "cat": "boss",
+  "end": 87.7
+ },
+ "guardian": {
+  "file": "music/guardian.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.74,
+  "seconds": 90.1,
+  "cat": "boss"
+ },
+ "titanSky": {
+  "file": "music/titanSky.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.77,
+  "seconds": 100.08,
+  "cat": "titan",
+  "end": 98.12
+ },
+ "tension": {
+  "file": "music/tension.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.68,
+  "seconds": 60.08,
+  "cat": "story",
+  "end": 59.89
+ },
+ "sacrifice": {
+  "file": "music/sacrifice.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.63,
+  "seconds": 75.05,
+  "cat": "calm",
+  "end": 73.06
+ },
+ "truth": {
+  "file": "music/truth.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.67,
+  "seconds": 75.05,
+  "cat": "calm",
+  "start": 0.43,
+  "end": 74.21
+ },
+ "letters": {
+  "file": "music/letters.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.86,
+  "seconds": 75.05,
+  "cat": "calm"
+ },
+ "hope": {
+  "file": "music/hope.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.74,
+  "seconds": 75.05,
+  "cat": "calm",
+  "end": 73.99
+ },
+ "triumph": {
+  "file": "music/triumph.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.65,
+  "seconds": 60.08,
+  "cat": "story",
+  "end": 59.9
+ },
+ "farewell": {
+  "file": "music/farewell.mp3",
+  "type": "music",
+  "loop": true,
   "vol": 0.6,
-  "seconds": 1.1
+  "seconds": 60.08,
+  "cat": "calm",
+  "end": 59.83
  },
- "coin": {
-  "file": "sfx/coin.mp3",
-  "type": "sfx",
-  "loop": false,
+ "voyage": {
+  "file": "music/voyage.mp3",
+  "type": "music",
+  "loop": true,
   "vol": 0.6,
-  "seconds": 0.6
+  "seconds": 90.1,
+  "cat": "story",
+  "amb": "ambShip"
  },
- "crit": {
-  "file": "sfx/crit.mp3",
-  "type": "sfx",
-  "loop": false,
-  "vol": 0.9,
-  "seconds": 0.9
- },
- "debuff": {
-  "file": "sfx/debuff.mp3",
-  "type": "sfx",
-  "loop": false,
+ "occupied": {
+  "file": "music/occupied.mp3",
+  "type": "music",
+  "loop": true,
   "vol": 0.6,
-  "seconds": 1.1
+  "seconds": 75.05,
+  "cat": "explore",
+  "amb": "ambWind"
  },
- "door": {
-  "file": "sfx/door.mp3",
-  "type": "sfx",
-  "loop": false,
-  "vol": 0.8,
-  "seconds": 2.5
+ "vault": {
+  "file": "music/vault.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.73,
+  "seconds": 75.05,
+  "cat": "explore",
+  "amb": "ambCave",
+  "start": 0.29,
+  "end": 74.06
  },
- "encounter": {
-  "file": "sfx/encounter.mp3",
-  "type": "sfx",
-  "loop": false,
-  "vol": 0.9,
-  "seconds": 1.5
+ "resistance": {
+  "file": "music/resistance.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.62,
+  "seconds": 75.05,
+  "cat": "explore"
  },
- "fire": {
-  "file": "sfx/fire.mp3",
-  "type": "sfx",
-  "loop": false,
-  "vol": 0.8,
-  "seconds": 1.3
+ "harbour": {
+  "file": "music/harbour.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.53,
+  "seconds": 75.05,
+  "cat": "calm",
+  "amb": "ambSea",
+  "end": 74.41
  },
- "flee": {
-  "file": "sfx/flee.mp3",
-  "type": "sfx",
-  "loop": false,
+ "kharam": {
+  "file": "music/kharam.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.72,
+  "seconds": 75.05,
+  "cat": "calm"
+ },
+ "sea": {
+  "file": "music/sea.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.57,
+  "seconds": 90.1,
+  "cat": "explore",
+  "amb": "ambShip",
+  "end": 88.38
+ },
+ "seaCave": {
+  "file": "music/seaCave.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.84,
+  "seconds": 60.08,
+  "cat": "explore",
+  "amb": "ambCave",
+  "start": 1.15,
+  "end": 58.56
+ },
+ "fishingTown": {
+  "file": "music/fishingTown.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.54,
+  "seconds": 60.08,
+  "cat": "calm",
+  "amb": "ambSea",
+  "end": 57.71
+ },
+ "volcano": {
+  "file": "music/volcano.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.64,
+  "seconds": 75.05,
+  "cat": "explore",
+  "amb": "ambFire"
+ },
+ "pilgrimTown": {
+  "file": "music/pilgrimTown.mp3",
+  "type": "music",
+  "loop": true,
   "vol": 0.7,
-  "seconds": 1.1
+  "seconds": 60.08,
+  "cat": "calm"
  },
- "heal": {
-  "file": "sfx/heal.mp3",
-  "type": "sfx",
-  "loop": false,
+ "underworld": {
+  "file": "music/underworld.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.66,
+  "seconds": 75.05,
+  "cat": "explore",
+  "amb": "ambCave"
+ },
+ "mourningTown": {
+  "file": "music/mourningTown.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.53,
+  "seconds": 60.08,
+  "cat": "calm",
+  "amb": "ambWind",
+  "end": 58.49
+ },
+ "arenaCity": {
+  "file": "music/arenaCity.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.52,
+  "seconds": 75.05,
+  "cat": "calm",
+  "amb": "ambCrowd"
+ },
+ "battleSea": {
+  "file": "music/battleSea.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.72,
+  "seconds": 75.05,
+  "cat": "battle",
+  "start": 0.55,
+  "end": 72.32
+ },
+ "battleArena": {
+  "file": "music/battleArena.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.71,
+  "seconds": 75.08,
+  "cat": "battle",
+  "end": 74.31
+ },
+ "titanSea": {
+  "file": "music/titanSea.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.83,
+  "seconds": 100.13,
+  "cat": "titan",
+  "end": 99.1
+ },
+ "titanFire": {
+  "file": "music/titanFire.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.79,
+  "seconds": 100.13,
+  "cat": "titan",
+  "start": 0.68,
+  "end": 98.48
+ },
+ "titanUnder": {
+  "file": "music/titanUnder.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.95,
+  "seconds": 100.08,
+  "cat": "titan",
+  "end": 97.66
+ },
+ "arenaChampion": {
+  "file": "music/arenaChampion.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.78,
+  "seconds": 75.05,
+  "cat": "boss",
+  "end": 74.77
+ },
+ "legend": {
+  "file": "music/legend.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.82,
+  "seconds": 75.05,
+  "cat": "boss"
+ },
+ "capital": {
+  "file": "music/capital.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.71,
+  "seconds": 80.7,
+  "cat": "explore",
+  "amb": "ambCrowd"
+ },
+ "sewer": {
+  "file": "music/sewer.mp3",
+  "type": "music",
+  "loop": true,
   "vol": 0.7,
-  "seconds": 1.4
+  "seconds": 98.25,
+  "cat": "explore",
+  "amb": "ambCave",
+  "start": 0.56,
+  "end": 96.6
+ },
+ "palace": {
+  "file": "music/palace.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.71,
+  "seconds": 85.52,
+  "cat": "explore"
+ },
+ "provinces": {
+  "file": "music/provinces.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.71,
+  "seconds": 92.66,
+  "cat": "explore",
+  "amb": "ambWind",
+  "start": 0.52,
+  "end": 89.47
+ },
+ "orchardTown": {
+  "file": "music/orchardTown.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.63,
+  "seconds": 69.49,
+  "cat": "calm"
+ },
+ "mines": {
+  "file": "music/mines.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.7,
+  "seconds": 77.37,
+  "cat": "explore",
+  "amb": "ambCave"
+ },
+ "prison": {
+  "file": "music/prison.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.72,
+  "seconds": 79.3,
+  "cat": "explore",
+  "amb": "ambWind",
+  "start": 0.31,
+  "end": 78.07
+ },
+ "roots": {
+  "file": "music/roots.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.71,
+  "seconds": 83.39,
+  "cat": "explore",
+  "amb": "ambCave"
+ },
+ "rebelCamp": {
+  "file": "music/rebelCamp.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.67,
+  "seconds": 81.58,
+  "cat": "calm",
+  "amb": "ambFire",
+  "end": 80.66
+ },
+ "battleLegion": {
+  "file": "music/battleLegion.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.88,
+  "seconds": 71.48,
+  "cat": "battle",
+  "end": 71.32
+ },
+ "titanRoot": {
+  "file": "music/titanRoot.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 1,
+  "seconds": 106.46,
+  "cat": "titan",
+  "end": 103.9
+ },
+ "warfront": {
+  "file": "music/warfront.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.71,
+  "seconds": 65.83,
+  "cat": "explore",
+  "amb": "ambWind"
+ },
+ "sanctum": {
+  "file": "music/sanctum.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.62,
+  "seconds": 65.71,
+  "cat": "calm"
+ },
+ "crypt": {
+  "file": "music/crypt.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.7,
+  "seconds": 79.36,
+  "cat": "explore",
+  "amb": "ambCave"
+ },
+ "stormPeak": {
+  "file": "music/stormPeak.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.7,
+  "seconds": 104.7,
+  "cat": "explore",
+  "amb": "ambStorm",
+  "start": 2.69,
+  "end": 101.54
+ },
+ "greatPyramid": {
+  "file": "music/greatPyramid.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.7,
+  "seconds": 82.16,
+  "cat": "explore",
+  "end": 81.17
+ },
+ "bastion": {
+  "file": "music/bastion.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.63,
+  "seconds": 63.24,
+  "cat": "calm",
+  "amb": "ambFire",
+  "end": 62.89
+ },
+ "starfall": {
+  "file": "music/starfall.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.7,
+  "seconds": 81.94,
+  "cat": "explore",
+  "amb": "ambNight",
+  "end": 81.76
+ },
+ "drowned": {
+  "file": "music/drowned.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.71,
+  "seconds": 65.81,
+  "cat": "explore",
+  "amb": "ambCave",
+  "start": 1.18,
+  "end": 64.07
+ },
+ "deepTrench": {
+  "file": "music/deepTrench.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.7,
+  "seconds": 68.87,
+  "cat": "explore",
+  "amb": "ambCave",
+  "end": 66.27
+ },
+ "titanStorm": {
+  "file": "music/titanStorm.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.98,
+  "seconds": 93.53,
+  "cat": "titan",
+  "end": 91.58
+ },
+ "mentor": {
+  "file": "music/mentor.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.92,
+  "seconds": 80.7,
+  "cat": "boss",
+  "end": 80.31
+ },
+ "emperor": {
+  "file": "music/emperor.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.99,
+  "seconds": 100.11,
+  "cat": "titan",
+  "end": 97.43
+ },
+ "sunEater": {
+  "file": "music/sunEater.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 1,
+  "seconds": 104.52,
+  "cat": "titan",
+  "start": 0.38,
+  "end": 102.52
+ },
+ "epilogue": {
+  "file": "music/epilogue.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.67,
+  "seconds": 83.79,
+  "cat": "story",
+  "end": 81.39
+ },
+ "credits": {
+  "file": "music/credits.mp3",
+  "type": "music",
+  "loop": false,
+  "vol": 0.72,
+  "seconds": 252,
+  "cat": "story"
  },
  "hit": {
   "file": "sfx/hit.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.8,
-  "seconds": 0.7
+  "vol": 1,
+  "seconds": 0.6
  },
  "hitHeavy": {
   "file": "sfx/hitHeavy.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.9,
-  "seconds": 0.9
+  "vol": 0.56,
+  "seconds": 0.88
+ },
+ "crit": {
+  "file": "sfx/crit.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.73,
+  "seconds": 0.88
+ },
+ "spell": {
+  "file": "sfx/spell.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.78,
+  "seconds": 1.2
+ },
+ "fire": {
+  "file": "sfx/fire.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.38,
+  "seconds": 1.28
+ },
+ "water": {
+  "file": "sfx/water.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.68,
+  "seconds": 1.28
  },
  "ice": {
   "file": "sfx/ice.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.8,
-  "seconds": 1.3
+  "vol": 0.95,
+  "seconds": 1.2
+ },
+ "shock": {
+  "file": "sfx/shock.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.45,
+  "seconds": 1.08
+ },
+ "poison": {
+  "file": "sfx/poison.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.66,
+  "seconds": 1.2
+ },
+ "heal": {
+  "file": "sfx/heal.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.36
+ },
+ "buff": {
+  "file": "sfx/buff.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.42,
+  "seconds": 1
+ },
+ "debuff": {
+  "file": "sfx/debuff.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.56,
+  "seconds": 1
+ },
+ "break": {
+  "file": "sfx/break.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.08
  },
  "ko": {
   "file": "sfx/ko.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.8,
-  "seconds": 1.3
+  "vol": 1,
+  "seconds": 1.28
  },
  "levelUp": {
   "file": "sfx/levelUp.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.8,
-  "seconds": 2.1
+  "vol": 0.29,
+  "seconds": 2
  },
- "menuBack": {
-  "file": "sfx/menuBack.mp3",
+ "coin": {
+  "file": "sfx/coin.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.5,
-  "seconds": 0.6
+  "vol": 0.7,
+  "seconds": 0.48
  },
  "menuMove": {
   "file": "sfx/menuMove.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.4,
-  "seconds": 0.6
+  "vol": 0.45,
+  "seconds": 0.48
  },
  "menuOk": {
   "file": "sfx/menuOk.mp3",
   "type": "sfx",
   "loop": false,
   "vol": 0.6,
-  "seconds": 0.6
+  "seconds": 0.48
  },
- "poison": {
-  "file": "sfx/poison.mp3",
+ "menuBack": {
+  "file": "sfx/menuBack.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.7,
-  "seconds": 1.3
- },
- "potion": {
-  "file": "sfx/potion.mp3",
-  "type": "sfx",
-  "loop": false,
-  "vol": 0.7,
-  "seconds": 1.1
- },
- "shock": {
-  "file": "sfx/shock.mp3",
-  "type": "sfx",
-  "loop": false,
-  "vol": 0.8,
-  "seconds": 1.2
- },
- "spell": {
-  "file": "sfx/spell.mp3",
-  "type": "sfx",
-  "loop": false,
-  "vol": 0.7,
-  "seconds": 1.3
+  "vol": 0.5,
+  "seconds": 0.48
  },
  "step": {
   "file": "sfx/step.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.35,
-  "seconds": 0.6
+  "vol": 0.45,
+  "seconds": 0.48
+ },
+ "door": {
+  "file": "sfx/door.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.71,
+  "seconds": 2.48
+ },
+ "encounter": {
+  "file": "sfx/encounter.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.64,
+  "seconds": 1.48
+ },
+ "flee": {
+  "file": "sfx/flee.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.38,
+  "seconds": 1
+ },
+ "potion": {
+  "file": "sfx/potion.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.95,
+  "seconds": 1
  },
  "telegraph": {
   "file": "sfx/telegraph.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.8,
+  "vol": 0.63,
+  "seconds": 2
+ },
+ "whoosh": {
+  "file": "sfx/whoosh.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.46,
+  "seconds": 0.6
+ },
+ "whooshBig": {
+  "file": "sfx/whooshBig.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.44,
+  "seconds": 1
+ },
+ "wingbeat": {
+  "file": "sfx/wingbeat.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.28
+ },
+ "wingFlutter": {
+  "file": "sfx/wingFlutter.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.48
+ },
+ "roar": {
+  "file": "sfx/roar.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.71,
+  "seconds": 2.8
+ },
+ "roarSmall": {
+  "file": "sfx/roarSmall.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.5
+ },
+ "screech": {
+  "file": "sfx/screech.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.69,
+  "seconds": 1.8
+ },
+ "hiss": {
+  "file": "sfx/hiss.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.83,
+  "seconds": 1.2
+ },
+ "howl": {
+  "file": "sfx/howl.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.47,
+  "seconds": 3.2
+ },
+ "bite": {
+  "file": "sfx/bite.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 0.25
+ },
+ "claw": {
+  "file": "sfx/claw.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 0.48
+ },
+ "stomp": {
+  "file": "sfx/stomp.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.62,
+  "seconds": 1.05
+ },
+ "rumble": {
+  "file": "sfx/rumble.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.79,
+  "seconds": 2.5
+ },
+ "quake": {
+  "file": "sfx/quake.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.46,
+  "seconds": 3
+ },
+ "rockFall": {
+  "file": "sfx/rockFall.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
   "seconds": 2.1
  },
- "water": {
-  "file": "sfx/water.mp3",
+ "thunder": {
+  "file": "sfx/thunder.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.62,
+  "seconds": 4
+ },
+ "lightning": {
+  "file": "sfx/lightning.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.91,
+  "seconds": 1.5
+ },
+ "gust": {
+  "file": "sfx/gust.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.76,
+  "seconds": 1.8
+ },
+ "splash": {
+  "file": "sfx/splash.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.1
+ },
+ "splashBig": {
+  "file": "sfx/splashBig.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 2
+ },
+ "waterRush": {
+  "file": "sfx/waterRush.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 2.5
+ },
+ "bubbles": {
+  "file": "sfx/bubbles.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.5
+ },
+ "crackle": {
+  "file": "sfx/crackle.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.8
+ },
+ "explosion": {
+  "file": "sfx/explosion.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.5,
+  "seconds": 2.67
+ },
+ "steam": {
+  "file": "sfx/steam.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.68,
+  "seconds": 1.3
+ },
+ "shatter": {
+  "file": "sfx/shatter.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1
+ },
+ "petrify": {
+  "file": "sfx/petrify.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.81,
+  "seconds": 1.3
+ },
+ "chainBreak": {
+  "file": "sfx/chainBreak.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.7
+ },
+ "chains": {
+  "file": "sfx/chains.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.8
+ },
+ "clang": {
+  "file": "sfx/clang.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 0.8
+ },
+ "shieldBlock": {
+  "file": "sfx/shieldBlock.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 0.64
+ },
+ "swordClash": {
+  "file": "sfx/swordClash.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.25
+ },
+ "arrowShot": {
+  "file": "sfx/arrowShot.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.58,
+  "seconds": 0.57
+ },
+ "spearThrow": {
+  "file": "sfx/spearThrow.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.73,
+  "seconds": 1.1
+ },
+ "windSlash": {
+  "file": "sfx/windSlash.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.78,
+  "seconds": 0.61
+ },
+ "earthSlam": {
+  "file": "sfx/earthSlam.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.47,
+  "seconds": 1.5
+ },
+ "drain": {
+  "file": "sfx/drain.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.85,
+  "seconds": 1.5
+ },
+ "revive": {
+  "file": "sfx/revive.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.69,
+  "seconds": 3.2
+ },
+ "summon": {
+  "file": "sfx/summon.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.66,
+  "seconds": 2.3
+ },
+ "curse": {
+  "file": "sfx/curse.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.58,
+  "seconds": 2.1
+ },
+ "holy": {
+  "file": "sfx/holy.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.64,
+  "seconds": 2.8
+ },
+ "stun": {
+  "file": "sfx/stun.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.62,
+  "seconds": 1.2
+ },
+ "portal": {
+  "file": "sfx/portal.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.63,
+  "seconds": 2
+ },
+ "sparkle": {
+  "file": "sfx/sparkle.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.76,
+  "seconds": 1.4
+ },
+ "chime": {
+  "file": "sfx/chime.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.41,
+  "seconds": 2
+ },
+ "bell": {
+  "file": "sfx/bell.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.58,
+  "seconds": 4.3
+ },
+ "shipBell": {
+  "file": "sfx/shipBell.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.73,
+  "seconds": 2.3
+ },
+ "gong": {
+  "file": "sfx/gong.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.58,
+  "seconds": 4.3
+ },
+ "hornConch": {
+  "file": "sfx/hornConch.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 3.5
+ },
+ "hornWar": {
+  "file": "sfx/hornWar.mp3",
   "type": "sfx",
   "loop": false,
   "vol": 0.8,
-  "seconds": 1.3
+  "seconds": 3
+ },
+ "drumHit": {
+  "file": "sfx/drumHit.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 1.7
+ },
+ "crowdCheer": {
+  "file": "sfx/crowdCheer.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 4.1
+ },
+ "crowdGasp": {
+  "file": "sfx/crowdGasp.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.93,
+  "seconds": 2
+ },
+ "crowdBoo": {
+  "file": "sfx/crowdBoo.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.66,
+  "seconds": 3
+ },
+ "stoneGrind": {
+  "file": "sfx/stoneGrind.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.97,
+  "seconds": 3.4
+ },
+ "woodDoor": {
+  "file": "sfx/woodDoor.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.86,
+  "seconds": 1.8
+ },
+ "chestOpen": {
+  "file": "sfx/chestOpen.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.66,
+  "seconds": 1.5
+ },
+ "keyTurn": {
+  "file": "sfx/keyTurn.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.79,
+  "seconds": 0.81
+ },
+ "paper": {
+  "file": "sfx/paper.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 0.91
+ },
+ "pageTurn": {
+  "file": "sfx/pageTurn.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.53,
+  "seconds": 0.54
+ },
+ "heartbeat": {
+  "file": "sfx/heartbeat.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.75,
+  "seconds": 2.33
+ },
+ "impact": {
+  "file": "sfx/impact.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.52,
+  "seconds": 2.8
+ },
+ "riser": {
+  "file": "sfx/riser.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.73,
+  "seconds": 3.8
+ },
+ "reveal": {
+  "file": "sfx/reveal.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.64,
+  "seconds": 3.3
+ },
+ "stepGrass": {
+  "file": "sfx/stepGrass.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.45,
+  "seconds": 0.28
+ },
+ "stepStone": {
+  "file": "sfx/stepStone.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.47,
+  "seconds": 0.75
+ },
+ "stepWater": {
+  "file": "sfx/stepWater.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.3,
+  "seconds": 0.44
+ },
+ "stepWood": {
+  "file": "sfx/stepWood.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.27,
+  "seconds": 0.29
+ },
+ "sail": {
+  "file": "sfx/sail.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.98,
+  "seconds": 1.8
+ },
+ "anchor": {
+  "file": "sfx/anchor.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 2.4
+ },
+ "oars": {
+  "file": "sfx/oars.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.76,
+  "seconds": 2.3
+ },
+ "creak": {
+  "file": "sfx/creak.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.97,
+  "seconds": 2.8
+ },
+ "gull": {
+  "file": "sfx/gull.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.47,
+  "seconds": 2
+ },
+ "coins": {
+  "file": "sfx/coins.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.6,
+  "seconds": 0.93
+ },
+ "itemGet": {
+  "file": "sfx/itemGet.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.43,
+  "seconds": 1.4
+ },
+ "questDone": {
+  "file": "sfx/questDone.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.46,
+  "seconds": 2.2
+ },
+ "equip": {
+  "file": "sfx/equip.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.81,
+  "seconds": 0.29
+ },
+ "save": {
+  "file": "sfx/save.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.35,
+  "seconds": 1.5
+ },
+ "denied": {
+  "file": "sfx/denied.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.18,
+  "seconds": 0.32
+ },
+ "titleSwell": {
+  "file": "sfx/titleSwell.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.71,
+  "seconds": 4
+ },
+ "bossReveal": {
+  "file": "sfx/bossReveal.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.62,
+  "seconds": 4
+ },
+ "waves": {
+  "file": "sfx/waves.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.69,
+  "seconds": 4
+ },
+ "splashHeavy": {
+  "type": "sfx",
+  "alias": "splashBig"
+ },
+ "heavySplash": {
+  "type": "sfx",
+  "alias": "splashBig"
+ },
+ "flap": {
+  "type": "sfx",
+  "alias": "wingbeat"
+ },
+ "wings": {
+  "type": "sfx",
+  "alias": "wingbeat"
+ },
+ "wing": {
+  "type": "sfx",
+  "alias": "wingbeat"
+ },
+ "cheer": {
+  "type": "sfx",
+  "alias": "crowdCheer"
+ },
+ "applause": {
+  "type": "sfx",
+  "alias": "crowdCheer"
+ },
+ "collarBreak": {
+  "type": "sfx",
+  "alias": "chainBreak"
+ },
+ "chainSnap": {
+  "type": "sfx",
+  "alias": "chainBreak"
+ },
+ "collar": {
+  "type": "sfx",
+  "alias": "chainBreak"
+ },
+ "growl": {
+  "type": "sfx",
+  "alias": "roarSmall"
+ },
+ "snarl": {
+  "type": "sfx",
+  "alias": "roarSmall"
+ },
+ "boom": {
+  "type": "sfx",
+  "alias": "impact"
+ },
+ "wind": {
+  "type": "sfx",
+  "alias": "gust"
+ },
+ "fireCrackle": {
+  "type": "sfx",
+  "alias": "crackle"
+ },
+ "embers": {
+  "type": "sfx",
+  "alias": "crackle"
+ },
+ "doorStone": {
+  "type": "sfx",
+  "alias": "stoneGrind"
+ },
+ "stoneDoor": {
+  "type": "sfx",
+  "alias": "stoneGrind"
+ },
+ "gate": {
+  "type": "sfx",
+  "alias": "stoneGrind"
+ },
+ "cartBell": {
+  "type": "sfx",
+  "alias": "shipBell"
+ },
+ "bellShip": {
+  "type": "sfx",
+  "alias": "shipBell"
+ },
+ "horn": {
+  "type": "sfx",
+  "alias": "hornWar"
+ },
+ "conch": {
+  "type": "sfx",
+  "alias": "hornConch"
+ },
+ "drum": {
+  "type": "sfx",
+  "alias": "drumHit"
+ },
+ "lightningStrike": {
+  "type": "sfx",
+  "alias": "lightning"
+ },
+ "quakeRumble": {
+  "type": "sfx",
+  "alias": "rumble"
+ },
+ "slash": {
+  "type": "sfx",
+  "alias": "claw"
+ },
+ "rip": {
+  "type": "sfx",
+  "alias": "claw"
+ },
+ "arrow": {
+  "type": "sfx",
+  "alias": "arrowShot"
+ },
+ "spear": {
+  "type": "sfx",
+  "alias": "spearThrow"
+ },
+ "shield": {
+  "type": "sfx",
+  "alias": "shieldBlock"
+ },
+ "sword": {
+  "type": "sfx",
+  "alias": "swordClash"
+ },
+ "bubble": {
+  "type": "sfx",
+  "alias": "bubbles"
+ },
+ "flood": {
+  "type": "sfx",
+  "alias": "waterRush"
+ },
+ "rocks": {
+  "type": "sfx",
+  "alias": "rockFall"
+ },
+ "crash": {
+  "type": "sfx",
+  "alias": "rockFall"
+ },
+ "bang": {
+  "type": "sfx",
+  "alias": "explosion"
+ },
+ "blast": {
+  "type": "sfx",
+  "alias": "explosion"
+ },
+ "twinkle": {
+  "type": "sfx",
+  "alias": "sparkle"
+ },
+ "pickup": {
+  "type": "sfx",
+  "alias": "itemGet"
+ },
+ "unlock": {
+  "type": "sfx",
+  "alias": "keyTurn"
+ },
+ "letter": {
+  "type": "sfx",
+  "alias": "paper"
+ },
+ "stompHeavy": {
+  "type": "sfx",
+  "alias": "stomp"
+ },
+ "tremor": {
+  "type": "sfx",
+  "alias": "rumble"
+ },
+ "cursed": {
+  "type": "sfx",
+  "alias": "curse"
+ },
+ "lifeDrain": {
+  "type": "sfx",
+  "alias": "drain"
+ },
+ "resurrect": {
+  "type": "sfx",
+  "alias": "revive"
+ },
+ "teleport": {
+  "type": "sfx",
+  "alias": "portal"
+ },
+ "gasp": {
+  "type": "sfx",
+  "alias": "crowdGasp"
+ },
+ "boo": {
+  "type": "sfx",
+  "alias": "crowdBoo"
+ },
+ "wave": {
+  "type": "sfx",
+  "alias": "waves"
+ },
+ "ocean": {
+  "type": "sfx",
+  "alias": "waves"
+ },
+ "seaWaves": {
+  "type": "sfx",
+  "alias": "waves"
+ },
+ "waveLap": {
+  "type": "sfx",
+  "alias": "waves"
+ },
+ "stepSand": {
+  "type": "sfx",
+  "alias": "step"
+ },
+ "titleCard": {
+  "type": "sfx",
+  "alias": "titleSwell"
+ },
+ "bossIntro": {
+  "type": "sfx",
+  "alias": "bossReveal"
+ },
+ "ambRain": {
+  "file": "ambient/ambRain.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.52,
+  "seconds": 22
+ },
+ "ambWind": {
+  "file": "ambient/ambWind.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.4,
+  "seconds": 22
+ },
+ "ambNight": {
+  "file": "ambient/ambNight.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.63,
+  "seconds": 22
+ },
+ "ambSea": {
+  "file": "ambient/ambSea.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.25,
+  "seconds": 22
+ },
+ "ambJungle": {
+  "file": "ambient/ambJungle.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.33,
+  "seconds": 22
+ },
+ "ambCave": {
+  "file": "ambient/ambCave.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.41,
+  "seconds": 22
+ },
+ "ambFire": {
+  "file": "ambient/ambFire.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.45,
+  "seconds": 22
+ },
+ "ambCrowd": {
+  "file": "ambient/ambCrowd.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.27,
+  "seconds": 22
+ },
+ "ambStorm": {
+  "file": "ambient/ambStorm.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.52,
+  "seconds": 22
+ },
+ "ambRiver": {
+  "file": "ambient/ambRiver.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.4,
+  "seconds": 22
+ },
+ "ambShip": {
+  "file": "ambient/ambShip.mp3",
+  "type": "ambient",
+  "loop": true,
+  "vol": 0.3,
+  "seconds": 22
+ },
+ "rain": {
+  "type": "ambient",
+  "alias": "ambRain"
+ },
+ "night": {
+  "type": "ambient",
+  "alias": "ambNight"
+ },
+ "storm": {
+  "type": "ambient",
+  "alias": "ambStorm"
+ },
+ "jungleAmbience": {
+  "type": "ambient",
+  "alias": "ambJungle"
+ },
+ "caveAmbience": {
+  "type": "ambient",
+  "alias": "ambCave"
  }
 }

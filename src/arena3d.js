@@ -44,11 +44,12 @@
   const CHIP = { burn: ["\u{1F525}", "#ff8a3a", "Burn"], bleed: ["\u{1FA78}", "#e04a4a", "Bleed"], poison: ["☠", "#9be06a", "Poison"], shock: ["⚡", "#ffe45c", "Shock"], chill: ["❄", "#9fd8ff", "Chill"],
     freeze: ["\u{1F9CA}", "#7fe3ff", "Freeze"], wet: ["\u{1F4A7}", "#6fb7ff", "Wet"], slow: ["\u{1F40C}", "#c9b28a", "Slow"], stun: ["\u{1F4AB}", "#ffd23f", "Stun"], steam: ["♨", "#d6d6d6", "Steam"], petrify: ["\u{1F5FF}", "#b0a090", "Petrify"] };
   const STAT_LABEL = { atk: "ATK", def: "DEF", pow: "POW", res: "RES", spd: "SPD", foc: "FOC", lck: "LCK", dr: "GUARD", shield: "SHIELD", taunt: "TAUNT", hot: "REGEN", sres: "STATUS-RES", vuln: "EXPOSED", wrathStore: "WRATH", swell: "SWELL",
-    counter: "COUNTER", cover: "COVERED", hounds: "HOUNDS", decoy: "DECOY", antlers: "ANTLERS", dust: "DUST", braceDeep: "BRACE", redHot: "RED-HOT", stunImmune: "UNSTUNNABLE" };
+    counter: "COUNTER", cover: "COVERED", hounds: "HOUNDS", decoy: "DECOY", antlers: "ANTLERS", dust: "DUST", braceDeep: "BRACE", redHot: "RED-HOT", stunImmune: "UNSTUNNABLE", mp: "MP", endure: "ENDURE" };
   const GROUPS = [["damage", "Attacks"], ["support", "Support"], ["control", "Control"], ["personal", "Personal"], ["skill", "Skill book (off-style slot)"]];
 
   let ready = null, renderer, scene, camera, world, dust, torchLights = [], units = [], ctx = null, active = false, speedF = () => 1, shake = 0, introT = 0, marker = null, manifest = {}, manifestTried = false;
-  const tex = {}, assets = {}, el = {};
+  const tex = {}, assets = {}, el = {}; let arenaCtl = null;   // arenaCtl: the controller of the arena built by src/arena-sets.js (ARENA agent)
+  const camP = { y: 4.6, z: 14.5, ly: 1.9, k: 1, base: 42, id: "std" };   // camera framing of this fight; src/arena-layout.js picks a wider preset for huge bosses
   const $ = s => el.root.querySelector(s);
   const FX = () => root.FX3D || null;   // battle effects (src/fx3d.js); the fight works without them
   const sfx = k => { try { const A = root.Audio; if (A && typeof A.sfx === "function") A.sfx(k); } catch (e) { /* audio must never break a fight */ } };
@@ -66,6 +67,7 @@
       #a3 .foes { top: 16px; left: 16px; width: 300px; }
       #a3 .foe { margin-bottom: 8px; font-size: 16px; } #a3 .foe.down { opacity: .35; }
       #a3 .bar { height: 10px; background: rgba(0,0,0,.6); border: 1px solid #000; margin-top: 3px; } #a3 .bar i { display: block; height: 100%; transition: width .25s; }
+      #a3 .tags { display: flex; flex-wrap: wrap; gap: 3px 8px; margin-top: 3px; font-size: 12px; line-height: 1.2; } #a3 .tags .w { color: #ffb26a; } #a3 .tags .r { color: #aab4c0; } #a3 .tags .b { color: #e8d28a; }
       #a3 .brk { font-size: 14px; color: #b7a58a; margin-top: 3px; } #a3 .brk.on { color: #f2c14e; }
       #a3 .chips { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; min-height: 2px; }
       #a3 .chips span { font-size: 12px; line-height: 1; padding: 2px 4px; background: rgba(0,0,0,.55); border: 1px solid #000; border-radius: 3px; white-space: nowrap; }
@@ -107,7 +109,7 @@
     if (!renderer) return;
     renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight;
     const hHalf = Math.atan(Math.tan(THREE.MathUtils.degToRad(21)) * 16 / 9);   // same sideways view on tall screens
-    camera.fov = Math.min(95, Math.max(42, THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(hHalf) / camera.aspect))));
+    camP.base = Math.min(95, Math.max(42, THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(hHalf) / camera.aspect)))); camera.fov = Math.min(110, camP.base * camP.k);
     camera.updateProjectionMatrix();
   }
 
@@ -179,6 +181,16 @@
     dust = new THREE.Points(g, new THREE.PointsMaterial({ color: A.dust || 0xffe0b0, size: 0.07, transparent: true, opacity: 0.7 })); world.add(dust);
   }
 
+  // every arena key of the game (floor, painted backdrop, props, light, weather) comes from src/arena-sets.js; the ARENAS table above is only the fallback
+  async function buildArenaSets(key) {
+    if (!root.ArenaSets) return false;
+    try {
+      if (arenaCtl) { arenaCtl.dispose(); arenaCtl = null; }
+      world.clear(); torchLights = []; dust = null;
+      arenaCtl = await root.ArenaSets.build({ THREE, world, scene, renderer, camera, key }); arenaCtl.sfx = sfx; return true;
+    } catch (e) { console.warn("arena sets failed, using the old arena", e); arenaCtl = null; return false; }
+  }
+
   // ---------- fighters ----------
   const shadowTex = () => {
     const c = document.createElement("canvas"); c.width = c.height = 64; const x = c.getContext("2d");
@@ -188,15 +200,17 @@
   let shadowT = null;
   function heightOf(u, key, a) {
     const kind = (a && a.mkind) || (u.coach ? "creature" : u.boss ? "boss" : u.side === "e" ? "enemy" : "creature");
-    return (HEIGHT[key] || KIND_H[kind] || 2.6) * ((a && a.scale) || 1) * (u.vscale || 1);
+    const h = (HEIGHT[key] || KIND_H[kind] || 2.6) * ((a && a.scale) || 1) * (u.vscale || 1);
+    return root.ArenaLayout && root.ArenaLayout.capHeight ? root.ArenaLayout.capHeight(u, h, a) : h;   // sizes stay in a range that always fits a camera framing (nothing tiny, nothing taller than the frame)
   }
   function makeView(u, key, x, z) {
-    const a = assets[key] || { kind: "none" }, h = heightOf(u, key, a);
+    let a = assets[key] || { kind: "none" }; const h = heightOf(u, key, a);
     const group = new THREE.Group(); group.position.set(x, 0, z); scene.add(group);
     shadowT = shadowT || shadowTex();
     const shadow = new THREE.Mesh(new THREE.PlaneGeometry(h * 1.1, h * 0.5), new THREE.MeshBasicMaterial({ map: shadowT, transparent: true, depthWrite: false }));
     shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.02; group.add(shadow);
     const v = u.view = { group, h, home: new THREE.Vector3(x, 0, z), phase: Math.random() * 6, anim: null, alive: u.alive ? 1 : 0, hitT: 0, yawFix: a.yaw || 0 };
+    if (a.kind === "none" && root.ArenaBoss && root.ArenaBoss.placeholder) a = { kind: "sprite", tex: root.ArenaBoss.placeholder(u), scale: 1 };   // missing art: a silhouette with its initial, never a grey box
     if (a.kind === "sprite") {
       const asp = a.tex.image ? a.tex.image.width / a.tex.image.height : 1, pivot = new THREE.Group();
       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(h * asp, h), new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.05, side: THREE.DoubleSide }));
@@ -234,11 +248,13 @@
     const dt = Math.min(0.05, clock.getDelta()), t = clock.elapsedTime;
     if (!active) return;
     if (FX()) FX().update(dt);
+    if (arenaCtl) arenaCtl.update(dt, t);
+    if (root.ArenaBoss) root.ArenaBoss.update(dt, t);
     // fixed camera: a slow push-in at the start, then one steady wide shot
     const f = introT > 0 ? (introT = Math.max(0, introT - dt)) / 2.5 : 0;
-    camera.position.set(0, 4.6 + 1.5 * f, 14.5 + 6 * f);
+    camera.position.set(0, camP.y + 1.5 * f, Math.min(20.8, camP.z + 6 * f));
     if (shake > 0) { shake = Math.max(0, shake - dt * 2.5); camera.position.x += (Math.random() - 0.5) * shake; camera.position.y += (Math.random() - 0.5) * shake; }
-    camera.lookAt(0, 1.9, 0);
+    camera.lookAt(0, camP.ly, 0);
     units.forEach(u => {
       const v = u.view; if (!v) return; const g = v.group;
       if (v.anim) {
@@ -285,14 +301,14 @@
   }
   function hud(activeU) {
     const phaseNote = e => (e.phases && (e.phases.length || e.phaseNo > 1) ? ` · phase ${e.phaseNo}/${e.phaseNo + e.phases.length}` : "");
-    $(".foes").innerHTML = ctx.foes.map(e => `<div class="foe${e.alive ? "" : " down"}">${e.name}${e.boss ? ` · Lv ${e.level}${phaseNote(e)}` : ""}
-      <div class="bar"><i style="width:${100 * e.hp / e.maxHp}%;background:#d94a3a"></i></div><div class="chips">${e.alive ? chipsFor(e) : ""}</div>
+    $(".foes").innerHTML = ctx.foes.map(e => `<div class="foe${e.alive || shownHp(e) > 0 ? "" : " down"}">${e.name}${e.boss ? ` · Lv ${e.level}${phaseNote(e)}` : ""}
+      <div class="bar"><i style="width:${100 * shownHp(e) / e.maxHp}%;background:#d94a3a"></i></div>${e.alive ? foeTags(e) : ""}<div class="chips">${e.alive ? chipsFor(e) : ""}</div>
       ${e.breakType && e.alive ? `<div class="brk${e.broken ? " on" : ""}">${e.broken ? "BROKEN! +50% damage" : "Break " + "◆".repeat(e.breakPts) + "◇".repeat(Math.max(0, (e.breakNeed || 1) - e.breakPts))}</div>` : ""}</div>`).join("");
     const weak = e => { const w = Object.entries(e.rs || {}).filter(([k, v]) => v <= -0.25).map(([k]) => k); return w.length ? w.join("/") : ""; };
     ctx.foes.forEach(() => 0);
-    $(".party").innerHTML = ctx.party.map(u => `<div class="pm${u === activeU ? " on" : ""}${u.alive ? "" : " down"}"><div class="row"><span class="nm">${u === activeU ? "▶ " : ""}${u.name} <small>Lv${u.level}</small></span><span>${u.hp}/${u.maxHp}</span></div>
-      <div class="bar"><i style="width:${100 * u.hp / u.maxHp}%;background:#58c26a"></i></div><div class="mp">${Array.from({ length: u.maxMp }, (_, k) => `<b class="${k < u.mp ? "on" : ""}"></b>`).join("")}</div>
-      ${u.style === "leviathan" ? `<div class="tide">${"<b class='on'></b>".repeat(u.tide)}${"<b></b>".repeat(5 - u.tide)} Tide ${u.tide}</div>` : ""}<div class="chips">${u.alive ? chipsFor(u) : ""}</div></div>`).join("")
+    $(".party").innerHTML = ctx.party.map(u => `<div class="pm${u === activeU ? " on" : ""}${u.alive || shownHp(u) > 0 ? "" : " down"}"><div class="row"><span class="nm">${u === activeU ? "▶ " : ""}${u.name} <small>Lv${u.level}</small></span><span>${shownHp(u)}/${u.maxHp}</span></div>
+      <div class="bar"><i style="width:${100 * shownHp(u) / u.maxHp}%;background:#58c26a"></i></div><div class="mp">${Array.from({ length: u.maxMp }, (_, k) => `<b class="${k < u.mp ? "on" : ""}"></b>`).join("")}</div>
+      ${u.style === "leviathan" ? `<div class="tide">${"<b class='on'></b>".repeat(u.tide)}${"<b></b>".repeat(Math.max(0, (u.tideMax || 5) - u.tide))} Tide ${u.tide}</div>` : ""}<div class="chips">${u.alive ? chipsFor(u) : ""}</div></div>`).join("")
       + `<div class="row" style="font-size:13px;color:#b7a58a;margin-top:6px"><span>${itemLine()}</span><span>Round ${ctx.round}</span></div>`;
   }
   const itemLine = () => Object.keys(state.items).filter(k => state.items[k] > 0 && Core.ITEMS[k]).map(k => `${Core.ITEMS[k].name} ${state.items[k]}`).join(" · ") || "No items";
@@ -356,13 +372,35 @@
   const wait = ms => new Promise(r => setTimeout(r, Math.max(10, ms * speedF())));
   const EL_SFX = { fire: "fire", water: "water", ice: "ice", shock: "shock", poison: "poison" };
   const ST_SFX = { burn: "fire", wet: "water", chill: "ice", freeze: "ice", shock: "shock", poison: "poison" };
+  // HP the HUD shows per unit while events play: the rules already hold the final HP, so each hit/heal event carries hpAfter and the bar follows the events (UI-FIX)
+  const shown = new Map();
+  const shownHp = u => (shown.has(u) ? shown.get(u) : u.hp);
   async function play() {
-    for (const e of ctx.ev.splice(0)) {
+    const evs = ctx.ev.splice(0);
+    shown.clear();
+    for (const e of evs) {   // start from the HP before the first hp-carrying event of each unit
+      if (e.hpAfter === undefined || !e.tgt || shown.has(e.tgt)) continue;
+      shown.set(e.tgt, e.t === "heal" ? Math.max(0, e.hpAfter - e.v) : Math.min(e.tgt.maxHp, e.hpAfter + e.v));
+    }
+    if (shown.size) hud();
+    for (const e of evs) {
       try { await playOne(e); } catch (err) { console.warn("arena event failed", e && e.t, err); }
     }
+    shown.clear(); hud();
     if (!ctx.telegraph) $(".warn").textContent = "";
   }
+  // a foe that joined the fight (a "summon" event of the rules): its view appears on a free spot and climbs out of the ground (ARENA agent)
+  async function summonIn(e) {
+    const u = e.unit; if (!u || u.view) return;
+    await ensureAsset(u.art || u.id); if (!units.includes(u)) units.push(u);
+    makeView(u, u.art || u.id, -6, -2);
+    if (root.ArenaLayout) { try { root.ArenaLayout.place({ THREE, camera, w: innerWidth, h: innerHeight, foes: ctx.foes, party: ctx.party.slice(0, 3), coach, camP }, u); } catch (err) { console.warn("arena place failed", err); } }
+    if (root.ArenaBoss) { root.ArenaBoss.attach(u); root.ArenaBoss.rise(u); }
+    sfx("telegraph"); hud(); await wait(650);
+  }
   async function playOne(e) {
+    if (root.ArenaBoss) { const r = root.ArenaBoss.event(e); if (r && r.then) await r; }   // boss visuals: collar, phase rings, pinned / marked heroes
+    if (e.t === "summon") { await summonIn(e); return; }
     if (e.t === "use") {
       const mv = e.moveId && Core.MOVES[e.moveId], P = e.basic ? 1 : e.enemy ? (e.big ? 2.3 : 1.2) : mv && mv.mp >= 3 ? 2.3 : mv && mv.mp >= 2 ? 1.6 : 1.2;
       log(`${e.src.name}: ${e.move}`); lastUse = { src: e.src, move: e.move, total: 0, P };
@@ -376,6 +414,9 @@
       // spells fly (an orb from the caster), physical moves lunge; non-basic moves gather a glow on the caster first
       const spell = offensive && !e.basic && (e.enemy ? !!e.el && !e.big : mv && (mv.kind === "spell" || (mv.kind === "best" && Core.eff(e.src, "pow") > Core.eff(e.src, "atk"))));
       const fx = FX();
+      // a move with its own animation (FX3D.move, see src/fx-moves.js) plays that instead of the generic glow / orb / lunge below
+      const own = fx && fx.move && speedF() >= 0.1 ? fx.move(e, { mv, P, tgt, spell, offensive, foes: ctx.foes, party: ctx.party, lunge, playClip, flash, wait, sfx, speedF: () => speedF(), shake: v => { shake = Math.max(shake, v); } }) : null;
+      if (own) { await own; return; }
       if (fx && !e.basic && !e.item && (offensive || e.grp === "support" || e.grp === "control")) fx.cast(e.src, e.el, P);
       if (fx && offensive && e.tkind === "allEnemies") fx.wave((e.src.side === "p" ? ctx.foes : ctx.party).filter(x => x.alive), e.el, P);
       if (spell && fx && tgt && e.tkind !== "allEnemies") { await wait(260); await fx.shoot(e.src, tgt.view && tgt.side ? tgt : (ctx.foes.find(f => f.alive) || tgt), e.el, P, 360 * speedF()); }
@@ -385,6 +426,7 @@
       else if (e.el && EL_SFX[e.el]) { /* the sound plays on the hit */ } else if (!e.basic && e.grp !== "basic" && !e.enemy) sfx("spell");
       await wait(e.basic ? 300 : spell ? 120 : 420);
     } else if (e.t === "dmg") {
+      if (e.hpAfter !== undefined && e.tgt) shown.set(e.tgt, e.hpAfter);
       if (e.dot) {
         if (FX()) FX().status(e.tgt, e.dot); float(e.tgt, "-" + e.v, (CHIP[e.dot] || ["", "#ff9a6a"])[1]); sfx(EL_SFX[e.el] || "hit"); hud(); await wait(160); return;
       }
@@ -394,21 +436,21 @@
       popNum(e.tgt, e.v, e.tgt.side === "p" ? "#ff7a66" : e.crit ? "#ffd23f" : "#fff4e0", [e.crit ? "CRITICAL" : "", e.note, e.tgt.broken ? "BROKEN x1.5" : "", e.absorbed ? e.absorbed + " blocked" : ""].filter(Boolean).join(" · "));
       if (lastUse && e.src && lastUse.src === e.src) { lastUse.total += e.v; log(`${e.src.name}: ${lastUse.move}  —  ${lastUse.total} damage`); }
       hud(); await wait(320);
-    } else if (e.t === "heal") { if (e.v > 0) { if (FX()) FX().heal(e.tgt); tint(e.tgt, 0x90ff90, 200); popNum(e.tgt, "+" + e.v, "#7ee081"); sfx("heal"); } hud(); await wait(e.v > 0 ? 260 : 20); }
+    } else if (e.t === "heal") { if (e.hpAfter !== undefined && e.tgt) shown.set(e.tgt, e.hpAfter); if (e.v > 0) { if (FX()) FX().heal(e.tgt); tint(e.tgt, 0x90ff90, 200); popNum(e.tgt, "+" + e.v, "#7ee081"); sfx("heal"); } hud(); await wait(e.v > 0 ? 260 : 20); }
     else if (e.t === "selfDmg") { float(e.tgt, "-" + e.v, "#ff6b57"); hud(); await wait(200); }
     else if (e.t === "say") { log(e.text); await wait(450); }
-    else if (e.t === "status") { if (FX()) FX().status(e.tgt, e.type); const c = CHIP[e.type]; float(e.tgt, c ? `${c[0]} ${c[2]}${e.n > 1 ? " x" + e.n : ""}` : e.type === "coil" ? "Coiled" : e.type === "curse" ? "Sealed" : e.type, c ? c[1] : "#e8c8ff"); sfx(ST_SFX[e.type] || "debuff"); hud(); await wait(240); }
-    else if (e.t === "debuff") { if (FX()) FX().debuff(e.tgt); float(e.tgt, `${STAT_LABEL[e.stat] || e.stat} ▼`, "#ff9a8a"); sfx("debuff"); hud(); await wait(220); }
-    else if (e.t === "buff") { if (FX()) FX().buff(e.tgt); float(e.tgt, `${STAT_LABEL[e.stat] || e.stat} ▲`, "#a8e0a0"); sfx("buff"); hud(); await wait(200); }
-    else if (e.t === "reaction") { if (FX() && e.tgt) FX().reaction(e.tgt, e.name); banner(e.name.toUpperCase() + "!", { Freeze: "#7fe3ff", Steam: "#e0e0e0", Conductive: "#ffe45c", Shatter: "#b0e8ff", Detonate: "#ff9a4a" }[e.name]); if (e.text) log(e.text); flash("#ffffff", 180); sfx(e.name === "Freeze" || e.name === "Shatter" ? "ice" : e.name === "Conductive" ? "shock" : "fire"); shake = Math.max(shake, 0.15); hud(); await wait(750); }
+    else if (e.t === "status") { seenFx(e.type); if (FX()) FX().status(e.tgt, e.type); const c = CHIP[e.type]; float(e.tgt, c ? `${c[0]} ${c[2]}${e.n > 1 ? " x" + e.n : ""}` : e.type === "coil" ? "Coiled" : e.type === "curse" ? "Sealed" : e.type, c ? c[1] : "#e8c8ff"); sfx(ST_SFX[e.type] || "debuff"); hud(); await wait(240); }
+    else if (e.t === "debuff") { seenFx("debuff"); if (FX()) FX().debuff(e.tgt); float(e.tgt, `${STAT_LABEL[e.stat] || e.stat} ▼`, "#ff9a8a"); sfx("debuff"); hud(); await wait(220); }
+    else if (e.t === "buff") { seenFx("buff"); if (FX()) FX().buff(e.tgt); float(e.tgt, `${STAT_LABEL[e.stat] || e.stat} ▲`, "#a8e0a0"); sfx("buff"); hud(); await wait(200); }
+    else if (e.t === "reaction") { seenFx(e.name); if (FX() && e.tgt) FX().reaction(e.tgt, e.name); banner(e.name.toUpperCase() + "!", { Freeze: "#7fe3ff", Steam: "#e0e0e0", Conductive: "#ffe45c", Shatter: "#b0e8ff", Detonate: "#ff9a4a" }[e.name]); if (e.text) log(e.text); flash("#ffffff", 180); sfx(e.name === "Freeze" || e.name === "Shatter" ? "ice" : e.name === "Conductive" ? "shock" : "fire"); shake = Math.max(shake, 0.15); hud(); await wait(750); }
     else if (e.t === "stunned") { float(e.tgt, e.type === "freeze" ? "FROZEN" : "STUNNED", "#ffd23f"); sfx("debuff"); log(`${e.tgt.name} cannot act!`); await wait(500); }
     else if (e.t === "tide") { if (e.n > 0) float(e.tgt, "Tide " + e.v, "#4ad0c8"); hud(); await wait(e.n > 0 ? 160 : 20); }
-    else if (e.t === "resist") { float(e.tgt, "Resisted", "#c9b28a"); await wait(160); }
+    else if (e.t === "resist") { seenFx("resist"); float(e.tgt, "Resisted", "#c9b28a"); await wait(160); }
     else if (e.t === "immune") { float(e.tgt, "Immune", "#c9b28a"); await wait(160); }
     else if (e.t === "reflect") { float(e.tgt, "Reflected!", "#e8f0ff"); flash("#ffffff", 150); await wait(300); }
     else if (e.t === "cleanse") { float(e.tgt, "Cleansed", "#ffe9a0"); sfx("heal"); hud(); await wait(160); }
     else if (e.t === "breakPt") { float(e.tgt, `Crack ${e.pts}/${e.need || 2}`, "#f2c14e"); hud(); await wait(260); }
-    else if (e.t === "broken") { if (FX()) FX().brk(e.tgt); coachSay(pick(["Now! It's open!", "Hit it while it's down!", "Its guard is broken!"])); sfx("break"); banner("BROKEN!", "#f2c14e"); flash("#ffd27a"); shake = 0.25; log(`${e.tgt.name} is BROKEN! It takes 50% more damage.`); hud(); await wait(900); }
+    else if (e.t === "broken") { seenFx("broken"); if (FX()) FX().brk(e.tgt); coachSay(pick(["Now! It's open!", "Hit it while it's down!", "Its guard is broken!"])); sfx("break"); banner("BROKEN!", "#f2c14e"); flash("#ffd27a"); shake = 0.25; log(`${e.tgt.name} is BROKEN! It takes 50% more damage.`); hud(); await wait(900); }
     else if (e.t === "phase") { sfx("telegraph"); flash("#ff3b2a", 500); shake = 0.35; banner("PHASE " + (e.tgt.phaseNo || ""), "#ff6b57"); log(e.text); hud(); await wait(1700); }
     else if (e.t === "ko") { if (e.tgt.side === "p") coachSay(pick([e.tgt.name + "! Get up!", "Hold on, " + e.tgt.name + "!"]), "idle"); sfx("ko"); if (FX()) FX().ko(e.tgt); if (e.tgt.view) e.tgt.view.alive = 0; log(`${e.tgt.name} falls!`); hud(); await wait(500); }
     else if (e.t === "revive") { if (FX()) FX().revive(e.tgt); sfx("heal"); if (e.tgt.view) e.tgt.view.alive = 1; tint(e.tgt, 0xffe080, 300); log(e.text || `${e.tgt.name} is back on its feet!`); hud(); await wait(500); }
@@ -416,12 +458,12 @@
   }
 
   // ---------- command menu (keyboard: arrows + Enter, Esc = back, 1-9 = pick; or click) ----------
-  function menu(title, options, back = false, onHover) {
+  function menu(title, options, back = false, onHover, start) {
     return new Promise(resolve => {
       const box = $(".cmd"), list = box.querySelector(".opts"), info = box.querySelector("p");
       box.hidden = false; box.querySelector("h4").textContent = title || "";
       const sel0 = options.findIndex(o => !o.disabled && !o.header);
-      let sel = Math.max(0, sel0);
+      let sel = start >= 0 && options[start] && !options[start].disabled && !options[start].header ? start : Math.max(0, sel0);   // start = remembered cursor
       const draw = () => { [...list.children].forEach((b, i) => { if (options[i].header) return; b.classList.toggle("sel", i === sel); if (i === sel) { info.textContent = options[i].info || ""; if (onHover) onHover(options[i], i); } }); };
       list.innerHTML = "";
       let num = 0;
@@ -448,6 +490,12 @@
     const w = Object.entries(f.rs || {}).filter(([k, v]) => v <= -0.25).map(([k]) => k), r = Object.entries(f.rs || {}).filter(([k, v]) => v >= 0.4).map(([k]) => k);
     return [w.length ? "Weak to " + w.join(", ") : "", r.length ? "Resists " + r.join(", ") : "", f.pr ? "Resists physical hits" : "", f.reflect ? "Reflects " + f.reflect.join("/") + " spells" : "", f.swarm ? "Swarm: area hits hurt it most" : "", f.breakType ? "Break: " + f.breakType : "", f.immune && f.immune.length ? "Immune: " + f.immune.join(", ") : ""].filter(Boolean).join(". ");
   };
+  // the same weakness / resistance / break info as the target picker, always shown on the foe's HUD panel (UI-FIX: it vanished when one foe was left and the picker was skipped)
+  function foeTags(f) {
+    const w = Object.entries(f.rs || {}).filter(([k, v]) => v <= -0.25).map(([k]) => k), r = Object.entries(f.rs || {}).filter(([k, v]) => v >= 0.4).map(([k]) => k);
+    const t = [w.length ? `<span class="w">Weak: ${w.join(", ")}</span>` : "", r.length ? `<span class="r">Resists: ${r.join(", ")}</span>` : "", f.pr ? `<span class="r">Resists physical</span>` : "", f.reflect ? `<span class="r">Reflects ${f.reflect.join("/")}</span>` : "", f.swarm ? `<span class="w">Swarm: area hits</span>` : "", f.breakType ? `<span class="b">Break: ${f.breakType}</span>` : "", f.immune && f.immune.length ? `<span class="r">Immune: ${f.immune.join(", ")}</span>` : ""].filter(Boolean);
+    return t.length ? `<div class="tags">${t.join("")}</div>` : "";
+  }
   async function pickTarget(kind, u) {
     if (kind === "self" || kind === "team" || kind === "allEnemies") return u;
     if (kind === "enemy") {
@@ -489,6 +537,10 @@
     const t = await pickTarget(m.target, u); if (!t) return null;
     return { move: id, target: t, opt };
   }
+  // the game state G is a top-level let in flow.js (not on window); read the setting safely
+  // the journal Effects tab opens an entry once that effect happened in a fight (either side)
+  const seenFx = k => { try { if (k) (G.seenFx = G.seenFx || {})[k] = 1; } catch (e) {} };
+  const cursorMem = () => { try { return G.cursorMem !== false; } catch (e) { return true; } };
   async function command(u, a, n) {
     const mv = Core.movesOf(u), basic = mv.find(m => Core.MOVES[m].basic), B = Core.MOVES[basic];
     for (;;) {
@@ -502,15 +554,17 @@
       if (off) opts.push({ label: `Skill: ${Core.MOVES[off].name} (${costText(u, off)})`, disabled: !Core.canUse(ctx, u, off), info: "Your off-style slot. " + Core.MOVES[off].desc + powerNote(u, off), k: "off" });
       opts.push({ label: `Items ▸`, disabled: !hasItems || u.usedItem, info: u.usedItem ? "Only 1 item per creature per turn." : itemLine(), k: "items" });
       opts.push({ label: "Auto (let the AI pick)", k: "auto" }, { label: "Run", disabled: state.boss, info: state.boss ? "There is no running from this fight." : "70% chance to get away.", k: "run" });
-      const i = await menu("", opts);
-      const k = opts[i].k;
+      // cursor memory (setting, on by default): start on the last command; a move used from Moves puts the cursor on "Again"
+      const mem = cursorMem(), lk = u._lastK === "moves" && repeat ? "repeat" : u._lastK;
+      const i = await menu("", opts, false, null, mem ? opts.findIndex(o => o.k === lk) : -1);
+      const k = opts[i].k; if (k !== "auto" && k !== "run") u._lastK = k;
       if (k === "attack") { const c = await chooseMove(u, basic); if (c) return c; }
       else if (k === "repeat" || k === "off") { const c = await chooseMove(u, k === "repeat" ? repeat : off); if (c) return c; }
       else if (k === "moves") {
-        const mo = movesMenuOptions(u), j = await menu(`Moves · MP ${u.mp}${u.style === "leviathan" ? " · Tide " + u.tide : ""}`, mo.concat([{ label: "Back" }]), true);
+        const mo = movesMenuOptions(u), j = await menu(`Moves · MP ${u.mp}${u.style === "leviathan" ? " · Tide " + u.tide : ""}`, mo.concat([{ label: "Back" }]), true, null, cursorMem() ? mo.findIndex(o => o.id && o.id === u.lastMove) : -1);
         if (j >= 0 && mo[j] && mo[j].id) { const c = await chooseMove(u, mo[j].id); if (c) return c; }
       } else if (k === "items") {
-        const ids = Object.keys(Core.ITEMS).filter(x => state.items[x] > 0), io = ids.map(x => ({ label: `${Core.ITEMS[x].name}  x${state.items[x]}`, id: x, disabled: Core.ITEMS[x].target === "allyDown" && !ctx.party.some(p => !p.alive), info: Core.ITEMS[x].desc }));
+        const ids = Object.keys(Core.ITEMS).filter(x => state.items[x] > 0), io = ids.map(x => ({ label: `${Core.ITEMS[x].name}  x${state.items[x]}`, id: x, disabled: !(Core.itemOk ? Core.itemOk(ctx, x) : !(Core.ITEMS[x].target === "allyDown" && !ctx.party.some(p => !p.alive))), info: Core.ITEMS[x].desc }));
         const j = await menu("Items", io.concat([{ label: "Back" }]), true);
         if (j >= 0 && io[j]) { const t = await pickTarget(Core.ITEMS[io[j].id].target, u); if (t) return { item: io[j].id, target: t }; }
       } else if (k === "auto") { const it = Core.autoItem(ctx, u, state.items); return it ? it : Core.autoChoice(ctx, u); }
@@ -525,26 +579,32 @@
     if (!Object.keys(manifest).length && !manifestTried) await loadManifest();
     speedF = opts.speedF || (() => 1); state.boss = !!opts.boss || opts.foes.some(f => f.boss);
     state.items = Object.assign({}, opts.items || {}); if (opts.potions !== undefined && state.items.potion === undefined) state.items.potion = opts.potions;
-    clearFighters(); const bg = BG_ALIAS[opts.bg] || opts.bg; buildArena(ARENAS[bg] ? bg : "desert");
-    const keys = new Set([...opts.foes.map(f => f.art || f.id), ...opts.party.map(p => p.id), "knight"]);
+    clearFighters(); const bg = BG_ALIAS[opts.bg] || opts.bg; if (!(await buildArenaSets(opts.bg))) buildArena(ARENAS[bg] ? bg : "desert");
+    const keys = new Set([...opts.foes.map(f => f.art || f.id), ...opts.party.map(p => p.art || p.id), "knight"]);
     await Promise.all([...keys].map(ensureAsset));
     ctx = Core.newBattle(opts.party, opts.foes);
+    await Promise.all(opts.foes.map(f => ensureAsset(f.art || f.id)));   // QA-A: units added by a start hook (Maelstrom heads) were in opts.foes without art loaded -> "M" placeholders
     const fm = formation(opts.foes);
-    opts.foes.forEach((e, i) => makeView(e, e.art || e.id, fm[i][0], fm[i][1]));
+    opts.foes.forEach((e, i) => { const p = fm[i] || [-4 - i * 1.5, -2 + i]; makeView(e, e.art || e.id, p[0], p[1]); });   // 4-5 foes (summons) have no classic slot: ArenaLayout places them
     // the front slot is closest to the camera: the bulkiest creature stands at the back so it never hides a smaller one (Danny 2026-10-30, Mawdeep over Pyrewisp)
     const SLOTS = [[3.4, -3.2], [6.0, -0.8], [2.4, 2.2]], team = opts.party.slice(0, 3);
-    team.forEach(p => makeView(p, p.id, 0, 0));
+    team.forEach(p => makeView(p, p.art || p.id, 0, 0));   // p.art = the evolved form's own art when it exists (Evo sets it)
     const bulk = p => { const b = new THREE.Box3().setFromObject(p.view.group), s = b.getSize(tmpV); return s.x * s.y + s.z * s.y * 0.5; };
     team.map(p => [p, bulk(p)]).sort((a, b) => b[1] - a[1]).forEach(([p], i) => { const [x, z] = SLOTS[i]; p.view.group.position.set(x, 0, z); p.view.home.set(x, 0, z); });
     makeView(coach, "knight", 9.6, -4.8);   // behind the team, upper right of the screen, so no creature covers him
     if (!coachLight) coachLight = new THREE.PointLight(0x9a4dff, 1.2, 6, 2);
     coach.view.group.add(coachLight); coachLight.position.set(0, 1.6, 0.6);
     units = [...opts.foes, ...opts.party, coach];
-    el.root.style.display = "block"; resize(); active = true; introT = 2.5; hud();
+    el.root.style.display = "block"; camP.k = 1; camP.id = "std"; camP.y = 4.6; camP.z = 14.5; camP.ly = 1.9; resize(); active = true; introT = opts.noIntro ? 0 : 2.5; hud();
+    // where everybody stands and which camera frames them (src/arena-layout.js): nothing hides anything, nothing is off screen or under a HUD panel; the classic formation above is the fallback
+    if (root.ArenaLayout) { try { root.ArenaLayout.arrange({ THREE, camera, renderer, scene, w: innerWidth, h: innerHeight, foes: opts.foes, party: team, coach, camP }); resize(); } catch (e) { console.warn("arena layout failed", e); } }
+    // boss visuals (src/arena-boss.js): general collars, multi-part shields, burrowed / airborne / pinned states, phase rings
+    if (root.ArenaBoss) { try { root.ArenaBoss.begin({ THREE, scene, camera, ctx: () => ctx, units: () => units, arena: () => arenaCtl, sfx, float, flash: (c, ms) => flash(c, ms), shake: v => { shake = Math.max(shake, v); } }); } catch (e) { console.warn("arena boss visuals failed", e); } }
     const n = opts.foes.length, lead = opts.foes.find(f => f.boss) || opts.foes[0];
     log(opts.intro || (lead.boss && lead.intro) || (state.boss ? "A fearsome foe blocks your way!" : n > 1 ? "A group attacks!" : `${lead.name} attacks!`));
     await wait(1600);
     await play();   // opening events (e.g. a Sphinx Cub's free Weaken)
+    if (opts.hold) { await opts.hold({ playOne, ctx, hud, log, wait }); finish(); return { res: "flee", potions: 0, items: state.items, rounds: ctx.round }; }   // test pages (fx-test.html): play events by hand, no turn loop
     let res = null;
     try {
       while (!res) {
@@ -579,9 +639,11 @@
     finish();
     return out;
   }
-  function finish() { if (FX()) FX().clear(); active = false; el.root.style.display = "none"; $(".cmd").hidden = true; setMarker(null); clearFighters(); }
+  function finish() { if (FX()) FX().clear(); if (root.ArenaBoss) root.ArenaBoss.end(); active = false; el.root.style.display = "none"; $(".cmd").hidden = true; setMarker(null); clearFighters(); }
 
   // test helper: a small JPEG of the current 3D view (lets automated checks see facing without a big screen)
   function snap(w = 640) { renderer.render(scene, camera); const c = document.createElement("canvas"), src = renderer.domElement; c.width = w; c.height = Math.round(w * src.height / src.width); c.getContext("2d").drawImage(src, 0, 0, c.width, c.height); return c.toDataURL("image/jpeg", 0.6); }
-  root.Arena3D = { init, fight, snap, manifest: () => manifest, get ctx() { return ctx; } };
+  root.Arena3D = { init, fight, snap, manifest: () => manifest, get ctx() { return ctx; },
+    arenaDef: key => (root.ArenaSets && root.ArenaSets.def ? root.ArenaSets.def(key) : null), get arena() { return arenaCtl; }, get camera() { return camera; }, get scene() { return scene; }, get camP() { return camP; },
+    layoutEnv: () => ({ THREE, camera, renderer, scene, w: innerWidth, h: innerHeight, foes: ctx.foes, party: ctx.party.slice(0, 3), coach, camP }) };
 })(window);

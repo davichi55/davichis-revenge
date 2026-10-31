@@ -1,4 +1,4 @@
-// R1 Sandpiper Rest: shaded caravanserai town. No encounters. NPC ids: innkeeper, merchant (sells G41 Wayfarer's Road Kit), r1 r2 r3.
+// R1 Sandpiper Rest: shaded caravanserai town. No encounters. NPC ids: innkeeper, merchant (sells G41 Wayfarer's Road Kit), r1 r2 r3, hassa, ossan (CH1-EXPAND quests). East gate (outside the wall) leads to oasisOutskirts.
 (function () {
   const { R, E, P, L } = World.shapes;
   World.def("sandpiperRest", {
@@ -9,8 +9,8 @@
       ["road", L([[650, 860], [650, 640]], 120)], ["floor", R(290, 200, 720, 450)],
       ["wall", R(250, 170, 790, 28)], ["wall", R(250, 170, 28, 500)], ["wall", R(1012, 170, 28, 500)], ["wall", R(250, 646, 340, 28)], ["wall", R(710, 646, 330, 28)],
     ],
-    entries: { start: { x: 650, y: 760, face: "up" }, from_dunes: { x: 650, y: 760, face: "up" } },
-    exits: [{ rect: [600, 810, 100, 40], to: "whisperglassDunes", entry: "from_sandpiper", push: [0, -1] }],
+    entries: { start: { x: 650, y: 760, face: "up" }, from_dunes: { x: 650, y: 760, face: "up" }, from_oasisOutskirts: { x: 1130, y: 470, face: "left" } },
+    exits: [{ rect: [600, 810, 100, 40], to: "whisperglassDunes", entry: "from_sandpiper", push: [0, -1] }, { rect: [1204, 420, 56, 110], to: "oasisOutskirts", entry: "from_sandpiper", push: [-1, 0] }],
     props: [
       ["reedInn", 520, 330], ["tent", 860, 330], ["tent", 960, 440], ["tent", 380, 470], ["cart", 790, 560], ["cart", 380, 590], ["trough", 560, 580], ["hayBales", 930, 560], ["hayBales", 320, 340],
       ["well", 650, 480], ["campfire", 790, 450], ["camel", 900, 600], ["camel", 340, 540], ["reedFence", 230, 700], ["reedFence", 330, 720], ["reedFence", 960, 710], ["reedFence", 1060, 700],
@@ -24,6 +24,8 @@
       { id: "r1", art: "npcTraveler", name: "Traveller", x: 800, y: 480 },
       { id: "r2", art: "npcGranny", name: "Old woman", x: 420, y: 520 },
       { id: "r3", art: "npcLegionGuard", name: "Soldier", x: 940, y: 520 },
+      { id: "hassa", art: "npcWidow", name: "Hassa", x: 700, y: 290 },   // CH1-EXPAND: side quest The Tuning Bell
+      { id: "ossan", art: "npcPorter", name: "Ossan", x: 430, y: 430 },   // CH1-EXPAND: side quest The Dead Man's Tally
       { id: null, art: "npcChild", x: 600, y: 440, path: [[600, 520], [720, 520], [720, 440], [600, 440]], loop: true, speed: 40 },
       { id: null, art: "npcVillagerM", x: 300, y: 400, path: [[300, 420], [300, 600]], speed: 20 },
     ],

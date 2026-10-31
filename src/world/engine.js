@@ -15,6 +15,7 @@
   }
   const DEBUG = /[?&]debug/.test(location.search);
   const CELL = 8, SPEED = 135, FOLLOW_H = 52, NPC_SCALE = 1.3;
+  const BOAT_SPEED = 160, SHIP_KEYS = ["shipSide", "shipDown", "shipUp", "galley"];   // boat regions (SYSTEMS): the hero is the Salt Heron; sprites in assets/ship/
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const hash = (x, y) => { let n = Math.floor(x) * 374761393 + Math.floor(y) * 668265263; n = (n ^ (n >> 13)) * 1274126177; return ((n ^ (n >> 16)) >>> 0) / 4294967295; };
   const mulberry = a => () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -68,13 +69,14 @@
       if (!this.R) throw new Error("World: unknown region " + this.rid);
       this.entryName = data.entry || "start"; this.party = (data.party || []).slice(0, 3);
       this.flags = data.flags || (World.flags = World.flags || {});
-      this.ready = false; this.dark = null; this.darkRT = null; this.lightImg = null; World.scene = this;
+      this.ready = false; this.dark = null; this.darkRT = null; this.lightImg = null; this.tempLights = []; World.scene = this;
     }
 
     // ---------- loading ----------
     spriteUrl(key) {
       const man = this.man && this.man[key], R = this.R;
       if (R.sprites && R.sprites[key]) return R.sprites[key];
+      if (SHIP_KEYS.includes(key)) return "assets/ship/" + key + ".png";
       if (man) return "assets/regions/sprites/" + key + ".png";
       if (HERO_KEYS.includes(key)) return "assets/hero/" + key + ".png";
       if (OW2DP.includes(key)) return "assets/ow2dp/" + key + ".png";
@@ -88,6 +90,7 @@
       const a = R.amb || {};
       if ((a.armies && a.armies.length) || a.chase || a.standoff) "lgA lgB lgSpear lgBanner lgDead lgCent rbA rbB rbArcher rbBanner rbDead rbSword cavA cavB".split(" ").forEach(k => s.add(k));
       if (a.wrecks) "wagon debris bones jackA jackB hyena".split(" ").forEach(k => s.add(k));
+      if (R.boat) SHIP_KEYS.forEach(k => s.add(k)); else if (a.ships && a.ships.length) s.add("galley");
       return [...s];
     }
     preload() {
@@ -98,15 +101,17 @@
         this.man = this.cache.json.get("regman") || {};
         for (const k of this.neededKeys()) { if (this.textures.exists(k)) continue; const u = this.spriteUrl(k); if (u) this.load.image(k, u); else console.warn("World: no sprite", k); }
         const gk = "gsrc_" + this.rid; if (!this.textures.exists(gk)) this.load.image(gk, R.ground || "assets/regions/" + this.rid + ".png");
+        if (R.groundAlt && R.groundAlt.src && !this.textures.exists("galt_" + this.rid)) this.load.image("galt_" + this.rid, R.groundAlt.src);   // POLISH: a second painting that fades in over the ground while a flag is on (the drained fen)
         if (R.gridUrl) this.load.json("grid_" + this.rid, R.gridUrl);
         this.party.forEach(id => { const k = "cr_" + id; if (!this.textures.exists(k) && !this.textures.exists("crx_" + id)) this.load.image(k, "assets/creatures/" + id + ".png"); });
+        (R.legends || []).forEach(l => { const art = window.Systems && Systems.legendArt ? Systems.legendArt(l) : null; if (art && !this.textures.exists("lg_" + art)) this.load.image("lg_" + art, "assets/creatures/" + art + ".png"); });   // legend silhouettes (SYSTEMS)
       };
       if (this.cache.json.exists("regman")) queue();
       else { this.load.json("regman", "assets/regions/sprites/manifest.json"); this.load.once("filecomplete-json-regman", queue); }
     }
     create() {
       const miss = this.failed.filter(k => k.startsWith("cr_") && !this.textures.exists(k));
-      this.failed.filter(k => !k.startsWith("cr_") && !k.startsWith("gsrc_") && k !== "regman").forEach(k => console.warn("World: failed to load", k));
+      this.failed.filter(k => !k.startsWith("cr_") && !k.startsWith("lg_") && !k.startsWith("gsrc_") && k !== "regman").forEach(k => console.warn("World: failed to load", k));
       if (miss.length) { miss.forEach(k => this.load.image("crx_" + k.slice(3), "assets/" + k.slice(3) + ".png")); this.load.once("complete", () => this.safeCreate()); this.load.start(); }
       else this.safeCreate();
     }
@@ -115,12 +120,13 @@
     create0() {
       const R = this.R;
       window.WORLD_SCENE = this; this.busy = 0; this.noPtr = false; this.hudT = 0; this.condT = 0; this.rng = mulberry(strSeed(this.rid));
+      this.boat = !!R.boat; this.shipS = null; this.sky = null; this.legendObjs = []; if (this.boat) R.noPuff = true;   // boat region: the hero is a ship (SYSTEMS)
       this.swayers = []; this.fires = []; this.conds = []; this.dynSolids = []; this.shadowOnly = false;
       this.makeTextures();
       this.terr = World.rasterize(R, CELL); this.cw = this.terr.cw; this.chh = this.terr.ch;
       if (R.gridUrl) this.applyGrid(this.cache.json.get("grid_" + this.rid));
       this.block = new Uint8Array(this.cw * this.chh); this.occ = new Uint8Array(this.cw * this.chh);
-      this.terrBlock = this.terr.names.map(n => World.TERRAIN[n].block);
+      this.terrBlock = this.terr.names.map(n => (this.boat ? (n === "water" || n === "shallow" ? 0 : 1) : World.TERRAIN[n].block));   // boats sail on water, land blocks
       for (let i = 0; i < this.block.length; i++) if (this.terrBlock[this.terr.data[i]]) this.block[i] = 1;
       this.paintGround();
       this.reserveAreas();
@@ -129,11 +135,14 @@
       this.buildThings();
       this.makePeople();
       this.makeAmbience();
+      this.makeSky();
       this.buildArmies();
+      this.buildLegends();
       this.makeDark();
       this.keys = this.input.keyboard.addKeys({ up: "UP", down: "DOWN", left: "LEFT", right: "RIGHT", w: "W", a: "A", s: "S", d: "D" });
       this.input.keyboard.on("keydown-E", () => this.interact()); this.input.keyboard.on("keydown-SPACE", () => this.interact());
       this.input.keyboard.on("keydown-ESC", () => { if (!this.busy) this.runHook("menu", this.rid); });
+      if (!this._blurHook) { this._blurHook = () => this.releaseKeys(); window.addEventListener("blur", this._blurHook); }   // alt-tab while walking
       this.input.on("pointerdown", p => this.pointerDown(p));
       this.cameras.main.setBounds(0, 0, R.w, R.h).startFollow(this.hero, true, 0.12, 0.12).setRoundPixels(true);
       this.puffTimer = 0;
@@ -144,9 +153,33 @@
       this.safeUntil = this.time.now + 3000; this.safeDist = 0; this.encFrac = 0.5 + this.rng(); this.walkT = 0; this.talkCool = 0; this.exitCool = this.time.now + 600; this.fired = {};
       playMusic(R.music);
       if (DEBUG) this.debugOverlay();
+      this.buildMinimap(); this.input.keyboard.on("keydown-M", () => { if (this.busy) return; try { G.minimap = G.minimap === false; } catch (e) {} this.showMinimap(); });
       this.events.once("shutdown", () => { if (this.textures.exists("ground_" + this.rid)) this.textures.remove("ground_" + this.rid); if (World.scene === this) World.scene = null; });
       this.ready = true; this.events.emit("ready", this); if (World.onReady) World.onReady(this);
       if (typeof H.enter === "function") this.runHook("enter", this.rid, this.entryName);
+    }
+    // ---------- minimap (Danny 2026-10-31): the walk grid of the whole area (light = walkable, dark = blocked), open exits in gold, you in purple. M toggles it ----------
+    buildMinimap() {
+      try {
+        const key = "mini_" + this.rid; if (this.textures.exists(key)) this.textures.remove(key);
+        const cw = this.cw, ch = this.chh, tex = this.textures.createCanvas(key, cw, ch), c = tex.getContext(), im = c.createImageData(cw, ch);
+        for (let i = 0; i < cw * ch; i++) { const b = this.block[i] === 1, o = i * 4; im.data[o] = b ? 22 : 222; im.data[o + 1] = b ? 16 : 204; im.data[o + 2] = b ? 14 : 168; im.data[o + 3] = 255; }
+        c.putImageData(im, 0, 0); tex.refresh();
+        const s = Math.min(190 / cw, 130 / ch), W = cw * s, H = ch * s, x = 960 - 12 - W, y = 12;
+        const frame = this.add.rectangle(x - 3, y - 3, W + 6, H + 6, 0x120c09, 0.85).setOrigin(0).setStrokeStyle(1, 0xb08a4a, 0.9).setScrollFactor(0).setDepth(21000);
+        const img = this.add.image(x, y, key).setOrigin(0).setScale(s).setAlpha(0.82).setScrollFactor(0).setDepth(21001);
+        const g = this.add.graphics().setScrollFactor(0).setDepth(21002);
+        this.mini = { x, y, s: s / CELL, frame, img, g, t: 0 }; this.showMinimap();
+        this.events.once("shutdown", () => { if (this.textures.exists(key)) this.textures.remove(key); this.mini = null; });
+      } catch (e) { console.warn("minimap", e); this.mini = null; }
+    }
+    showMinimap() { if (!this.mini) return; let on = true; try { on = G.minimap !== false; } catch (e) {} [this.mini.frame, this.mini.img, this.mini.g].forEach(o => o.setVisible(on)); }
+    updateMinimap(time) {
+      const m = this.mini; if (!m || !m.img.visible || time - m.t < 100) return; m.t = time;
+      const g = m.g, X = v => m.x + v * m.s, Y = v => m.y + v * m.s; g.clear();
+      g.fillStyle(0x16100e, 1); for (const d of this.dynSolids) if (d.on) g.fillRect(X(d.r[0]), Y(d.r[1]), Math.max(1, (d.r[2] - d.r[0]) * m.s), Math.max(1, (d.r[3] - d.r[1]) * m.s));   // doors and walls that open with the story
+      for (const e of this.exits || []) if (e.on && e.glow) { g.fillStyle(0xffc84a, 1); g.fillCircle(X(e.rect[0] + e.rect[2] / 2), Y(e.rect[1] + e.rect[3] / 2), 3); }
+      g.fillStyle(0xffffff, 1); g.fillCircle(X(this.pos.x), Y(this.pos.y), 3.5); g.fillStyle(0xb04aff, 1); g.fillCircle(X(this.pos.x), Y(this.pos.y), 2.4);
     }
     applyGrid(g) { if (!g) return; const idx = {}; this.terr.names.forEach((n, i) => (idx[World.TERRAIN[n].ch] = i)); for (let y = 0; y < Math.min(this.chh, g.length); y++) for (let x = 0; x < Math.min(this.cw, g[y].length); x++) if (idx[g[y][x]] !== undefined) this.terr.data[y * this.cw + x] = idx[g[y][x]]; }
 
@@ -173,6 +206,12 @@
       mk("bfly0", 6, 3, fly("#f0a030", "#3a2010", true)); mk("bfly1", 6, 3, fly("#f0a030", "#3a2010", false)); mk("bfly2", 6, 3, fly("#58c8c0", "#1a2a30", true)); mk("bfly3", 6, 3, fly("#58c8c0", "#1a2a30", false));
       mk("drop", 2, 4, ctx => { ctx.fillStyle = "#9fd8ff"; ctx.fillRect(0, 0, 2, 4); });
       mk("star", 5, 5, ctx => { ctx.fillStyle = "#fff"; ctx.fillRect(2, 0, 1, 5); ctx.fillRect(0, 2, 5, 1); });
+      // sea foam, rain, snow, fog, glow motes (SYSTEMS: boat wake and the sky layers)
+      mk("foam", 16, 9, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 0.5, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,255,255,0.95)"); g.addColorStop(0.6, "rgba(235,248,255,0.55)"); g.addColorStop(1, "rgba(235,248,255,0)"); ctx.save(); ctx.translate(0, h / 2); ctx.scale(1, h / w); ctx.translate(0, -w / 2); ctx.fillStyle = g; ctx.fillRect(0, 0, w, w); ctx.restore(); });
+      mk("rainStreak", 2, 16, (ctx, w, h) => { const g = ctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(1, "rgba(255,255,255,0.95)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
+      mk("flake", 4, 4, ctx => { ctx.fillStyle = "#fff"; ctx.fillRect(1, 0, 2, 4); ctx.fillRect(0, 1, 4, 2); });
+      mk("fogPuff", 256, 128, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 4, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,255,255,0.9)"); g.addColorStop(0.5, "rgba(255,255,255,0.4)"); g.addColorStop(1, "rgba(255,255,255,0)"); ctx.save(); ctx.translate(0, h / 2); ctx.scale(1, h / w); ctx.translate(0, -w / 2); ctx.fillStyle = g; ctx.fillRect(0, 0, w, w); ctx.restore(); });
+      mk("mote", 12, 12, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(0.35, "rgba(255,255,255,0.5)"); g.addColorStop(1, "rgba(255,255,255,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       // treasure chests (closed / open), drawn in the same chunky pixel style
       const chest = open => ctx => {
         ctx.fillStyle = "#1a0f0c"; ctx.fillRect(1, open ? 6 : 8, 30, open ? 20 : 18);
@@ -198,10 +237,20 @@
       if (this.textures.exists("ground_" + this.rid)) this.textures.remove("ground_" + this.rid);
       this.groundCanvas = c; this.groundTex = this.textures.addCanvas("ground_" + this.rid, c);
       this.add.image(0, 0, "ground_" + this.rid).setOrigin(0, 0).setDepth(0);
+      this.altCtx = null; this.altImg = null; this.altOn = false;
+      const GA = R.groundAlt, ak = "galt_" + this.rid;
+      if (GA && this.textures.exists(ak) && this.textures.get(ak).key !== "__MISSING") {   // the alternative painting gets its own canvas (prop shadows are baked into both) and sits just above the ground
+        const ac = makeCanvas(R.w, R.h), actx = ac.getContext("2d"); actx.imageSmoothingEnabled = true; actx.imageSmoothingQuality = "high"; actx.drawImage(this.textures.get(ak).getSourceImage(), 0, 0, R.w, R.h);
+        this.altCtx = actx; if (this.textures.exists("galtc_" + this.rid)) this.textures.remove("galtc_" + this.rid); this.altTex = this.textures.addCanvas("galtc_" + this.rid, ac);
+        this.altImg = this.add.image(0, 0, "galtc_" + this.rid).setOrigin(0, 0).setDepth(0.5).setAlpha(0);
+      }
     }
     bakeShadow(x, base, w, h, kind) {
       if (this.R.dark && this.R.dark.noShadow) return;
-      const ctx = this.shadowCtx; ctx.save(); ctx.filter = "blur(2px)"; ctx.fillStyle = "rgba(14,5,18,0.4)"; ctx.strokeStyle = "rgba(14,5,18,0.34)"; ctx.beginPath();
+      for (const ctx of this.altCtx ? [this.shadowCtx, this.altCtx] : [this.shadowCtx]) this.bakeShadow1(ctx, x, base, w, h, kind);
+    }
+    bakeShadow1(ctx, x, base, w, h, kind) {
+      ctx.save(); ctx.filter = "blur(2px)"; ctx.fillStyle = "rgba(14,5,18,0.4)"; ctx.strokeStyle = "rgba(14,5,18,0.34)"; ctx.beginPath();
       if (kind === "tall") { ctx.lineWidth = 8; ctx.globalAlpha = 0.6; ctx.moveTo(x, base - 2); ctx.lineTo(x + h * 0.42, base + h * 0.1); ctx.stroke(); ctx.globalAlpha = 1; ctx.beginPath(); ctx.ellipse(x + h * 0.45, base + h * 0.11, w * 0.4, w * 0.13, 0.2, 0, 7); ctx.fill(); }
       else if (kind === "box") { const hw = w * 0.42, L = Math.min(h * 0.3, 60); ctx.moveTo(x - hw, base); ctx.lineTo(x + hw, base); ctx.lineTo(x + hw + L, base + L * 0.5); ctx.lineTo(x - hw + L, base + L * 0.5); ctx.closePath(); ctx.fill(); }
       else { ctx.ellipse(x + w * 0.1, base - 1, w * 0.46, Math.max(4, w * 0.13), 0, 0, 7); ctx.fill(); }
@@ -216,7 +265,7 @@
       for (const d of this.dynSolids) if (d.on && x >= d.r[0] && x < d.r[2] && y >= d.r[1] && y < d.r[3]) return true;
       return false;
     }
-    free(x, y) { return !(this.blockedAt(x - 4, y) || this.blockedAt(x + 4, y) || this.blockedAt(x - 4, y - 3) || this.blockedAt(x + 4, y - 3)); }
+    free(x, y) { const hx = this.boat ? 14 : 4, hy = this.boat ? 7 : 3; return !(this.blockedAt(x - hx, y) || this.blockedAt(x + hx, y) || this.blockedAt(x - hx, y - hy) || this.blockedAt(x + hx, y - hy)); }   // a ship needs more room than a person
     npcAt(x, y) { for (const n of this.npcs || []) if (n.on && n.solid !== false && Math.abs(x - n.x) < 10 && Math.abs(y - n.y) < 7) return true; return false; }
     ok(x, y) { return this.free(x, y) && !this.npcAt(x, y); }
     reach(ax, ay, bx, by, tol) {
@@ -261,7 +310,22 @@
       const glow = this.add.image(Math.round(x), Math.round(y), tex).setDepth(8000).setBlendMode(Phaser.BlendModes.ADD).setScale(1.4 * k).setAlpha(0.5);
       this.fires.push({ x, y, glow, k, ph: Math.random() * 6.28, tint }); return glow;
     }
-    buildProps() { for (const p of this.R.props || []) this.P(p[0], p[1], p[2], p[3]); }
+    buildProps() { for (const p of this.R.props || []) this.P(p[0], p[1], p[2], p[3]); this.buildBlockers(); }
+    // WORLD-M2: invisible flag-driven blockers { rect, show, hide } (a gap that a vent opens) and pulses { id, rect, period, duty, phase } (a gas field that is solid while flag "pulse.<id>" is on; it never switches on around the hero)
+    buildBlockers() {
+      for (const b of this.R.blockers || []) { const r = [b.rect[0], b.rect[1], b.rect[0] + b.rect[2], b.rect[1] + b.rect[3]], vis = this.cond(b.show) && !(b.hide !== undefined && this.cond(b.hide)), rec = { r, on: vis }; this.dynSolids.push(rec); this.conds.push({ cnd: { show: b.show, hide: b.hide }, objs: [], solid: rec }); }
+      this.pulses = (this.R.pulses || []).map(p => { const rec = { r: [p.rect[0], p.rect[1], p.rect[0] + p.rect[2], p.rect[1] + p.rect[3]], on: false }; this.dynSolids.push(rec); return Object.assign({ rec, was: false }, p); });
+      if (this.pulses.length) this.time.addEvent({ delay: 200, loop: true, callback: () => {
+        let ch = false;
+        for (const p of this.pulses) {
+          let want = ((this.time.now + (p.phase || 0)) % p.period) < p.period * (p.duty || 0.5), r = p.rec.r;
+          if (this.checking) want = false;
+          if (want && !p.was && this.hero && this.hero.x > r[0] - 18 && this.hero.x < r[2] + 18 && this.hero.y > r[1] - 18 && this.hero.y < r[3] + 18) want = false;
+          if (want !== p.was) { p.was = want; p.rec.on = want && p.block !== false; this.flags["pulse." + p.id] = want; ch = true; }
+        }
+        if (ch) this.refresh();
+      } });
+    }
     // keep scatter off everything that matters: entries, exits, NPCs, things, armies' lanes
     reserveAreas() {
       const R = this.R, occ = this.occ;
@@ -272,7 +336,7 @@
       for (const c of [].concat(R.chests || [], R.gather || [])) this.blockRect(c.x - 40, c.y - 40, c.x + 40, c.y + 30, occ);
       const a = R.amb || {}, lanes = (a.armies || []).map(g => g.lane).concat(a.chase ? [a.chase.lane] : []);
       for (const l of lanes) for (let i = 0; i < l.length - 1; i++) { const n = Math.ceil(Math.hypot(l[i + 1][0] - l[i][0], l[i + 1][1] - l[i][1]) / 12); for (let k = 0; k <= n; k++) { const x = l[i][0] + (l[i + 1][0] - l[i][0]) * k / n, y = l[i][1] + (l[i + 1][1] - l[i][1]) * k / n; this.blockRect(x - 40, y - 40, x + 40, y + 30, occ); } }
-      if (a.standoff) this.blockRect(a.standoff.x - 130, a.standoff.y - 90, a.standoff.x + 130, a.standoff.y + 90, occ);
+      for (const so of [].concat(a.standoff || [])) { const hh = Math.max(90, (so.cols || 5) * 10 + 20); this.blockRect(so.x - 130, so.y - hh, so.x + 130, so.y + hh, occ); }
       (a.wrecks || []).forEach(w => this.blockRect(w[0] - 140, w[1] - 100, w[0] + 140, w[1] + 100, occ));
       for (const z of R.reserve || []) this.blockRect(z[0], z[1], z[0] + z[2], z[1] + z[3], occ);
     }
@@ -339,13 +403,14 @@
       const en = (R.entries || {})[this.entryName] || (R.entries || {}).start || (R.entries || {}).default || { x: R.w / 2, y: R.h / 2, face: "down" };
       const [sx, sy] = this.nearestFree(en.x, en.y); this.face = en.face === "up" ? "up" : en.face === "down" ? "down" : "side"; this.flipH = en.face === "left";
       this.heroShadow = this.add.image(sx, sy - 1, "shadow").setDepth(sy - 1);
-      this.hero = this.add.image(sx, sy, "hkDownIdle").setOrigin(0.5, 1).setDepth(sy);
+      this.hero = this.add.image(sx, sy, this.boat ? "shipSide" : "hkDownIdle").setOrigin(0.5, this.boat ? 0.82 : 1).setDepth(sy);
       this.heroGlow = this.add.image(sx, sy - 28, "pglow").setBlendMode(Phaser.BlendModes.ADD).setDepth(sy + 0.2).setScale(0.8, 1);
       this.heroGlowLow = this.add.image(sx, sy - 2, "pglow").setBlendMode(Phaser.BlendModes.ADD).setDepth(sy - 1.5).setScale(0.9, 0.35);
       this.pos = { x: sx, y: sy }; this.moving = false; this.makeFollowers(sx, sy);
       this.refresh();
     }
     makeFollowers(sx, sy) {
+      if (this.boat) { this.trail = [{ x: sx, y: sy, d: -1 }, { x: sx, y: sy, d: 0 }]; this.trailD = 0; this.followers = []; return; }   // nobody walks behind a ship
       this.trail = []; this.trailD = 0; for (let d = 130; d >= 0; d -= 4) this.trail.push({ x: sx, y: sy, d: -d });
       this.followers = this.party.map((id, i) => {
         const src = this.textures.exists("cr_" + id) ? "cr_" + id : this.textures.exists("crx_" + id) ? "crx_" + id : null; if (!src) { console.warn("World: no art for creature", id); return null; }
@@ -374,6 +439,11 @@
         if (c.rec) { c.rec.on = on; if (c.army) c.rec.off = !on; } if (c.solid) c.solid.on = on;
         for (const o of c.objs) if (o && o.setVisible) o.setVisible(on);
       }
+      if (this.altImg) {   // POLISH: the alternative ground (drained fen) fades in when its flag turns on, and is simply there when you arrive after that
+        const on = !!(this.cond(this.R.groundAlt.show) && !(this.R.groundAlt.hide !== undefined && this.cond(this.R.groundAlt.hide)));
+        if (!this.altInit) { this.altInit = true; this.altOn = on; this.altImg.setAlpha(on ? 1 : 0); }
+        else if (on !== this.altOn) { this.altOn = on; this.tweens.add({ targets: this.altImg, alpha: on ? 1 : 0, duration: 2200, ease: "Sine.easeInOut" }); }
+      }
       for (const c of this.chests) { const op = !!this.flags["chest." + c.id]; if (c.s && c.s.texture.key !== (op ? "chestOpen" : "chestClosed")) c.s.setTexture(op ? "chestOpen" : "chestClosed"); }
       for (const g of this.gathers) { const got = !!this.flags["gather." + g.id]; if (got) { g.glow.setVisible(false); g.star.setVisible(false); g.done = true; } }
     }
@@ -391,16 +461,16 @@
       if (a.water) {
         this.time.addEvent({ delay: 170, loop: true, callback: () => {
           const v = this.cameras.main.worldView;
-          for (let k = 0; k < 3; k++) { const x = v.x + Math.random() * v.width, y = v.y + Math.random() * v.height, t = this.terrainAt(x, y); if (t !== "water" && t !== "shallow") continue; const g = this.add.image(Math.round(x), Math.round(y), "glint").setDepth(2).setAlpha(0).setScale(1.5); this.tweens.add({ targets: g, alpha: 0.9, duration: 260, yoyo: true, onComplete: () => g.destroy() }); }
+          for (let k = 0; k < 3; k++) { if (this.altOn) break; const x = v.x + Math.random() * v.width, y = v.y + Math.random() * v.height, t = this.terrainAt(x, y); if (t !== "water" && t !== "shallow") continue; const g = this.add.image(Math.round(x), Math.round(y), "glint").setDepth(2).setAlpha(0).setScale(1.5); this.tweens.add({ targets: g, alpha: 0.9, duration: 260, yoyo: true, onComplete: () => g.destroy() }); }
         } });
         this.time.addEvent({ delay: 1300, loop: true, callback: () => {
-          const v = this.cameras.main.worldView, x = v.x + Math.random() * v.width, y = v.y + Math.random() * v.height; if (this.terrainAt(x, y) !== "water" || this.terrainAt(x + 12, y) !== "water") return;
+          if (this.altOn) return; const v = this.cameras.main.worldView, x = v.x + Math.random() * v.width, y = v.y + Math.random() * v.height; if (this.terrainAt(x, y) !== "water" || this.terrainAt(x + 12, y) !== "water") return;
           const e = this.add.ellipse(x, y, 10, 4).setStrokeStyle(1, 0xbfffe8, 0.7).setDepth(2); this.tweens.add({ targets: e, scaleX: 4, scaleY: 4, alpha: 0, duration: 1800, onComplete: () => e.destroy() });
         } });
       }
       // sparkles on glass sand / salt / bone floors etc: a.sparkle = { terrain: ["glass"], color: 0xbfffee, rate: 6 }
       if (a.sparkle) this.time.addEvent({ delay: 1000 / (a.sparkle.rate || 6), loop: true, callback: () => {
-        const v = this.cameras.main.worldView;
+        if (this.altOn) return; const v = this.cameras.main.worldView;
         for (let k = 0; k < 4; k++) { const x = v.x + Math.random() * v.width, y = v.y + Math.random() * v.height; if (!(a.sparkle.terrain || ["glass"]).includes(this.terrainAt(x, y))) continue; const e = this.add.image(Math.round(x), Math.round(y), "star").setDepth(y).setAlpha(0).setTint(a.sparkle.color || 0xbfffee); this.tweens.add({ targets: e, alpha: 1, scale: 1.8, duration: 380, yoyo: true, onComplete: () => e.destroy() }); break; }
       } });
       if (a.drips) this.time.addEvent({ delay: 650, loop: true, callback: () => {
@@ -427,18 +497,139 @@
     }
     // dungeon lighting: a dark layer with soft holes around the hero and every fire
     makeDark() {
-      const d = this.R.dark; if (!d) return; this.dark = Object.assign({ ambient: 0.86, radius: 170, color: 0x04020a }, d === true ? {} : d);
+      const d = this.R.dark || (this.sky && this.sky.dark); if (!d) return; this.dark = Object.assign({ ambient: 0.86, radius: 170, color: 0x04020a }, d === true ? {} : d);   // a night sky (SYSTEMS) darkens the map the same way a dungeon does
       this.darkRT = this.add.renderTexture(0, 0, 960, 540).setOrigin(0, 0).setScrollFactor(0).setDepth(9700);
       this.lightImg = this.make.image({ key: "light", add: false });
     }
     updateDark(time) {
-      const d = this.dark, rt = this.darkRT, cam = this.cameras.main, v = cam.worldView; rt.fill(d.color, d.ambient);
-      const stamp = (x, y, r, a) => { this.lightImg.setScale(r / 128).setAlpha(a); rt.erase(this.lightImg, x - v.x - 0, y - v.y); };
+      const d = this.dark, rt = this.darkRT, cam = this.cameras.main, v = cam.worldView; rt.clear(); rt.fill(d.color, d.ambient);   // QA-B: clear first, else the translucent fill piles up frame after frame until everything outside the lights is opaque
+      const z = cam.zoom || 1; if (z !== 1 || rt.scaleX !== 1) rt.setScale(1 / z).setPosition(480 - 480 / z, 270 - 270 / z);   // Cinema zoom: keep the dark layer screen-sized and its light holes in place
+      const stamp = (x, y, r, a) => { this.lightImg.setScale(r * z / 128).setAlpha(a); rt.erase(this.lightImg, (x - v.x) * z, (y - v.y) * z); };
       const fl = 1 + Math.sin(time * 0.011) * 0.03; this.lightImg.setOrigin(0.5, 0.5);
       stamp(this.pos.x, this.pos.y - 20, d.radius * fl, 1);
       for (const f of this.fires) if (f.glow.visible && f.x > v.x - 160 && f.x < v.right + 160 && f.y > v.y - 160 && f.y < v.bottom + 160) stamp(f.x, f.y, (d.fireRadius || 120) * f.k * (1 + Math.sin(time * 0.017 + f.ph) * 0.06), 0.95);
       for (const e of this.exits || []) if (e.on && e.glow) stamp(e.rect[0] + e.rect[2] / 2, e.rect[1] + e.rect[3] / 2, Math.max(e.rect[2], e.rect[3]) * 0.6 + 30, 0.7);
       for (const l of this.R.lights || []) if (l[0] > v.x - 200 && l[0] < v.right + 200 && l[1] > v.y - 200 && l[1] < v.bottom + 200) stamp(l[0], l[1], l[2] || 100, l[3] || 0.8);
+      for (const l of this.tempLights || []) stamp(l[0], l[1], l[2] || 100, l[3] || 0.8);   // Cinema: lights that follow actors / light a scene ([x, y, radius, alpha])
+    }
+
+    // ================= SYSTEMS: the ship, the sky (weather and night), legends =================
+    // the Salt Heron: heading follows the keys, front/back/side sprite, bobbing, wake foam (called every frame in boat regions after the walker code)
+    shipFrame(time, dt, px, py, vx, vy, mv) {
+      const h = this.hero, sg = this.shipS = this.shipS || { hx: -1, hy: 0, flip: false, wake: 0, ring: 0 };
+      if (vx || vy) { const l = Math.hypot(vx, vy) || 1; sg.hx += (vx / l - sg.hx) * Math.min(1, dt * 6); sg.hy += (vy / l - sg.hy) * Math.min(1, dt * 6); }
+      const hl = Math.hypot(sg.hx, sg.hy) || 1, ux = sg.hx / hl, uy = sg.hy / hl;
+      if (Math.abs(ux) > 0.15) sg.flip = ux > 0;
+      const key = Math.abs(uy) > 0.72 ? (uy > 0 ? "shipDown" : "shipUp") : "shipSide", flip = key === "shipDown" ? false : sg.flip;
+      const bob = Math.sin(time * 0.0021) * 1.6 + (mv ? Math.sin(time * 0.0063) * 0.9 : 0), rot = Math.sin(time * 0.0017) * 0.02 + (key === "shipSide" ? (flip ? 1 : -1) * uy * 0.33 : 0);
+      h.setTexture(key).setFlipX(flip).setRotation(rot).setPosition(px, Math.round(py + bob)).setDepth(this.pos.y);
+      this.heroShadow.setPosition(px, py + 4).setDepth(this.pos.y - 1).setScale(key === "shipSide" ? 1.7 : 1.1, 1).setAlpha(0.5);
+      this.heroGlow.setAlpha(0); this.heroGlowLow.setAlpha(0);
+      sg.wake -= dt; sg.ring -= dt;
+      if (mv && sg.wake <= 0) {
+        sg.wake = 0.07;
+        for (const sd of [-1, 1]) { const f = this.add.image(Math.round(this.pos.x - ux * 34 - uy * 7 * sd), Math.round(this.pos.y - uy * 14 + ux * 3.5 * sd), "foam").setDepth(this.pos.y - 2).setAlpha(0.75).setScale(0.7); this.tweens.add({ targets: f, scale: 2.3, alpha: 0, duration: 1200, onComplete: () => f.destroy() }); }
+        const b = this.add.image(Math.round(this.pos.x + ux * 38), Math.round(this.pos.y + uy * 8), "foam").setDepth(this.pos.y + 1).setAlpha(0.8).setScale(0.5); this.tweens.add({ targets: b, scale: 1.4, alpha: 0, duration: 520, onComplete: () => b.destroy() });
+      } else if (!mv && sg.ring <= 0) { sg.ring = 1.7; const e = this.add.ellipse(px, py + 3, 44, 12).setStrokeStyle(1, 0xdff4ff, 0.55).setDepth(this.pos.y - 2); this.tweens.add({ targets: e, scaleX: 2.2, scaleY: 2.2, alpha: 0, duration: 1900, onComplete: () => e.destroy() }); }
+    }
+    // weather and time of day. amb.weather: "rain" | "saltRain" | "storm" | "snow" | "embers" | "spores" | "mist" | "ash" (or an array: one random pick per visit, "clear" allowed),
+    // amb.night: true | "moonless" | chance (0..1) | { chance, moonless }, amb.dusk: true | chance. The result is written to flags sky.night / sky.moonless / sky.dusk / sky.rain / sky.storm / sky.snow / sky.mist.
+    makeSky() {
+      const a = this.amb, f = World.forceSky || {}, rnd = Math.random, pick = v => (Array.isArray(v) ? v[Math.floor(rnd() * v.length)] : v), MUL = Phaser.BlendModes.MULTIPLY, ADD = Phaser.BlendModes.ADD;
+      let weather = f.weather !== undefined ? f.weather : pick(a.weather); if (!weather || weather === "clear") weather = null;
+      const nv = f.night !== undefined ? f.night : a.night; let night = false;
+      if (nv === true || nv === "night") night = "night"; else if (nv === "moonless") night = "moonless";
+      else if (nv && typeof nv === "object") { if (rnd() < (nv.chance || 0)) night = rnd() < (nv.moonless === undefined ? 0.4 : nv.moonless) ? "moonless" : "night"; }
+      else if (typeof nv === "number" && rnd() < nv) night = rnd() < 0.4 ? "moonless" : "night";
+      const dv = f.dusk !== undefined ? f.dusk : a.dusk, dusk = !night && (dv === true || (typeof dv === "number" && rnd() < dv));
+      const S = this.sky = { weather, night, dusk, parts: [], flies: [], splash: 0, bolt: 3 + rnd() * 5, flashT: 0 };
+      const fl = this.flags; Object.keys(fl).forEach(k => { if (k.indexOf("sky.") === 0) delete fl[k]; });
+      fl["sky.night"] = !!night; fl["sky.moonless"] = night === "moonless"; fl["sky.dusk"] = dusk; fl["sky.rain"] = weather === "rain" || weather === "saltRain" || weather === "storm"; fl["sky.storm"] = weather === "storm"; fl["sky.snow"] = weather === "snow"; fl["sky.mist"] = weather === "mist";
+      try { if (window.Audio && typeof window.Audio.ambient === "function") window.Audio.ambient(weather === "storm" ? "ambStorm" : weather === "rain" || weather === "saltRain" ? "ambRain" : night ? "ambNight" : weather === "mist" || weather === "snow" ? "ambWind" : "auto"); } catch (e) { /* audio is optional (AUDIO: weather and night pick their ambience, everything else follows the area music) */ }
+      const tint = (col, al, blend) => { const r = this.add.rectangle(0, 0, 960, 540, col, al).setOrigin(0, 0).setScrollFactor(0).setDepth(9503); if (blend !== undefined) r.setBlendMode(blend); return r; };
+      const mkP = (tex, n, init, list) => { for (let i = 0; i < n; i++) { const s = this.add.image(0, 0, tex).setScrollFactor(0).setDepth(9300), p = Object.assign({ s, x: rnd() * 1000 - 20, y: rnd() * 580 - 20, vx: 0, vy: 0, ph: rnd() * 6.28 }, init(s, i)); (list || S.parts).push(p); } };
+      if (dusk) { tint(0xff9a58, 0.2, MUL); tint(0xff7a30, 0.05, ADD); }
+      if (night) {
+        const dark = night === "moonless"; tint(dark ? 0x2a3050 : 0x4a5a96, dark ? 0.3 : 0.22, MUL);
+        S.dark = dark ? { ambient: 0.84, radius: 150, color: 0x02030c } : { ambient: 0.58, radius: 220, color: 0x060a22 };
+        mkP("mote", 14, s => { s.setTint(0xdcff80).setBlendMode(ADD).setScale(0.5); return {}; }, S.flies);   // fireflies
+      }
+      if (weather === "rain" || weather === "saltRain" || weather === "storm") {
+        const salt = weather === "saltRain", storm = weather === "storm", n = storm ? 200 : salt ? 90 : 120, vx = storm ? -240 : salt ? -140 : -100, vy = storm ? 700 : salt ? 460 : 560;
+        mkP("rainStreak", n, s => { const k = 0.8 + rnd() * 0.5; s.setTint(salt ? 0xf4efd8 : 0xaed6ff).setAlpha((storm ? 0.55 : 0.4) * (0.6 + rnd() * 0.6)).setRotation(Math.atan2(vy, vx) - Math.PI / 2).setScale(1, k * (storm ? 1.3 : 1)); return { vx: vx * k, vy: vy * k }; });
+        tint(salt ? 0x6a6a60 : 0x2a3a5c, storm ? 0.22 : 0.14, MUL);
+      } else if (weather === "snow") { mkP("flake", 110, s => { const k = 0.6 + rnd() * 0.9; s.setScale(k).setAlpha(0.55 + rnd() * 0.45); return { vx: -10 + rnd() * 20, vy: 24 + rnd() * 34 }; }); tint(0xc8d8f0, 0.2, MUL); }
+      else if (weather === "ash") { mkP("flake", 90, s => { s.setTint(0x8a8280).setScale(0.8 + rnd() * 0.9).setAlpha(0.5 + rnd() * 0.4); return { vx: 6 + rnd() * 14, vy: 16 + rnd() * 26 }; }); tint(0x7a6a6a, 0.14, MUL); }
+      else if (weather === "embers") { mkP("mote", 80, s => { s.setTint(0xffa040).setBlendMode(ADD).setScale(0.3 + rnd() * 0.5); return { vx: -8 + rnd() * 24, vy: -(26 + rnd() * 50) }; }); tint(0xff6a20, 0.045, ADD); }
+      else if (weather === "spores") { mkP("mote", 64, s => { s.setTint(rnd() < 0.5 ? 0x9dffb8 : 0xb8ffe8).setBlendMode(ADD).setScale(0.45 + rnd() * 0.8); return { vx: -5 + rnd() * 10, vy: -(4 + rnd() * 14) }; }); tint(0x90d8a8, 0.12, MUL); }
+      else if (weather === "mist") { mkP("fogPuff", 8, s => { s.setTint(0xe6eef2).setScale(3 + rnd() * 2.5).setAlpha(0.1 + rnd() * 0.12); return { x: rnd() * 1500 - 300, y: 40 + rnd() * 460, vx: 8 + rnd() * 14 }; }); tint(0xdfe8ee, 0.07); }
+      S.flies.forEach(p => { p.x = 40 + rnd() * 880; p.y = 40 + rnd() * 460; });
+    }
+    updateSky(time, dt) {
+      const S = this.sky; if (!S) return; const W = S.weather, P = S.parts;
+      if (W === "rain" || W === "saltRain" || W === "storm") {
+        for (const p of P) { p.x += p.vx * dt; p.y += p.vy * dt; if (p.y > 556 || p.x < -24) { p.x = Math.random() * 1000 + 20; p.y = -16 - Math.random() * 50; } p.s.setPosition(Math.round(p.x), Math.round(p.y)); }
+        S.splash -= dt;
+        if (S.splash <= 0) { S.splash = W === "storm" ? 0.04 : 0.1; const v = this.cameras.main.worldView, x = Math.round(v.x + Math.random() * v.width), y = Math.round(v.y + Math.random() * v.height), e = this.add.ellipse(x, y, 6, 2).setStrokeStyle(1, W === "saltRain" ? 0xf4efd8 : 0xdff0ff, 0.55).setDepth(y); this.tweens.add({ targets: e, scaleX: 2.8, scaleY: 2.8, alpha: 0, duration: 420, onComplete: () => e.destroy() }); }
+        if (W === "storm") this.updateLightning(S, dt);
+      } else if (W === "snow" || W === "ash") {
+        for (const p of P) { p.x += (p.vx + Math.sin(time * 0.0012 + p.ph) * 14) * dt; p.y += p.vy * dt; if (p.y > 550) { p.y = -8; p.x = Math.random() * 960; } if (p.x < -10) p.x = 970; if (p.x > 970) p.x = -10; p.s.setPosition(Math.round(p.x), Math.round(p.y)); }
+      } else if (W === "embers") {
+        for (const p of P) { p.x += (p.vx + Math.sin(time * 0.002 + p.ph) * 12) * dt; p.y += p.vy * dt; if (p.y < -8) { p.y = 548; p.x = Math.random() * 960; } p.s.setPosition(Math.round(p.x), Math.round(p.y)).setAlpha(0.35 + 0.5 * Math.abs(Math.sin(time * 0.006 + p.ph))); }
+      } else if (W === "spores") {
+        for (const p of P) { p.x += (p.vx + Math.sin(time * 0.0009 + p.ph) * 10) * dt; p.y += (p.vy + Math.cos(time * 0.0011 + p.ph) * 8) * dt; if (p.y < -10) p.y = 550; if (p.y > 550) p.y = -10; if (p.x < -10) p.x = 970; if (p.x > 970) p.x = -10; p.s.setPosition(Math.round(p.x), Math.round(p.y)).setAlpha(0.2 + 0.55 * (0.5 + 0.5 * Math.sin(time * 0.0025 + p.ph))); }
+      } else if (W === "mist") {
+        for (const p of P) { p.x += p.vx * dt; if (p.x > 1250) p.x = -320; p.s.setPosition(Math.round(p.x), Math.round(p.y)); }
+      }
+      for (const f of S.flies) f.s.setPosition(Math.round(f.x + Math.sin(time * 0.0008 + f.ph) * 40), Math.round(f.y + Math.cos(time * 0.0011 + f.ph * 2) * 24)).setAlpha(0.15 + 0.85 * Math.max(0, Math.sin(time * 0.0031 + f.ph * 3)));
+    }
+    updateLightning(S, dt) {
+      S.bolt -= dt;
+      if (S.bolt <= 0 && S.flashT <= 0) {
+        S.bolt = 5 + Math.random() * 9; S.flashT = 0.45;
+        const g = this.add.graphics().setScrollFactor(0).setDepth(9802).setBlendMode(Phaser.BlendModes.ADD); let x = 120 + Math.random() * 720, y = 0; const end = 180 + Math.random() * 200;
+        g.lineStyle(3, 0xeaf2ff, 0.95); g.beginPath(); g.moveTo(x, y); while (y < end) { x += (Math.random() - 0.5) * 60; y += 24 + Math.random() * 30; g.lineTo(x, y); } g.strokePath(); this.tweens.add({ targets: g, alpha: 0, duration: 380, onComplete: () => g.destroy() });
+        try { if (window.Audio && typeof window.Audio.sfx === "function") setTimeout(() => { try { window.Audio.sfx("thunder"); } catch (e) { /* optional */ } }, 300 + Math.random() * 700); } catch (e) { /* audio is optional */ }
+      }
+      if (S.flashT > 0) {
+        S.flashT -= dt; const t = S.flashT;
+        if (!S.flash) S.flash = this.add.rectangle(0, 0, 960, 540, 0xdfeaff, 0).setOrigin(0, 0).setScrollFactor(0).setDepth(9801).setBlendMode(Phaser.BlendModes.ADD);
+        S.flash.setAlpha(S.flashT <= 0 ? 0 : t > 0.33 ? 0.8 : t > 0.25 ? 0.1 : t > 0.14 ? 0.55 : t * 3);
+      }
+    }
+    // legends: a shimmer that may stand on the map (region field `legends`); Systems.legendSpawn decides chance, respawn and conditions; touching it runs hook `legend`
+    buildLegends() {
+      this.legendObjs = []; const L = this.R.legends; if (!L || !L.length || !window.Systems || !Systems.legendSpawn) return;
+      const ADD = Phaser.BlendModes.ADD;
+      for (const d of L) {
+        let sp = null; try { sp = Systems.legendSpawn(d, this.rid, this.flags); } catch (e) { console.warn("World: legend", d.id, e); }
+        if (!sp) continue;
+        const [x, y] = this.nearestFree(sp.x, sp.y), key = sp.art && this.textures.exists("lg_" + sp.art) ? "lg_" + sp.art : null, blue = sp.color === "blue", gl = blue ? "glowBlue" : "glowGold";
+        const o = { id: sp.id, d, sp, x, y, ph: Math.random() * 6, on: true, cool: 0, away: true, spT: 0 };
+        o.glow = this.add.image(x, y - 24, gl).setBlendMode(ADD).setDepth(y + 1).setScale(1.7).setAlpha(0.55); o.ring = this.add.image(x, y - 2, gl).setBlendMode(ADD).setDepth(y - 1).setScale(1.5, 0.5).setAlpha(0.5);
+        if (key) { const im = this.textures.get(key).getSourceImage(), sc = Math.min(2.2, (sp.size || 78) / im.height); o.sc = sc; o.body = this.add.image(x, y, key).setOrigin(0.5, 1).setDepth(y).setScale(sc).setTint(blue ? 0xcfe8ff : 0xfff0c0).setAlpha(0.62); o.ghost = this.add.image(x, y, key).setOrigin(0.5, 1).setDepth(y + 0.1).setScale(sc).setTint(0x80ffff).setAlpha(0.25).setBlendMode(ADD); }
+        else o.body = this.add.image(x, y - 24, "star").setScale(9).setDepth(y).setBlendMode(ADD).setAlpha(0.7);
+        this.legendObjs.push(o);
+      }
+    }
+    updateLegends(time, dt) {
+      for (const o of this.legendObjs) {
+        if (!o.on) continue;
+        const pu = 0.5 + 0.5 * Math.sin(time * 0.003 + o.ph), bob = Math.sin(time * 0.0017 + o.ph) * 2.5;
+        o.glow.setAlpha(0.35 + 0.35 * pu).setScale(1.5 + 0.25 * pu).setPosition(o.x, Math.round(o.y - 26 + bob)); o.ring.setAlpha(0.3 + 0.35 * pu);
+        if (o.sc) { const j = Math.sin(time * 0.04 + o.ph) * 1.2 * (Math.sin(time * 0.0009) > 0.82 ? 3 : 1); o.body.setPosition(Math.round(o.x + j), Math.round(o.y + bob)).setAlpha(0.45 + 0.3 * pu); o.ghost.setPosition(Math.round(o.x - j * 2), Math.round(o.y + bob - 1)).setAlpha(0.15 + 0.2 * (1 - pu)); }
+        else o.body.setAngle(time * 0.05).setAlpha(0.5 + 0.4 * pu);
+        o.spT -= dt; if (o.spT <= 0) { o.spT = 0.14; const m = this.add.image(Math.round(o.x + (Math.random() - 0.5) * 40), Math.round(o.y - 4 - Math.random() * 20), "star").setBlendMode(Phaser.BlendModes.ADD).setDepth(o.y + 2).setScale(1.2).setAlpha(0.9); this.tweens.add({ targets: m, y: m.y - 30 - Math.random() * 24, alpha: 0, duration: 1000, onComplete: () => m.destroy() }); }
+        const d = Math.hypot(this.pos.x - o.x, this.pos.y - o.y);
+        if (d > 70) o.away = true;
+        if (d < 36 && o.away && !this.busy && this.time.now > this.safeUntil && this.time.now > o.cool) { o.away = false; this.touchLegend(o); }
+      }
+    }
+    async touchLegend(o) {
+      const r = await this.runHook("legend", o.id, this.rid, o.sp);
+      if (!this.sys || !this.sys.isActive()) return;
+      if (r) { o.on = false; [o.glow, o.ring, o.body, o.ghost].forEach(x => x && this.tweens.add({ targets: x, alpha: 0, duration: 700, onComplete: () => x.destroy() })); }
+      else o.cool = this.time.now + 4000;
     }
 
     // ---------- armies: patrols (that hunt you), a chase, a stand-off, wrecks ----------
@@ -464,7 +655,13 @@
         [[0, 0], [-20, -18], [-20, 18], [-42, 0]].forEach(([ox, oy], i) => this.mkUnit(ch.pur, "cavA", ox, oy, { frames: ["cavA", "cavB"], phase: i * 0.7, fps: 8 }));
         ch.reb.name = ch.pur.name = "chase"; ch.reb.table = ch.pur.table = c.table;
       }
-      if (a.standoff) this.buildStandoff(a.standoff);
+      // imperial patrol galleys on a sea map (SYSTEMS): they sail a lane, hunt a ship they see and start `table` on touch
+      (a.ships || []).forEach((d, i) => {
+        const g = this.addGroup(d.lane, d.mode || "pingpong", d.speed || 40, d.s0 === undefined ? 60 : d.s0, d.mode === "loop", { name: d.id || "ship" + i, cfg: Object.assign({ cry: "Heave to, in the name of the empire!", chaseSpeed: 70 }, d), table: d.table, noDust: true });
+        const u = this.mkUnit(g, "galley", 0, 0, { frames: ["galley"], still: true, kind: "legion", right: false }); u.sh.setScale(1.7, 0.8);
+        if (d.show !== undefined || d.hide !== undefined) this.conds.push({ cnd: { show: d.show, hide: d.hide }, objs: [], rec: g, army: true });
+      });
+      this.stands = []; [].concat(a.standoff || []).forEach(so => this.buildStandoff(so));   // one stand-off or an array of them (WORLD-M5)
       if (this.wrecks.length) {
         this.wrecks.forEach(([x, y]) => { this.P("wagon", x, y, { solid: [30, 12], shadow: "box" }); this.P("debris", x + 56, y + 14, { shadow: false }); this.P("bones", x - 52, y + 10, { shadow: false }); });
         if (a.beasts !== false) { for (let i = 0; i < 4; i++) { const sh = this.add.image(-99, -99, "shadow").setScale(0.5, 0.4), s = this.add.image(-99, -99, "jackA").setOrigin(0.5, 1); this.beasts.push({ s, sh, a: i * 1.57, r: 70 + i * 12, w: (i % 2 ? -1 : 1) * (0.5 + i * 0.07), x: 0, y: 0 }); } this.hyena = this.add.image(this.wrecks[0][0] + 44, this.wrecks[0][1] + 24, "hyena").setOrigin(0.5, 1).setDepth(this.wrecks[0][1] + 24); }
@@ -472,10 +669,12 @@
       }
     }
     buildStandoff(so) {
-      const S = this.stand = { L: [], R: [], t: { shout: 2500, fight: 5000 }, g: { units: [] }, x: so.x, y: so.y, table: so.table }, X = so.x, Y = so.y;
-      const mk = (side, tex, hx, hy, o) => { const u = this.mkUnit(S.g, tex, 0, 0, Object.assign({ hx, hy, jx: 0, jy: 0, tx: 0, ty: 0, nj: Math.random() * 2000, lunge: 0, side, frames: [tex], still: true, kind: side === "L" ? "legion" : "rebel", right: side === "L", front: false, c: -1, placed: false }, o)); (side === "L" ? S.L : S.R).push(u); return u; };
-      for (let r = 0; r < 2; r++) for (let c = 0; c < 5; c++) { const a = mk("L", r ? "lgSpear" : "lgA", X - 46 - r * 21, Y + (c - 2) * 19, { front: r === 0, c }); if (!r) a.frames = ["lgA"]; mk("R", r ? (c === 1 || c === 3 ? "rbArcher" : "rbSword") : "rbA", X + 46 + r * 21, Y + (c - 2) * 19, { front: r === 0, c }); }
-      mk("L", "lgBanner", X - 108, Y, {}); mk("L", "lgCent", X - 66, Y - 48, {}); mk("R", "rbBanner", X + 108, Y, {});
+      // options (WORLD-M5): id (name for hiding), cols (line length, default 5), mirror (legion on the east side), noTouch (a spectacle: touching it starts no fight), cryL / cryR (shout lines)
+      const n = so.cols || 5, m = so.mirror ? -1 : 1, S = this.stand = { L: [], R: [], t: { shout: 2500, fight: 5000 }, g: { units: [] }, x: so.x, y: so.y, table: so.table, name: so.id || "stand", noTouch: !!so.noTouch, n, cry: [so.cryL, so.cryR] }, X = so.x, Y = so.y;
+      (this.stands = this.stands || []).push(S);
+      const mk = (side, tex, hx, hy, o) => { const u = this.mkUnit(S.g, tex, 0, 0, Object.assign({ hx, hy, jx: 0, jy: 0, tx: 0, ty: 0, nj: Math.random() * 2000, lunge: 0, side, frames: [tex], still: true, kind: side === "L" ? "legion" : "rebel", right: side === "L", front: false, c: -1, placed: false, flip: m < 0, m }, o)); (side === "L" ? S.L : S.R).push(u); return u; };
+      for (let r = 0; r < 2; r++) for (let c = 0; c < n; c++) { const a = mk("L", r ? "lgSpear" : "lgA", X - m * (46 + r * 21), Y + (c - (n - 1) / 2) * 19, { front: r === 0, c }); if (!r) a.frames = ["lgA"]; mk("R", r ? (c % 2 === 1 ? "rbArcher" : "rbSword") : "rbA", X + m * (46 + r * 21), Y + (c - (n - 1) / 2) * 19, { front: r === 0, c }); }
+      mk("L", "lgBanner", X - m * 108, Y, {}); mk("L", "lgCent", X - m * 66, Y - 48, {}); mk("R", "rbBanner", X + m * 108, Y, {});
     }
     shout(x, y, txt, col) { const t = this.add.text(Math.round(x), Math.round(y - 44), txt, { fontFamily: "Marcellus, Georgia, serif", fontSize: "11px", color: col || "#fbe9c0", backgroundColor: "#1a0f1acc", padding: { x: 4, y: 2 } }).setOrigin(0.5, 1).setDepth(9100); this.tweens.add({ targets: t, y: t.y - 8, alpha: 0, delay: 1100, duration: 600, onComplete: () => t.destroy() }); }
     spark(x, y) { const e = this.add.image(Math.round(x), Math.round(y), "spark").setDepth(9000).setBlendMode(Phaser.BlendModes.ADD).setScale(1.5); this.tweens.add({ targets: e, scale: 3, alpha: 0, duration: 260, onComplete: () => e.destroy() }); }
@@ -516,7 +715,7 @@
         this.placeUnit(u, u.x, u.y, t, !g.done && !u.dead, cx); if (u.alpha !== undefined) { u.s.setAlpha(u.alpha); u.sh.setAlpha(u.alpha * 0.85); }
       }
       g.dust -= dt;
-      if (!g.done && !hide && g.dust <= 0 && g.units.length) { g.dust = 0.3; const u = g.units[Math.floor(Math.random() * g.units.length)], v = this.cameras.main.worldView; if (u.x > v.x - 60 && u.x < v.right + 60 && u.y > v.y - 60 && u.y < v.bottom + 60) this.dustAt(u.x - cx * 8, u.y, 0.38); }
+      if (!g.done && !hide && !g.noDust && g.dust <= 0 && g.units.length) { g.dust = 0.3; const u = g.units[Math.floor(Math.random() * g.units.length)], v = this.cameras.main.worldView; if (u.x > v.x - 60 && u.x < v.right + 60 && u.y > v.y - 60 && u.y < v.bottom + 60) this.dustAt(u.x - cx * 8, u.y, 0.38); }
     }
     updateChase(t) {
       const c = this.chase, r = c.reb, p = c.pur; p.hidden = p.s < 0;
@@ -524,27 +723,27 @@
       if (r.done && p.done && !c.wait) { c.wait = t + 3500; r.units.concat(p.units).forEach(u => this.tweens.add({ targets: u, alpha: 0, duration: 1200, delay: 1500 })); }
       if (c.wait && t > c.wait) { c.wait = 0; c.fell = false; [r, p].forEach(g => { g.s = g.s0; g.done = false; g.px = null; g.hv = [1, 0]; g.units.forEach(u => { u.dead = false; u.placed = false; u.alpha = 1; }); }); }
     }
-    updateStandoff(t, dt) {
-      const S = this.stand, all = S.L.concat(S.R);
-      if (this.isHidden("stand")) { all.forEach(u => { u.s.setVisible(false); u.sh.setVisible(false); }); return; }
-      for (const u of all) { u.nj -= dt * 1000; if (u.nj <= 0) { u.nj = 900 + Math.random() * 1800; u.tx = (Math.random() - 0.5) * 5; u.ty = (Math.random() - 0.5) * 3; } u.jx += (u.tx - u.jx) * Math.min(1, dt * 3); u.jy += (u.ty - u.jy) * Math.min(1, dt * 3); u.x = u.hx + u.jx + u.lunge * (u.side === "L" ? 1 : -1); u.y = u.hy + u.jy; this.placeUnit(u, u.x, u.y, t, Math.abs(u.tx - u.jx) > 0.6 && !u.dead); }
+    updateStandoff(t, dt, S) {
+      S = S || this.stand; const all = S.L.concat(S.R);
+      if (this.isHidden(S.name)) { all.forEach(u => { u.s.setVisible(false); u.sh.setVisible(false); }); return; }
+      for (const u of all) { u.nj -= dt * 1000; if (u.nj <= 0) { u.nj = 900 + Math.random() * 1800; u.tx = (Math.random() - 0.5) * 5; u.ty = (Math.random() - 0.5) * 3; } u.jx += (u.tx - u.jx) * Math.min(1, dt * 3); u.jy += (u.ty - u.jy) * Math.min(1, dt * 3); u.x = u.hx + u.jx + u.lunge * (u.side === "L" ? 1 : -1) * (u.m || 1); u.y = u.hy + u.jy; this.placeUnit(u, u.x, u.y, t, Math.abs(u.tx - u.jx) > 0.6 && !u.dead); }
       S.t.shout -= dt * 1000; S.t.fight -= dt * 1000;
       const v = this.cameras.main.worldView, near = S.x > v.x - 150 && S.x < v.right + 150 && S.y > v.y - 150 && S.y < v.bottom + 150;
-      if (S.t.shout <= 0) { S.t.shout = 3200 + Math.random() * 2600; const left = Math.random() < 0.5, pool = (left ? S.L : S.R).filter(u => !u.dead), u = pool[Math.floor(Math.random() * pool.length)], lines = left ? ["Hold the line!", "Shields up!", "For the empire!", "Break them!"] : ["For the free cities!", "Hold!", "Never kneel!", "Stand firm!"]; if (u && near) this.shout(u.x, u.y - 4, lines[Math.floor(Math.random() * lines.length)], left ? "#ffb0a0" : "#a8c8ff"); }
+      if (S.t.shout <= 0) { S.t.shout = 3200 + Math.random() * 2600; const left = Math.random() < 0.5, pool = (left ? S.L : S.R).filter(u => !u.dead), u = pool[Math.floor(Math.random() * pool.length)], lines = S.cry[left ? 0 : 1] || (left ? ["Hold the line!", "Shields up!", "For the empire!", "Break them!"] : ["For the free cities!", "Hold!", "Never kneel!", "Stand firm!"]); if (u && near) this.shout(u.x, u.y - 4, lines[Math.floor(Math.random() * lines.length)], left ? "#ffb0a0" : "#a8c8ff"); }
       if (S.t.fight <= 0) {
-        S.t.fight = 5500 + Math.random() * 4500; const c = Math.floor(Math.random() * 5), a = S.L.find(u => u.front && u.c === c && !u.dead), b = S.R.find(u => u.front && u.c === c && !u.dead);
+        S.t.fight = 5500 + Math.random() * 4500; const c = Math.floor(Math.random() * S.n), a = S.L.find(u => u.front && u.c === c && !u.dead), b = S.R.find(u => u.front && u.c === c && !u.dead);
         if (a && b && near) { this.tweens.add({ targets: [a, b], lunge: 17, duration: 260, yoyo: true, ease: "Quad.easeOut" }); [220, 330, 440].forEach((d, i) => this.time.delayedCall(d, () => { this.spark((a.x + b.x) / 2, a.y - 16 + (i - 1) * 3); if (i === 1) this.dustAt((a.x + b.x) / 2, a.y); })); if (Math.random() < 0.55) this.time.delayedCall(520, () => this.killUnit(Math.random() < 0.5 ? a : b, 9000)); }
       }
     }
     updateArmies(t, dt) {
-      this.groups.forEach(g => this.updateGroup(g, t, dt)); if (this.chase) this.updateChase(t); if (this.stand) this.updateStandoff(t, dt);
+      this.groups.forEach(g => this.updateGroup(g, t, dt)); if (this.chase) this.updateChase(t); for (const S of this.stands || []) this.updateStandoff(t, dt, S);
       const bh = this.isHidden("beasts"); this.beasts.forEach(b => { b.s.setVisible(!bh); b.sh.setVisible(!bh); }); if (this.hyena) this.hyena.setVisible(!bh);
       for (const b of this.beasts) { if (bh) break; b.a += b.w * dt; const cx = this.wrecks[0][0], cy = this.wrecks[0][1] + 10, nx = cx + Math.cos(b.a) * b.r * 1.25, ny = cy + Math.sin(b.a) * b.r * 0.7, dx = nx - b.x; if (Math.abs(dx) > 0.05) b.s.setFlipX(dx < 0); b.x = nx; b.y = ny; b.s.setTexture(Math.floor(t / 130 + b.a * 3) % 2 ? "jackA" : "jackB").setPosition(Math.round(nx), Math.round(ny)).setDepth(ny); b.sh.setPosition(Math.round(nx), Math.round(ny) - 1).setDepth(ny - 1); }
       if (this.hyena) this.hyena.setScale(1, 1 + Math.sin(t * 0.003) * 0.02);
       // touching a legion soldier or the beasts starts an encounter
       const h = this.pos, hit = (x, y, r, px, py) => Math.hypot(x - px, y - py) < r; let touch = null;
       for (const g of this.groups) { if (g.hidden || g.off || this.isHidden(g.name) || g.s < 0) continue; for (const u of g.units) if (u.kind === "legion" && !u.dead && u.placed && (hit(u.x, u.y, 40, h.x, h.y) || this.followers.some(f => hit(u.x, u.y, 32, f.x, f.y)))) { touch = touch || { name: g.name, table: g.table }; } }
-      if (this.stand && !this.isHidden("stand")) for (const u of this.stand.L) if (!u.dead && hit(u.x, u.y, 44, h.x, h.y)) touch = touch || { name: "stand", table: this.stand.table };
+      for (const S of this.stands || []) if (!S.noTouch && !this.isHidden(S.name)) for (const u of S.L) if (!u.dead && hit(u.x, u.y, 44, h.x, h.y)) touch = touch || { name: S.name, table: S.table };
       if (!bh) for (const b of this.beasts) if (hit(b.x, b.y, 40, h.x, h.y)) touch = touch || { name: "beasts" };
       this.touch = touch;
       if (touch && !this.busy && this.time.now > this.safeUntil && this.safeDist <= 0) this.startEncounter((touch.table || this.defaultTable()), touch.name);
@@ -562,7 +761,11 @@
       if (this.safeDist > 0) { this.safeDist -= stepLen; }
       if (this.time.now < this.safeUntil || this.safeDist > 0) return;
       const z = this.zoneAt(this.pos.x, this.pos.y); if (!z || !z.table || !z.rate) return;
-      this.walkT += dt; if (this.walkT >= z.rate * this.encFrac * (1 / Math.max(0.05, window.Flow && Flow.encounterMult ? Flow.encounterMult() : 1))) this.startEncounter(z.table, "steps");
+      this.walkT += dt;
+      if (this.walkT >= z.rate * this.encFrac * (1 / Math.max(0.05, window.Flow && Flow.encounterMult ? Flow.encounterMult() : 1))) {
+        if (window.Systems && Systems.skipFight && Systems.skipFight(z.table)) { this.walkT = 0; this.encFrac = 0.5 + Math.random(); }   // Quiet Sigil: a weak fight never starts
+        else this.startEncounter(z.table, "steps");
+      }
     }
     async startEncounter(table, why) {
       if (!table) return; this.busy++; this.walkT = 0; this.encFrac = 0.5 + Math.random(); this.moving = false;
@@ -574,7 +777,9 @@
     }
 
     // ---------- input ----------
-    runHook(name, ...args) { this.busy++; return callHook(name, ...args).then(r => { if (this.sys && this.sys.isActive()) { this.busy = Math.max(0, this.busy - 1); this.talkCool = this.time.now + 250; this.refresh(); } return r; }); }
+    // menus, dialogue and cutscenes take the keyboard: a walk key released meanwhile never reaches Phaser, so forget held keys on both sides of a hook
+    releaseKeys() { try { this.input.keyboard.resetKeys(); } catch (e) {} }
+    runHook(name, ...args) { this.busy++; this.releaseKeys(); return callHook(name, ...args).then(r => { if (this.sys && this.sys.isActive()) { this.busy = Math.max(0, this.busy - 1); this.talkCool = this.time.now + 250; this.releaseKeys(); this.refresh(); } return r; }); }
     nearest(list, r) { let best = null, bd = r; for (const n of list) { if (!n.on || n.done) continue; const d = Math.hypot(this.pos.x - n.x, this.pos.y - n.y); if (d < bd) { bd = d; best = n; } } return best; }
     interact() {
       if (this.busy || this.time.now < this.talkCool || !this.ready) return;
@@ -594,12 +799,12 @@
     }
     inRect(r) { return this.pos.x >= r[0] && this.pos.x < r[0] + r[2] && this.pos.y >= r[1] && this.pos.y < r[1] + r[3]; }
     trigOn(t) { return !(t.once !== false && this.flags["trig." + t.id]) && this.cond(t.when) && this.cond(t.show) && !(t.hide !== undefined && this.cond(t.hide)); }
-    async fireTrigger(t) { if (t.once !== false) this.flags["trig." + t.id] = true; await this.runHook("trigger", t.id, this.rid); }
+    async fireTrigger(t) { if (t.once !== false) this.flags["trig." + t.id] = true; t.armed = false; await this.runHook("trigger", t.id, this.rid); }   // QA-B: armed=false until the hero has left the rect, so a "not yet" message (story step not done, trigger given back) cannot re-fire while he still stands inside it
     async takeExit(e) {
-      this.busy++; this.moving = false; log("exit", e.to, e.entry);
+      this.busy++; this.moving = false; this.releaseKeys(); log("exit", e.to, e.entry);
       const party = this.party.slice(), flags = this.flags, r = await callHook("exit", e.to, e.entry, { scene: this, party, flags, from: this.rid });
       if (!this.sys || !this.sys.isActive()) return;
-      if (r === false) { this.busy--; this.exitCool = this.time.now + 1500; const [x, y] = this.nearestFree(this.pos.x + Math.sign(e.push && e.push[0] || 0) * 40, this.pos.y + Math.sign(e.push && e.push[1] || 0) * 40); this.pos.x = x; this.pos.y = y; return; }
+      if (r === false) { this.busy--; this.releaseKeys(); this.exitCool = this.time.now + 1500; const [x, y] = this.nearestFree(this.pos.x + Math.sign(e.push && e.push[0] || 0) * 40, this.pos.y + Math.sign(e.push && e.push[1] || 0) * 40); this.pos.x = x; this.pos.y = y; return; }
       if (r === "handled") return;
       World.enter(this, e.to, e.entry, party, flags);
     }
@@ -626,6 +831,11 @@
     setFlag(k, v) { this.flags[k] = v === undefined ? true : v; this.refresh(); }
     // reachability report for the test page and the build log: every entry to every exit/NPC/chest/gather/trigger
     checkReach() {
+      const R = this.R; if (!R.checkFlags && !(R.pulses || []).length) return this.checkReach0();
+      const sv = this.flags; this.flags = Object.assign({}, sv, R.checkFlags || {}); this.checking = true; (this.pulses || []).forEach(p => { p.rec.on = false; p.was = false; }); this.refresh();
+      try { return this.checkReach0(); } finally { this.flags = sv; this.checking = false; this.refresh(); }
+    }
+    checkReach0() {
       const R = this.R, out = [], pts = [];
       for (const e of R.exits || []) pts.push(["exit " + e.to + (e.entry ? "@" + e.entry : ""), e.rect[0] + e.rect[2] / 2, e.rect[1] + e.rect[3] / 2, Math.max(e.rect[2], e.rect[3]) / 2 + 6]);
       for (const n of R.npcs || []) if (n.id && n.art) pts.push(["npc " + n.id, n.x, n.y + 14, 36]);
@@ -655,12 +865,13 @@
     // ---------- the frame loop ----------
     update(time, delta) {
       if (!this.ready) return;
+      this.updateMinimap(time);
       const dt = Math.min(0.05, delta / 1000), k = this.keys, ptr = this.input.activePointer;
       let vx = (k.right.isDown || k.d.isDown ? 1 : 0) - (k.left.isDown || k.a.isDown ? 1 : 0), vy = (k.down.isDown || k.s.isDown ? 1 : 0) - (k.up.isDown || k.w.isDown ? 1 : 0), usePtr = false;
       if (this.busy || this.scripted) { vx = 0; vy = 0; }
       else if (!vx && !vy && ptr.isDown && !this.noPtr) { usePtr = true; const w = this.cameras.main.getWorldPoint(ptr.x, ptr.y), dx = w.x - this.pos.x, dy = w.y - (this.pos.y - 18), d = Math.hypot(dx, dy); if (d > 8) { vx = dx / d; vy = dy / d; } }
       const len = Math.hypot(vx, vy) || 1; vx /= len; vy /= len;
-      const step = SPEED * dt; let moved = false, ox = this.pos.x, oy = this.pos.y;
+      const step = (this.boat ? BOAT_SPEED : SPEED) * dt; let moved = false, ox = this.pos.x, oy = this.pos.y;
       if (vx || vy) moved = this.walk(vx, vy, step, usePtr);
       if (!this.scripted) this.moving = moved;
       if (vx || vy) { if (Math.abs(vy) > Math.abs(vx) + 0.1) this.face = vy > 0 ? "down" : "up"; else { this.face = "side"; this.flipH = vx < 0; } }
@@ -669,6 +880,7 @@
       this.heroShadow.setPosition(px, py - 1).setDepth(this.pos.y - 1);
       { const pu = 0.5 + 0.5 * Math.sin(time * 0.0026); this.heroGlow.setPosition(px, py - 30).setDepth(this.pos.y + 0.2).setAlpha(0.10 + 0.12 * pu).setScale(0.75 + 0.08 * pu, 0.95 + 0.08 * pu); this.heroGlowLow.setPosition(px, py - 2).setDepth(this.pos.y - 1.5).setAlpha(0.28 + 0.2 * pu); }
       if (mv) { this.puffTimer -= dt; if (this.puffTimer <= 0) { this.puffTimer = 0.16; const p = this.add.image(Math.round(this.pos.x - vx * 6), py - 1, "puff").setDepth(this.pos.y + 0.5).setAlpha(this.R.noPuff ? 0 : 0.5).setScale(0.6); if (this.R.puffTint) p.setTint(this.R.puffTint); this.tweens.add({ targets: p, alpha: 0, scale: 1.3, y: p.y - 5, duration: 480, onComplete: () => p.destroy() }); } }
+      if (this.boat) this.shipFrame(time, dt, px, py, vx, vy, mv);
       for (const w of this.swayers) { const a = Math.sin(time * 0.0014 + w.phase) * w.amp + Math.sin(time * 0.0031 + w.phase * 2) * w.amp * 0.4; if (w.s.setSkew) w.s.setSkew(a, 0); else w.s.rotation = a * 0.6; }
       for (const f of this.fires) f.glow.setAlpha(0.42 + 0.2 * Math.sin(time * 0.017 + f.ph) + 0.1 * Math.sin(time * 0.043 + f.ph * 3)).setScale((1.4 + 0.08 * Math.sin(time * 0.021 + f.ph)) * f.k);
       const wf = Math.floor(time / 140) % 2, R = this.R;
@@ -686,7 +898,7 @@
         n.ps += (n.speed || 22) * dt * n.pd; if (n.ps > n.P.L) { n.ps = n.P.L; n.pd = -1; } if (n.ps < 0) { n.ps = 0; n.pd = 1; }
         const a = pathAt(n.P, n.ps); if (Math.abs(a.hx) > 0.2) n.s.setFlipX(a.hx * n.pd > 0); n.x = a.x; n.y = a.y; n.s.setPosition(Math.round(n.x), Math.round(n.y - Math.abs(Math.sin(time * 0.01)) * 1)).setDepth(n.y); n.sh.setPosition(Math.round(n.x), Math.round(n.y) - 1).setDepth(n.y - 1);
       }
-      this.updateFollowers(time, dt); this.updateArmies(time, dt);
+      this.updateFollowers(time, dt); this.updateArmies(time, dt); this.updateSky(time, dt); this.updateLegends(time, dt);
       const v = this.cameras.main.worldView;
       for (const m of this.motes) { m.x += m.vx * dt; m.y += Math.sin(time * 0.001 + m.ph) * 6 * dt; m.s.setPosition(Math.round(v.x + ((m.x - v.x) % 1000 + 1000) % 1000 - 20), Math.round(v.y + ((m.y - v.y) % 600 + 600) % 600 - 20)); }
       if (this.dark) this.updateDark(time);
@@ -694,7 +906,8 @@
       if (!this.busy && !this.scripted) {
         this.encounterTick(dt, moved, Math.hypot(this.pos.x - ox, this.pos.y - oy));
         if (this.time.now > this.exitCool) for (const e of this.exits) { if (this.inRect(e.rect) && this.cond(e.show) && !(e.hide !== undefined && this.cond(e.hide))) { if (e.need !== undefined && !this.cond(e.need)) { if (!e.warned) { e.warned = true; this.exitCool = this.time.now + 1200; if (e.blocked) this.runHook("trigger", e.blocked, this.rid); const [x, y] = this.nearestFree(this.pos.x + Math.sign(e.push && e.push[0] || 0) * 36, this.pos.y + Math.sign(e.push && e.push[1] || 0) * 36); this.pos.x = x; this.pos.y = y; } } else { e.warned = false; this.takeExit(e); } break; } else e.warned = false; }
-        if (!this.busy) for (const t of this.triggers) if (!t.press && this.inRect(t.rect) && this.trigOn(t)) { this.fireTrigger(t); break; }
+        for (const t of this.triggers) if (t.armed === false && !this.inRect(t.rect)) t.armed = true;
+        if (!this.busy) for (const t of this.triggers) if (!t.press && t.armed !== false && this.inRect(t.rect) && this.trigOn(t)) { this.fireTrigger(t); break; }
       }
       // prompts
       const near = this.nearest(this.npcs.filter(n => n.id && n.name !== undefined), 64), ch = this.nearest(this.chests, 44), gs = this.nearest(this.gathers, 44);

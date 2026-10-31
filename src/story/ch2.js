@@ -119,6 +119,7 @@
       await UI.say([["narr", "The bellow grows. You keep going."]]);
     }
     await UI.say([["narr", "The deepest cell. A ring of bone, and a guardian rising from a pile of horns: a great skull on four legs, stamping."]]);
+    await Cinema.boss({ id: "mazeGuardian", name: "The Maze Guardian", title: "Keeper of the Bone Maze", bg: "boneMaze" });
     const res = await F.boss([F.mkEnemy("mazeGuardian", 8), F.mkEnemy("mazeBat", 7, " B")], { bg: "boneMaze", intro: "The Maze's guardian lowers its horns!" });
     if (res !== "win") return;
     F.set("k1.done"); F.quest("bellow", 1);
@@ -153,7 +154,7 @@
       if (!F.f("bear.done")) { await UI.say([["captain", "Brisk's the name. Passengers to Ixcalo, no questions. ...Not tonight, though. The tide is wrong and the customs men are thick on the pier."], ["hero", "(The boat can wait. Ithiel's work first: the Hollow of the Sky-Stone.)"]]); return; }
       if (F.f("m1.done")) { await UI.say([["captain", "The boat's already sailed east, friend. Wait for the next tide. The jungle will keep."]]); return; }
       await UI.say([["captain", "Brisk's the name. Passengers to Ixcalo, no questions. The jungle shore, three nights' sail. You'd be the one with the green seal, then."]]);
-      const i = await F.ask("Board the smuggler's boat now? This ends Milestone 1.", [{ label: "Board now" }, { label: "Not yet, I have things to finish" }]);
+      const i = await F.ask("Board the smuggler's boat now? The dunes will be days behind you.", [{ label: "Board now" }, { label: "Not yet, I have things to finish" }]);
       if (i === 0) await S.ending(F);
     },
   };
@@ -169,6 +170,7 @@
       ["hero", "(It speaks of a falling star, held up by a giant who was told to keep it from the ground.)"],
       ["narr", F.f("lore.bearer") ? "That matches the rumour from Amber Wells: strike the stone twice in a breath and it splits." : "The script ends in a diagram: two hammers, one stone, a crack. A heavy blow, then another."]]);
     G.best.duneBearer = Object.assign(G.best.duneBearer || {}, { breakKnown: true }); F.set("lore.bearer");
+    if (S.sunPiece) S.sunPiece(F, 1);   // chapter 11 lore: the first builder tablet of the Sun Eater
   };
   S.trigger.bearer = async F => {
     if (F.f("bear.done")) return;
@@ -176,6 +178,7 @@
     await UI.say([["narr", "The great door grinds open. A sunken chamber, a fallen star of stone hanging in the air on a giant's back. The giant kneels, and breathes."], ["hero", "(It has not moved in a thousand years. It is awake now.)"]]);
     await F.banter("bearer");
     const intro = (Core.ENEMIES && Core.ENEMIES.duneBearer && Core.ENEMIES.duneBearer.intro) || "The sand rises. An ancient giant stands up, a cracked sky-stone strapped to its back.";
+    await Cinema.boss({ id: "duneBearer", name: "The Dune Bearer", title: "Titan of the Whisperglass", bg: "ruins", music: "titan" });
     const res = await F.boss([F.mkEnemy("duneBearer", 10)], { intro, music: "titan", xpBonus: 1.0 });
     if (res !== "win") return;
     F.set("bear.done"); F.set("ch2.bearerDone"); F.questDone("m_bearer"); F.giveGear("G17", 3);
@@ -190,11 +193,11 @@
   S.ending = async F => {
     F.set("m1.done"); F.questDone("m_boat");
     await UI.fade(true, 700); F.music("sad");
-    await UI.say([["narr", "The smuggler boat leaves Saltgate on the night tide. The lighthouse swings its beam across the water and lets you go."]]);
     await F.banter("boat");
     await UI.say([["hero", "(Behind me: a burning academy, eight empty pens, a Titan on its knees. Ahead: the empire.)"]]);
     F.save(true);
-    await UI.card({ image: "assets/title.png", big: "To be continued", text: "in Chapter 3. Your game has been saved. Thank you for playing." , delay: 800});
+    if (S.begin && S.begin[3]) { await S.begin[3](F); return; }   // chapter 3 (src/story/ch3.js) plays the voyage, the title card and enters Creeping Shore
+    await UI.card({ image: "assets/title.png", big: "To be continued", text: "in Chapter 3. Your game has been saved. Thank you for playing.", delay: 800 });
     await UI.fade(false, 300);
     F.save(true);
     if (Flow.toTitle) Flow.toTitle();

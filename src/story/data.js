@@ -77,9 +77,9 @@ const Data = (() => {
       karvan: [["bulwyrm", "Shield for shield. I will hold."], ["rotfang", "Steel? Pff. Rust always wins."], ["stillgaze", "He guards a door. What does the door guard?"]],
       wagon:  [["bulwyrm", "Cages. ...I was in one. Open them."], ["rotfang", "Typical. Everyone gets kept. Nobody gets asked."], ["stillgaze", "Locked and listening. A cage hears itself."]],
       bearer: [["bulwyrm", "The Bearer. I am also a wall."], ["rotfang", "A giant stone man. Of course. Why not."], ["stillgaze", "What is carried is not always a burden. What is it, here?"]],
-      boat:   [["bulwyrm", "Water. I do not swim. I... sink well."], ["rotfang", "Salt on my scales. Terrific."], ["stillgaze", "Who crosses a sea comes back changed, or does not."]],
+      boat:   [["bulwyrm", "Water. I do not swim. I sink."], ["rotfang", "Salt on my scales. Terrific."], ["stillgaze", "Who crosses a sea comes back changed, or does not."]],
       idle:   [["bulwyrm", "..."], ["rotfang", "I could hate this town, easily. It's cosy."], ["stillgaze", "What has a roof but no walls? Ask me later."]],
-      lab:    [["bulwyrm", "You brought bread to the bars. I remember."], ["rotfang", "Fine. I trusted you. Once. Happy?"], ["stillgaze", "The riddle was always you."]],
+      lab:    [["bulwyrm", "You brought bread. I remember."], ["rotfang", "Fine. I trusted you. Once. Happy?"], ["stillgaze", "The riddle was always you."]],
     },
     breakers: {
       tut:    [["crushjaw", "Is the slug edible? Asking for science."], ["zephyrra", "Ooh ooh, I'll beat Crushjaw to it!"], ["duskcoil", "Between us, the slug is nervous. I can tell."]],
@@ -135,22 +135,21 @@ const Data = (() => {
   const TIER_FLASK = [8, 12, 20, 32, 48, 68, 90, 110];
   const ITEMS = {
     sunwater: { n: "Sunwater Flask",  d: "Heals one creature by 25% of its max HP.", f: 1.0, use: "heal" },
-    antidote: { n: "Reed Antidote",   d: "Cures poison.", f: 0.6 },
-    salve:    { n: "Cooling Salve",   d: "Cures burn.", f: 0.6 },
-    moss:     { n: "Clotting Moss",   d: "Cures bleed.", f: 0.6 },
-    wrap:     { n: "Ember Wrap",      d: "Cures chill.", f: 0.6 },
-    clay:     { n: "Grounding Clay",  d: "Cures shock.", f: 0.6 },
-    tea:      { n: "Quick Tea",       d: "Cures slow.", f: 0.6 },
-    cloth:    { n: "Dry Cloth",       d: "Removes Wet.", f: 0.33 },
-    tonic:    { n: "Clearwater Tonic", d: "Cures every status on one creature.", f: 1.5 },
-    ember:    { n: "Ashen Ember",     d: "Revives a fallen creature at 20% HP.", f: 4, use: "revive" },
+    antidote: { n: "Reed Antidote",   d: "Clears burn, bleed, poison, shock, chill and slow from one creature, and any lowered stat. Not Wet.", f: 0.6 },
+    tonic:    { n: "Clearwater Tonic", d: "Cures every status, Wet included, and every lowered stat on one creature.", f: 1.5 },
+    ember:    { n: "Ashen Ember",     d: "Revives a fallen creature at 30% HP, in a fight or from the menu.", f: 4, use: "revive" },
     incense:  { n: "Wayfarer's Incense", d: "Halves the fight rate for about 5 minutes of walking.", f: 2, use: "charm" },
     candle:   { n: "Lure Candle",     d: "Doubles the fight rate for about 5 minutes.", f: 1, use: "charm" },
-    cinderBomb: { n: "Cinder Bomb", d: "Fire damage, adds burn. Never breaks a boss.", f: 1.8 },
-    rimeFlask:  { n: "Rime Flask",  d: "Ice damage, adds chill. Never breaks a boss.", f: 1.8 },
-    soakJar:    { n: "Soak Jar",    d: "Makes an enemy Wet.", f: 1.8 },
-    sparkJar:   { n: "Spark Jar",   d: "Lightning damage, adds shock.", f: 1.8 },
-    venomPot:   { n: "Venom Pot",   d: "Poison damage, adds a stack.", f: 1.8 },
+    cinderBomb: { n: "Cinder Bomb", d: "Fire damage, adds burn. Never counts toward a break.", f: 1.8 },
+    rimeFlask:  { n: "Rime Flask",  d: "Ice damage, adds chill. Never counts toward a break.", f: 1.8 },
+    soakJar:    { n: "Soak Jar",    d: "Makes an enemy Wet. Never counts toward a break.", f: 1.8 },
+    sparkJar:   { n: "Spark Jar",   d: "Lightning damage, adds shock. Never counts toward a break.", f: 1.8 },
+    venomPot:   { n: "Venom Pot",   d: "Poison damage, adds a poison stack. Never counts toward a break.", f: 1.8 },
+    cinderWard: { n: "Cinder-Ward", d: "One creature takes 25% less fire damage for 3 turns.", f: 1.5 },
+    rimeWard:   { n: "Rime-Ward",   d: "One creature takes 25% less ice and water damage for 3 turns.", f: 1.5 },
+    stormWard:  { n: "Storm-Ward",  d: "One creature takes 25% less lightning damage for 3 turns.", f: 1.5 },
+    venomWard:  { n: "Venom-Ward",  d: "One creature takes 25% less poison damage for 3 turns.", f: 1.5 },
+    soulDew:    { n: "Soul Dew",    d: "Revives a fallen creature at full HP. Once per fight. Not sold.", f: 0, key: false },
     keyK1:      { n: "Bone Maze Key", d: "Opens a cell in the Menagerie Wagon.", key: true },
     wardstone:  { n: "Wardstone", d: "A charm: halves the fight rate for good.", key: true },
     journal:    { n: "Field Journal", d: "Your satchel of notes. Everything you see goes in.", key: true },
@@ -158,61 +157,209 @@ const Data = (() => {
   // trade goods (sellable, no other use) and skill-book materials
   const GOODS = { sandGlass: ["Glass-Sand Vial", 6], scarabShell: ["Scarab Shell", 7], adderFang: ["Adder Fang", 8], impWing: ["Imp Wing", 6], slimeJar: ["Slug Slime", 4], inkVial: ["Ink Vial", 5], boneChip: ["Bone Chip", 6],
     scorpPlate: ["Scorpion Plate", 14], emberSlag: ["Ember Slag", 12], legionCoin: ["Legion Coin", 9], lizScale: ["Lizard Scale", 10], saltCrust: ["Salt Crust", 9], curio: ["Odd Curio", 5], mossClump: ["Cistern Moss", 6], catMist: ["Heat-Haze Jar", 8] };
-  const MATS = { duneclawShard: ["Duneclaw Shard", "Hard as a mason's chisel. Helps against Titans' stone."], cinderglassEmber: ["Cinderglass Ember", "A coal that never goes out."], cinderPlume: ["Cinder Plume", "A feather that is warm on one side."] };
+  const MATS = { duneclawShard: ["Duneclaw Shard", "Hard as a mason's chisel."], cinderglassEmber: ["Cinderglass Ember", "A coal that never goes out."], cinderPlume: ["Cinder Plume", "A feather that is warm on one side."] };
   // skill book: 10 pieces unlock a move that any creature can equip in its off-style slot
   const BOOK = {
-    ramStrike: { n: "Ram Strike", mat: "duneclawShard", need: 10, d: "Impact move, 2 MP. Counts toward impact breaks. Helps against the Dune Bearer.", move: "ramStrike" },
-    kindle:    { n: "Kindle", mat: "cinderglassEmber", need: 10, d: "Fire move, 2 MP. Adds burn. A fire answer to roots and wood.", move: "kindle" },
-    revive:    { n: "Revive", mat: "cinderPlume", need: 10, d: "Brings a fallen ally back to their feet.", move: "revive" },
+    ramStrike: { n: "Ram Strike", mat: "duneclawShard", need: 10, d: "Impact move, 2 MP. Counts toward impact breaks.", move: "ramStrike" },
+    kindle:    { n: "Kindle", mat: "cinderglassEmber", need: 10, d: "Fire move, 2 MP. Adds burn.", move: "kindle" },
+    revive:    { n: "Revive", mat: "cinderPlume", need: 10, d: "Revives a fallen ally at 20% HP, 3 MP.", move: "revive" },
   };
   const priceOf = (key, tier) => {
     const it = ITEMS[key]; if (!it || it.f == null) return 0;
-    if (key === "cloth") return [2, 4, 6, 10, 14, 20, 27, 33][tier];
     return Math.round(TIER_FLASK[tier] * it.f);
   };
 
-  // ---------- gear sets (GEAR_SETS.md); st = [full, two-piece] for stat bonuses I can apply; fx = tag passed to the battle rules ----------
+  // ---------- gear sets: all 46 of GEAR_SETS.md (owner RULES-GEAR) ----------
+  // pieces = [helm, armour, weapon]. Each set has 3 bonuses b[]: n name, d full-set text, d2 two-piece text, fx = the tag the battle rules read (u.fx[tag], src/core.js "gear set bonuses"),
+  // st = the part Flow.applyGear applies to the stats: [full, two-piece] as percent (hp def res spd xp) or MP (startMp). Texts say exactly what the rules do (test-gear.js checks the numbers).
+  // bn(name, "text with {} for each number", fullNumbers, twoPieceNumbers | twoPieceText, { fx, st })
+  const fmt = (t, a) => { let i = 0; return t.replace(/\{\}/g, () => a[i++]); };
+  const bn = (n, t, full, half, o) => Object.assign({ n, d: fmt(t, full), d2: Array.isArray(half) ? fmt(t, half) : half }, o);
   const SETS = {
-    G44: { n: "Initiate's Mask", pieces: ["Plain Wooden Mask", "White Linen Robe", "Temple Reed Staff"], b: [
-      { n: "Quiet Mind", d: "Start each fight with 2 MP.", d2: "Start each fight with 1 MP.", st: { startMp: [2, 1] } },
-      { n: "Empty Hands", d: "At 0 MP your basic attack gives +1 extra MP.", d2: "Once per fight.", fx: "emptyHands" },
-      { n: "Thrifty Caster", d: "Your first spell each turn costs 1 less MP (min 1).", d2: "Every second turn.", fx: "thrifty" }] },
-    G41: { n: "Wayfarer's Road Kit", pieces: ["Road Hood", "Travelling Cloak", "Wayfarer's Knife"], b: [
-      { n: "Sturdy Boots", d: "+10% max HP.", d2: "+5% max HP.", st: { hp: [10, 5] } },
-      { n: "Ready Hands", d: "Start each fight with 1 MP.", d2: "First basic attack gives +1 extra MP.", st: { startMp: [1, 0] }, fx: "readyHands" },
-      { n: "Fast Learner", d: "+15% experience.", d2: "+7% experience.", st: { xp: [15, 7] } }] },
-    G5: { n: "Bullring Bronze", pieces: ["Nose-Ring Helm", "Bronze Cuirass", "Bull-Horn Blade"], b: [
-      { n: "Bull's Constitution", d: "+15% max HP.", d2: "+7% max HP.", st: { hp: [15, 7] } },
-      { n: "Horn Counter", d: "Deal back 15% of physical damage you take.", d2: "8%.", fx: "hornCounter" },
-      { n: "Iron Nose Ring", d: "25% less chance to be stunned or slowed.", d2: "12%.", fx: "ironNose" }] },
-    G16: { n: "Tower Shield Phalanx", pieces: ["Bronze Helm", "Tower Shield", "Short Stabbing Sword"], b: [
-      { n: "Wall", d: "+20% Defense.", d2: "+10% Defense.", st: { def: [20, 10] } },
-      { n: "Shield Brother", d: "Hits it takes for an ally (Bulwark) deal 25% less damage.", d2: "12% less.", fx: "shieldBrother" },
-      { n: "Locked Shields", d: "Shield Wall cuts team damage by 40% instead of 30%.", d2: "35% instead of 30%.", fx: "lockedShields" }] },
-    G45: { n: "Stoneweather Cloak", pieces: ["Sun-Bleached Hood", "Thick Grey Cloak", "Weathered Staff"], b: [
-      { n: "Hard to Rattle", d: "30% less chance to be hit by a status.", d2: "15%.", fx: "hardToRattle" },
-      { n: "Shake It Off", d: "Statuses on you last 1 turn shorter.", d2: "Only burn and poison.", fx: "shakeOff" },
-      { n: "Thick Skin", d: "Ignore the first status each fight.", d2: "The first status lasts 1 turn.", fx: "thickSkin" }] },
-    G20: { n: "Quarry Mason's Hammer", pieces: ["Mason's Cap", "Quarry Apron", "Mason's Hammer"], b: [
-      { n: "Earthquake", d: "Earthshaker +30% damage, stun chance +10 points.", d2: "+15%, +5 points.", fx: "earthquake" },
-      { n: "Pillar Fist", d: "Basic attacks add 25% of your Defense.", d2: "12%.", fx: "pillarFist" },
-      { n: "Full Strength", d: "+20% damage while your HP is full.", d2: "+10%.", fx: "fullStrength" }] },
-    G12: { n: "Cinder Serpent Pit", pieces: ["Smoke-Grey Hood", "Coal-Red Plate", "Cinder Rod"], b: [
-      { n: "Slow Burn", d: "Burn you apply lasts 1 turn longer.", d2: "Every second burn.", fx: "slowBurn" },
-      { n: "Ember Heart", d: "+20% fire damage.", d2: "+10%.", fx: "emberHeart" },
-      { n: "Ashen Skin", d: "20% less fire damage taken.", d2: "10%.", fx: "ashenSkin" }] },
+    G1: { n: "Gladiator of the Black Sand", pieces: ["Bronze-and-Obsidian Helm", "Sand-Stained Greaves", "Heavy Trident-Blade"], b: [
+      bn("Arena Favourite", "Deal +{}% damage to broken enemies, on top of the normal break bonus.", [20], [10], { fx: "arenaFavourite" }),
+      bn("Crowd Roar", "The first time one of your moves breaks an enemy each turn, you gain +1 MP.", [], "Only the first enemy you break each fight gives +1 MP.", { fx: "crowdRoar" }),
+      bn("Sand Underfoot", "Moves that cost HP, such as Reckless Blow, cost {}% less HP.", [25], [12], { fx: "sandUnderfoot" })] },
+    G2: { n: "Horn of the Sun Bull", pieces: ["Gilded Horn-Cap", "Golden Breastplate", "Sun Gladius"], b: [
+      bn("Momentum", "Basic attacks on the same target in a row each deal {}% more damage than the one before, up to +{}%. Any other move, or a new target, starts over.", [10, 30], [5, 15], { fx: "momentum" }),
+      bn("Heavy Hitter", "Moves that cost 3 MP deal +{}% damage, but you have {}% less Speed.", [20, 15], [10, 8], { fx: "heavyHitter", st: { spd: [-15, -8] } }),
+      bn("Fed by Blood", "Your basic attack gives +1 extra MP when the target is broken.", [], "Every second basic attack on a broken target gives +1 extra MP.", { fx: "fedByBlood" })] },
+    G3: { n: "Furious Centurion", pieces: ["Red-Crested Helm", "Scarred Scale Armour", "Notched Blade"], b: [
+      bn("Bottled Fury", "Wrath adds {}% more of the damage it stored to your next hit.", [50], [25], { fx: "bottledFury" }),
+      bn("Thick Skin of Spite", "Below half HP, you take {}% less physical damage.", [20], [10], { fx: "spiteSkin" }),
+      bn("Berserker's Oath", "Below half HP, you deal +{}% damage.", [25], [12], { fx: "berserkOath" })] },
     G4: { n: "Warden of the Winding Halls", pieces: ["Maze-Pattern Helm", "Bronze Maze Plate", "Long-Hafted Axe"], b: [
-      { n: "Dead End", d: "Impact moves count as 2 hits toward breaks.", d2: "The first impact move each turn.", fx: "deadEnd" },
-      { n: "Opening Charge", d: "Your first action of the fight deals +40% damage.", d2: "+20%.", fx: "openingCharge" },
-      { n: "Cheap Cruelty", d: "1 MP attacks deal +25% damage.", d2: "+12%.", fx: "cheapCruelty" }] },
+      bn("Dead End", "Impact moves (Labyrinth Charge, Earthshaker and so on) count one extra hit toward breaks.", [], "The first impact move each turn counts one extra hit toward breaks.", { fx: "deadEnd" }),
+      bn("Opening Charge", "Your first move of the fight deals +{}% damage.", [40], [20], { fx: "openingCharge" }),
+      bn("Cheap Cruelty", "Attacks that cost 1 MP deal +{}% damage.", [25], [12], { fx: "cheapCruelty" })] },
+    G5: { n: "Bullring Bronze", pieces: ["Nose-Ring Helm", "Bronze Cuirass", "Bull-Horn Blade"], b: [
+      bn("Bull's Constitution", "+{}% max HP.", [15], [7], { st: { hp: [15, 7] } }),
+      bn("Horn Counter", "When a physical attack hits you, the attacker takes {}% of that damage back.", [15], [8], { fx: "hornCounter" }),
+      bn("Iron Nose Ring", "{}% of the stuns, slows and Speed drops used against you fail.", [25], [12], { fx: "ironNose" })] },
+    G6: { n: "Windfeather Scout", pieces: ["Feathered Cap", "Plume Jerkin", "Hooked Blade"], b: [
+      bn("Tailwind Weave", "Your Tailwind gives +{}% Speed instead of +30%.", [45], [37.5], { fx: "tailwindWeave" }),
+      bn("Quick Talons", "+{}% Speed.", [15], [7], { st: { spd: [15, 7] } }),
+      bn("First Gust", "+{}% Speed during the first round of a fight.", [40], [20], { fx: "firstGust" })] },
+    G7: { n: "Razor Plume", pieces: ["Glass-Edged Crest", "Razor-Feather Mantle", "Plume Dagger"], b: [
+      bn("Keen Edge", "Critical hits deal {}x damage instead of 1.5x.", [1.8], [1.65], { fx: "critDmg" }),
+      bn("Hundred Cuts", "In a move with several hits, the 2nd hit deals +{}%, the 3rd +{}% and later hits +{}%.", [10, 20, 30], [5, 10, 15], { fx: "hundredCuts" }),
+      bn("Open Wounds", "Bleed you apply lasts 1 turn longer.", [], "Every second bleed you apply lasts 1 turn longer.", { fx: "openWounds" })] },
+    G8: { n: "Condor Tower Watch", pieces: ["Lookout's Hood", "Watchman's Cloak", "Tower Spear"], b: [
+      bn("Reward the Hunt", "The first time you land a critical hit each turn, you gain +1 MP.", [], "Only the first critical hit each fight gives +1 MP.", { fx: "rewardHunt" }),
+      bn("Hawk Eye", "+{}% chance to land critical hits, added to your normal chance.", [10], [5], { fx: "critChance" }),
+      bn("Death From Above", "The strike that follows Dive deals +{}% damage, on top of Dive's own bonus.", [50], [25], { fx: "deathFromAbove" })] },
+    G9: { n: "Obsidian Talon Skirmisher", pieces: ["Smoke-Black Hood", "Smoke-Black Cloak", "Obsidian Talons"], b: [
+      bn("Glancing Feathers", "Dive and Hit and Run cut damage taken by {} points more (Dive {}% instead of 30%, Hit and Run {}% instead of 25%).", [15, 45, 40], [8, 38, 33], { fx: "glancingFeathers" }),
+      bn("Unseen Retreat", "If you took no damage since your last turn, you deal +{}% damage this turn.", [20], [10], { fx: "unseenRetreat" }),
+      bn("Swift Recovery", "Heal {}% of your max HP for every hit you land, at most {}% per move.", [2, 6], [1, 3], { fx: "swiftRecovery" })] },
+    G10: { n: "Snatcher's Plumage", pieces: ["Ragged Feather Hood", "Patchwork Plumage", "Hooked Hand-Blade"], b: [
+      bn("Thief's Hands", "Snatch also gives you the buff it takes, for as long as it had left.", [], "Snatch also gives you the buff it takes, for 1 turn only.", { fx: "thiefsHands" }),
+      bn("Shrill Echo", "Moves that lower Speed, such as Shriek, lower it {}% more.", [50], [25], { fx: "shrillEcho" }),
+      bn("Wind Cutter", "+{}% damage against enemies slower than you.", [20], [10], { fx: "windCutter" })] },
+    G11: { n: "Venomfang Legion", pieces: ["Serpent-Fang Helm", "Green-Black Scale Mail", "Venom-Dripping Short Sword"], b: [
+      bn("Toxic Edge", "+{}% poison damage, from poison hits and from the poison itself.", [25], [12], { fx: "toxicEdge" }),
+      bn("Virulent", "The first poison you apply each turn adds +1 stack.", [], "The first poison you apply on every second turn adds +1 stack.", { fx: "virulent" }),
+      bn("Lean Brew", "Poison moves cost 1 less MP (never below 1).", [], "Every second poison move costs 1 less MP (never below 1).", { fx: "leanBrew" })] },
+    G12: { n: "Cinder Serpent Pit", pieces: ["Smoke-Grey Hood", "Coal-Red Plate", "Cinder Rod"], b: [
+      bn("Slow Burn", "Burn you apply lasts 1 turn longer.", [], "Every second burn you apply lasts 1 turn longer.", { fx: "slowBurn" }),
+      bn("Ember Heart", "+{}% fire damage, from fire hits and from burn.", [20], [10], { fx: "emberHeart" }),
+      bn("Ashen Skin", "You take {}% less fire damage, burn included.", [20], [10], { fx: "ashenSkin" })] },
+    G13: { n: "Bloodletter's Altar", pieces: ["Priest's Red Cowl", "Red-Stained Apron", "Curved Sacrificial Blade"], b: [
+      bn("Deep Cuts", "Bleed you apply deals +{}% damage.", [25], [12], { fx: "deepCuts" }),
+      bn("Rupture Rite", "Rupture deals +{}% damage.", [30], [15], { fx: "ruptureRite" }),
+      bn("Hunger for Red", "You heal {}% of the damage your bleed deals.", [10], [5], { fx: "hungerRed" })] },
+    G14: { n: "Chorus of Many Heads", pieces: ["Nine-Headed Crest", "Layered Scale Mail", "Hydra-Tooth Spear"], b: [
+      bn("Louder Chorus", "Many Heads adds +{}% damage over time for each different status on the target, instead of +10%.", [15], [12], { fx: "louderChorus" }),
+      bn("Cocktail", "Enemies with 3 or more different statuses take +{}% damage from you.", [15], [7], { fx: "cocktail" }),
+      bn("Quickened Rot", "Fester ticks every damage-over-time status {} times instead of once.", [1.5], [1.25], { fx: "quickenedRot" })] },
+    G15: { n: "Marsh Witch's Regrowth", pieces: ["Reed Crown", "Bog-Wood Mantle", "Staff of Tangled Roots"], b: [
+      bn("Regrowth", "Regrow a Head heals {}% more.", [50], [25], { fx: "regrowth" }),
+      bn("Early Rot", "Burn, bleed, poison and shock you apply during your first 2 turns deal +{}% damage.", [50], [25], { fx: "earlyRot" }),
+      bn("Antivenom Blood", "{}% of the status effects used against you fail.", [30], [15], { fx: "hardToRattle" })] },
+    G16: { n: "Tower Shield Phalanx", pieces: ["Bronze Helm", "Tower Shield", "Short Stabbing Sword"], b: [
+      bn("Wall", "+{}% Defense.", [20], [10], { st: { def: [20, 10] } }),
+      bn("Shield Brother", "Enemy attacks that Bulwark sends onto you deal {}% less damage.", [25], [12], { fx: "shieldBrother" }),
+      bn("Locked Shields", "Shield Wall cuts the team's damage taken by {}% instead of 30%.", [40], [35], { fx: "lockedShields" })] },
     G17: { n: "Stoneguard of the Sun Gate", pieces: ["Mirror-Disc Helm", "Mirror-Disc Plate", "Sun-Gate Shield"], b: [
-      { n: "Mirror Plate", d: "+20% Resistance.", d2: "+10% Resistance.", st: { res: [20, 10] } },
-      { n: "Warded Against Elements", d: "15% less damage from all elements.", d2: "7%.", fx: "warded" },
-      { n: "Cleansing Pillar", d: "Remove one status from yourself each turn.", d2: "Every second turn.", fx: "cleansing" }] },
+      bn("Mirror Plate", "+{}% Resistance.", [20], [10], { st: { res: [20, 10] } }),
+      bn("Warded Against Elements", "Damage of any element (fire, water, shock and so on), burn, poison and shock damage over time included, is {}% less. Plain physical hits and bleed are not reduced.", [15], [7], { fx: "warded" }),
+      bn("Cleansing Pillar", "At the start of each of your turns, the status effect with the most stacks is removed from you.", [], "On every second turn, the status effect with the most stacks is removed from you.", { fx: "cleansing" })] },
+    G18: { n: "Counterstrike Bastion", pieces: ["Spiked Helm", "Spiked Plates", "Heavy Mace"], b: [
+      bn("Spiked Facing", "Counter Stance's counter-attack deals +{}% damage.", [40], [20], { fx: "spikedFacing" }),
+      bn("Weighty Blows", "Crushing Weight deals +{}% damage.", [30], [15], { fx: "weightyBlows" }),
+      bn("Reprisal", "Each time you are hit, your next attack deals +{}% more damage, up to {} hits (+{}%).", [10, 3, 30], [5, 3, 15], { fx: "reprisal" })] },
+    G19: { n: "Challenge Banner Cohort", pieces: ["Standard-Bearer's Crest", "Stone Mantle", "Carved Pillar-Shaft"], b: [
+      bn("Provocation", "Challenge lasts 1 turn longer.", [], "Every second Challenge lasts 1 turn longer.", { fx: "provocation" }),
+      bn("Absorb", "The first time you are hit each turn, you gain +1 MP.", [], "The first time you are hit on every second turn, you gain +1 MP.", { fx: "absorb" }),
+      bn("Heavy Sleeper", "While Challenge is active, you take {}% less damage.", [15], [7], { fx: "heavySleeper" })] },
+    G20: { n: "Quarry Mason's Hammer", pieces: ["Mason's Cap", "Quarry Apron", "Mason's Hammer"], b: [
+      bn("Earthquake", "Earthshaker deals +{}% damage and its stun chance is {} points higher.", [30, 10], [15, 5], { fx: "earthquake" }),
+      bn("Pillar Fist", "Basic attacks add {}% of your Defense as extra damage.", [25], [12], { fx: "pillarFist" }),
+      bn("Full Strength", "+{}% damage while your HP is full.", [20], [10], { fx: "fullStrength" })] },
+    G21: { n: "Sunpriest's Vestments", pieces: ["Sun-Disc Helm", "Golden Feather Vestments", "Staff of Warm Light"], b: [
+      bn("Radiant Healing", "Your healing moves heal {}% more.", [20], [10], { fx: "radiantHealing" }),
+      bn("Frugal Light", "Healing moves cost 1 less MP (never below 1).", [], "Every second healing move costs 1 less MP (never below 1).", { fx: "frugalLight" }),
+      bn("Overflowing Light", "Healing above an ally's max HP becomes a shield for 2 turns, worth up to {}% of their max HP.", [10], [5], { fx: "overflowingLight" })] },
+    G22: { n: "Ashen Pyre Order", pieces: ["Ash-Grey Hood", "Ember-Trimmed Robes", "Pyre-Tender's Rake"], b: [
+      bn("Rebirth Rite", "Rebirth revives at {}% HP instead of 30%.", [50], [40], { fx: "rebirthRite" }),
+      bn("Longer Ember", "From the Ashes raises you at {}% HP instead of 25%.", [40], [33], { fx: "longerEmber" }),
+      bn("Ashen Mantle", "Allies you revive (Rebirth, Revive), and you when From the Ashes raises you, return with a shield for 2 turns worth {}% of max HP.", [15], [8], { fx: "ashenMantle" })] },
+    G23: { n: "Cleanser's Reed Garland", pieces: ["Crown of River Reeds", "Clear White Cloth", "Cleanser's Reed Wand"], b: [
+      bn("Healing Flame", "Cleansing Flame, Purge and Silver Lining also heal each cleansed ally for {}% of their max HP.", [8], [4], { fx: "healingFlame" }),
+      bn("Quick Purge", "Purge costs 1 less MP (never below 1).", [], "Every second Purge costs 1 less MP (never below 1).", { fx: "quickPurge" }),
+      bn("Inoculation", "An ally you cleanse resists those statuses {}% of the time until the end of the round.", [50], [25], { fx: "inoculation" })] },
+    G24: { n: "Shieldbearer Aviary", pieces: ["White-Plume Crest", "Layered Shield Plumage", "Gilded Plume Staff"], b: [
+      bn("Strong Ward", "Flame Ward absorbs {}% more damage.", [30], [15], { fx: "strongWard" }),
+      bn("Lingering Ward", "Shields you cast (Flame Ward, Silver Lining, Plant the Pillar) last 1 turn longer.", [], "Every second shield you cast lasts 1 turn longer.", { fx: "lingeringWard" }),
+      bn("Scorching Ward", "When a shield you cast is broken, the attacker is burned (1 stack).", [], "When a shield you cast is broken, the attacker is burned (1 stack) for 1 turn only.", { fx: "scorchingWard" })] },
+    G25: { n: "Dawn-Fire Offering", pieces: ["Morning-Red Hood", "Dawn-Red Vestments", "Fire-Bowl Censer"], b: [
+      bn("Brighter Sun", "Sunfire deals +{}% damage, and the share of that damage it heals is {}% bigger.", [25, 25], [12, 12], { fx: "brighterSun" }),
+      bn("Kind Peck", "Your basic attack also heals the ally with the lowest HP for {}% of their max HP.", [4], [2], { fx: "kindPeck" }),
+      bn("Kindled Heart", "Start each fight with {} extra MP.", [2], [1], { st: { startMp: [2, 1] } })] },
+    G26: { n: "Stonegaze Order", pieces: ["Slit-Eyed Mask", "Grey Stone Cloak", "Gazer's Rod"], b: [
+      bn("Hard Stare", "Stone Gaze lands {} points more often (a base chance of {}% becomes {}%).", [20, 70, 90], [10, 70, 80], { fx: "hardStare" }),
+      bn("Deep Weakness", "Stat reductions you apply are {}% stronger.", [25], [12], { fx: "deepWeakness" }),
+      bn("Cheap Stone", "Stone Gaze costs 1 less MP (never below 1).", [], "Every second Stone Gaze costs 1 less MP (never below 1).", { fx: "cheapStone" })] },
+    G27: { n: "Venom Mark Assassins", pieces: ["Dark Assassin's Hood", "Night-Dyed Leathers", "Poisoned Needle-Blade"], b: [
+      bn("Deeper Exposure", "Exposed adds +{}% damage per debuff on the target instead of +5%, still at most +25%.", [8], [6], { fx: "deeperExposure" }),
+      bn("Exploit", "+{}% damage against enemies with 2 or more debuffs (statuses or lowered stats).", [15], [7], { fx: "exploit" }),
+      bn("Long Marks", "Stat reductions you apply last 1 turn longer.", [], "Every second stat reduction you apply lasts 1 turn longer.", { fx: "longMarks" })] },
+    G28: { n: "Shatterer's Chisel", pieces: ["Stonecutter's Cap", "Stonecutter's Smock", "Shatterer's Chisel"], b: [
+      bn("Cracking", "Crack Armour lowers Defense {}% more ({}% instead of 25%).", [50, 37.5], [25, 31.25], { fx: "cracking" }),
+      bn("Shell Cracker", "Crack Armour and Shatter Shield count one extra hit toward shell breaks.", [], "The first of them each turn counts one extra hit toward shell breaks.", { fx: "shellCracker" }),
+      bn("Armour Piercer", "Your hits ignore {}% of the enemy's Defense and Resistance.", [15], [7], { fx: "armourPiercer" })] },
+    G29: { n: "Coil of the Slow Hour", pieces: ["Sundial Helm", "Bronze Arm-Coils", "Slow-Hour Rod"], b: [
+      bn("Tighter Coil", "When Coil lands, it also lowers the enemy's Speed by {}% for 2 turns.", [20], [10], { fx: "tighterCoil" }),
+      bn("Chain Breaker", "Bosses wear down more slowly against your control moves: each earlier control hit on a boss cuts your next chance by {}% instead of 50%.", [37.5], [44], { fx: "chainBreaker" }),
+      bn("Heavy Feet", "Enemies whose Speed you lowered take +{}% damage from everyone.", [10], [5], { fx: "heavyFeet" })] },
+    G30: { n: "Serpent-Haired Veil", pieces: ["Bronze-Snake Veil", "Serpent-Hair Mantle", "Hissing Staff"], b: [
+      bn("Quiet Hiss", "Hiss lowers Attack {}% more ({}% instead of 25%).", [50, 37.5], [25, 31.25], { fx: "quietHiss" }),
+      bn("Calm Eyes", "You take {}% less damage from enemies whose Attack you have lowered.", [20], [10], { fx: "calmEyes" }),
+      bn("Lasting Curse", "Curse of Stone lasts 1 turn longer.", [], "Every second Curse of Stone lasts 1 turn longer.", { fx: "lastingCurse" })] },
+    G31: { n: "Emberscale Mantle", pieces: ["Flame-Shaped Crest", "Emberscale Mantle", "Ember Fang"], b: [
+      bn("Dragonfire", "+{}% fire damage, from fire hits and from burn.", [20], [10], { fx: "emberHeart" }),
+      bn("Fire Thrift", "Fire spells cost 1 less MP (never below 1).", [], "Every second fire spell costs 1 less MP (never below 1).", { fx: "fireThrift" }),
+      bn("Fireproof Hide", "You take {}% less fire damage, burn included.", [20], [10], { fx: "ashenSkin" })] },
+    G32: { n: "Tideglass Regalia", pieces: ["Tideglass Crown", "Glass-Scaled Plates", "Tideglass Wand"], b: [
+      bn("Deep Frost", "+{}% water and ice damage.", [20], [10], { fx: "deepFrost" }),
+      bn("Lingering Damp", "Wet and Chill you apply last 1 turn longer.", [], "Every second Wet or Chill you apply lasts 1 turn longer.", { fx: "lingeringDamp" }),
+      bn("Brittle Freeze", "A Freeze (Wet + Chill) you cause also lowers the target's Defense by {}% for 3 turns.", [15], [7], { fx: "brittleFreeze" })] },
+    G33: { n: "Stormcaller's Obsidian Crown", pieces: ["Obsidian Crown", "Copper-Spiked Mantle", "Stormcaller's Rod"], b: [
+      bn("Storm Surge", "+{}% lightning damage, from shock hits and from shock.", [20], [10], { fx: "stormSurge" }),
+      bn("Wet Conductor", "Lightning on a Wet target deals {}x damage instead of 2x.", [2.5], [2.25], { fx: "wetConductor" }),
+      bn("Cheap Thunder", "Lightning spells cost 1 less MP (never below 1).", [], "Every second lightning spell costs 1 less MP (never below 1).", { fx: "cheapThunder" })] },
     G34: { n: "Reaction Scholar's Regalia", pieces: ["Diagram Cap", "Scholar's Robe", "Annotated Rod"], b: [
-      { n: "Master of Mixing", d: "Combo Master bonus rises from +30% to +50%.", d2: "+40%.", fx: "masterMixing" },
-      { n: "Charged Attune", d: "Attune also gives the next spell +15% damage.", d2: "+7%.", fx: "chargedAttune" },
-      { n: "Sharper Detonation", d: "Detonate deals +30% damage.", d2: "+15%.", fx: "sharperDetonate" }] },
+      bn("Master of Mixing", "Combo Master reactions deal +{}% instead of +30%.", [50], [40], { fx: "masterMixing" }),
+      bn("Charged Attune", "Attune also gives the next move you use that costs MP +{}% damage.", [15], [7], { fx: "chargedAttune" }),
+      bn("Sharper Detonation", "Detonate deals +{}% damage.", [30], [15], { fx: "sharperDetonate" })] },
+    G35: { n: "Aether Bulb Circlet", pieces: ["Glass-Bulb Circlet", "Aether Robe", "Spark Staff"], b: [
+      bn("Element Dance", "A spell of a different element than your last spell deals +{}% damage.", [20], [10], { fx: "elementDance" }),
+      bn("Wide Burn", "Spells that hit all enemies deal +{}% damage.", [20], [10], { fx: "wideBurn" }),
+      bn("Primed", "Start each fight with {} extra MP.", [2], [1], { st: { startMp: [2, 1] } })] },
+    G36: { n: "Abyssal Trident", pieces: ["Black-Pearl Crown", "Dark-Coral Mail", "Abyssal Trident"], b: [
+      bn("Heavier Tide", "Maelstrom and Tidal Wave deal +{}% damage.", [20], [10], { fx: "heavierTide" }),
+      bn("Deeper Reservoir", "Your Tide can grow to 6 instead of 5.", [], "You start each fight with 1 Tide.", { fx: "deeperReservoir" }),
+      bn("Long Breath", "Deep Breath gives +1 extra Tide.", [], "Every second Deep Breath gives +1 extra Tide.", { fx: "longBreath" })] },
+    G37: { n: "Kraken-Hide", pieces: ["Kraken Hood", "Hull-Ribbed Hide Plates", "Kraken-Tooth Hook"], b: [
+      bn("Pressure Skin", "With 3 or more Tide, you take {}% less damage.", [15], [7], { fx: "pressureSkin" }),
+      bn("Salvage the Deep", "If you are knocked out, you keep {}% of your Tide when you are revived.", [50], [25], { fx: "salvage" }),
+      bn("Thick Blubber", "+{}% max HP.", [15], [7], { st: { hp: [15, 7] } })] },
+    G38: { n: "Whirlpool Siren", pieces: ["Spiral Shell Crest", "Siren's Shell Mantle", "Conch Horn"], b: [
+      bn("Dragging Current", "Riptide also lowers the target's Speed by {}% for 2 turns.", [15], [7], { fx: "draggingCurrent" }),
+      bn("Long Hunger", "Abyssal Hunger gives you 1 extra MP.", [], "Every second Abyssal Hunger gives you 1 extra MP.", { fx: "longHunger" }),
+      bn("Surging Undertow", "Undertow gives +1 extra Tide against a broken enemy.", [], "Every second Undertow on a broken enemy gives +1 extra Tide.", { fx: "surgingUndertow" })] },
+    G39: { n: "Tidal Executioner", pieces: ["Dark-Blue Helm", "Dark-Blue Armour", "Drowning Net"], b: [
+      bn("Finishing Wave", "Maelstrom and Tidal Wave deal +{}% damage to broken enemies.", [30], [15], { fx: "finishingWave" }),
+      bn("Crashing Wave", "A release at maximum Tide also makes its targets Wet.", [], "A release at maximum Tide also makes its targets Wet for 1 turn only.", { fx: "crashingWave" }),
+      bn("Patient Predator", "+{}% damage for each round of the fight after the first, up to +{}%.", [4, 20], [2, 10], { fx: "patientPredator" })] },
+    G40: { n: "Deep Current Trench", pieces: ["Tide-Stone Helm", "Barnacled Plates", "Trench Anchor"], b: [
+      bn("Deeper Well", "+{} max MP (the usual cap is 10, or 15 for a Leviathan).", [3], [1], { fx: "deeperWell" }),
+      bn("Heavy Tail", "Tail Slap and Undertow deal +{}% damage.", [30], [15], { fx: "heavyTail" }),
+      bn("Salt Armour", "+{}% Resistance.", [15], [7], { st: { res: [15, 7] } })] },
+    G41: { n: "Wayfarer's Road Kit", pieces: ["Road Hood", "Travelling Cloak", "Wayfarer's Knife"], b: [
+      bn("Sturdy Boots", "+{}% max HP.", [10], [5], { st: { hp: [10, 5] } }),
+      bn("Ready Hands", "Start each fight with 1 extra MP.", [], "Your first basic attack each fight gives +1 extra MP.", { st: { startMp: [1, 0] }, fx: "readyHands" }),
+      bn("Fast Learner", "This creature earns +{}% experience from fights.", [15], [7], { st: { xp: [15, 7] } })] },
+    G42: { n: "Legion Standard", pieces: ["Plumed Legion Helm", "Red Cloak and Tower Shield", "Legion Gladius"], b: [
+      bn("Disciplined Ranks", "+{}% damage.", [8], [4], { fx: "disciplined" }),
+      bn("Shoulder to Shoulder", "+{}% Defense and Resistance.", [10], [5], { st: { def: [10, 5], res: [10, 5] } }),
+      bn("Last Stand", "Below 25% HP, you deal +{}% damage.", [25], [12], { fx: "lastStand" })] },
+    G43: { n: "Sunstone Regalia", pieces: ["Jade Circlet", "Gold-and-Jade Regalia", "Sunstone Sceptre"], b: [
+      bn("Brilliant Edge", "Critical hits deal {}x damage instead of 1.5x.", [1.8], [1.65], { fx: "critDmg" }),
+      bn("Fortune's Eye", "+{}% chance to land critical hits, added to your normal chance.", [10], [5], { fx: "critChance" }),
+      bn("Persuasive Poison", "Your status effects and control moves land {}% more often.", [15], [7], { fx: "persuasive" })] },
+    G44: { n: "Initiate's Mask", pieces: ["Plain Wooden Mask", "White Linen Robe", "Temple Reed Staff"], b: [
+      bn("Quiet Mind", "Start each fight with at least {} MP. A creature that already starts with that much gains nothing.", [2], [1], { st: { minMp: [2, 1] } }),
+      bn("Empty Hands", "When you have 0 MP, your basic attack gives +1 extra MP.", [], "Once per fight, when you have 0 MP, your basic attack gives +1 extra MP.", { fx: "emptyHands" }),
+      bn("Thrifty Caster", "The first move you use each turn that costs MP costs 1 less (never below 1).", [], "On every second turn, the first move you use that costs MP costs 1 less (never below 1).", { fx: "thrifty" })] },
+    G45: { n: "Stoneweather Cloak", pieces: ["Sun-Bleached Hood", "Thick Grey Cloak", "Weathered Staff"], b: [
+      bn("Hard to Rattle", "{}% of the status effects used against you fail.", [30], [15], { fx: "hardToRattle" }),
+      bn("Shake It Off", "Status effects on you last 1 turn shorter (at least 1 turn).", [], "Only burn and poison on you last 1 turn shorter (at least 1 turn).", { fx: "shakeOff" }),
+      bn("Thick Skin", "You ignore the first status effect used against you each fight.", [], "The first status effect used against you each fight lasts only 1 turn.", { fx: "thickSkin" })] },
+    G46: { n: "Triumph Parade Regalia", pieces: ["Gold-Trimmed Parade Helm", "Bright Triumph Cloak", "Parade Standard"], b: [
+      bn("Quick Step", "+{}% Speed.", [15], [7], { st: { spd: [15, 7] } }),
+      bn("Overtake", "You get your extra third action at {}x the fastest enemy's Speed instead of 2x.", [1.8], [1.9], { fx: "overtake" }),
+      bn("First Out", "You act first in round 1. Several creatures that act first go by Speed.", [], "+25% Speed during the first round of a fight.", { fx: "firstOut" })] },
   };
   const SLOTS = ["helm", "armor", "weapon"], SLOT_NAMES = { helm: "Helm", armor: "Armour", weapon: "Weapon" };
   const pieceId = (set, slot) => set + "." + slot;
@@ -220,12 +367,12 @@ const Data = (() => {
 
   // ---------- shops ----------
   // stock entries: item key | "gear:G41" (pieces in fixed order) ; buys: multiplier for trade goods ; disc: price multiplier
-  const BASICS = ["sunwater", "antidote", "salve", "moss"];
+  const BASICS = ["sunwater", "antidote"];
   const SHOPS = {
     orun:     { n: "Academy shop", who: "clerk", tier: 0, stock: ["sunwater", "antidote"], buys: 1.0 },
     sandpiper:{ n: "Sandpiper Rest stall", who: "clerk", stock: [...BASICS, "gear:G41"], gearPrice: { G41: [100, 160, 140] }, buys: 1.0 },
-    amber:    { n: "Amber Wells market", who: "merchant", stock: [...BASICS, "wrap", "clay", "tea", "cloth", "tonic", "ember", "incense", "cinderBomb", "rimeFlask", "soakJar", "sparkJar", "venomPot", "gear:G45"], gearPrice: { G45: [140, 240, 180] }, buys: 1.0 },
-    saltgate: { n: "Smuggler's counter", who: "merchant", stock: [...BASICS, "wrap", "clay", "tea", "cloth", "incense", "cinderBomb", "rimeFlask", "soakJar", "sparkJar", "venomPot"], disc: { cinderBomb: 0.8, rimeFlask: 0.8, soakJar: 0.8, sparkJar: 0.8, venomPot: 0.8 }, buys: 1.2 },
+    amber:    { n: "Amber Wells market", who: "merchant", stock: [...BASICS, "tonic", "ember", "incense", "cinderBomb", "rimeFlask", "soakJar", "sparkJar", "venomPot", "gear:G45"], gearPrice: { G45: [140, 240, 180] }, buys: 1.0 },
+    saltgate: { n: "Smuggler's counter", who: "merchant", stock: [...BASICS, "incense", "cinderBomb", "rimeFlask", "soakJar", "sparkJar", "venomPot"], disc: { cinderBomb: 0.8, rimeFlask: 0.8, soakJar: 0.8, sparkJar: 0.8, venomPot: 0.8 }, buys: 1.2 },
   };
   const INNS = { orun: { n: "The Lamp and Quill", free1: true }, sandpiper: { n: "The Reed Inn" }, amber: { n: "The Seventh Date" }, saltgate: { n: "The Gull and Anchor" }, tent: { n: "Field tent by the Hollow door" } };
 

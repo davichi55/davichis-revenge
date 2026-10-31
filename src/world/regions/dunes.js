@@ -1,5 +1,5 @@
 // R1 Whisperglass Dunes: glass-sand dunes, legion patrols that hunt you, a buried builder door. Table "dunes" about every 40 s of walking.
-// Exits: orun (north-west), sandpiperRest (north-east), cisternBurntGate (south door + north gate), amberBasin (east).
+// Exits: orun (north-west), sandpiperRest (north-east), cisternBurntGate (south door + north gate), amberBasin (east); CH1-EXPAND: glassRidges (north), caravanGraveyard (south-west), oasisOutskirts (north-east), open once Sandpiper Rest has been reached.
 (function () {
   const { R, E, P, L } = World.shapes;
   World.def("whisperglassDunes", {
@@ -13,13 +13,18 @@
       ["rock", P([[1950, 880], [2150, 860], [2200, 1000], [2060, 1080], [1940, 1000]])], ["rock", P([[250, 1150], [420, 1100], [520, 1200], [430, 1320], [280, 1300]])], ["rock", P([[600, 100], [800, 60], [900, 160], [760, 230], [620, 200]])],
       ["rock", P([[1000, 700], [1100, 680], [1140, 760], [1060, 800]])],
     ],
-    entries: { start: { x: 160, y: 230, face: "down" }, from_orun: { x: 170, y: 230, face: "right" }, from_sandpiper: { x: 1900, y: 300, face: "left" }, from_cistern: { x: 1220, y: 1360, face: "up" }, from_cistern_gate: { x: 1760, y: 590, face: "down" }, from_amberBasin: { x: 2190, y: 780, face: "left" } },
+    entries: { start: { x: 160, y: 230, face: "down" }, from_orun: { x: 170, y: 230, face: "right" }, from_sandpiper: { x: 1900, y: 300, face: "left" }, from_cistern: { x: 1220, y: 1360, face: "up" }, from_cistern_gate: { x: 1760, y: 590, face: "down" }, from_amberBasin: { x: 2190, y: 780, face: "left" },
+      from_glassRidges: { x: 1115, y: 150, face: "down" }, from_caravanGraveyard: { x: 645, y: 1350, face: "up" }, from_oasisOutskirts: { x: 1765, y: 150, face: "down" } },
     exits: [
-      { rect: [40, 140, 56, 120], to: "orun", entry: "from_dunes", push: [1, 0] },
+      { rect: [40, 140, 56, 120], to: "orun", entry: "from_dunes", push: [1, 0], hide: "ch5.start" },
+      { rect: [40, 140, 56, 120], to: "ashenOrun", entry: "from_dunes", push: [1, 0], show: "ch5.start" },
       { rect: [1930, 210, 50, 100], to: "sandpiperRest", entry: "from_dunes", push: [-1, 0], floor: "road" },
       { rect: [1180, 1400, 90, 50], to: "cisternBurntGate", entry: "from_dunes", push: [0, -1] },
       { rect: [1722, 520, 70, 36], to: "cisternBurntGate", entry: "from_dunes_gate", push: [0, 1] },
       { rect: [2220, 730, 50, 100], to: "amberBasin", entry: "from_dunes", push: [-1, 0] },
+      { rect: [1050, 40, 130, 50], to: "glassRidges", entry: "from_dunes", push: [0, 1], need: "sp.seen", blocked: "ch1x.wait" },
+      { rect: [590, 1400, 110, 50], to: "caravanGraveyard", entry: "from_dunes", push: [0, -1], need: "sp.seen", blocked: "ch1x.wait" },
+      { rect: [1700, 40, 130, 50], to: "oasisOutskirts", entry: "from_dunes", push: [0, 1], need: "sp.seen", blocked: "ch1x.wait" },
     ],
     triggers: [{ id: "dunesArrival", rect: [180, 250, 160, 100] }, { id: "duskWhisperer", rect: [1700, 1000, 160, 120], once: false, when: "dunes.dusk" }],
     chests: [{ id: "dunesBuriedChest", x: 1790, y: 1170, show: "ch6.buriedDoorOpen" }],

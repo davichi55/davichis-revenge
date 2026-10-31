@@ -9,7 +9,7 @@ const Menus = (() => {
   M.itemName = itemName;
 
   // ---------- battle results ----------
-  M.results = ({ xp, gold: g, ups, drops, boss }) => UI.window(boss ? "Victory over a Titan" : "Victory!", body => {
+  M.results = ({ xp, gold: g, ups, drops, boss, titan }) => UI.window(titan ? "Victory over a Titan" : "Victory!", body => {
     const dropList = Object.entries(drops).map(([n, c]) => `${esc(n)} x${c}`).join(", ") || "nothing this time";
     body.innerHTML = `<h3>Rewards</h3><div class="row"><div class="g">Experience<small>every creature in the party${G.collection.length ? " (and the wagon at a share)" : ""}</small></div><b>+${xp} XP</b></div>
       <div class="row"><div class="g">Kakal</div><b>+${g}</b></div><div class="row"><div class="g">Drops<small>${dropList}</small></div></div>
@@ -83,22 +83,27 @@ const Menus = (() => {
   // ---------- main menu ----------
   M.main = () => {
     let jt = 0, msg = "";
-    const TABS = ["Party", "Items", "Journal", "System"];
+    const TABS = ["Party", "Items", "Journal", "System"]; if (G.flags.ferryPass && window.Systems && Systems.ui) TABS.splice(3, 0, "Travel"); Systems.ui && (Systems.ui.jt = 0, Systems.ui.page = 0);
     const win = UI.window("Menu", (body, api, tab) => {
       const foot = msg ? `<div style="color:#f2c14e;margin-bottom:8px">${esc(msg)}</div>` : "";
+      const tn = TABS[tab];
       if (tab === 0) {
         const card = (u, i, wagon) => `<div class="row"><div style="width:62px;height:54px;display:grid;place-items:center">${UI.art(u.id)}</div><div class="g"><b style="font-weight:400;font-size:19px">${esc(u.name)}</b> <small style="display:inline">${esc(Core.CREATURES[u.id] ? Core.CREATURES[u.id].styleName || "" : "")} Lv ${u.level}${u.points ? ` · <span style="color:#f2c14e">+${u.points} points</span>` : ""}</small>${bar(u.hp / u.maxHp)}<small>HP ${u.hp}/${u.maxHp}${u.alive ? "" : " (fallen)"}</small></div><button class="b" data-d="${wagon ? "w" : "p"}${i}">Details</button>${wagon ? `<button class="b" data-sw="${i}">Swap in</button>` : ""}</div>`;
         body.innerHTML = foot + `<h3>Your team</h3>` + G.party.map((u, i) => card(u, i, false)).join("") + `<h3 style="margin-top:12px">The Menagerie Wagon</h3>` + (G.collection.length ? G.collection.map((u, i) => card(u, i, true)).join("") : `<div class="row"><div class="g">Empty. Freed creatures wait here and gain some experience while you fight.<small>Keys from the old dungeons free one cage each.</small></div></div>`)
           + `<div class="row"><div class="g">Party order<small>Reorder your three by swapping two of them.</small></div><button class="b" data-order="1">Swap order</button></div>`;
       } else if (tab === 1) {
-        const names = ["sunwater", "ember", "antidote", "salve", "moss", "wrap", "clay", "tea", "cloth", "tonic", "incense", "candle", "cinderBomb", "rimeFlask", "soakJar", "sparkJar", "venomPot"];
+        const names = ["respecStone", "sunwater", "ember", "antidote", "tonic", "incense", "candle", "cinderBomb", "rimeFlask", "soakJar", "sparkJar", "venomPot"];
         const has = names.filter(k => G.items[k] > 0);
         body.innerHTML = foot + `<h3>Items</h3>` + (has.length ? has.map(k => { const d = Data.ITEMS[k]; return `<div class="row"><div class="g">${esc(d.n)} x${G.items[k]}<small>${esc(d.d)}</small></div>${d.use ? `<button class="b" data-use="${k}">Use</button>` : `<small>in battle</small>`}</div>`; }).join("") : `<div class="row"><div class="g">No consumables. Shops sell Sunwater Flasks.</div></div>`)
           + `<h3 style="margin-top:12px">Key items</h3>` + (Object.keys(Data.ITEMS).filter(k => Data.ITEMS[k].key && G.items[k] > 0).map(k => `<div class="row"><div class="g">${esc(Data.ITEMS[k].n)}<small>${esc(Data.ITEMS[k].d)}</small></div></div>`).join("") || `<div class="row"><div class="g">None.</div></div>`)
-          + `<h3 style="margin-top:12px">Skill Book</h3><div style="color:#b7a58a;margin-bottom:6px">Collect materials, unlock moves. Any creature can carry one off-style move (Party > Skill).</div>`
+          + (window.Systems && Systems.ui ? Systems.ui.charmsHtml() : "") + `<h3 style="margin-top:12px">Skill Book</h3><div style="color:#b7a58a;margin-bottom:6px">Collect materials, unlock moves. Any creature can carry one off-style move (Party > Skill).</div>`
           + Object.entries(Data.BOOK).map(([k, b]) => { const have = G.mats[b.mat] || 0, un = G.book.includes(k); return `<div class="row"><div class="g">${esc(b.n)}<small>${esc(b.d)}</small><small>${esc(Data.MATS[b.mat][0])}: ${Math.min(have, b.need)}/${b.need}${have > b.need ? " (+" + (have - b.need) + " spare)" : ""}</small></div>${un ? `<b style="color:#7ee081">Unlocked</b>` : `<button class="b" data-unlock="${k}" ${have >= b.need ? "" : "disabled"}>Unlock</button>`}</div>`; }).join("")
-          + `<h3 style="margin-top:12px">Gear</h3>` + (Object.keys(G.owned).filter(p => G.owned[p] > 0).map(p => `<div class="row"><div class="g">${esc(Data.pieceName(p))}<small>${esc(Data.SETS[p.split(".")[0]].n)} · ${Data.SLOT_NAMES[p.split(".")[1]]} · owned ${G.owned[p]}, worn ${Flow.worn(p)}</small></div></div>`).join("") || `<div class="row"><div class="g">No gear yet. Sets come from chests, bosses, quests and a few shops. Equip in Party > Gear.</div></div>`)
+          + `<h3 style="margin-top:12px">Gear</h3>` + (window.GearUI && GearUI.listHtml ? GearUI.listHtml() : "")
           + `<h3 style="margin-top:12px">Materials and trade goods</h3>` + ([...Object.keys(G.mats).filter(k => G.mats[k] > 0).map(k => `${esc(Data.MATS[k][0])} x${G.mats[k]}`), ...Object.keys(G.goods).filter(k => G.goods[k] > 0).map(k => `${esc(Data.GOODS[k][0])} x${G.goods[k]}`)].join(" · ") || "None yet.");
+      } else if (tn === "Journal" && window.Systems && Systems.ui) {
+        body.innerHTML = Systems.ui.journalHtml(foot);
+      } else if (tn === "Travel") {
+        body.innerHTML = Systems.ui.travelHtml(foot);
       } else if (tab === 2) {
         const sub = ["Quests", "Rumours", "Bestiary"];
         let h = foot + `<div style="margin-bottom:10px">${sub.map((s, i) => `<button class="tab${i === jt ? " on" : ""}" data-jt="${i}">${s}</button>`).join(" ")}</div>`;
@@ -117,9 +122,11 @@ const Menus = (() => {
         }
         body.innerHTML = h;
       } else {
-        const v = G.vol || (G.vol = { music: 0.7, sfx: 0.8 });
+        const v = G.vol || (G.vol = { music: 0.5, sfx: 0.8 });
         body.innerHTML = foot + `<div class="row"><div class="g">Save game<small>${Flow.locked ? "Not during a scene." : ""}</small></div><button class="b" data-sys="save" ${Flow.locked ? "disabled" : ""}>Save</button></div>
           <div class="row"><div class="g">Battle speed<small>Animations in fights.</small></div><button class="b" data-sys="speed">${SPEEDS[G.speed].name}</button></div>
+          <div class="row"><div class="g">Remember last action<small>The battle menu opens on the action you used last.</small></div><button class="b" data-sys="cursor">${G.cursorMem === false ? "Off" : "On"}</button></div>
+          <div class="row"><div class="g">Minimap<small>The area map in the corner (M).</small></div><button class="b" data-sys="minimap">${G.minimap === false ? "Off" : "On"}</button></div>
           <div class="row"><div class="g">Music volume</div><button class="b" data-sys="mv-">-</button><b>${Math.round(v.music * 100)}%</b><button class="b" data-sys="mv+">+</button></div>
           <div class="row"><div class="g">Sound effects volume</div><button class="b" data-sys="sv-">-</button><b>${Math.round(v.sfx * 100)}%</b><button class="b" data-sys="sv+">+</button></div>
           <div class="row"><div class="g">Back to title<small>Unsaved progress is lost.</small></div><button class="b" data-sys="title">Title</button></div>`;
@@ -127,30 +134,36 @@ const Menus = (() => {
     }, {
       tabs: TABS, gold, foot: "Q / R or Tab switches tabs. Esc closes.",
       click: async (e, api) => {
-        const t = e.target.closest("[data-d],[data-sw],[data-order],[data-use],[data-unlock],[data-jt],[data-sys]"); if (!t) return; const d = t.dataset; msg = "";
+        const t = e.target.closest("[data-d],[data-sw],[data-order],[data-use],[data-unlock],[data-jt],[data-sys],[data-sj],[data-travel],[data-charm]"); if (!t) return; const d = t.dataset; msg = "";
+        if (d.sj !== undefined) { Systems.ui.journalClick(d.sj); return api.redraw(); }
+        if (d.charm !== undefined) { msg = Systems.ui.charmClick(d.charm); return api.redraw(); }
+        if (d.travel !== undefined) { if (await Systems.travelTo(d.travel)) api.close(); return; }
         if (d.jt !== undefined) { jt = +d.jt; return api.redraw(); }
         if (d.d !== undefined) { const wag = d.d[0] === "w", i = +d.d.slice(1); await partyScreen(wag ? G.party.length + i : i); return api.redraw(); }
         if (d.sw !== undefined) { // swap a wagon creature into the party
-          const i = await UI.choose("Swap in for which team member?", G.party.map(u => ({ label: `${u.name} Lv${u.level}` })), { back: true });
+          const i = await UI.choose("Swap in for which team member?", G.party.map(u => ({ label: `${u.name} Lv${u.level}${u.guest ? " (guest)" : ""}`, disabled: !!u.guest })), { back: true });
           if (i >= 0) { const w = G.collection[+d.sw]; G.collection[+d.sw] = G.party[i]; G.party[i] = w; msg = `${w.name} joins the team.`; Flow.sfx("menuOk"); } return api.redraw();
         }
         if (d.order !== undefined) {
-          const a = await UI.choose("Move which creature?", G.party.map(u => ({ label: u.name })), { back: true }); if (a < 0) return;
-          const b = await UI.choose("Swap places with?", G.party.map((u, k) => ({ label: u.name, disabled: k === a })), { back: true }); if (b < 0) return;
+          const a = await UI.choose("Move which creature?", G.party.map(u => ({ label: u.name, disabled: !!u.guest })), { back: true }); if (a < 0) return;
+          const b = await UI.choose("Swap places with?", G.party.map((u, k) => ({ label: u.name, disabled: k === a || !!u.guest })), { back: true }); if (b < 0) return;
           [G.party[a], G.party[b]] = [G.party[b], G.party[a]]; return api.redraw();
         }
         if (d.use !== undefined) {
           const k = d.use;
           if (k === "sunwater") { const u = await pickCreature("Heal who?", c => c.alive && c.hp < c.maxHp); if (u) { const h = Math.round(u.maxHp * 0.25); u.hp = Math.min(u.maxHp, u.hp + h); Flow.take(k); msg = `${u.name} recovers ${h} HP.`; Flow.sfx("potion"); } else msg = "Nobody needs healing."; }
-          else if (k === "ember") { const u = await pickCreature("Revive who?", c => !c.alive); if (u) { u.alive = true; u.hp = Math.max(1, Math.round(u.maxHp * 0.2)); Flow.take(k); msg = `${u.name} is back on its feet.`; Flow.sfx("potion"); } else msg = "Nobody has fallen."; }
+          else if (k === "ember") { const u = await pickCreature("Revive who?", c => !c.alive); if (u) { u.alive = true; u.hp = Math.max(1, Math.round(u.maxHp * 0.3)); Flow.take(k); msg = `${u.name} is back on its feet.`; Flow.sfx("potion"); } else msg = "Nobody has fallen."; }
+          else if (k === "respecStone") { msg = await Systems.useRespecStone() || ""; }
           else if (k === "incense" || k === "candle") { G.charm = { kind: k, until: Date.now() + 5 * 60 * 1000 }; Flow.take(k); msg = k === "incense" ? "Fights are rarer for five minutes." : "Fights come twice as often for five minutes."; }
           return api.redraw();
         }
-        if (d.unlock !== undefined) { if (Flow.unlockBook(d.unlock)) { msg = `${Data.BOOK[d.unlock].n} unlocked! Equip it in Party > Skill.`; Flow.sfx("levelUp"); } return api.redraw(); }
+        if (d.unlock !== undefined) { if (Flow.unlockBook(d.unlock)) { msg = `${Data.BOOK[d.unlock].n} unlocked!`; Flow.sfx("levelUp"); } return api.redraw(); }
         if (d.sys !== undefined) {
-          const v = G.vol || (G.vol = { music: 0.7, sfx: 0.8 }), s = d.sys;
+          const v = G.vol || (G.vol = { music: 0.5, sfx: 0.8 }), s = d.sys;
           if (s === "save") { msg = Flow.save() ? "Game saved." : "Saving failed."; }
           else if (s === "speed") G.speed = (G.speed + 1) % SPEEDS.length;
+          else if (s === "cursor") G.cursorMem = G.cursorMem === false;
+          else if (s === "minimap") { G.minimap = G.minimap === false; try { if (World.scene) World.scene.showMinimap(); } catch (e) {} }
           else if (s === "mv-" || s === "mv+") { v.music = Math.max(0, Math.min(1, Math.round((v.music + (s === "mv+" ? 0.1 : -0.1)) * 10) / 10)); Flow.applyVolume(); }
           else if (s === "sv-" || s === "sv+") { v.sfx = Math.max(0, Math.min(1, Math.round((v.sfx + (s === "sv+" ? 0.1 : -0.1)) * 10) / 10)); Flow.applyVolume(); Flow.sfx("menuMove"); }
           else if (s === "title") { if (await UI.confirm("Back to the title screen? Unsaved progress is lost.", "Yes", "No")) { api.close("title"); } return; }
@@ -163,7 +176,7 @@ const Menus = (() => {
 
   // ---------- title-screen settings ----------
   M.settings = () => {
-    const v = (window.__vol = window.__vol || (G && G.vol) || { music: 0.7, sfx: 0.8 });
+    const v = (window.__vol = window.__vol || (G && G.vol) || { music: 0.5, sfx: 0.8 });
     return UI.window("Settings", (body) => {
       body.innerHTML = `<div class="row"><div class="g">Battle speed<small>Animations in fights.</small></div><button class="b" data-s="speed">${SPEEDS[(G && G.speed) || 0].name}</button></div>
         <div class="row"><div class="g">Music volume</div><button class="b" data-s="mv-">-</button><b>${Math.round(v.music * 100)}%</b><button class="b" data-s="mv+">+</button></div>

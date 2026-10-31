@@ -601,5 +601,4506 @@
   "w": 33,
   "h": 50,
   "kind": "npc"
+ },
+ "bookShelfTall": {
+  "w": 117,
+  "h": 128,
+  "kind": "big"
+ },
+ "bookShelfLow": {
+  "w": 108,
+  "h": 111,
+  "kind": "round"
+ },
+ "studyTable": {
+  "w": 69,
+  "h": 78,
+  "kind": "round"
+ },
+ "readingLamp": {
+  "w": 38,
+  "h": 108,
+  "kind": "tall",
+  "fire": [
+   0,
+   -96,
+   0.7
+  ]
+ },
+ "roundRug": {
+  "w": 130,
+  "h": 98,
+  "kind": "flat"
+ },
+ "scrollRack": {
+  "w": 82,
+  "h": 84,
+  "kind": "round"
+ },
+ "trapStair": {
+  "w": 96,
+  "h": 90,
+  "kind": "round"
+ },
+ "studyChair": {
+  "w": 39,
+  "h": 62,
+  "kind": "round"
+ },
+ "legionStandard": {
+  "w": 66,
+  "h": 152,
+  "kind": "tall",
+  "sway": 0.015
+ },
+ "weaponRack": {
+  "w": 79,
+  "h": 84,
+  "kind": "round"
+ },
+ "sandbagWall": {
+  "w": 104,
+  "h": 78,
+  "kind": "round"
+ },
+ "sunCalendarGate": {
+  "w": 176,
+  "h": 239,
+  "kind": "gate"
+ },
+ "ironFence": {
+  "w": 112,
+  "h": 91,
+  "kind": "round"
+ },
+ "torchPole": {
+  "w": 27,
+  "h": 104,
+  "kind": "tall",
+  "fire": [
+   0,
+   -92,
+   0.7
+  ]
+ },
+ "bookPile": {
+  "w": 74,
+  "h": 45,
+  "kind": "flat"
+ },
+ "campCrates": {
+  "w": 74,
+  "h": 69,
+  "kind": "round"
+ },
+ "toppledStatue": {
+  "w": 116,
+  "h": 111,
+  "kind": "round"
+ },
+ "burntStall": {
+  "w": 98,
+  "h": 100,
+  "kind": "big"
+ },
+ "dryFountain": {
+  "w": 112,
+  "h": 92,
+  "kind": "round"
+ },
+ "clerkDesk": {
+  "w": 86,
+  "h": 82,
+  "kind": "round"
+ },
+ "printingPress": {
+  "w": 96,
+  "h": 100,
+  "kind": "round"
+ },
+ "supplyWagon": {
+  "w": 134,
+  "h": 115,
+  "kind": "big"
+ },
+ "pillory": {
+  "w": 66,
+  "h": 92,
+  "kind": "round"
+ },
+ "rubblePile": {
+  "w": 86,
+  "h": 76,
+  "kind": "flat"
+ },
+ "burntLibrary": {
+  "w": 204,
+  "h": 170,
+  "kind": "big"
+ },
+ "burntHouse": {
+  "w": 125,
+  "h": 125,
+  "kind": "big"
+ },
+ "legionTent": {
+  "w": 118,
+  "h": 104,
+  "kind": "big"
+ },
+ "watchPost": {
+  "w": 91,
+  "h": 190,
+  "kind": "big"
+ },
+ "dominionBanner": {
+  "w": 193,
+  "h": 150,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "collarAltar": {
+  "w": 112,
+  "h": 112,
+  "kind": "round",
+  "fire": [
+   0,
+   -62,
+   0.8
+  ],
+  "glow": "gold"
+ },
+ "noticeBoard": {
+  "w": 75,
+  "h": 98,
+  "kind": "round"
+ },
+ "spikeBarricade": {
+  "w": 112,
+  "h": 113,
+  "kind": "round"
+ },
+ "npcRefugeeW": {
+  "w": 28,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcRefugeeM": {
+  "w": 25,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcKessa": {
+  "w": 23,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcDorrin": {
+  "w": 38,
+  "h": 56,
+  "kind": "npc"
+ },
+ "npcMayle": {
+  "w": 20,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcCourier": {
+  "w": 32,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcForgemaster": {
+  "w": 39,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcCareKeeper": {
+  "w": 24,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcSarn": {
+  "w": 26,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcApprentice": {
+  "w": 24,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcPrinter": {
+  "w": 23,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcSaffa": {
+  "w": 28,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcHadiya": {
+  "w": 19,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcOdan": {
+  "w": 25,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcSefa": {
+  "w": 21,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcLanternBuilder": {
+  "w": 27,
+  "h": 48,
+  "kind": "npc"
+ },
+ "m4_tollbooth": {
+  "w": 142,
+  "h": 122,
+  "kind": "big"
+ },
+ "m4_signalTower": {
+  "w": 170,
+  "h": 182,
+  "kind": "big"
+ },
+ "m4_saltBush": {
+  "w": 60,
+  "h": 52,
+  "kind": "round",
+  "sway": 0.03
+ },
+ "m4_roadMarker": {
+  "w": 35,
+  "h": 62,
+  "kind": "tall"
+ },
+ "m4_cliffRuin": {
+  "w": 126,
+  "h": 122,
+  "kind": "big"
+ },
+ "m4_convoyWagon": {
+  "w": 152,
+  "h": 135,
+  "kind": "big"
+ },
+ "m4_legionCairn": {
+  "w": 74,
+  "h": 72,
+  "kind": "round"
+ },
+ "m4_driftwood": {
+  "w": 92,
+  "h": 66,
+  "kind": "flat"
+ },
+ "m4_loom": {
+  "w": 88,
+  "h": 112,
+  "kind": "round"
+ },
+ "m4_thymeBox": {
+  "w": 92,
+  "h": 86,
+  "kind": "round"
+ },
+ "m4_laundryTub": {
+  "w": 112,
+  "h": 102,
+  "kind": "round"
+ },
+ "m4_lowTable": {
+  "w": 92,
+  "h": 85,
+  "kind": "round",
+  "fire": [
+   0,
+   -30,
+   0.4
+  ]
+ },
+ "m4_lampWindow": {
+  "w": 104,
+  "h": 142,
+  "kind": "big",
+  "fire": [
+   0,
+   -96,
+   0.7
+  ],
+  "glow": "gold"
+ },
+ "m4_roomScreen": {
+  "w": 76,
+  "h": 112,
+  "kind": "tall"
+ },
+ "m4_herbRack": {
+  "w": 76,
+  "h": 92,
+  "kind": "round"
+ },
+ "m4_divan": {
+  "w": 112,
+  "h": 93,
+  "kind": "round"
+ },
+ "m4_cacaoTree": {
+  "w": 131,
+  "h": 132,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m4_jasmineBush": {
+  "w": 72,
+  "h": 70,
+  "kind": "round",
+  "sway": 0.02
+ },
+ "m4_birdCage": {
+  "w": 76,
+  "h": 122,
+  "kind": "round"
+ },
+ "m4_hedge": {
+  "w": 152,
+  "h": 151,
+  "kind": "big"
+ },
+ "m4_sundial": {
+  "w": 55,
+  "h": 78,
+  "kind": "round"
+ },
+ "m4_hiddenShrine": {
+  "w": 80,
+  "h": 104,
+  "kind": "round",
+  "fire": [
+   0,
+   -50,
+   0.6
+  ],
+  "glow": "gold"
+ },
+ "m4_trellisArch": {
+  "w": 91,
+  "h": 124,
+  "kind": "gate"
+ },
+ "m4_flowerBed": {
+  "w": 92,
+  "h": 72,
+  "kind": "round"
+ },
+ "m4_fruitTree": {
+  "w": 78,
+  "h": 102,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m4_vineWall": {
+  "w": 152,
+  "h": 116,
+  "kind": "big"
+ },
+ "m4_irrigationGate": {
+  "w": 92,
+  "h": 80,
+  "kind": "round"
+ },
+ "m4_dryingRack": {
+  "w": 112,
+  "h": 95,
+  "kind": "round"
+ },
+ "m4_cacaoPress": {
+  "w": 128,
+  "h": 122,
+  "kind": "big"
+ },
+ "m4_tukHouse": {
+  "w": 110,
+  "h": 122,
+  "kind": "big"
+ },
+ "m4_tukInn": {
+  "w": 141,
+  "h": 142,
+  "kind": "big"
+ },
+ "m4_pickerBaskets": {
+  "w": 72,
+  "h": 57,
+  "kind": "round"
+ },
+ "m4_paleWall": {
+  "w": 164,
+  "h": 143,
+  "kind": "big"
+ },
+ "m4_paleGateArch": {
+  "w": 176,
+  "h": 213,
+  "kind": "gate"
+ },
+ "m4_paleTower": {
+  "w": 137,
+  "h": 192,
+  "kind": "big"
+ },
+ "m4_fighterTent": {
+  "w": 121,
+  "h": 102,
+  "kind": "big"
+ },
+ "m4_warTable": {
+  "w": 206,
+  "h": 187,
+  "kind": "big"
+ },
+ "m4_gateBunk": {
+  "w": 196,
+  "h": 172,
+  "kind": "big"
+ },
+ "m4_rebelBanner": {
+  "w": 49,
+  "h": 132,
+  "kind": "tall",
+  "sway": 0.025
+ },
+ "m4_supplyStack": {
+  "w": 102,
+  "h": 80,
+  "kind": "round"
+ },
+ "m4_greatPyramid": {
+  "w": 900,
+  "h": 601,
+  "kind": "big"
+ },
+ "m4_saltStatue": {
+  "w": 79,
+  "h": 122,
+  "kind": "round"
+ },
+ "m4_saltPan": {
+  "w": 152,
+  "h": 100,
+  "kind": "round"
+ },
+ "m4_saltMound": {
+  "w": 85,
+  "h": 72,
+  "kind": "round"
+ },
+ "m4_ninthCairn": {
+  "w": 112,
+  "h": 112,
+  "kind": "round"
+ },
+ "m4_overseerTower": {
+  "w": 104,
+  "h": 192,
+  "kind": "big"
+ },
+ "m4_whiteBarracks": {
+  "w": 204,
+  "h": 181,
+  "kind": "big"
+ },
+ "m4_chainPost": {
+  "w": 58,
+  "h": 82,
+  "kind": "tall"
+ },
+ "m4_brineVat": {
+  "w": 82,
+  "h": 89,
+  "kind": "round"
+ },
+ "m4_brickArch": {
+  "w": 150,
+  "h": 142,
+  "kind": "big"
+ },
+ "m4_drainPipe": {
+  "w": 78,
+  "h": 100,
+  "kind": "round"
+ },
+ "m4_valveStand": {
+  "w": 68,
+  "h": 92,
+  "kind": "round"
+ },
+ "m4_floodGap": {
+  "w": 170,
+  "h": 145,
+  "kind": "flat"
+ },
+ "m4_drainedGap": {
+  "w": 170,
+  "h": 138,
+  "kind": "flat"
+ },
+ "m4_ratWarren": {
+  "w": 96,
+  "h": 72,
+  "kind": "round"
+ },
+ "m4_streetGrating": {
+  "w": 108,
+  "h": 150,
+  "kind": "tall"
+ },
+ "m4_sewerPillar": {
+  "w": 63,
+  "h": 122,
+  "kind": "tall"
+ },
+ "m4_sewerGrating": {
+  "w": 132,
+  "h": 204,
+  "kind": "big"
+ },
+ "m4_chainsHanging": {
+  "w": 67,
+  "h": 92,
+  "kind": "tall"
+ },
+ "m4_shackledBones": {
+  "w": 69,
+  "h": 70,
+  "kind": "round"
+ },
+ "m4_glowMold": {
+  "w": 39,
+  "h": 52,
+  "kind": "round",
+  "fire": [
+   0,
+   -18,
+   0.5
+  ]
+ },
+ "m4_rotRaft": {
+  "w": 100,
+  "h": 63,
+  "kind": "round"
+ },
+ "m4_sluiceBars": {
+  "w": 140,
+  "h": 206,
+  "kind": "big"
+ },
+ "m4_sewerLamp": {
+  "w": 37,
+  "h": 72,
+  "kind": "tall",
+  "fire": [
+   0,
+   -58,
+   0.6
+  ]
+ },
+ "m4_brickRubble": {
+  "w": 82,
+  "h": 49,
+  "kind": "flat"
+ },
+ "m4_slumHouseTall": {
+  "w": 161,
+  "h": 190,
+  "kind": "big"
+ },
+ "m4_slumHouseWide": {
+  "w": 138,
+  "h": 150,
+  "kind": "big"
+ },
+ "m4_slumHovel": {
+  "w": 115,
+  "h": 105,
+  "kind": "big"
+ },
+ "m4_dyeWorks": {
+  "w": 250,
+  "h": 274,
+  "kind": "big"
+ },
+ "m4_menderInn": {
+  "w": 181,
+  "h": 160,
+  "kind": "big"
+ },
+ "m4_dyeVat": {
+  "w": 66,
+  "h": 87,
+  "kind": "round"
+ },
+ "m4_clothesLine": {
+  "w": 150,
+  "h": 130,
+  "kind": "flat"
+ },
+ "m4_woodStairs": {
+  "w": 110,
+  "h": 136,
+  "kind": "flat"
+ },
+ "m4_drainGrate": {
+  "w": 92,
+  "h": 55,
+  "kind": "flat"
+ },
+ "m4_streetShrine": {
+  "w": 48,
+  "h": 80,
+  "kind": "tall"
+ },
+ "m4_clayOven": {
+  "w": 31,
+  "h": 72,
+  "kind": "round",
+  "fire": [
+   0,
+   -22,
+   0.8
+  ]
+ },
+ "m4_clothStall": {
+  "w": 102,
+  "h": 112,
+  "kind": "big"
+ },
+ "m4_waterJars": {
+  "w": 65,
+  "h": 66,
+  "kind": "round"
+ },
+ "m4_ropeBridgeEnd": {
+  "w": 139,
+  "h": 110,
+  "kind": "tall"
+ },
+ "m4_hangingLamps": {
+  "w": 55,
+  "h": 112,
+  "kind": "tall",
+  "fire": [
+   0,
+   -96,
+   0.8
+  ]
+ },
+ "m4_quayPosts": {
+  "w": 72,
+  "h": 99,
+  "kind": "round"
+ },
+ "m2_fernClump": {
+  "w": 52,
+  "h": 48,
+  "kind": "round",
+  "sway": 0.03
+ },
+ "m2_giantLeaf": {
+  "w": 69,
+  "h": 74,
+  "kind": "round",
+  "sway": 0.03
+ },
+ "m2_flowerBush": {
+  "w": 67,
+  "h": 58,
+  "kind": "round"
+ },
+ "m2_orchidLog": {
+  "w": 92,
+  "h": 97,
+  "kind": "round"
+ },
+ "m2_mossBoulder": {
+  "w": 81,
+  "h": 70,
+  "kind": "round"
+ },
+ "m2_mushrooms": {
+  "w": 50,
+  "h": 42,
+  "kind": "round"
+ },
+ "m2_giantCeiba": {
+  "w": 227,
+  "h": 330,
+  "kind": "tall"
+ },
+ "m2_jungleTreeA": {
+  "w": 121,
+  "h": 250,
+  "kind": "tall",
+  "sway": 0.012
+ },
+ "m2_jungleTreeB": {
+  "w": 184,
+  "h": 215,
+  "kind": "tall",
+  "sway": 0.012
+ },
+ "m2_stranglerFig": {
+  "w": 116,
+  "h": 235,
+  "kind": "tall"
+ },
+ "m2_thornBush": {
+  "w": 64,
+  "h": 56,
+  "kind": "round"
+ },
+ "m2_rootTangle": {
+  "w": 100,
+  "h": 75,
+  "kind": "round"
+ },
+ "archiveCabinet": {
+  "w": 86,
+  "h": 120,
+  "kind": "big"
+ },
+ "archiveCabinetGlow": {
+  "w": 87,
+  "h": 120,
+  "kind": "big"
+ },
+ "copyTube": {
+  "w": 71,
+  "h": 152,
+  "kind": "tall"
+ },
+ "greatArchiveDoor": {
+  "w": 216,
+  "h": 462,
+  "kind": "gate"
+ },
+ "greatArchiveDoorOpen": {
+  "w": 216,
+  "h": 212,
+  "kind": "gate"
+ },
+ "vaultClerkDesk": {
+  "w": 100,
+  "h": 84,
+  "kind": "round"
+ },
+ "iceCluster": {
+  "w": 92,
+  "h": 92,
+  "kind": "round"
+ },
+ "iceSpire": {
+  "w": 54,
+  "h": 124,
+  "kind": "tall"
+ },
+ "m2_tidalRock": {
+  "w": 94,
+  "h": 70,
+  "kind": "round"
+ },
+ "m2_signalPole": {
+  "w": 46,
+  "h": 124,
+  "kind": "tall",
+  "fire": [
+   0,
+   -104,
+   0.7
+  ]
+ },
+ "m2_kiteTree": {
+  "w": 148,
+  "h": 150,
+  "kind": "tall"
+ },
+ "m2_deadSnag": {
+  "w": 111,
+  "h": 112,
+  "kind": "tall"
+ },
+ "m2_oarRack": {
+  "w": 68,
+  "h": 78,
+  "kind": "round"
+ },
+ "m2_mudBoat": {
+  "w": 110,
+  "h": 91,
+  "kind": "round"
+ },
+ "m2_crabBasket": {
+  "w": 74,
+  "h": 50,
+  "kind": "round"
+ },
+ "m2_lanternBuoy": {
+  "w": 99,
+  "h": 60,
+  "kind": "round",
+  "fire": [
+   0,
+   -34,
+   0.5
+  ]
+ },
+ "m2_stiltInn": {
+  "w": 166,
+  "h": 190,
+  "kind": "big"
+ },
+ "m2_stiltHouseA": {
+  "w": 125,
+  "h": 150,
+  "kind": "big"
+ },
+ "m2_stiltHouseB": {
+  "w": 128,
+  "h": 140,
+  "kind": "big"
+ },
+ "m2_stiltStore": {
+  "w": 191,
+  "h": 150,
+  "kind": "big"
+ },
+ "m2_ropeLamp": {
+  "w": 49,
+  "h": 112,
+  "kind": "tall",
+  "fire": [
+   0,
+   -92,
+   0.8
+  ]
+ },
+ "m2_coveredCage": {
+  "w": 84,
+  "h": 85,
+  "kind": "round"
+ },
+ "m2_fishRack": {
+  "w": 112,
+  "h": 112,
+  "kind": "round"
+ },
+ "m2_netPile": {
+  "w": 84,
+  "h": 55,
+  "kind": "round"
+ },
+ "m2_stiltHouseC": {
+  "w": 138,
+  "h": 156,
+  "kind": "big"
+ },
+ "m2_stiltHouseD": {
+  "w": 125,
+  "h": 134,
+  "kind": "big"
+ },
+ "m2_clothesLine": {
+  "w": 120,
+  "h": 118,
+  "kind": "round"
+ },
+ "m2_tarpCrates": {
+  "w": 92,
+  "h": 100,
+  "kind": "round"
+ },
+ "m2_riverShrine": {
+  "w": 80,
+  "h": 84,
+  "kind": "round",
+  "fire": [
+   0,
+   -50,
+   0.4
+  ]
+ },
+ "m2_stiltBoat": {
+  "w": 134,
+  "h": 126,
+  "kind": "round"
+ },
+ "m2_bellPost": {
+  "w": 53,
+  "h": 104,
+  "kind": "tall"
+ },
+ "m2_waterJars": {
+  "w": 76,
+  "h": 56,
+  "kind": "round"
+ },
+ "m2_jungleTreeSlim": {
+  "w": 124,
+  "h": 230,
+  "kind": "tall",
+  "sway": 0.015
+ },
+ "m2_fanPalm": {
+  "w": 136,
+  "h": 175,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m2_bananaTree": {
+  "w": 71,
+  "h": 120,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m2_ruinWall": {
+  "w": 150,
+  "h": 129,
+  "kind": "big"
+ },
+ "m2_ruinPillar": {
+  "w": 72,
+  "h": 130,
+  "kind": "tall"
+ },
+ "m2_stoneHead": {
+  "w": 98,
+  "h": 100,
+  "kind": "round"
+ },
+ "m2_ruinStairs": {
+  "w": 130,
+  "h": 94,
+  "kind": "big"
+ },
+ "m2_milestone": {
+  "w": 77,
+  "h": 96,
+  "kind": "tall"
+ },
+ "m2_fallenLog": {
+  "w": 134,
+  "h": 97,
+  "kind": "round"
+ },
+ "m2_ruinArch": {
+  "w": 127,
+  "h": 150,
+  "kind": "big"
+ },
+ "m2_ruinRubble": {
+  "w": 92,
+  "h": 64,
+  "kind": "round"
+ },
+ "m2_ferryInn": {
+  "w": 165,
+  "h": 184,
+  "kind": "big"
+ },
+ "m2_riverHouseA": {
+  "w": 127,
+  "h": 150,
+  "kind": "big"
+ },
+ "m2_riverHouseB": {
+  "w": 121,
+  "h": 142,
+  "kind": "big"
+ },
+ "m2_marketStall": {
+  "w": 112,
+  "h": 112,
+  "kind": "big"
+ },
+ "m2_ferryHoist": {
+  "w": 175,
+  "h": 150,
+  "kind": "big"
+ },
+ "m2_hangingFish": {
+  "w": 81,
+  "h": 104,
+  "kind": "tall"
+ },
+ "m2_paintedSign": {
+  "w": 36,
+  "h": 86,
+  "kind": "tall"
+ },
+ "m2_hen": {
+  "w": 24,
+  "h": 26,
+  "kind": "round"
+ },
+ "m2_heron": {
+  "w": 45,
+  "h": 64,
+  "kind": "round"
+ },
+ "m2_capybara": {
+  "w": 44,
+  "h": 34,
+  "kind": "round"
+ },
+ "m2_redParrot": {
+  "w": 26,
+  "h": 36,
+  "kind": "round"
+ },
+ "m2_spiderMonkey": {
+  "w": 37,
+  "h": 44,
+  "kind": "round"
+ },
+ "m2_tapir": {
+  "w": 87,
+  "h": 50,
+  "kind": "round"
+ },
+ "m2_sunCroc": {
+  "w": 100,
+  "h": 60,
+  "kind": "round"
+ },
+ "m2_riverTurtle": {
+  "w": 46,
+  "h": 32,
+  "kind": "round"
+ },
+ "npcOma": {
+  "w": 33,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcTahlen": {
+  "w": 61,
+  "h": 54,
+  "kind": "npc"
+ },
+ "npcFerryman": {
+  "w": 26,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcNetMender": {
+  "w": 36,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcFerryBoy": {
+  "w": 18,
+  "h": 40,
+  "kind": "npc"
+ },
+ "npcPip": {
+  "w": 31,
+  "h": 38,
+  "kind": "npc"
+ },
+ "npcStallWoman": {
+  "w": 30,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcItzel": {
+  "w": 23,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcRunaway": {
+  "w": 17,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcHealer": {
+  "w": 16,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcOldGuard": {
+  "w": 23,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcShrineKeeper": {
+  "w": 22,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcCaptive": {
+  "w": 19,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcSlave": {
+  "w": 29,
+  "h": 44,
+  "kind": "npc"
+ },
+ "npcCenturion": {
+  "w": 26,
+  "h": 56,
+  "kind": "npc"
+ },
+ "npcOptio": {
+  "w": 29,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcTribune": {
+  "w": 32,
+  "h": 56,
+  "kind": "npc"
+ },
+ "npcCollarsmith": {
+  "w": 37,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcPriest": {
+  "w": 25,
+  "h": 54,
+  "kind": "npc"
+ },
+ "npcOverseer": {
+  "w": 29,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcJaguarElite": {
+  "w": 45,
+  "h": 54,
+  "kind": "npc"
+ },
+ "npcMarksman": {
+  "w": 39,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcYaxa": {
+  "w": 27,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcWeaver": {
+  "w": 30,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcTamoc": {
+  "w": 26,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcNeeli": {
+  "w": 15,
+  "h": 40,
+  "kind": "npc"
+ },
+ "npcFarmer": {
+  "w": 31,
+  "h": 46,
+  "kind": "npc"
+ },
+ "m2_templeWall": {
+  "w": 170,
+  "h": 139,
+  "kind": "big"
+ },
+ "m2_templePillar": {
+  "w": 83,
+  "h": 156,
+  "kind": "tall"
+ },
+ "m2_templeSteps": {
+  "w": 170,
+  "h": 175,
+  "kind": "big"
+ },
+ "m2_hideTent": {
+  "w": 123,
+  "h": 100,
+  "kind": "big"
+ },
+ "m2_freedShrine": {
+  "w": 150,
+  "h": 97,
+  "kind": "round",
+  "fire": [
+   0,
+   -30,
+   0.5
+  ]
+ },
+ "m2_cookPot": {
+  "w": 40,
+  "h": 58,
+  "kind": "round",
+  "fire": [
+   0,
+   -22,
+   0.9
+  ]
+ },
+ "m2_spearRack": {
+  "w": 76,
+  "h": 82,
+  "kind": "round"
+ },
+ "m2_hammock": {
+  "w": 110,
+  "h": 94,
+  "kind": "round"
+ },
+ "m2_fortWall": {
+  "w": 190,
+  "h": 185,
+  "kind": "big"
+ },
+ "m2_fortGate": {
+  "w": 210,
+  "h": 273,
+  "kind": "gate"
+ },
+ "m2_watchTower": {
+  "w": 165,
+  "h": 230,
+  "kind": "big"
+ },
+ "m2_barracks": {
+  "w": 180,
+  "h": 150,
+  "kind": "big"
+ },
+ "m2_granary": {
+  "w": 135,
+  "h": 150,
+  "kind": "big"
+ },
+ "m2_cellBlock": {
+  "w": 133,
+  "h": 150,
+  "kind": "big"
+ },
+ "m2_commandTower": {
+  "w": 148,
+  "h": 270,
+  "kind": "big"
+ },
+ "m2_legionStandard": {
+  "w": 46,
+  "h": 132,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m2_stakeFence": {
+  "w": 140,
+  "h": 190,
+  "kind": "round"
+ },
+ "m2_weaponRack": {
+  "w": 75,
+  "h": 82,
+  "kind": "round"
+ },
+ "m2_trainingPost": {
+  "w": 53,
+  "h": 84,
+  "kind": "tall"
+ },
+ "m2_supplyWagon": {
+  "w": 130,
+  "h": 120,
+  "kind": "big"
+ },
+ "m2_legionTent": {
+  "w": 97,
+  "h": 100,
+  "kind": "big"
+ },
+ "m2_ballista": {
+  "w": 102,
+  "h": 92,
+  "kind": "round"
+ },
+ "m2_cageWagon": {
+  "w": 156,
+  "h": 184,
+  "kind": "big"
+ },
+ "m2_cellDoor": {
+  "w": 71,
+  "h": 94,
+  "kind": "big"
+ },
+ "m2_pinkRock": {
+  "w": 115,
+  "h": 110,
+  "kind": "round"
+ },
+ "m2_bathHut": {
+  "w": 120,
+  "h": 112,
+  "kind": "big"
+ },
+ "m2_mineralCrust": {
+  "w": 112,
+  "h": 99,
+  "kind": "round"
+ },
+ "m2_bambooGrove": {
+  "w": 127,
+  "h": 140,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m2_geyserCone": {
+  "w": 45,
+  "h": 74,
+  "kind": "round"
+ },
+ "m2_boardwalkRail": {
+  "w": 110,
+  "h": 93,
+  "kind": "round"
+ },
+ "m2_steamBoulder": {
+  "w": 90,
+  "h": 76,
+  "kind": "round"
+ },
+ "m2_hotFern": {
+  "w": 66,
+  "h": 62,
+  "kind": "round",
+  "sway": 0.03
+ },
+ "m2_canopyTrunk": {
+  "w": 224,
+  "h": 380,
+  "kind": "tall"
+ },
+ "m2_canopyHut": {
+  "w": 96,
+  "h": 130,
+  "kind": "big"
+ },
+ "m2_featherCharms": {
+  "w": 39,
+  "h": 108,
+  "kind": "tall",
+  "sway": 0.025
+ },
+ "m2_hangingMoss": {
+  "w": 81,
+  "h": 120,
+  "kind": "tall",
+  "sway": 0.025
+ },
+ "m2_bridgeAnchor": {
+  "w": 95,
+  "h": 76,
+  "kind": "round"
+ },
+ "m2_bigNest": {
+  "w": 96,
+  "h": 47,
+  "kind": "round"
+ },
+ "m2_legionOutpost": {
+  "w": 74,
+  "h": 112,
+  "kind": "big"
+ },
+ "m2_wovenLantern": {
+  "w": 130,
+  "h": 104,
+  "kind": "tall",
+  "fire": [
+   0,
+   -86,
+   0.7
+  ]
+ },
+ "m2_giantBloom": {
+  "w": 144,
+  "h": 90,
+  "kind": "round"
+ },
+ "m2_lashedCrates": {
+  "w": 84,
+  "h": 95,
+  "kind": "round"
+ },
+ "m2_plumeInn": {
+  "w": 155,
+  "h": 172,
+  "kind": "big"
+ },
+ "m2_weaverHutA": {
+  "w": 99,
+  "h": 142,
+  "kind": "big"
+ },
+ "m2_weaverHutB": {
+  "w": 114,
+  "h": 128,
+  "kind": "big"
+ },
+ "m2_loomFrame": {
+  "w": 83,
+  "h": 112,
+  "kind": "round"
+ },
+ "m2_featherLine": {
+  "w": 140,
+  "h": 138,
+  "kind": "round",
+  "sway": 0.02
+ },
+ "m2_ropeLift": {
+  "w": 159,
+  "h": 200,
+  "kind": "big"
+ },
+ "m2_featherStall": {
+  "w": 110,
+  "h": 106,
+  "kind": "big"
+ },
+ "m2_windBells": {
+  "w": 64,
+  "h": 96,
+  "kind": "tall",
+  "sway": 0.03
+ },
+ "m2_nestSeat": {
+  "w": 76,
+  "h": 70,
+  "kind": "round"
+ },
+ "m2_kiteRack": {
+  "w": 74,
+  "h": 84,
+  "kind": "round"
+ },
+ "m2_yaxaShrine": {
+  "w": 74,
+  "h": 78,
+  "kind": "round",
+  "fire": [
+   0,
+   -44,
+   0.4
+  ]
+ },
+ "m2_platformLamp": {
+  "w": 43,
+  "h": 90,
+  "kind": "tall",
+  "fire": [
+   0,
+   -72,
+   0.6
+  ]
+ },
+ "m2_loomBasket": {
+  "w": 70,
+  "h": 31,
+  "kind": "round"
+ },
+ "m2_glowShroomBig": {
+  "w": 125,
+  "h": 124,
+  "kind": "tall",
+  "fire": [
+   0,
+   -60,
+   0.6
+  ],
+  "glow": "blue"
+ },
+ "m2_glowShroomSmall": {
+  "w": 55,
+  "h": 50,
+  "kind": "round",
+  "fire": [
+   0,
+   -22,
+   0.35
+  ],
+  "glow": "blue"
+ },
+ "m2_paleRootPillar": {
+  "w": 93,
+  "h": 176,
+  "kind": "tall"
+ },
+ "m2_stalagmite": {
+  "w": 106,
+  "h": 100,
+  "kind": "round"
+ },
+ "m2_caveTablet": {
+  "w": 63,
+  "h": 102,
+  "kind": "round"
+ },
+ "m2_fungusShelf": {
+  "w": 112,
+  "h": 92,
+  "kind": "round"
+ },
+ "m2_caveBones": {
+  "w": 82,
+  "h": 82,
+  "kind": "round"
+ },
+ "m2_ventMound": {
+  "w": 92,
+  "h": 118,
+  "kind": "round"
+ },
+ "m2_caveMouth": {
+  "w": 186,
+  "h": 101,
+  "kind": "big"
+ },
+ "m2_rootWall": {
+  "w": 154,
+  "h": 185,
+  "kind": "big"
+ },
+ "m2_dripRock": {
+  "w": 88,
+  "h": 84,
+  "kind": "round"
+ },
+ "m2_sporeCluster": {
+  "w": 74,
+  "h": 70,
+  "kind": "round",
+  "sway": 0.03
+ },
+ "m2_caveCrystals": {
+  "w": 174,
+  "h": 80,
+  "kind": "round"
+ },
+ "m2_rubbleHeap": {
+  "w": 96,
+  "h": 74,
+  "kind": "round"
+ },
+ "m2_carvedPerch": {
+  "w": 79,
+  "h": 112,
+  "kind": "tall"
+ },
+ "m2_openCage": {
+  "w": 109,
+  "h": 104,
+  "kind": "big"
+ },
+ "m2_windWheel": {
+  "w": 64,
+  "h": 116,
+  "kind": "round",
+  "sway": 0.02
+ },
+ "m2_updraftVent": {
+  "w": 98,
+  "h": 62,
+  "kind": "round",
+  "fire": [
+   0,
+   -12,
+   0.7
+  ],
+  "glow": "blue"
+ },
+ "m2_rocStatue": {
+  "w": 220,
+  "h": 210,
+  "kind": "big"
+ },
+ "m2_aviaryArch": {
+  "w": 122,
+  "h": 144,
+  "kind": "big"
+ },
+ "m2_featherPile": {
+  "w": 84,
+  "h": 55,
+  "kind": "round"
+ },
+ "m2_runePerch": {
+  "w": 97,
+  "h": 74,
+  "kind": "round"
+ },
+ "m2_cageStair": {
+  "w": 93,
+  "h": 156,
+  "kind": "big"
+ },
+ "m2_brokenPerch": {
+  "w": 111,
+  "h": 90,
+  "kind": "round"
+ },
+ "m2_ropeStump": {
+  "w": 71,
+  "h": 96,
+  "kind": "tall"
+ },
+ "m2_windBanner": {
+  "w": 69,
+  "h": 128,
+  "kind": "tall",
+  "sway": 0.04
+ },
+ "m2_stonePost": {
+  "w": 102,
+  "h": 170,
+  "kind": "big"
+ },
+ "m2_signalFirePit": {
+  "w": 92,
+  "h": 64,
+  "kind": "round",
+  "fire": [
+   0,
+   -18,
+   0.8
+  ]
+ },
+ "m2_tribuneTable": {
+  "w": 77,
+  "h": 84,
+  "kind": "round"
+ },
+ "m2_marksmanNest": {
+  "w": 100,
+  "h": 104,
+  "kind": "big"
+ },
+ "m2_arrowBarrel": {
+  "w": 64,
+  "h": 58,
+  "kind": "round"
+ },
+ "m2_cliffTree": {
+  "w": 183,
+  "h": 190,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m2_legionBannerSm": {
+  "w": 64,
+  "h": 108,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m2_cliffBoulder": {
+  "w": 100,
+  "h": 76,
+  "kind": "round"
+ },
+ "m2_adobeHouseA": {
+  "w": 130,
+  "h": 142,
+  "kind": "big"
+ },
+ "m2_adobeHouseB": {
+  "w": 138,
+  "h": 134,
+  "kind": "big"
+ },
+ "m2_marigoldWell": {
+  "w": 105,
+  "h": 98,
+  "kind": "round"
+ },
+ "m2_clayLampShrine": {
+  "w": 79,
+  "h": 74,
+  "kind": "round",
+  "fire": [
+   0,
+   -34,
+   0.9
+  ]
+ },
+ "m2_hayStack": {
+  "w": 76,
+  "h": 84,
+  "kind": "round"
+ },
+ "m2_scarecrow": {
+  "w": 74,
+  "h": 96,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m2_gourdTrellis": {
+  "w": 130,
+  "h": 78,
+  "kind": "round"
+ },
+ "m2_marigoldRowA": {
+  "w": 150,
+  "h": 123,
+  "kind": "flat"
+ },
+ "m2_marigoldRowB": {
+  "w": 150,
+  "h": 113,
+  "kind": "flat"
+ },
+ "m2_henHouse": {
+  "w": 60,
+  "h": 64,
+  "kind": "round"
+ },
+ "m2_stoneFence": {
+  "w": 112,
+  "h": 86,
+  "kind": "round"
+ },
+ "m2_appleTree": {
+  "w": 121,
+  "h": 152,
+  "kind": "tall",
+  "sway": 0.012
+ },
+ "m2_waterTrough": {
+  "w": 86,
+  "h": 90,
+  "kind": "round"
+ },
+ "m2_stairPost": {
+  "w": 82,
+  "h": 98,
+  "kind": "tall"
+ },
+ "m2_flowerWreath": {
+  "w": 51,
+  "h": 70,
+  "kind": "round"
+ },
+ "m2_hHerbs": {
+  "w": 67,
+  "h": 82,
+  "kind": "tall"
+ },
+ "m2_hDoor": {
+  "w": 83,
+  "h": 124,
+  "kind": "gate"
+ },
+ "m2_hBasket": {
+  "w": 62,
+  "h": 55,
+  "kind": "round"
+ },
+ "m2_hRug": {
+  "w": 146,
+  "h": 81,
+  "kind": "flat"
+ },
+ "m2_hChest": {
+  "w": 84,
+  "h": 85,
+  "kind": "round"
+ },
+ "m2_hStool": {
+  "w": 41,
+  "h": 44,
+  "kind": "round"
+ },
+ "m2_hJars": {
+  "w": 64,
+  "h": 60,
+  "kind": "round"
+ },
+ "m2_hLamp": {
+  "w": 25,
+  "h": 66,
+  "kind": "tall"
+ },
+ "m2_cShelf": {
+  "w": 116,
+  "h": 132,
+  "kind": "big"
+ },
+ "m2_cBarrel": {
+  "w": 48,
+  "h": 62,
+  "kind": "round"
+ },
+ "m2_cAlcove": {
+  "w": 87,
+  "h": 112,
+  "kind": "big"
+ },
+ "m2_cJars": {
+  "w": 82,
+  "h": 68,
+  "kind": "round"
+ },
+ "m2_cLadder": {
+  "w": 108,
+  "h": 142,
+  "kind": "tall"
+ },
+ "m2_cCrate": {
+  "w": 72,
+  "h": 67,
+  "kind": "round"
+ },
+ "m2_cHerbs": {
+  "w": 93,
+  "h": 78,
+  "kind": "round"
+ },
+ "m2_cLamp": {
+  "w": 62,
+  "h": 60,
+  "kind": "round",
+  "fire": [
+   0,
+   -28,
+   0.5
+  ]
+ },
+ "saltmereWarTent": {
+  "w": 183,
+  "h": 180,
+  "kind": "big"
+ },
+ "saltmereMessHall": {
+  "w": 200,
+  "h": 183,
+  "kind": "big"
+ },
+ "saltmereSurgeonTent": {
+  "w": 109,
+  "h": 110,
+  "kind": "big"
+ },
+ "saltmereForge": {
+  "w": 132,
+  "h": 110,
+  "kind": "big"
+ },
+ "saltmereCotHouse": {
+  "w": 168,
+  "h": 130,
+  "kind": "big"
+ },
+ "saltmereSupplyTent": {
+  "w": 116,
+  "h": 100,
+  "kind": "big"
+ },
+ "saltmereBunkTent": {
+  "w": 88,
+  "h": 84,
+  "kind": "big"
+ },
+ "saltmereGuildHall": {
+  "w": 104,
+  "h": 110,
+  "kind": "big"
+ },
+ "saltmereBannerConcord": {
+  "w": 72,
+  "h": 150,
+  "kind": "tall",
+  "sway": 0.025
+ },
+ "saltmereBannerFlock": {
+  "w": 72,
+  "h": 150,
+  "kind": "tall",
+  "sway": 0.025
+ },
+ "saltmereBannerDominion": {
+  "w": 74,
+  "h": 150,
+  "kind": "tall",
+  "sway": 0.025
+ },
+ "saltmereCookFire": {
+  "w": 54,
+  "h": 62,
+  "kind": "round",
+  "fire": [
+   0,
+   -26,
+   0.9
+  ]
+ },
+ "saltmereDummy": {
+  "w": 38,
+  "h": 66,
+  "kind": "round"
+ },
+ "saltmereWeaponRack": {
+  "w": 84,
+  "h": 98,
+  "kind": "round"
+ },
+ "saltmereStretchers": {
+  "w": 92,
+  "h": 62,
+  "kind": "round"
+ },
+ "saltmereMapTable": {
+  "w": 104,
+  "h": 89,
+  "kind": "round"
+ },
+ "saltmereTentConcord": {
+  "w": 90,
+  "h": 100,
+  "kind": "big"
+ },
+ "saltmereTentFlock": {
+  "w": 123,
+  "h": 100,
+  "kind": "big"
+ },
+ "saltmereTentDominion": {
+  "w": 96,
+  "h": 100,
+  "kind": "big"
+ },
+ "saltmereSupplyWagon": {
+  "w": 130,
+  "h": 124,
+  "kind": "big"
+ },
+ "saltmereWaterCart": {
+  "w": 100,
+  "h": 83,
+  "kind": "round"
+ },
+ "saltmereFirewood": {
+  "w": 80,
+  "h": 54,
+  "kind": "round"
+ },
+ "saltmereLantern": {
+  "w": 21,
+  "h": 76,
+  "kind": "tall",
+  "fire": [
+   0,
+   -66,
+   0.6
+  ]
+ },
+ "saltmereHorseLine": {
+  "w": 112,
+  "h": 91,
+  "kind": "round"
+ },
+ "saltmereSiegeTower": {
+  "w": 173,
+  "h": 260,
+  "kind": "big"
+ },
+ "saltmereBallista": {
+  "w": 175,
+  "h": 100,
+  "kind": "round"
+ },
+ "saltmereCatapult": {
+  "w": 116,
+  "h": 120,
+  "kind": "round"
+ },
+ "saltmereBurntWagon": {
+  "w": 130,
+  "h": 86,
+  "kind": "big"
+ },
+ "saltmereStakes": {
+  "w": 120,
+  "h": 106,
+  "kind": "round"
+ },
+ "saltmereSandbags": {
+  "w": 124,
+  "h": 133,
+  "kind": "round"
+ },
+ "saltmereWreckedTower": {
+  "w": 195,
+  "h": 200,
+  "kind": "big"
+ },
+ "saltmereFallenBanner": {
+  "w": 84,
+  "h": 60,
+  "kind": "flat"
+ },
+ "saltmereTussock": {
+  "w": 31,
+  "h": 50,
+  "kind": "round"
+ },
+ "saltmereDeadTree": {
+  "w": 118,
+  "h": 120,
+  "kind": "tall"
+ },
+ "saltmereBoardwalk": {
+  "w": 112,
+  "h": 69,
+  "kind": "flat"
+ },
+ "saltmereMudPuddle": {
+  "w": 92,
+  "h": 60,
+  "kind": "flat"
+ },
+ "saltmereAmmoCrates": {
+  "w": 122,
+  "h": 54,
+  "kind": "round"
+ },
+ "saltmereBunkerHatch": {
+  "w": 113,
+  "h": 92,
+  "kind": "big"
+ },
+ "saltmereMortarPit": {
+  "w": 104,
+  "h": 252,
+  "kind": "round"
+ },
+ "saltmereLadder": {
+  "w": 80,
+  "h": 84,
+  "kind": "tall"
+ },
+ "saltmerePalisade": {
+  "w": 124,
+  "h": 151,
+  "kind": "round"
+ },
+ "saltmereRampart": {
+  "w": 150,
+  "h": 110,
+  "kind": "round"
+ },
+ "saltmereTorchPost": {
+  "w": 18,
+  "h": 82,
+  "kind": "tall",
+  "fire": [
+   0,
+   -72,
+   0.7
+  ]
+ },
+ "saltmereWarBrazier": {
+  "w": 32,
+  "h": 62,
+  "kind": "tall",
+  "fire": [
+   0,
+   -50,
+   0.9
+  ]
+ },
+ "saltmereShieldWall": {
+  "w": 104,
+  "h": 89,
+  "kind": "round"
+ },
+ "saltmereLegionStandard": {
+  "w": 84,
+  "h": 124,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "saltmereBoltPile": {
+  "w": 72,
+  "h": 45,
+  "kind": "round"
+ },
+ "saltmereRubble": {
+  "w": 92,
+  "h": 68,
+  "kind": "flat"
+ },
+ "sanctumCathedral": {
+  "w": 218,
+  "h": 300,
+  "kind": "big"
+ },
+ "sanctumBellTower": {
+  "w": 110,
+  "h": 240,
+  "kind": "big"
+ },
+ "sanctumObservTower": {
+  "w": 179,
+  "h": 280,
+  "kind": "big"
+ },
+ "sanctumPilgrimHall": {
+  "w": 220,
+  "h": 211,
+  "kind": "big"
+ },
+ "sanctumPilgrimInn": {
+  "w": 147,
+  "h": 150,
+  "kind": "big"
+ },
+ "sanctumHouseA": {
+  "w": 116,
+  "h": 120,
+  "kind": "big"
+ },
+ "sanctumHouseB": {
+  "w": 115,
+  "h": 132,
+  "kind": "big"
+ },
+ "sanctumShop": {
+  "w": 113,
+  "h": 120,
+  "kind": "big"
+ },
+ "sanctumStagStatue": {
+  "w": 74,
+  "h": 150,
+  "kind": "round",
+  "fire": [
+   0,
+   -128,
+   0.8
+  ]
+ },
+ "sanctumCandelabra": {
+  "w": 51,
+  "h": 92,
+  "kind": "tall",
+  "fire": [
+   0,
+   -80,
+   0.8
+  ]
+ },
+ "sanctumBanner": {
+  "w": 60,
+  "h": 150,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "sanctumCypress": {
+  "w": 39,
+  "h": 132,
+  "kind": "tall",
+  "sway": 0.015
+ },
+ "sanctumPrayerWall": {
+  "w": 124,
+  "h": 100,
+  "kind": "round",
+  "fire": [
+   0,
+   -30,
+   1
+  ]
+ },
+ "sanctumFountain": {
+  "w": 117,
+  "h": 100,
+  "kind": "round"
+ },
+ "sanctumBench": {
+  "w": 92,
+  "h": 71,
+  "kind": "round"
+ },
+ "sanctumPlanter": {
+  "w": 59,
+  "h": 60,
+  "kind": "round"
+ },
+ "cryptNiche": {
+  "w": 71,
+  "h": 96,
+  "kind": "tall",
+  "fire": [
+   0,
+   -50,
+   0.6
+  ]
+ },
+ "cryptShroudedBones": {
+  "w": 104,
+  "h": 94,
+  "kind": "round"
+ },
+ "cryptSarcophagus": {
+  "w": 112,
+  "h": 111,
+  "kind": "round"
+ },
+ "cryptPillar": {
+  "w": 79,
+  "h": 132,
+  "kind": "tall"
+ },
+ "cryptTablets": {
+  "w": 53,
+  "h": 84,
+  "kind": "round"
+ },
+ "cryptAltar": {
+  "w": 109,
+  "h": 92,
+  "kind": "round",
+  "fire": [
+   0,
+   -52,
+   0.8
+  ]
+ },
+ "cryptOssuary": {
+  "w": 104,
+  "h": 104,
+  "kind": "round"
+ },
+ "cryptCandleStand": {
+  "w": 33,
+  "h": 70,
+  "kind": "tall",
+  "fire": [
+   0,
+   -60,
+   0.6
+  ]
+ },
+ "cryptGlyphDawn": {
+  "w": 58,
+  "h": 42,
+  "kind": "flat"
+ },
+ "cryptGlyphZenith": {
+  "w": 58,
+  "h": 42,
+  "kind": "flat"
+ },
+ "cryptGlyphDusk": {
+  "w": 58,
+  "h": 42,
+  "kind": "flat"
+ },
+ "cryptGlyphNight": {
+  "w": 58,
+  "h": 42,
+  "kind": "flat"
+ },
+ "pyrPlate": {
+  "w": 60,
+  "h": 43,
+  "kind": "flat"
+ },
+ "pyrPlateLit": {
+  "w": 60,
+  "h": 43,
+  "kind": "flat"
+ },
+ "pyrPlateRed": {
+  "w": 60,
+  "h": 45,
+  "kind": "flat"
+ },
+ "pyrShutter": {
+  "w": 150,
+  "h": 170,
+  "kind": "round"
+ },
+ "obsTelescope": {
+  "w": 102,
+  "h": 134,
+  "kind": "round"
+ },
+ "obsArmillary": {
+  "w": 77,
+  "h": 100,
+  "kind": "round"
+ },
+ "obsChartWall": {
+  "w": 150,
+  "h": 70,
+  "kind": "big"
+ },
+ "obsDesk": {
+  "w": 112,
+  "h": 465,
+  "kind": "round"
+ },
+ "obsLampStand": {
+  "w": 108,
+  "h": 104,
+  "kind": "tall",
+  "fire": [
+   0,
+   -92,
+   0.7
+  ],
+  "glow": "gold"
+ },
+ "obsBookshelf": {
+  "w": 62,
+  "h": 112,
+  "kind": "big"
+ },
+ "obsOrrery": {
+  "w": 63,
+  "h": 92,
+  "kind": "round"
+ },
+ "obsStool": {
+  "w": 50,
+  "h": 50,
+  "kind": "round"
+ },
+ "spinePine": {
+  "w": 125,
+  "h": 152,
+  "kind": "tall",
+  "sway": 0.03
+ },
+ "spineCrag": {
+  "w": 149,
+  "h": 150,
+  "kind": "round"
+ },
+ "spineRod": {
+  "w": 72,
+  "h": 134,
+  "kind": "tall",
+  "fire": [
+   0,
+   -118,
+   0.7
+  ],
+  "glow": "blue"
+ },
+ "spineChainPost": {
+  "w": 92,
+  "h": 72,
+  "kind": "tall"
+ },
+ "spineCairn": {
+  "w": 60,
+  "h": 72,
+  "kind": "tall",
+  "sway": 0.03
+ },
+ "spineCollarAltar": {
+  "w": 66,
+  "h": 100,
+  "kind": "round"
+ },
+ "spineRamHorns": {
+  "w": 171,
+  "h": 184,
+  "kind": "big"
+ },
+ "spineFlags": {
+  "w": 85,
+  "h": 142,
+  "kind": "tall",
+  "sway": 0.035
+ },
+ "spineBoulder": {
+  "w": 95,
+  "h": 82,
+  "kind": "round"
+ },
+ "spineScrub": {
+  "w": 64,
+  "h": 42,
+  "kind": "round"
+ },
+ "spineScorch": {
+  "w": 104,
+  "h": 70,
+  "kind": "flat"
+ },
+ "spineFulgurite": {
+  "w": 95,
+  "h": 92,
+  "kind": "round"
+ },
+ "spineDeadPine": {
+  "w": 103,
+  "h": 132,
+  "kind": "tall"
+ },
+ "spineSlab": {
+  "w": 104,
+  "h": 123,
+  "kind": "flat"
+ },
+ "spineTablet": {
+  "w": 82,
+  "h": 92,
+  "kind": "round"
+ },
+ "spineLantern": {
+  "w": 69,
+  "h": 82,
+  "kind": "tall",
+  "fire": [
+   0,
+   -62,
+   0.6
+  ]
+ },
+ "prismPrism": {
+  "w": 106,
+  "h": 134,
+  "kind": "tall",
+  "fire": [
+   0,
+   -80,
+   0.6
+  ],
+  "glow": "blue"
+ },
+ "prismDoorFire": {
+  "w": 91,
+  "h": 150,
+  "kind": "big"
+ },
+ "prismDoorShock": {
+  "w": 91,
+  "h": 150,
+  "kind": "big"
+ },
+ "prismDoorIce": {
+  "w": 92,
+  "h": 150,
+  "kind": "big"
+ },
+ "prismChart": {
+  "w": 98,
+  "h": 150,
+  "kind": "tall"
+ },
+ "prismGolemStatue": {
+  "w": 91,
+  "h": 142,
+  "kind": "round"
+ },
+ "prismBombShelf": {
+  "w": 72,
+  "h": 82,
+  "kind": "round"
+ },
+ "prismLens": {
+  "w": 46,
+  "h": 72,
+  "kind": "round"
+ },
+ "bastionWell": {
+  "w": 72,
+  "h": 86,
+  "kind": "round"
+ },
+ "bastionCrates": {
+  "w": 84,
+  "h": 67,
+  "kind": "round"
+ },
+ "bastionMessFire": {
+  "w": 81,
+  "h": 66,
+  "kind": "round",
+  "fire": [
+   0,
+   -28,
+   0.9
+  ]
+ },
+ "bastionRowboat": {
+  "w": 100,
+  "h": 72,
+  "kind": "round"
+ },
+ "bastionTrainingPost": {
+  "w": 43,
+  "h": 70,
+  "kind": "round"
+ },
+ "bastionHayCart": {
+  "w": 108,
+  "h": 77,
+  "kind": "big"
+ },
+ "bastionTent": {
+  "w": 89,
+  "h": 92,
+  "kind": "big"
+ },
+ "bastionTorch": {
+  "w": 23,
+  "h": 80,
+  "kind": "tall",
+  "fire": [
+   0,
+   -70,
+   0.7
+  ]
+ },
+ "bastionFarPyramid": {
+  "w": 447,
+  "h": 340,
+  "kind": "round"
+ },
+ "stairStatue": {
+  "w": 135,
+  "h": 164,
+  "kind": "round"
+ },
+ "stairBurntBanner": {
+  "w": 65,
+  "h": 152,
+  "kind": "tall",
+  "sway": 0.03
+ },
+ "stairBarricade": {
+  "w": 144,
+  "h": 139,
+  "kind": "round"
+ },
+ "stairBurntHouse": {
+  "w": 191,
+  "h": 152,
+  "kind": "big"
+ },
+ "stairBrokenColumn": {
+  "w": 148,
+  "h": 104,
+  "kind": "round"
+ },
+ "stairSiegeRam": {
+  "w": 150,
+  "h": 134,
+  "kind": "big"
+ },
+ "stairBrazierGold": {
+  "w": 49,
+  "h": 94,
+  "kind": "tall",
+  "fire": [
+   0,
+   -80,
+   1
+  ]
+ },
+ "stairArch": {
+  "w": 230,
+  "h": 261,
+  "kind": "gate"
+ },
+ "stairHouseA": {
+  "w": 127,
+  "h": 140,
+  "kind": "big"
+ },
+ "stairHouseB": {
+  "w": 117,
+  "h": 150,
+  "kind": "big"
+ },
+ "stairFallenStatue": {
+  "w": 130,
+  "h": 105,
+  "kind": "flat"
+ },
+ "stairShieldPile": {
+  "w": 80,
+  "h": 60,
+  "kind": "flat"
+ },
+ "stairCart": {
+  "w": 110,
+  "h": 97,
+  "kind": "round"
+ },
+ "stairTorchStand": {
+  "w": 25,
+  "h": 86,
+  "kind": "tall",
+  "fire": [
+   0,
+   -74,
+   0.8
+  ]
+ },
+ "stairWallSegment": {
+  "w": 140,
+  "h": 121,
+  "kind": "round"
+ },
+ "stairTent": {
+  "w": 96,
+  "h": 96,
+  "kind": "big"
+ },
+ "pyrDiscDawn": {
+  "w": 221,
+  "h": 232,
+  "kind": "big"
+ },
+ "pyrDiscZenith": {
+  "w": 225,
+  "h": 232,
+  "kind": "big"
+ },
+ "pyrDiscDusk": {
+  "w": 228,
+  "h": 232,
+  "kind": "big"
+ },
+ "pyrCollarAltar": {
+  "w": 118,
+  "h": 104,
+  "kind": "round"
+ },
+ "pyrGutter": {
+  "w": 124,
+  "h": 96,
+  "kind": "flat"
+ },
+ "pyrGoldStatue": {
+  "w": 89,
+  "h": 156,
+  "kind": "round"
+ },
+ "pyrBrazier": {
+  "w": 37,
+  "h": 96,
+  "kind": "tall",
+  "fire": [
+   0,
+   -82,
+   0.9
+  ],
+  "glow": "gold"
+ },
+ "pyrLightPillar": {
+  "w": 53,
+  "h": 150,
+  "kind": "tall"
+ },
+ "pyrMural": {
+  "w": 184,
+  "h": 222,
+  "kind": "big"
+ },
+ "pyrChains": {
+  "w": 49,
+  "h": 132,
+  "kind": "tall"
+ },
+ "pyrDesk": {
+  "w": 134,
+  "h": 116,
+  "kind": "big"
+ },
+ "pyrRoots": {
+  "w": 156,
+  "h": 130,
+  "kind": "flat"
+ },
+ "pyrOfferingPillar": {
+  "w": 158,
+  "h": 142,
+  "kind": "tall"
+ },
+ "pyrChainRing": {
+  "w": 110,
+  "h": 62,
+  "kind": "flat"
+ },
+ "pyrBanner": {
+  "w": 100,
+  "h": 150,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "pyrRubble": {
+  "w": 90,
+  "h": 60,
+  "kind": "flat"
+ },
+ "pyrGrate": {
+  "w": 400,
+  "h": 210,
+  "kind": "flat"
+ },
+ "pyrBlackSun": {
+  "w": 640,
+  "h": 931,
+  "kind": "flat"
+ },
+ "roofCalendar": {
+  "w": 760,
+  "h": 749,
+  "kind": "flat"
+ },
+ "starhavenHut": {
+  "w": 102,
+  "h": 102,
+  "kind": "big"
+ },
+ "starhavenTent": {
+  "w": 107,
+  "h": 92,
+  "kind": "big"
+ },
+ "starhavenGreatTelescope": {
+  "w": 173,
+  "h": 196,
+  "kind": "big"
+ },
+ "starhavenStarLamp": {
+  "w": 142,
+  "h": 142,
+  "kind": "big"
+ },
+ "starhavenNotebooks": {
+  "w": 73,
+  "h": 112,
+  "kind": "tall",
+  "sway": 0.03
+ },
+ "starhavenKite": {
+  "w": 39,
+  "h": 124,
+  "kind": "tall",
+  "sway": 0.04
+ },
+ "starhavenShard": {
+  "w": 91,
+  "h": 92,
+  "kind": "round",
+  "fire": [
+   0,
+   -56,
+   0.6
+  ],
+  "glow": "blue"
+ },
+ "starhavenCrates": {
+  "w": 92,
+  "h": 87,
+  "kind": "round"
+ },
+ "starhavenLampPost": {
+  "w": 37,
+  "h": 102,
+  "kind": "tall",
+  "fire": [
+   0,
+   -90,
+   0.7
+  ],
+  "glow": "gold"
+ },
+ "starhavenDesk": {
+  "w": 112,
+  "h": 131,
+  "kind": "round"
+ },
+ "starhavenQuarterStall": {
+  "w": 82,
+  "h": 102,
+  "kind": "big"
+ },
+ "starhavenDinghy": {
+  "w": 102,
+  "h": 129,
+  "kind": "round"
+ },
+ "starhavenGlassSpire": {
+  "w": 74,
+  "h": 72,
+  "kind": "round"
+ },
+ "starhavenBlackRock": {
+  "w": 70,
+  "h": 62,
+  "kind": "round"
+ },
+ "starhavenBeachGrass": {
+  "w": 58,
+  "h": 42,
+  "kind": "round"
+ },
+ "starhavenFlag": {
+  "w": 64,
+  "h": 132,
+  "kind": "tall",
+  "sway": 0.03
+ },
+ "starfallBowl": {
+  "w": 220,
+  "h": 152,
+  "kind": "flat"
+ },
+ "starfallStone": {
+  "w": 95,
+  "h": 142,
+  "kind": "tall",
+  "fire": [
+   0,
+   -70,
+   0.6
+  ],
+  "glow": "blue"
+ },
+ "starfallRib": {
+  "w": 221,
+  "h": 204,
+  "kind": "big"
+ },
+ "starfallMeteor": {
+  "w": 97,
+  "h": 82,
+  "kind": "round"
+ },
+ "starfallGlassMound": {
+  "w": 117,
+  "h": 72,
+  "kind": "round"
+ },
+ "starfallBurntTree": {
+  "w": 104,
+  "h": 112,
+  "kind": "tall",
+  "sway": 0.015
+ },
+ "starfallPillar": {
+  "w": 80,
+  "h": 122,
+  "kind": "tall"
+ },
+ "starfallShards": {
+  "w": 84,
+  "h": 82,
+  "kind": "round"
+ },
+ "craterFlowerA": {
+  "w": 67,
+  "h": 92,
+  "kind": "round",
+  "fire": [
+   0,
+   -50,
+   0.4
+  ],
+  "glow": "gold"
+ },
+ "craterFlowerB": {
+  "w": 81,
+  "h": 82,
+  "kind": "round",
+  "fire": [
+   0,
+   -40,
+   0.4
+  ],
+  "glow": "blue"
+ },
+ "craterFlowerC": {
+  "w": 67,
+  "h": 104,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "craterEmberwood": {
+  "w": 164,
+  "h": 156,
+  "kind": "tall",
+  "sway": 0.015
+ },
+ "craterShard": {
+  "w": 65,
+  "h": 72,
+  "kind": "round"
+ },
+ "craterAshHeap": {
+  "w": 92,
+  "h": 55,
+  "kind": "flat"
+ },
+ "craterChimes": {
+  "w": 50,
+  "h": 62,
+  "kind": "round"
+ },
+ "craterBloomBig": {
+  "w": 156,
+  "h": 130,
+  "kind": "tall"
+ },
+ "craterSleeper": {
+  "w": 460,
+  "h": 281,
+  "kind": "round"
+ },
+ "drownedDome": {
+  "w": 250,
+  "h": 190,
+  "kind": "big"
+ },
+ "drownedBridge": {
+  "w": 210,
+  "h": 196,
+  "kind": "gate"
+ },
+ "drownedColossus": {
+  "w": 167,
+  "h": 232,
+  "kind": "big"
+ },
+ "drownedStele": {
+  "w": 39,
+  "h": 132,
+  "kind": "tall",
+  "fire": [
+   0,
+   -72,
+   0.5
+  ],
+  "glow": "gold"
+ },
+ "drownedKelp": {
+  "w": 66,
+  "h": 124,
+  "kind": "tall",
+  "sway": 0.035
+ },
+ "drownedCoral": {
+  "w": 108,
+  "h": 82,
+  "kind": "round"
+ },
+ "drownedStatue": {
+  "w": 79,
+  "h": 152,
+  "kind": "round"
+ },
+ "drownedVent": {
+  "w": 44,
+  "h": 62,
+  "kind": "round"
+ },
+ "drownedPillar": {
+  "w": 97,
+  "h": 122,
+  "kind": "tall"
+ },
+ "drownedWreck": {
+  "w": 170,
+  "h": 165,
+  "kind": "big"
+ },
+ "drownedShell": {
+  "w": 74,
+  "h": 82,
+  "kind": "round"
+ },
+ "drownedCrates": {
+  "w": 84,
+  "h": 68,
+  "kind": "round"
+ },
+ "drownedLightPylon": {
+  "w": 60,
+  "h": 102,
+  "kind": "tall",
+  "fire": [
+   0,
+   -90,
+   0.5
+  ],
+  "glow": "gold"
+ },
+ "drownedRubble": {
+  "w": 100,
+  "h": 77,
+  "kind": "flat"
+ },
+ "drownedBlockWall": {
+  "w": 150,
+  "h": 95,
+  "kind": "round"
+ },
+ "drownedAnemone": {
+  "w": 80,
+  "h": 62,
+  "kind": "round"
+ },
+ "deepReef": {
+  "w": 96,
+  "h": 92,
+  "kind": "round"
+ },
+ "deepLanternPlant": {
+  "w": 72,
+  "h": 112,
+  "kind": "tall",
+  "fire": [
+   0,
+   -80,
+   0.6
+  ],
+  "glow": "blue"
+ },
+ "deepGlassFish": {
+  "w": 84,
+  "h": 53,
+  "kind": "round"
+ },
+ "deepJelly": {
+  "w": 35,
+  "h": 92,
+  "kind": "round",
+  "fire": [
+   0,
+   -60,
+   0.5
+  ],
+  "glow": "blue"
+ },
+ "deepWhaleRib": {
+  "w": 150,
+  "h": 152,
+  "kind": "big"
+ },
+ "deepRock": {
+  "w": 117,
+  "h": 82,
+  "kind": "round"
+ },
+ "deepDais": {
+  "w": 230,
+  "h": 150,
+  "kind": "flat"
+ },
+ "deepWisp": {
+  "w": 31,
+  "h": 44,
+  "kind": "round"
+ },
+ "npcRhaz": {
+  "w": 38,
+  "h": 54,
+  "kind": "npc"
+ },
+ "npcPeya": {
+  "w": 36,
+  "h": 42,
+  "kind": "npc"
+ },
+ "npcCorvin": {
+  "w": 38,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcImela": {
+  "w": 24,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcSurgeon": {
+  "w": 27,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcBrisk": {
+  "w": 28,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcIthielGrey": {
+  "w": 20,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcLysenne": {
+  "w": 27,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcMorvane": {
+  "w": 21,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcVael": {
+  "w": 21,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcCalendarScholar": {
+  "w": 40,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcDavichi": {
+  "w": 27,
+  "h": 54,
+  "kind": "npc"
+ },
+ "npcPilgrim": {
+  "w": 27,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcAcolyte": {
+  "w": 18,
+  "h": 44,
+  "kind": "npc"
+ },
+ "npcWarden": {
+  "w": 31,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcFlockGuard": {
+  "w": 28,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcResistFighter": {
+  "w": 38,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcMedic": {
+  "w": 34,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcQuartermaster": {
+  "w": 41,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcScholarM": {
+  "w": 22,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcScholarF": {
+  "w": 28,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcCook": {
+  "w": 29,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcRecruit": {
+  "w": 21,
+  "h": 44,
+  "kind": "npc"
+ },
+ "npcScout": {
+  "w": 26,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcPorter": {
+  "w": 28,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcRefugee": {
+  "w": 20,
+  "h": 46,
+  "kind": "npc"
+ },
+ "m2_treeFern": {
+  "w": 101,
+  "h": 135,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m2_ferryRaft": {
+  "w": 172,
+  "h": 106,
+  "kind": "big"
+ },
+ "m2_featherSign": {
+  "w": 48,
+  "h": 88,
+  "kind": "tall"
+ },
+ "m2_cableWinch": {
+  "w": 75,
+  "h": 84,
+  "kind": "round"
+ },
+ "m2_barge": {
+  "w": 160,
+  "h": 111,
+  "kind": "big"
+ },
+ "m2_gourdInn": {
+  "w": 141,
+  "h": 156,
+  "kind": "big"
+ },
+ "m2_eelStall": {
+  "w": 86,
+  "h": 100,
+  "kind": "big",
+  "fire": [
+   0,
+   -30,
+   0.7
+  ]
+ },
+ "m2_cargoBales": {
+  "w": 100,
+  "h": 76,
+  "kind": "round"
+ },
+ "m2_riverWarehouse": {
+  "w": 200,
+  "h": 203,
+  "kind": "big"
+ },
+ "m2_riverHouseC": {
+  "w": 146,
+  "h": 146,
+  "kind": "big"
+ },
+ "m2_dockPosts": {
+  "w": 90,
+  "h": 95,
+  "kind": "round",
+  "fire": [
+   0,
+   -78,
+   0.5
+  ]
+ },
+ "m2_fruitCrates": {
+  "w": 84,
+  "h": 67,
+  "kind": "round"
+ },
+ "m2_boatHull": {
+  "w": 150,
+  "h": 122,
+  "kind": "big"
+ },
+ "m2_riverLamp": {
+  "w": 58,
+  "h": 110,
+  "kind": "tall",
+  "fire": [
+   0,
+   -92,
+   0.7
+  ]
+ },
+ "m2_pyramidTier": {
+  "w": 260,
+  "h": 198,
+  "kind": "big"
+ },
+ "m2_skullRack": {
+  "w": 100,
+  "h": 136,
+  "kind": "round"
+ },
+ "m2_whipPost": {
+  "w": 55,
+  "h": 84,
+  "kind": "tall"
+ },
+ "m2_redBanner": {
+  "w": 69,
+  "h": 130,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m2_quarryPit": {
+  "w": 120,
+  "h": 98,
+  "kind": "round"
+ },
+ "m2_obsidianBrazier": {
+  "w": 38,
+  "h": 70,
+  "kind": "tall",
+  "fire": [
+   0,
+   -56,
+   0.9
+  ]
+ },
+ "m2_workerTent": {
+  "w": 85,
+  "h": 70,
+  "kind": "big"
+ },
+ "m2_sunDisc": {
+  "w": 149,
+  "h": 110,
+  "kind": "round"
+ },
+ "m2_mangrove": {
+  "w": 136,
+  "h": 150,
+  "kind": "tall"
+ },
+ "m2_mangroveRoots": {
+  "w": 96,
+  "h": 84,
+  "kind": "round"
+ },
+ "m2_driftwood": {
+  "w": 126,
+  "h": 124,
+  "kind": "round"
+ },
+ "m2_beachedBoat": {
+  "w": 140,
+  "h": 92,
+  "kind": "big"
+ },
+ "m2_shipWreck": {
+  "w": 230,
+  "h": 217,
+  "kind": "big"
+ },
+ "m2_fishStakes": {
+  "w": 62,
+  "h": 72,
+  "kind": "tall"
+ },
+ "m2_shellMound": {
+  "w": 80,
+  "h": 44,
+  "kind": "round"
+ },
+ "m2_mudReeds": {
+  "w": 63,
+  "h": 84,
+  "kind": "round",
+  "sway": 0.04
+ },
+ "m2_terraceWall": {
+  "w": 190,
+  "h": 193,
+  "kind": "big"
+ },
+ "m2_collarAltar": {
+  "w": 121,
+  "h": 124,
+  "kind": "round"
+ },
+ "m2_slavePen": {
+  "w": 172,
+  "h": 220,
+  "kind": "big"
+ },
+ "m2_crankGate": {
+  "w": 119,
+  "h": 112,
+  "kind": "big"
+ },
+ "m2_stoneCart": {
+  "w": 122,
+  "h": 110,
+  "kind": "round"
+ },
+ "m2_obsidianStele": {
+  "w": 67,
+  "h": 144,
+  "kind": "tall"
+ },
+ "m2_priestLodge": {
+  "w": 118,
+  "h": 150,
+  "kind": "big"
+ },
+ "m2_ledgerTable": {
+  "w": 91,
+  "h": 82,
+  "kind": "round"
+ },
+ "m2_herbRack": {
+  "w": 66,
+  "h": 78,
+  "kind": "round"
+ },
+ "m2_campCrates": {
+  "w": 88,
+  "h": 57,
+  "kind": "round"
+ },
+ "m2_treeLookout": {
+  "w": 205,
+  "h": 200,
+  "kind": "tall",
+  "sway": 0.01
+ },
+ "m2_collarPile": {
+  "w": 70,
+  "h": 57,
+  "kind": "round"
+ },
+ "m2_mossAltar": {
+  "w": 130,
+  "h": 84,
+  "kind": "round",
+  "fire": [
+   0,
+   -46,
+   0.4
+  ]
+ },
+ "m2_stoneBench": {
+  "w": 76,
+  "h": 255,
+  "kind": "round"
+ },
+ "m2_campSign": {
+  "w": 102,
+  "h": 90,
+  "kind": "tall"
+ },
+ "m2_waterBarrel": {
+  "w": 39,
+  "h": 62,
+  "kind": "round"
+ },
+ "m2_dyeVats": {
+  "w": 92,
+  "h": 94,
+  "kind": "round"
+ },
+ "m2_featherBundles": {
+  "w": 80,
+  "h": 86,
+  "kind": "round"
+ },
+ "m2_rootArch": {
+  "w": 131,
+  "h": 132,
+  "kind": "big"
+ },
+ "m2_cavePuddle": {
+  "w": 76,
+  "h": 51,
+  "kind": "round"
+ },
+ "m2_featherNest": {
+  "w": 122,
+  "h": 93,
+  "kind": "round"
+ },
+ "m2_bigPerch": {
+  "w": 240,
+  "h": 230,
+  "kind": "big"
+ },
+ "m2_giantFeather": {
+  "w": 31,
+  "h": 92,
+  "kind": "tall"
+ },
+ "m2_windSlit": {
+  "w": 85,
+  "h": 114,
+  "kind": "big"
+ },
+ "m2_plumedWatcher": {
+  "w": 95,
+  "h": 132,
+  "kind": "round"
+ },
+ "m2_cageFrame": {
+  "w": 144,
+  "h": 168,
+  "kind": "big"
+ },
+ "m2_rootBrace": {
+  "w": 220,
+  "h": 120,
+  "kind": "tall"
+ },
+ "m2_featherDrift": {
+  "w": 96,
+  "h": 89,
+  "kind": "round"
+ },
+ "m2_hTable": {
+  "w": 104,
+  "h": 92,
+  "kind": "round"
+ },
+ "m2_hLoom": {
+  "w": 119,
+  "h": 132,
+  "kind": "big"
+ },
+ "m2_hCradle": {
+  "w": 72,
+  "h": 76,
+  "kind": "round"
+ },
+ "m2_hBed": {
+  "w": 132,
+  "h": 123,
+  "kind": "round"
+ },
+ "m2_hHearth": {
+  "w": 112,
+  "h": 135,
+  "kind": "big"
+ },
+ "m2_hPantry": {
+  "w": 100,
+  "h": 134,
+  "kind": "big"
+ },
+ "m2_hChair": {
+  "w": 37,
+  "h": 62,
+  "kind": "round"
+ },
+ "m2_hWindow": {
+  "w": 74,
+  "h": 104,
+  "kind": "tall"
+ },
+ "m2_waterfall": {
+  "w": 168,
+  "h": 270,
+  "kind": "big"
+ },
+ "m2_tabletWall": {
+  "w": 214,
+  "h": 370,
+  "kind": "big"
+ },
+ "m2_caveStalag": {
+  "w": 122,
+  "h": 104,
+  "kind": "round"
+ },
+ "m2_wetRock": {
+  "w": 86,
+  "h": 82,
+  "kind": "round"
+ },
+ "m2_mossLedge": {
+  "w": 120,
+  "h": 63,
+  "kind": "round"
+ },
+ "m2_hangingRoots": {
+  "w": 96,
+  "h": 120,
+  "kind": "tall",
+  "sway": 0.025
+ },
+ "m2_glowFlowers": {
+  "w": 94,
+  "h": 54,
+  "kind": "round"
+ },
+ "m2_fallenSlab": {
+  "w": 100,
+  "h": 82,
+  "kind": "round"
+ },
+ "ithielStudy": {
+  "w": 86,
+  "h": 156,
+  "kind": "big"
+ },
+ "officersPavilion": {
+  "w": 158,
+  "h": 132,
+  "kind": "big"
+ },
+ "barracksHall": {
+  "w": 189,
+  "h": 150,
+  "kind": "big"
+ },
+ "prisonCart": {
+  "w": 150,
+  "h": 157,
+  "kind": "big"
+ },
+ "sentryBox": {
+  "w": 81,
+  "h": 96,
+  "kind": "round"
+ },
+ "ruinedHouse": {
+  "w": 150,
+  "h": 130,
+  "kind": "big"
+ },
+ "m4_gnawedRoot": {
+  "w": 222,
+  "h": 201,
+  "kind": "big"
+ },
+ "m4_glowFungus": {
+  "w": 86,
+  "h": 82,
+  "kind": "round",
+  "fire": [
+   0,
+   -54,
+   0.7
+  ],
+  "glow": "blue"
+ },
+ "m4_builderTablet": {
+  "w": 76,
+  "h": 102,
+  "kind": "tall",
+  "fire": [
+   0,
+   -60,
+   0.5
+  ],
+  "glow": "gold"
+ },
+ "m4_collarAltarRoot": {
+  "w": 122,
+  "h": 76,
+  "kind": "big"
+ },
+ "m4_denMouth": {
+  "w": 282,
+  "h": 272,
+  "kind": "big"
+ },
+ "m4_boneHeapRoot": {
+  "w": 122,
+  "h": 108,
+  "kind": "round"
+ },
+ "m4_rootSpikes": {
+  "w": 66,
+  "h": 102,
+  "kind": "round"
+ },
+ "m4_rootBridgeStub": {
+  "w": 112,
+  "h": 60,
+  "kind": "flat"
+ },
+ "m4_glassTank": {
+  "w": 131,
+  "h": 132,
+  "kind": "big"
+ },
+ "m4_mirrorStand": {
+  "w": 53,
+  "h": 102,
+  "kind": "tall"
+ },
+ "m4_gazeStatue": {
+  "w": 58,
+  "h": 92,
+  "kind": "round"
+ },
+ "m4_gazeStatueCracked": {
+  "w": 63,
+  "h": 92,
+  "kind": "round"
+ },
+ "m4_sealedGlassDoor": {
+  "w": 142,
+  "h": 183,
+  "kind": "big"
+ },
+ "m4_openGlassDoor": {
+  "w": 142,
+  "h": 136,
+  "kind": "big",
+  "fire": [
+   0,
+   -60,
+   1
+  ]
+ },
+ "m4_glassPillar": {
+  "w": 48,
+  "h": 132,
+  "kind": "tall"
+ },
+ "m4_cisternRuin": {
+  "w": 142,
+  "h": 118,
+  "kind": "big"
+ },
+ "m4_granaryVines": {
+  "w": 128,
+  "h": 148,
+  "kind": "big"
+ },
+ "m4_granaryOpen": {
+  "w": 128,
+  "h": 160,
+  "kind": "big"
+ },
+ "m4_ashDrift": {
+  "w": 134,
+  "h": 109,
+  "kind": "round"
+ },
+ "m4_ashBurnt": {
+  "w": 134,
+  "h": 99,
+  "kind": "flat",
+  "fire": [
+   0,
+   -10,
+   0.9
+  ]
+ },
+ "m4_brazierUnlit": {
+  "w": 73,
+  "h": 82,
+  "kind": "tall"
+ },
+ "m4_brazierLit": {
+  "w": 53,
+  "h": 82,
+  "kind": "tall",
+  "fire": [
+   0,
+   -70,
+   1
+  ]
+ },
+ "m4_ventGrate": {
+  "w": 82,
+  "h": 71,
+  "kind": "flat"
+ },
+ "m4_emberWall": {
+  "w": 142,
+  "h": 271,
+  "kind": "big"
+ },
+ "m4_oldNest": {
+  "w": 122,
+  "h": 98,
+  "kind": "round"
+ },
+ "m4_charredBranch": {
+  "w": 162,
+  "h": 99,
+  "kind": "flat"
+ },
+ "m4_gildedStatue": {
+  "w": 97,
+  "h": 122,
+  "kind": "round"
+ },
+ "m4_goldBrazier": {
+  "w": 48,
+  "h": 92,
+  "kind": "tall",
+  "fire": [
+   0,
+   -82,
+   0.9
+  ],
+  "glow": "gold"
+ },
+ "m4_sunBannerGold": {
+  "w": 64,
+  "h": 150,
+  "kind": "tall",
+  "sway": 0.02
+ },
+ "m4_collarAltar": {
+  "w": 132,
+  "h": 94,
+  "kind": "big"
+ },
+ "m4_goldFountain": {
+  "w": 126,
+  "h": 112,
+  "kind": "round"
+ },
+ "m4_colonnade": {
+  "w": 232,
+  "h": 238,
+  "kind": "big"
+ },
+ "m4_servantDoor": {
+  "w": 84,
+  "h": 104,
+  "kind": "big"
+ },
+ "m4_redCarpet": {
+  "w": 200,
+  "h": 115,
+  "kind": "flat"
+ },
+ "npcMender": {
+  "w": 23,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcRanna": {
+  "w": 30,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcPavo": {
+  "w": 21,
+  "h": 42,
+  "kind": "npc"
+ },
+ "npcCellMan": {
+  "w": 42,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcCellDyer": {
+  "w": 19,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcServant": {
+  "w": 33,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcCourtPriest": {
+  "w": 29,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcRebelCook": {
+  "w": 22,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcRebelMedic": {
+  "w": 33,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcSentry": {
+  "w": 22,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcFighter": {
+  "w": 24,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcCaptainDahl": {
+  "w": 28,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcLaundress": {
+  "w": 26,
+  "h": 48,
+  "kind": "npc"
+ },
+ "npcMiner": {
+  "w": 29,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcWorkerLeader": {
+  "w": 28,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcWidow": {
+  "w": 30,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcPressman": {
+  "w": 28,
+  "h": 50,
+  "kind": "npc"
+ },
+ "npcOrchardWorker": {
+  "w": 26,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcNinthBanner": {
+  "w": 36,
+  "h": 52,
+  "kind": "npc"
+ },
+ "m4_clawBench": {
+  "w": 82,
+  "h": 83,
+  "kind": "round"
+ },
+ "m4_glassBench": {
+  "w": 92,
+  "h": 75,
+  "kind": "round"
+ },
+ "m4_chainPile": {
+  "w": 82,
+  "h": 74,
+  "kind": "flat"
+ },
+ "m4_wardenDesk": {
+  "w": 112,
+  "h": 71,
+  "kind": "big",
+  "fire": [
+   0,
+   -34,
+   0.4
+  ]
+ },
+ "m4_glassPillarBlack": {
+  "w": 134,
+  "h": 132,
+  "kind": "tall"
+ },
+ "m4_cellBlock": {
+  "w": 142,
+  "h": 325,
+  "kind": "big"
+ },
+ "m4_glassStairs": {
+  "w": 122,
+  "h": 95,
+  "kind": "flat"
+ },
+ "m4_crowPerch": {
+  "w": 21,
+  "h": 62,
+  "kind": "tall"
+ },
+ "m4_ridgePyramid": {
+  "w": 440,
+  "h": 356,
+  "kind": "big"
+ },
+ "m4_villaRoof": {
+  "w": 330,
+  "h": 227,
+  "kind": "big"
+ },
+ "m4_giantRoot": {
+  "w": 259,
+  "h": 250,
+  "kind": "big"
+ },
+ "m4_rootWall": {
+  "w": 210,
+  "h": 227,
+  "kind": "big"
+ },
+ "m4_bigFern": {
+  "w": 85,
+  "h": 92,
+  "kind": "round",
+  "sway": 0.03
+ },
+ "m4_glowShroom": {
+  "w": 56,
+  "h": 72,
+  "kind": "round",
+  "fire": [
+   0,
+   -48,
+   0.6
+  ],
+  "glow": "blue"
+ },
+ "m4_mossBoulder": {
+  "w": 107,
+  "h": 72,
+  "kind": "round"
+ },
+ "m4_bridgePost": {
+  "w": 130,
+  "h": 82,
+  "kind": "tall"
+ },
+ "m4_rootClump": {
+  "w": 102,
+  "h": 104,
+  "kind": "flat"
+ },
+ "m4_chewedTrunk": {
+  "w": 162,
+  "h": 102,
+  "kind": "round"
+ },
+ "m4_ropeBridgeLong": {
+  "w": 440,
+  "h": 267,
+  "kind": "flat"
+ },
+ "m4_cliffSign": {
+  "w": 53,
+  "h": 92,
+  "kind": "tall"
+ },
+ "m4_beachPier": {
+  "w": 162,
+  "h": 119,
+  "kind": "flat"
+ },
+ "m4_gibbet": {
+  "w": 66,
+  "h": 122,
+  "kind": "tall"
+ },
+ "m4_jungleTree": {
+  "w": 183,
+  "h": 210,
+  "kind": "tall",
+  "sway": 0.015
+ },
+ "m4_beachPalm": {
+  "w": 94,
+  "h": 132,
+  "kind": "tall",
+  "sway": 0.03
+ },
+ "m4_wreckBoat": {
+  "w": 122,
+  "h": 92,
+  "kind": "flat"
+ },
+ "m4_thornBush": {
+  "w": 98,
+  "h": 72,
+  "kind": "round"
+ },
+ "m4_floodFlat": {
+  "w": 176,
+  "h": 255,
+  "kind": "flat"
+ },
+ "m4_mudFlat": {
+  "w": 176,
+  "h": 259,
+  "kind": "flat"
+ },
+ "m4_slimeFlat": {
+  "w": 120,
+  "h": 180,
+  "kind": "flat"
+ },
+ "m4_villaColumn": {
+  "w": 70,
+  "h": 132,
+  "kind": "tall"
+ },
+ "m4_mosaicFountain": {
+  "w": 97,
+  "h": 92,
+  "kind": "round"
+ },
+ "m4_bathPool": {
+  "w": 172,
+  "h": 132,
+  "kind": "round"
+ },
+ "m4_libraryShelf": {
+  "w": 102,
+  "h": 167,
+  "kind": "big"
+ },
+ "m4_ledgerDesk": {
+  "w": 112,
+  "h": 98,
+  "kind": "round",
+  "fire": [
+   0,
+   -34,
+   0.4
+  ]
+ },
+ "m4_songbirdPerches": {
+  "w": 41,
+  "h": 82,
+  "kind": "round"
+ },
+ "m4_strongroomDoor": {
+  "w": 102,
+  "h": 144,
+  "kind": "big"
+ },
+ "m4_kitchenStove": {
+  "w": 122,
+  "h": 147,
+  "kind": "big",
+  "fire": [
+   0,
+   -30,
+   0.8
+  ]
+ },
+ "m4_rootTent": {
+  "w": 146,
+  "h": 112,
+  "kind": "big"
+ },
+ "m4_ropeWalk": {
+  "w": 132,
+  "h": 101,
+  "kind": "flat"
+ },
+ "m4_longTable": {
+  "w": 224,
+  "h": 149,
+  "kind": "big"
+ },
+ "m4_rootArch": {
+  "w": 232,
+  "h": 134,
+  "kind": "gate"
+ },
+ "m4_hangLanterns": {
+  "w": 56,
+  "h": 122,
+  "kind": "tall",
+  "fire": [
+   0,
+   -104,
+   0.8
+  ],
+  "glow": "blue"
+ },
+ "m4_campCrates": {
+  "w": 92,
+  "h": 75,
+  "kind": "round"
+ },
+ "m4_rootStumpTable": {
+  "w": 82,
+  "h": 56,
+  "kind": "round"
+ },
+ "m4_medTent": {
+  "w": 130,
+  "h": 102,
+  "kind": "big"
+ },
+ "m4_glassTower": {
+  "w": 76,
+  "h": 222,
+  "kind": "big"
+ },
+ "m4_glassWall": {
+  "w": 172,
+  "h": 116,
+  "kind": "big"
+ },
+ "m4_cellDoorGlass": {
+  "w": 82,
+  "h": 150,
+  "kind": "big"
+ },
+ "m4_collarHooks": {
+  "w": 124,
+  "h": 156,
+  "kind": "big"
+ },
+ "m4_forgeAnvil": {
+  "w": 102,
+  "h": 82,
+  "kind": "round",
+  "fire": [
+   0,
+   -30,
+   0.9
+  ]
+ },
+ "m4_wardenGate": {
+  "w": 262,
+  "h": 316,
+  "kind": "gate"
+ },
+ "m4_prisonLamp": {
+  "w": 33,
+  "h": 102,
+  "kind": "tall",
+  "fire": [
+   0,
+   -84,
+   0.7
+  ],
+  "glow": "blue"
+ },
+ "m4_glassSpikes": {
+  "w": 71,
+  "h": 82,
+  "kind": "round"
+ },
+ "m4_mineHead": {
+  "w": 190,
+  "h": 171,
+  "kind": "gate"
+ },
+ "m4_saltBarge": {
+  "w": 224,
+  "h": 172,
+  "kind": "big"
+ },
+ "m4_saltBargeBurning": {
+  "w": 224,
+  "h": 228,
+  "kind": "big",
+  "fire": [
+   0,
+   -50,
+   1.4
+  ]
+ },
+ "m4_saltCrystalBig": {
+  "w": 129,
+  "h": 112,
+  "kind": "round"
+ },
+ "m4_chainGang": {
+  "w": 134,
+  "h": 103,
+  "kind": "round"
+ },
+ "m4_freedMiners": {
+  "w": 134,
+  "h": 112,
+  "kind": "round"
+ },
+ "m4_railBuffer": {
+  "w": 102,
+  "h": 66,
+  "kind": "round"
+ },
+ "m4_mineLamp": {
+  "w": 33,
+  "h": 82,
+  "kind": "tall",
+  "fire": [
+   0,
+   -66,
+   0.7
+  ]
+ },
+ "npcPrisonerA": {
+  "w": 17,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcPrisonerB": {
+  "w": 17,
+  "h": 46,
+  "kind": "npc"
+ },
+ "npcPrisonerC": {
+  "w": 17,
+  "h": 44,
+  "kind": "npc"
+ },
+ "npcPalaceGuard": {
+  "w": 31,
+  "h": 52,
+  "kind": "npc"
+ },
+ "npcChainedBeast": {
+  "w": 40,
+  "h": 40,
+  "kind": "npc"
+ },
+ "npcGardener": {
+  "w": 31,
+  "h": 46,
+  "kind": "npc"
+ },
+ "m4_chimney": {
+  "w": 73,
+  "h": 102,
+  "kind": "round"
+ },
+ "m4_roofHatch": {
+  "w": 90,
+  "h": 70,
+  "kind": "flat"
+ },
+ "m4_stoneShutter": {
+  "w": 184,
+  "h": 253,
+  "kind": "big"
+ },
+ "m4_roofStairs": {
+  "w": 112,
+  "h": 102,
+  "kind": "flat"
+ },
+ "m4_collarPillar": {
+  "w": 74,
+  "h": 122,
+  "kind": "tall"
+ },
+ "m4_obsidianSlab": {
+  "w": 112,
+  "h": 68,
+  "kind": "round"
+ },
+ "m4_skullRack": {
+  "w": 95,
+  "h": 112,
+  "kind": "round"
+ },
+ "m4_cellDoor": {
+  "w": 92,
+  "h": 109,
+  "kind": "big"
+ },
+ "m4_crackedAltar": {
+  "w": 137,
+  "h": 132,
+  "kind": "big",
+  "fire": [
+   0,
+   -70,
+   0.7
+  ]
+ },
+ "m4_bloodBrazier": {
+  "w": 58,
+  "h": 92,
+  "kind": "tall",
+  "fire": [
+   0,
+   -80,
+   0.9
+  ]
+ },
+ "m4_pyrStairs": {
+  "w": 202,
+  "h": 181,
+  "kind": "flat"
+ },
+ "m4_jaguarBlack": {
+  "w": 77,
+  "h": 102,
+  "kind": "round"
+ },
+ "m4_palaceGate": {
+  "w": 270,
+  "h": 274,
+  "kind": "gate"
+ },
+ "m4_gildedWall": {
+  "w": 164,
+  "h": 104,
+  "kind": "big"
+ },
+ "m4_goldUrn": {
+  "w": 50,
+  "h": 72,
+  "kind": "round"
+ },
+ "m4_eagleStatue": {
+  "w": 77,
+  "h": 142,
+  "kind": "tall"
+ },
+ "m4_gongStand": {
+  "w": 66,
+  "h": 92,
+  "kind": "tall"
+ },
+ "m4_palaceBench": {
+  "w": 72,
+  "h": 62,
+  "kind": "round"
+ },
+ "m4_goldCage": {
+  "w": 43,
+  "h": 92,
+  "kind": "tall"
+ },
+ "m4_waterBasin": {
+  "w": 152,
+  "h": 92,
+  "kind": "round"
+ },
+ "m4_ropeBridge": {
+  "w": 420,
+  "h": 282,
+  "kind": "flat"
+ },
+ "m4_roofFinial": {
+  "w": 63,
+  "h": 92,
+  "kind": "tall"
+ },
+ "m4_parapet": {
+  "w": 152,
+  "h": 93,
+  "kind": "big"
+ },
+ "m4_roofBanner": {
+  "w": 78,
+  "h": 112,
+  "kind": "tall",
+  "sway": 0.03
  }
 }

@@ -1,5 +1,5 @@
 // R2 Amber Wells Basin: oasis chain, red rock, a salt flat to the north; legion armies roam (patrols, a chase, a stand-off). Table "basin" ~40 s.
-// Exits: dunes (west), amberWells (south), scorpionQuarry (south-east), cinderglassFlats (north-east), saltgate (north), hollowSkyStone (south-west).
+// Exits: dunes (west), amberWells (south), scorpionQuarry (south-east), cinderglassFlats (north-east), saltgate (north), hollowSkyStone (south-west); CH1-EXPAND: redMesaSteps (south), saltpanWorks (north-west).
 (function () {
   const { R, E, P, L } = World.shapes;
   const oases = [[700, 800, 130, 80], [1350, 900, 160, 95], [1850, 650, 110, 70]], reeds = [];
@@ -15,7 +15,7 @@
       ["rock", P([[300, 300], [520, 240], [680, 330], [620, 470], [380, 480]])], ["rock", P([[1500, 1150], [1700, 1100], [1800, 1220], [1700, 1360], [1520, 1320]])], ["rock", P([[800, 1150], [980, 1100], [1060, 1200], [960, 1300], [820, 1280]])],
       ["rock", P([[1350, 460], [1520, 420], [1600, 520], [1500, 620], [1360, 580]])], ["rock", P([[2050, 900], [2220, 860], [2250, 1000], [2120, 1060], [2020, 1000]])], ["rock", P([[220, 800], [320, 780], [360, 880], [270, 940]])],
     ],
-    entries: { start: { x: 160, y: 760, face: "right" }, from_dunes: { x: 160, y: 770, face: "right" }, from_amberWells: { x: 1150, y: 1340, face: "up" }, from_quarry: { x: 2150, y: 1220, face: "left" }, from_flats: { x: 2150, y: 340, face: "left" }, from_saltgate: { x: 1480, y: 140, face: "down" }, from_hollow: { x: 190, y: 1240, face: "up" } },
+    entries: { start: { x: 160, y: 760, face: "right" }, from_dunes: { x: 160, y: 770, face: "right" }, from_amberWells: { x: 1150, y: 1340, face: "up" }, from_quarry: { x: 2150, y: 1220, face: "left" }, from_flats: { x: 2150, y: 340, face: "left" }, from_saltgate: { x: 1480, y: 140, face: "down" }, from_hollow: { x: 190, y: 1240, face: "up" }, from_redMesaSteps: { x: 585, y: 1350, face: "up" }, from_saltpanWorks: { x: 850, y: 150, face: "down" } },
     exits: [
       { rect: [40, 710, 60, 120], to: "whisperglassDunes", entry: "from_amberBasin", push: [1, 0] },
       { rect: [1100, 1420, 100, 50], to: "amberWells", entry: "from_basin", push: [0, -1] },
@@ -23,6 +23,8 @@
       { rect: [2210, 250, 60, 110], to: "cinderglassFlats", entry: "from_basin", push: [-1, 0] },
       { rect: [1450, 40, 110, 50], to: "saltgate", entry: "from_basin", push: [0, 1] },
       { rect: [60, 1250, 100, 50], to: "hollowSkyStone", entry: "from_basin", push: [0, -1] },
+      { rect: [520, 1415, 130, 50], to: "redMesaSteps", entry: "from_amberBasin", push: [0, -1] },
+      { rect: [790, 40, 120, 50], to: "saltpanWorks", entry: "from_amberBasin", push: [0, 1] },
     ],
     props: reeds,
     scatter: [

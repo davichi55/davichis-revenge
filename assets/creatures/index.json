@@ -238,5 +238,1709 @@
  "zephyrra": {
   "w": 94,
   "h": 95
+ },
+ "mudbackBasilisk": {
+  "w": 149,
+  "h": 95
+ },
+ "riverSiren": {
+  "w": 59,
+  "h": 118
+ },
+ "reedmoth": {
+  "w": 62,
+  "h": 112
+ },
+ "bogTrollPup": {
+  "w": 102,
+  "h": 95
+ },
+ "heronWraith": {
+  "w": 83,
+  "h": 129
+ },
+ "pearlBackedSnapper": {
+  "w": 144,
+  "h": 90
+ },
+ "tideHag": {
+  "w": 78,
+  "h": 112
+ },
+ "glowCrab": {
+  "w": 135,
+  "h": 84
+ },
+ "mangroveImp": {
+  "w": 51,
+  "h": 78
+ },
+ "whisperfish": {
+  "w": 126,
+  "h": 95
+ },
+ "gildedTapirSprite": {
+  "w": 122,
+  "h": 118
+ },
+ "vineChimera": {
+  "w": 127,
+  "h": 112
+ },
+ "jungleHarpy": {
+  "w": 78,
+  "h": 112
+ },
+ "sporeSatyr": {
+  "w": 82,
+  "h": 112
+ },
+ "emberToucan": {
+  "w": 87,
+  "h": 95
+ },
+ "stranglerNaga": {
+  "w": 114,
+  "h": 118
+ },
+ "kapokTroll": {
+  "w": 122,
+  "h": 132
+ },
+ "legionShieldbearer": {
+  "w": 71,
+  "h": 112
+ },
+ "legionSpearman": {
+  "w": 112,
+  "h": 112
+ },
+ "legionArcher": {
+  "w": 84,
+  "h": 112
+ },
+ "legionOptio": {
+  "w": 70,
+  "h": 118
+ },
+ "jaguarCohortElite": {
+  "w": 96,
+  "h": 112
+ },
+ "featherWyvern": {
+  "w": 118,
+  "h": 112
+ },
+ "lanternBatKnight": {
+  "w": 91,
+  "h": 101
+ },
+ "ropeSpiderMaiden": {
+  "w": 170,
+  "h": 129
+ },
+ "orchidDryad": {
+  "w": 61,
+  "h": 118
+ },
+ "cloudRam": {
+  "w": 101,
+  "h": 112
+ },
+ "skyEel": {
+  "w": 82,
+  "h": 101
+ },
+ "legionMarksman": {
+  "w": 108,
+  "h": 112
+ },
+ "sporerootCrawler": {
+  "w": 110,
+  "h": 90
+ },
+ "gloomMushroomShaman": {
+  "w": 87,
+  "h": 112
+ },
+ "caveGargoyle": {
+  "w": 87,
+  "h": 112
+ },
+ "fungusTroll": {
+  "w": 113,
+  "h": 132
+ },
+ "drippingMimic": {
+  "w": 78,
+  "h": 90
+ },
+ "steamSprite": {
+  "w": 51,
+  "h": 78
+ },
+ "hotspringToad": {
+  "w": 71,
+  "h": 84
+ },
+ "pyramidAcolyte": {
+  "w": 53,
+  "h": 112
+ },
+ "plumedWatcher": {
+  "w": 67,
+  "h": 132
+ },
+ "kessaVorn": {
+  "w": 53,
+  "h": 112
+ },
+ "dorrinHale": {
+  "w": 93,
+  "h": 123
+ },
+ "mayleTarn": {
+  "w": 45,
+  "h": 106
+ },
+ "quillshade": {
+  "w": 86,
+  "h": 101
+ },
+ "fortCenturion": {
+  "w": 152,
+  "h": 210
+ },
+ "windhollowGuardian": {
+  "w": 241,
+  "h": 210
+ },
+ "plumedCoil": {
+  "w": 192,
+  "h": 220
+ },
+ "shearwing": {
+  "w": 315,
+  "h": 210
+ },
+ "motherGlowmoth": {
+  "w": 217,
+  "h": 210
+ },
+ "palaceGuard": {
+  "w": 64,
+  "h": 129
+ },
+ "eagleCohortArcher": {
+  "w": 89,
+  "h": 112
+ },
+ "courtPriest": {
+  "w": 60,
+  "h": 118
+ },
+ "templeHound": {
+  "w": 77,
+  "h": 112
+ },
+ "sewerNaga": {
+  "w": 72,
+  "h": 129
+ },
+ "ratChimera": {
+  "w": 80,
+  "h": 106
+ },
+ "drownedSlaveWraith": {
+  "w": 51,
+  "h": 118
+ },
+ "centurion": {
+  "w": 97,
+  "h": 132
+ },
+ "supplyConvoyGuard": {
+  "w": 81,
+  "h": 118
+ },
+ "saltGargoyle": {
+  "w": 140,
+  "h": 123
+ },
+ "orchardSatyr": {
+  "w": 80,
+  "h": 118
+ },
+ "overseersHound": {
+  "w": 105,
+  "h": 101
+ },
+ "sunmawCultist": {
+  "w": 68,
+  "h": 112
+ },
+ "veiledCisternGuardian": {
+  "w": 142,
+  "h": 220
+ },
+ "ghostOfTheNinthLegion": {
+  "w": 74,
+  "h": 170
+ },
+ "spearTwinA": {
+  "w": 79,
+  "h": 132
+ },
+ "spearTwinB": {
+  "w": 77,
+  "h": 132
+ },
+ "prisonGuard": {
+  "w": 105,
+  "h": 123
+ },
+ "warderSpearman": {
+  "w": 60,
+  "h": 118
+ },
+ "collarSmith": {
+  "w": 103,
+  "h": 123
+ },
+ "prisonHound": {
+  "w": 155,
+  "h": 106
+ },
+ "rootWorm": {
+  "w": 76,
+  "h": 101
+ },
+ "rootboundTroll": {
+  "w": 93,
+  "h": 132
+ },
+ "gnawling": {
+  "w": 92,
+  "h": 95
+ },
+ "blackMirrorWraith": {
+  "w": 63,
+  "h": 118
+ },
+ "thornbackDragonet": {
+  "w": 88,
+  "h": 106
+ },
+ "rootGnawer": {
+  "w": 229,
+  "h": 260
+ },
+ "hollowNestGuardian": {
+  "w": 93,
+  "h": 220
+ },
+ "emberwick": {
+  "w": 76,
+  "h": 90
+ },
+ "mothmara": {
+  "w": 91,
+  "h": 123
+ },
+ "hearthkin": {
+  "w": 67,
+  "h": 84
+ },
+ "standardBearer": {
+  "w": 57,
+  "h": 132
+ },
+ "siegeBallista": {
+  "w": 159,
+  "h": 132
+ },
+ "stormRoc": {
+  "w": 85,
+  "h": 132
+ },
+ "thunderRamCalf": {
+  "w": 89,
+  "h": 106
+ },
+ "galeHarpy": {
+  "w": 79,
+  "h": 118
+ },
+ "lightningWolf": {
+  "w": 171,
+  "h": 98
+ },
+ "spiritPriest": {
+  "w": 50,
+  "h": 123
+ },
+ "prismGuardian": {
+  "w": 155,
+  "h": 220
+ },
+ "mentorIthiel": {
+  "w": 44,
+  "h": 150
+ },
+ "mentorConstructA": {
+  "w": 123,
+  "h": 150
+ },
+ "mentorConstructB": {
+  "w": 130,
+  "h": 130
+ },
+ "mentorConstructC": {
+  "w": 176,
+  "h": 125
+ },
+ "stormRam": {
+  "w": 260,
+  "h": 260
+ },
+ "veilStag": {
+  "w": 89,
+  "h": 190
+ },
+ "naumachiaAdmiral": {
+  "w": 101,
+  "h": 170
+ },
+ "sunPriestGolem": {
+  "w": 67,
+  "h": 132
+ },
+ "obsidianChimera": {
+  "w": 127,
+  "h": 132
+ },
+ "bloodAltarWraith": {
+  "w": 59,
+  "h": 123
+ },
+ "eclipseMoth": {
+  "w": 77,
+  "h": 106
+ },
+ "shadowMinotaur": {
+  "w": 116,
+  "h": 132
+ },
+ "pyramidNaga": {
+  "w": 77,
+  "h": 132
+ },
+ "emperorDavichi": {
+  "w": 73,
+  "h": 190
+ },
+ "sunEater": {
+  "w": 181,
+  "h": 280
+ },
+ "lastWarden": {
+  "w": 119,
+  "h": 220
+ },
+ "mawmotherOfTheDeep": {
+  "w": 369,
+  "h": 280
+ },
+ "lanternDeepGuardian": {
+  "w": 175,
+  "h": 240
+ },
+ "kirinth": {
+  "w": 79,
+  "h": 123
+ },
+ "bakuroth": {
+  "w": 179,
+  "h": 95
+ },
+ "grandChampion": {
+  "w": 165,
+  "h": 190
+ },
+ "kitsuneva__foxfireMatron": {
+  "w": 138,
+  "h": 145
+ },
+ "kitsuneva__inariHeartfire": {
+  "w": 164,
+  "h": 165
+ },
+ "kitsuneva__nineTailedSolstice": {
+  "w": 163,
+  "h": 170
+ },
+ "ninthLegionShade": {
+  "w": 85,
+  "h": 112
+ },
+ "hollowNestSpawn": {
+  "w": 154,
+  "h": 101
+ },
+ "emperorGuard": {
+  "w": 66,
+  "h": 129
+ },
+ "naumachiaSailor": {
+  "w": 102,
+  "h": 118
+ },
+ "sunTendril": {
+  "w": 70,
+  "h": 132
+ },
+ "deepLantern": {
+  "w": 77,
+  "h": 101
+ },
+ "dreadShadeAdd": {
+  "w": 63,
+  "h": 118
+ },
+ "grandChampionPet": {
+  "w": 165,
+  "h": 112
+ },
+ "legionTribune": {
+  "w": 77,
+  "h": 118
+ },
+ "houndOfTheCohort": {
+  "w": 104,
+  "h": 112
+ },
+ "academyWardenConstruct": {
+  "w": 110,
+  "h": 132
+ },
+ "frostWisp": {
+  "w": 59,
+  "h": 73
+ },
+ "rimeBasilisk": {
+  "w": 94,
+  "h": 106
+ },
+ "archiveWraith": {
+  "w": 80,
+  "h": 118
+ },
+ "crystalGargoyle": {
+  "w": 124,
+  "h": 118
+ },
+ "vaultHound": {
+  "w": 100,
+  "h": 95
+ },
+ "oasisSphinxGuard": {
+  "w": 158,
+  "h": 132
+ },
+ "mesaRoc": {
+  "w": 100,
+  "h": 132
+ },
+ "brassAutomaton": {
+  "w": 92,
+  "h": 129
+ },
+ "sandWyrmling": {
+  "w": 82,
+  "h": 90
+ },
+ "seaGullHarpy": {
+  "w": 52,
+  "h": 106
+ },
+ "krakenWhelp": {
+  "w": 118,
+  "h": 101
+ },
+ "gullLord": {
+  "w": 75,
+  "h": 112
+ },
+ "sirenEel": {
+  "w": 60,
+  "h": 112
+ },
+ "saltHydraChick": {
+  "w": 84,
+  "h": 90
+ },
+ "mermaidShaman": {
+  "w": 73,
+  "h": 112
+ },
+ "patrolGalley": {
+  "w": 146,
+  "h": 112
+ },
+ "scyllaHound": {
+  "w": 75,
+  "h": 112
+ },
+ "whirlpoolImp": {
+  "w": 49,
+  "h": 78
+ },
+ "caveCrabKnight": {
+  "w": 140,
+  "h": 112
+ },
+ "drownedSailorWraith": {
+  "w": 46,
+  "h": 112
+ },
+ "ashImp": {
+  "w": 53,
+  "h": 73
+ },
+ "lavaBoarling": {
+  "w": 134,
+  "h": 101
+ },
+ "cinderGargoyle": {
+  "w": 161,
+  "h": 123
+ },
+ "smokePhoenixChick": {
+  "w": 75,
+  "h": 78
+ },
+ "basaltTroll": {
+  "w": 127,
+  "h": 132
+ },
+ "salamanderKnight": {
+  "w": 72,
+  "h": 123
+ },
+ "obsidianJackal": {
+  "w": 152,
+  "h": 106
+ },
+ "gloomcapWalker": {
+  "w": 65,
+  "h": 123
+ },
+ "boneCerberusPup": {
+  "w": 112,
+  "h": 101
+ },
+ "ferryGhoul": {
+  "w": 119,
+  "h": 123
+ },
+ "shadeLamia": {
+  "w": 83,
+  "h": 129
+ },
+ "paleMinotaurShade": {
+  "w": 117,
+  "h": 132
+ },
+ "tombScarab": {
+  "w": 137,
+  "h": 95
+ },
+ "arenaLionWolf": {
+  "w": 126,
+  "h": 123
+ },
+ "arenaBoarBull": {
+  "w": 160,
+  "h": 132
+ },
+ "mirequeen": {
+  "w": 123,
+  "h": 129
+ },
+ "brassbone": {
+  "w": 82,
+  "h": 132
+ },
+ "selkira": {
+  "w": 145,
+  "h": 112
+ },
+ "bronzeChampion": {
+  "w": 145,
+  "h": 210
+ },
+ "bronzeBeast": {
+  "w": 193,
+  "h": 210
+ },
+ "drownedShrineGuardian": {
+  "w": 183,
+  "h": 210
+ },
+ "stoneGiant": {
+  "w": 127,
+  "h": 210
+ },
+ "sunbirdGuardian": {
+  "w": 152,
+  "h": 210
+ },
+ "motherOfTheMaelstrom": {
+  "w": 130,
+  "h": 230
+ },
+ "emberWolf": {
+  "w": 260,
+  "h": 220
+ },
+ "gateHound": {
+  "w": 276,
+  "h": 220
+ },
+ "oldHollowbell": {
+  "w": 172,
+  "h": 210
+ },
+ "blackPearlHermit": {
+  "w": 196,
+  "h": 210
+ },
+ "lionWolf": {
+  "w": 126,
+  "h": 123
+ },
+ "boarBull": {
+  "w": 160,
+  "h": 132
+ },
+ "fenLeech": {
+  "w": 141,
+  "h": 95
+ },
+ "bogLantern": {
+  "w": 39,
+  "h": 73
+ },
+ "giantstoneSentry": {
+  "w": 114,
+  "h": 132
+ },
+ "chiselImp": {
+  "w": 70,
+  "h": 78
+ },
+ "emberhawk": {
+  "w": 82,
+  "h": 101
+ },
+ "sunbirdChick": {
+  "w": 57,
+  "h": 67
+ },
+ "gazeStatue": {
+  "w": 81,
+  "h": 132
+ },
+ "mirrorShade": {
+  "w": 33,
+  "h": 112
+ },
+ "glassSerpent": {
+  "w": 83,
+  "h": 112
+ },
+ "ashwingOwl": {
+  "w": 150,
+  "h": 123
+ },
+ "cinderMothSwarm": {
+  "w": 103,
+  "h": 101
+ },
+ "vaulthorn": {
+  "w": 119,
+  "h": 132
+ },
+ "legionSlinger": {
+  "w": 86,
+  "h": 112
+ },
+ "candleWraith": {
+  "w": 49,
+  "h": 129
+ },
+ "boneChoir": {
+  "w": 73,
+  "h": 123
+ },
+ "prismSprite": {
+  "w": 50,
+  "h": 78
+ },
+ "refractionGolem": {
+  "w": 117,
+  "h": 132
+ },
+ "mirrorMoth": {
+  "w": 70,
+  "h": 101
+ },
+ "starMetalGolem": {
+  "w": 101,
+  "h": 132
+ },
+ "cometFox": {
+  "w": 95,
+  "h": 95
+ },
+ "craterBloom": {
+  "w": 54,
+  "h": 101
+ },
+ "meteorBoar": {
+  "w": 144,
+  "h": 112
+ },
+ "voidMoth": {
+  "w": 69,
+  "h": 112
+ },
+ "hollowLens": {
+  "w": 37,
+  "h": 101
+ },
+ "staredrinker": {
+  "w": 52,
+  "h": 132
+ },
+ "emberwoodSentinel": {
+  "w": 54,
+  "h": 132
+ },
+ "drownedSentry": {
+  "w": 136,
+  "h": 132
+ },
+ "lanternEel": {
+  "w": 63,
+  "h": 112
+ },
+ "builderWraith": {
+  "w": 55,
+  "h": 123
+ },
+ "coralColossus": {
+  "w": 93,
+  "h": 132
+ },
+ "abyssalCrab": {
+  "w": 158,
+  "h": 132
+ },
+ "deepGlowfish": {
+  "w": 106,
+  "h": 101
+ },
+ "lanternJelly": {
+  "w": 35,
+  "h": 101
+ },
+ "trenchHorror": {
+  "w": 125,
+  "h": 132
+ },
+ "lightlessMaw": {
+  "w": 79,
+  "h": 132
+ },
+ "legionCenturion": {
+  "w": 97,
+  "h": 132
+ },
+ "glowMoth": {
+  "w": 56,
+  "h": 56
+ },
+ "maelstromHead": {
+  "w": 129,
+  "h": 202
+ },
+ "gateHoundHead": {
+  "w": 281,
+  "h": 206
+ },
+ "marketOverseer": {
+  "w": 68,
+  "h": 112
+ },
+ "netFighter": {
+  "w": 119,
+  "h": 112
+ },
+ "cellGhost": {
+  "w": 67,
+  "h": 112
+ },
+ "horncinder__ironhorn": {
+  "w": 98,
+  "h": 146
+ },
+ "horncinder__blazehorn": {
+  "w": 169,
+  "h": 143
+ },
+ "horncinder__bronzeAsterion": {
+  "w": 109,
+  "h": 164
+ },
+ "horncinder__chimeraAshbringer": {
+  "w": 136,
+  "h": 161
+ },
+ "horncinder__asterionEternal": {
+  "w": 109,
+  "h": 170
+ },
+ "horncinder__sunhorn": {
+  "w": 109,
+  "h": 146
+ },
+ "skarnwolf__rimefang": {
+  "w": 167,
+  "h": 117
+ },
+ "skarnwolf__chainbreaker": {
+  "w": 180,
+  "h": 120
+ },
+ "skarnwolf__fenrirFrostjaw": {
+  "w": 176,
+  "h": 134
+ },
+ "skarnwolf__gleipnirsEnd": {
+  "w": 191,
+  "h": 127
+ },
+ "skarnwolf__fenrirUnchained": {
+  "w": 190,
+  "h": 115
+ },
+ "skarnwolf__frostbreath": {
+  "w": 181,
+  "h": 117
+ },
+ "crushjaw__feastmaw": {
+  "w": 172,
+  "h": 106
+ },
+ "crushjaw__scalehide": {
+  "w": 178,
+  "h": 104
+ },
+ "crushjaw__heartEater": {
+  "w": 162,
+  "h": 118
+ },
+ "crushjaw__balanceBearer": {
+  "w": 129,
+  "h": 117
+ },
+ "crushjaw__ammitTheDevourer": {
+  "w": 185,
+  "h": 134
+ },
+ "crushjaw__rotjaw": {
+  "w": 151,
+  "h": 105
+ },
+ "bramblehoof__oakhide": {
+  "w": 178,
+  "h": 150
+ },
+ "bramblehoof__mossmantle": {
+  "w": 153,
+  "h": 148
+ },
+ "bramblehoof__elderwoodWarden": {
+  "w": 190,
+  "h": 160
+ },
+ "bramblehoof__sporelordLeshy": {
+  "w": 167,
+  "h": 168
+ },
+ "bramblehoof__wildwoodSovereign": {
+  "w": 182,
+  "h": 170
+ },
+ "bramblehoof__greenwarden": {
+  "w": 159,
+  "h": 145
+ },
+ "quillshade__scrollrunner": {
+  "w": 79,
+  "h": 109
+ },
+ "quillshade__ravenCourier": {
+  "w": 75,
+  "h": 113
+ },
+ "quillshade__worldTreeMessenger": {
+  "w": 126,
+  "h": 125
+ },
+ "quillshade__muninnsHeir": {
+  "w": 103,
+  "h": 126
+ },
+ "quillshade__ratatoskrHighHerald": {
+  "w": 111,
+  "h": 141
+ },
+ "quillshade__whisperscribe": {
+  "w": 94,
+  "h": 109
+ },
+ "skyrend__galeGriffin": {
+  "w": 147,
+  "h": 138
+ },
+ "skyrend__wildcardWing": {
+  "w": 153,
+  "h": 135
+ },
+ "skyrend__stormJester": {
+  "w": 172,
+  "h": 153
+ },
+ "skyrend__tempestGryphon": {
+  "w": 188,
+  "h": 156
+ },
+ "skyrend__skylordOfFortune": {
+  "w": 190,
+  "h": 95
+ },
+ "skyrend__thunderheart": {
+  "w": 190,
+  "h": 133
+ },
+ "vespera__velvetSphinx": {
+  "w": 145,
+  "h": 123
+ },
+ "vespera__razorwing": {
+  "w": 119,
+  "h": 125
+ },
+ "vespera__riddlemistress": {
+  "w": 167,
+  "h": 140
+ },
+ "vespera__shadowtalonHarridan": {
+  "w": 183,
+  "h": 139
+ },
+ "vespera__nemesisSphinx": {
+  "w": 174,
+  "h": 159
+ },
+ "vespera__venomwing": {
+  "w": 172,
+  "h": 123
+ },
+ "zephyrra__featherward": {
+  "w": 112,
+  "h": 105
+ },
+ "zephyrra__galeHare": {
+  "w": 96,
+  "h": 103
+ },
+ "zephyrra__valkyrieHare": {
+  "w": 134,
+  "h": 118
+ },
+ "zephyrra__cloudMother": {
+  "w": 158,
+  "h": 119
+ },
+ "zephyrra__windsingerOfAsgard": {
+  "w": 144,
+  "h": 133
+ },
+ "zephyrra__hearthfeather": {
+  "w": 100,
+  "h": 105
+ },
+ "mossmaw__bogbristle": {
+  "w": 152,
+  "h": 123
+ },
+ "mossmaw__rotbloom": {
+  "w": 169,
+  "h": 121
+ },
+ "mossmaw__ancientBogGuardian": {
+  "w": 174,
+  "h": 143
+ },
+ "mossmaw__witherbloomHydra": {
+  "w": 177,
+  "h": 140
+ },
+ "mossmaw__erymanthianVerdant": {
+  "w": 190,
+  "h": 155
+ },
+ "mossmaw__mossguard": {
+  "w": 154,
+  "h": 121
+ },
+ "rotfang__gnawroot": {
+  "w": 190,
+  "h": 104
+ },
+ "rotfang__blightdrake": {
+  "w": 190,
+  "h": 100
+ },
+ "rotfang__worldRootGnawer": {
+  "w": 168,
+  "h": 123
+ },
+ "rotfang__plaguewyrm": {
+  "w": 191,
+  "h": 110
+ },
+ "rotfang__nidhoggUnbound": {
+  "w": 190,
+  "h": 117
+ },
+ "rotfang__chargeWyrm": {
+  "w": 177,
+  "h": 108
+ },
+ "smolderhead__emberquill": {
+  "w": 159,
+  "h": 135
+ },
+ "smolderhead__ashenSalamander": {
+  "w": 148,
+  "h": 135
+ },
+ "smolderhead__pyreHydra": {
+  "w": 190,
+  "h": 140
+ },
+ "smolderhead__cinderGargantua": {
+  "w": 167,
+  "h": 160
+ },
+ "smolderhead__vesuvianHydra": {
+  "w": 169,
+  "h": 170
+ },
+ "smolderhead__steamhead": {
+  "w": 165,
+  "h": 135
+ },
+ "mirequeen__dirgeLizard": {
+  "w": 158,
+  "h": 142
+ },
+ "mirequeen__bansheeMarshal": {
+  "w": 136,
+  "h": 142
+ },
+ "mirequeen__widowOfTheFen": {
+  "w": 183,
+  "h": 165
+ },
+ "mirequeen__keenOfThousand": {
+  "w": 163,
+  "h": 164
+ },
+ "mirequeen__queenOfAllWidows": {
+  "w": 154,
+  "h": 170
+ },
+ "mirequeen__gazewitch": {
+  "w": 177,
+  "h": 142
+ },
+ "shellmund__runeShell": {
+  "w": 104,
+  "h": 148
+ },
+ "shellmund__trollwarden": {
+  "w": 102,
+  "h": 152
+ },
+ "shellmund__monolithTortoise": {
+  "w": 98,
+  "h": 170
+ },
+ "shellmund__mountainMother": {
+  "w": 109,
+  "h": 170
+ },
+ "shellmund__genbuOfTheDeep": {
+  "w": 134,
+  "h": 170
+ },
+ "shellmund__gorgonShell": {
+  "w": 97,
+  "h": 148
+ },
+ "bulwyrm__templeGolem": {
+  "w": 127,
+  "h": 148
+ },
+ "bulwyrm__fountainGuard": {
+  "w": 136,
+  "h": 145
+ },
+ "bulwyrm__harbourColossus": {
+  "w": 171,
+  "h": 170
+ },
+ "bulwyrm__cascadeTitan": {
+  "w": 163,
+  "h": 170
+ },
+ "bulwyrm__talosOfTheTides": {
+  "w": 159,
+  "h": 170
+ },
+ "bulwyrm__drakegolem": {
+  "w": 136,
+  "h": 148
+ },
+ "atlacrab__pillarBearer": {
+  "w": 138,
+  "h": 148
+ },
+ "atlacrab__tideAnchor": {
+  "w": 151,
+  "h": 148
+ },
+ "atlacrab__atlasBreaker": {
+  "w": 153,
+  "h": 170
+ },
+ "atlacrab__lighthouseCrab": {
+  "w": 171,
+  "h": 170
+ },
+ "atlacrab__krakenAtlas": {
+  "w": 189,
+  "h": 150
+ },
+ "atlacrab__tidebulwark": {
+  "w": 140,
+  "h": 148
+ },
+ "brassbone__forgeGuard": {
+  "w": 121,
+  "h": 148
+ },
+ "brassbone__ivoryBulwark": {
+  "w": 92,
+  "h": 150
+ },
+ "brassbone__talosForgeLord": {
+  "w": 118,
+  "h": 170
+ },
+ "brassbone__gashadokuroTitan": {
+  "w": 114,
+  "h": 170
+ },
+ "brassbone__talosUnforged": {
+  "w": 93,
+  "h": 170
+ },
+ "brassbone__bullbrass": {
+  "w": 94,
+  "h": 150
+ },
+ "kitsuneva__windTailVixen": {
+  "w": 139,
+  "h": 143
+ },
+ "kitsuneva__dawnTail": {
+  "w": 170,
+  "h": 163
+ },
+ "kitsuneva__emberCharmer": {
+  "w": 170,
+  "h": 140
+ },
+ "glimmerkoi__scholarKoi": {
+  "w": 96,
+  "h": 109
+ },
+ "glimmerkoi__rapidsKoi": {
+  "w": 77,
+  "h": 109
+ },
+ "glimmerkoi__dragonGateScholar": {
+  "w": 119,
+  "h": 127
+ },
+ "glimmerkoi__torrentSerpent": {
+  "w": 170,
+  "h": 79
+ },
+ "glimmerkoi__ryujinAscendant": {
+  "w": 109,
+  "h": 147
+ },
+ "glimmerkoi__tideKoi": {
+  "w": 94,
+  "h": 111
+ },
+ "nightveil__hushedOwl": {
+  "w": 108,
+  "h": 123
+ },
+ "nightveil__venomSeer": {
+  "w": 110,
+  "h": 125
+ },
+ "nightveil__midnightAugur": {
+  "w": 123,
+  "h": 140
+ },
+ "nightveil__medusaOwl": {
+  "w": 107,
+  "h": 142
+ },
+ "nightveil__athenaNoctua": {
+  "w": 170,
+  "h": 113
+ },
+ "nightveil__nightwing": {
+  "w": 152,
+  "h": 121
+ },
+ "emberlamb__fleeceKeeper": {
+  "w": 119,
+  "h": 119
+ },
+ "emberlamb__shepherdsFlame": {
+  "w": 137,
+  "h": 117
+ },
+ "emberlamb__ramOfColchis": {
+  "w": 124,
+  "h": 136
+ },
+ "emberlamb__hearthShepherd": {
+  "w": 116,
+  "h": 133
+ },
+ "emberlamb__aureateFlock": {
+  "w": 134,
+  "h": 155
+ },
+ "emberlamb__bastionLamb": {
+  "w": 121,
+  "h": 119
+ },
+ "volthorn__sparkRunner": {
+  "w": 166,
+  "h": 123
+ },
+ "volthorn__stormcaller": {
+  "w": 137,
+  "h": 125
+ },
+ "volthorn__thunderstrideStallion": {
+  "w": 170,
+  "h": 135
+ },
+ "volthorn__tempestSleipnir": {
+  "w": 165,
+  "h": 146
+ },
+ "volthorn__allfatherSteed": {
+  "w": 169,
+  "h": 85
+ },
+ "volthorn__chargehoof": {
+  "w": 170,
+  "h": 122
+ },
+ "brinegrave__kennelWarden": {
+  "w": 155,
+  "h": 148
+ },
+ "brinegrave__houndsOfTheDeep": {
+  "w": 162,
+  "h": 150
+ },
+ "brinegrave__scyllaWarden": {
+  "w": 170,
+  "h": 122
+ },
+ "brinegrave__packOfTheAbyss": {
+  "w": 169,
+  "h": 115
+ },
+ "brinegrave__cerberusOfTheTide": {
+  "w": 170,
+  "h": 145
+ },
+ "brinegrave__bulwarkHound": {
+  "w": 170,
+  "h": 146
+ },
+ "stillgaze__riddlecrow": {
+  "w": 85,
+  "h": 111
+ },
+ "stillgaze__swiftCockatrice": {
+  "w": 94,
+  "h": 109
+ },
+ "stillgaze__sphinxOfTheDust": {
+  "w": 115,
+  "h": 127
+ },
+ "stillgaze__basiliskCrowned": {
+  "w": 87,
+  "h": 128
+ },
+ "stillgaze__chimeraOfRiddles": {
+  "w": 157,
+  "h": 147
+ },
+ "stillgaze__stoneShield": {
+  "w": 88,
+  "h": 111
+ },
+ "duskcoil__whisperRaven": {
+  "w": 108,
+  "h": 123
+ },
+ "duskcoil__coilmonger": {
+  "w": 149,
+  "h": 123
+ },
+ "duskcoil__huginnsConfidant": {
+  "w": 134,
+  "h": 140
+ },
+ "duskcoil__wyrmOfSecrets": {
+  "w": 145,
+  "h": 146
+ },
+ "duskcoil__odinsInformant": {
+  "w": 127,
+  "h": 162
+ },
+ "duskcoil__rotLaundress": {
+  "w": 125,
+  "h": 123
+ },
+ "solenne__dawnScarab": {
+  "w": 101,
+  "h": 111
+ },
+ "solenne__templeSentinel": {
+  "w": 129,
+  "h": 113
+ },
+ "solenne__kheprisBlessing": {
+  "w": 139,
+  "h": 127
+ },
+ "solenne__pharaohsScarab": {
+  "w": 134,
+  "h": 127
+ },
+ "solenne__solarBarque": {
+  "w": 164,
+  "h": 146
+ },
+ "solenne__cinderScarab": {
+  "w": 101,
+  "h": 111
+ },
+ "kappadeep__bowlKeeper": {
+  "w": 107,
+  "h": 106
+ },
+ "kappadeep__sleepyTidecaller": {
+  "w": 123,
+  "h": 105
+ },
+ "kappadeep__wellOfAges": {
+  "w": 128,
+  "h": 120
+ },
+ "kappadeep__riverElderTide": {
+  "w": 114,
+  "h": 122
+ },
+ "kappadeep__suijinOfTheDeep": {
+  "w": 147,
+  "h": 141
+ },
+ "kappadeep__bowlSage": {
+  "w": 111,
+  "h": 105
+ },
+ "pyrewisp__lanternJackal": {
+  "w": 93,
+  "h": 123
+ },
+ "pyrewisp__willOWhisp": {
+  "w": 60,
+  "h": 118
+ },
+ "pyrewisp__anubisFlameKeeper": {
+  "w": 99,
+  "h": 142
+ },
+ "pyrewisp__jackoLanternKing": {
+  "w": 170,
+  "h": 139
+ },
+ "pyrewisp__lordOfFalseDawn": {
+  "w": 170,
+  "h": 97
+ },
+ "pyrewisp__gloomwisp": {
+  "w": 67,
+  "h": 118
+ },
+ "mawdeep__whirlmaw": {
+  "w": 161,
+  "h": 150
+ },
+ "mawdeep__tidepoolToad": {
+  "w": 148,
+  "h": 148
+ },
+ "mawdeep__charybdisGlutton": {
+  "w": 170,
+  "h": 165
+ },
+ "mawdeep__toadOfTheGulf": {
+  "w": 162,
+  "h": 170
+ },
+ "mawdeep__maelstromLeviathan": {
+  "w": 170,
+  "h": 162
+ },
+ "mawdeep__fenGlutton": {
+  "w": 170,
+  "h": 148
+ },
+ "auroracorn__prismHorn": {
+  "w": 144,
+  "h": 135
+ },
+ "auroracorn__swanguard": {
+  "w": 158,
+  "h": 138
+ },
+ "auroracorn__rainbowBridgeWarden": {
+  "w": 134,
+  "h": 155
+ },
+ "auroracorn__valkyrieUnicorn": {
+  "w": 171,
+  "h": 104
+ },
+ "auroracorn__auroraSovereign": {
+  "w": 170,
+  "h": 158
+ },
+ "auroracorn__galeUnicorn": {
+  "w": 134,
+  "h": 135
+ },
+ "lumoth__duskDuster": {
+  "w": 131,
+  "h": 125
+ },
+ "lumoth__moonMothling": {
+  "w": 129,
+  "h": 123
+ },
+ "lumoth__nightlightGaruda": {
+  "w": 170,
+  "h": 135
+ },
+ "lumoth__lunaMother": {
+  "w": 151,
+  "h": 143
+ },
+ "lumoth__empressOfTheNight": {
+  "w": 170,
+  "h": 161
+ },
+ "lumoth__venomDuster": {
+  "w": 128,
+  "h": 123
+ },
+ "sunkenhorn__coralStag": {
+  "w": 170,
+  "h": 137
+ },
+ "sunkenhorn__moonwaleStag": {
+  "w": 170,
+  "h": 125
+ },
+ "sunkenhorn__bakunawaElder": {
+  "w": 170,
+  "h": 124
+ },
+ "sunkenhorn__lunarLeviathanStag": {
+  "w": 170,
+  "h": 127
+ },
+ "sunkenhorn__moonSwallower": {
+  "w": 170,
+  "h": 119
+ },
+ "sunkenhorn__hearthDeepStag": {
+  "w": 169,
+  "h": 115
+ },
+ "selkira__lotusSelkie": {
+  "w": 159,
+  "h": 123
+ },
+ "selkira__tideCantor": {
+  "w": 150,
+  "h": 123
+ },
+ "selkira__silkieOfTheLostPod": {
+  "w": 170,
+  "h": 118
+ },
+ "selkira__wavesingerLament": {
+  "w": 165,
+  "h": 140
+ },
+ "selkira__queenOfTheSealfolk": {
+  "w": 163,
+  "h": 161
+ },
+ "selkira__maelstromSelkie": {
+  "w": 141,
+  "h": 123
+ },
+ "hearthkin__emberbelly": {
+  "w": 88,
+  "h": 100
+ },
+ "hearthkin__cinderSprite": {
+  "w": 84,
+  "h": 100
+ },
+ "hearthkin__domovoiElder": {
+  "w": 88,
+  "h": 106
+ },
+ "hearthkin__ashHearthSpirit": {
+  "w": 76,
+  "h": 106
+ },
+ "hearthkin__heartOfTheHome": {
+  "w": 88,
+  "h": 122
+ },
+ "hearthkin__stoutHearth": {
+  "w": 70,
+  "h": 100
+ },
+ "mothmara__dreadMare": {
+  "w": 93,
+  "h": 138
+ },
+ "mothmara__nightmareCharger": {
+  "w": 140,
+  "h": 138
+ },
+ "mothmara__vigilMare": {
+  "w": 133,
+  "h": 156
+ },
+ "mothmara__wildHuntMare": {
+  "w": 109,
+  "h": 157
+ },
+ "mothmara__hecatesMare": {
+  "w": 150,
+  "h": 170
+ },
+ "mothmara__tidemare": {
+  "w": 121,
+  "h": 138
+ },
+ "kirinth__moodweaver": {
+  "w": 105,
+  "h": 135
+ },
+ "kirinth__sanctuaryQilin": {
+  "w": 93,
+  "h": 138
+ },
+ "kirinth__spiritOfFourElements": {
+  "w": 110,
+  "h": 156
+ },
+ "kirinth__templeGuardianQilin": {
+  "w": 106,
+  "h": 157
+ },
+ "kirinth__kirinOfTheFourWinds": {
+  "w": 116,
+  "h": 170
+ },
+ "kirinth__hearthQilin": {
+  "w": 113,
+  "h": 135
+ },
+ "bakuroth__dreamdrinker": {
+  "w": 171,
+  "h": 105
+ },
+ "bakuroth__fallingStarTapir": {
+  "w": 170,
+  "h": 105
+ },
+ "bakuroth__nightmareFeeder": {
+  "w": 170,
+  "h": 119
+ },
+ "bakuroth__starSwallower": {
+  "w": 170,
+  "h": 93
+ },
+ "bakuroth__bakuOfTheFirstDream": {
+  "w": 170,
+  "h": 114
+ },
+ "bakuroth__dreadEater": {
+  "w": 147,
+  "h": 106
  }
 }

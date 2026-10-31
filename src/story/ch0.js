@@ -154,6 +154,17 @@
       click: (e, api) => { const b = e.target.closest("[data-p]"); if (b) { sel = +b.dataset.p; api.redraw(); if (e.detail >= 1) api.close(sel); } },
       keys: (e, api) => { const k = e.key; if (k === "ArrowRight") sel = (sel + 1) % 9; else if (k === "ArrowLeft") sel = (sel + 8) % 9; else if (k === "ArrowDown") sel = (sel + 3) % 9; else if (k === "ArrowUp") sel = (sel + 6) % 9; else if (k === "Enter" || k === " ") return api.close(sel); else return; api.redraw(); } });
   }
+  // the clicked pack, big: the three creatures and their names (still no styles), then take them or look again
+  function packCloseup(p) {
+    let sel = 0;
+    const img = id => `<div style="display:flex;flex-direction:column;align-items:center;gap:8px"><div style="height:250px;display:flex;align-items:flex-end;justify-content:center"><img src="assets/creatures/${id}.png" alt="${UI.esc(Data.NAMES[id])}" style="height:240px;width:240px;object-fit:contain;object-position:bottom;image-rendering:pixelated;filter:drop-shadow(0 6px 8px #000a)" onerror="this.style.visibility='hidden'"></div><b style="font-family:'Marcellus SC',serif;font-size:20px;color:#f2c14e">${UI.esc(Data.NAMES[id])}</b></div>`;
+    return UI.window(p.n, (body) => {
+      body.innerHTML = `<div style="display:flex;justify-content:space-around;align-items:flex-end;gap:16px;padding:18px 8px 26px;background:radial-gradient(ellipse at 50% 85%,#3a2614,#1b130e 70%);border:1px solid #3a2a1a">${p.ids.map(img).join("")}</div>
+        <div style="display:flex;justify-content:center;gap:18px;margin-top:18px">${["Take them", "Look again"].map((l, i) => `<button class="row${i === sel ? " sel" : ""}" data-c="${i}" style="min-width:190px;justify-content:center;color:inherit;font:inherit;font-size:19px;cursor:pointer">${l}</button>`).join("")}</div>`;
+    }, { noClose: true, closeLabel: "", gold: () => "", foot: "Left/Right and Enter, Esc to look again, or click.",
+      click: (e, api) => { const b = e.target.closest("[data-c]"); if (b) api.close(+b.dataset.c === 0); },
+      keys: (e, api) => { const k = e.key; if (k === "ArrowLeft" || k === "ArrowRight") { sel = 1 - sel; api.redraw(); } else if (k === "Enter" || k === " ") api.close(sel === 0); else if (k === "Escape" || k === "Backspace") api.close(false); } });
+  }
   S.trigger.vault = async F => {
     F.music("packChoice");
     await UI.say([
@@ -172,12 +183,13 @@
     let pick;
     for (;;) {
       pick = await pickPack(); const p = Data.PACKS[pick];
-      if (await UI.confirm(`Take ${p.n}? (${p.ids.map(id => Data.NAMES[id]).join(", ")})`, "Take them", "Look again")) break;
+      if (await packCloseup(p)) break;
     }
     const pk = Data.PACKS[pick];
     const sl = S.assignSlots(pk.id);
     G.pack = pk.id; G.slots = sl.slots; G.unchosen = sl.unchosen; G.mirror = sl.mirror;
-    G.party = pk.ids.map(id => F.mk(id, 3)); G.collection = [];
+    // level 3, but the 2 levels' worth of stat points (6) are the player's to spend, not pre-spread
+    G.party = pk.ids.map(id => { const u = F.mk(id, 3); try { u.stats = Core.makeCreature(id, 1).stats; u.maxHp = Core.maxHpOf(u.stats, u.level); u.hp = u.maxHp; u.points = (u.points || 0) + 6; } catch (e) {} return u; }); G.collection = [];
     G.items.sunwater = (G.items.sunwater || 0);
     F.set("pro.packed"); F.questDone("m_lessons");
     await UI.say([

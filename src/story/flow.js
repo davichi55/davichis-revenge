@@ -13,12 +13,13 @@ const Flow = (() => {
   const newState = () => ({
     v: 2, ch: 0, pack: null, party: [], collection: [], slots: [], unchosen: [], gold: 60, items: {}, mats: {}, goods: {}, book: [], owned: {}, flags: {}, quests: {}, kills: {}, best: {},
     rumours: {}, region: "orun", entry: "start", speed: (G && G.speed) || 0, nights: 0, charm: null, lastTown: "orun", inns: {}, playMs: 0, t0: Date.now(), banterSeen: {},
+    visited: {},   // towns seen (ferry pass list); G.sys = the systems state (src/systems.js), created on demand
   });
   F.newGame = () => { G = newState(); return G; };
   F.f = k => !!(G && G.flags[k]);
   F.set = (k, v = true) => { G.flags[k] = v; };
   F.sstate = () => ({ ch: G.ch, f: G.flags, q: new Proxy({}, { get: (_, id) => (typeof id === "string" && id in G.quests && G.quests[id] !== "done" ? G.quests[id] : undefined) }) });
-  F.tier = () => (G.ch <= 0 ? 0 : G.ch <= 2 ? 1 : G.ch <= 4 ? 2 : G.ch <= 6 ? 3 : G.ch <= 8 ? 4 : G.ch <= 10 ? 5 : 6);
+  F.tier = () => (G.ch <= 0 ? 0 : G.ch <= 2 ? 1 : G.ch <= 4 ? 2 : G.ch <= 6 ? 3 : G.ch <= 8 ? 4 : G.ch <= 10 ? 5 : G.ch <= 11 ? 6 : 7);   // 7 = post-game (potion 110)
   F.price = (item, shop) => { const d = Data.priceOf(item, F.tier()); const m = shop && shop.disc && shop.disc[item]; return Math.max(1, Math.round(d * (m || 1))); };
   F.speedF = () => SPEEDS[(G && G.speed) || 0].f;
   F.wait = ms => new Promise(r => setTimeout(r, Math.max(10, ms * F.speedF())));
@@ -31,16 +32,17 @@ const Flow = (() => {
     try { G.playMs = (G.playMs || 0) + (Date.now() - (G.t0 || Date.now())); G.t0 = Date.now(); localStorage.setItem(SAVE_KEY, snap()); if (!quiet) UI.toast("Game saved."); return true; }
     catch (e) { console.error("save failed", e); if (!quiet) UI.toast("Saving failed: the browser refused the save."); return false; }
   };
-  F.load = () => { try { const s = localStorage.getItem(SAVE_KEY); if (!s) return false; G = JSON.parse(s); G.t0 = Date.now(); if (!G.v) return false; return true; } catch (e) { return false; } };
+  F.load = () => { try { const s = localStorage.getItem(SAVE_KEY); if (!s) return false; G = JSON.parse(s); G.t0 = Date.now(); if (!G.v) return false; if (window.Systems) Systems.migrate(G); return true; } catch (e) { return false; } };
   F.hasSave = () => { try { return !!localStorage.getItem(SAVE_KEY); } catch (e) { return false; } };
   F.saveInfo = () => { try { const g = JSON.parse(localStorage.getItem(SAVE_KEY)); return g && { ch: g.ch, region: g.region, party: g.party.map(u => u.name + " " + u.level).join(", ") }; } catch (e) { return null; } };
   F.checkpoint = () => { F.cp = snap(); try { localStorage.setItem(CP_KEY, F.cp); } catch (e) {} };
-  F.restoreCheckpoint = () => { if (!F.cp) return false; const sp = G.speed; G = JSON.parse(F.cp); G.speed = sp; G.t0 = Date.now(); return true; };
+  F.restoreCheckpoint = () => { if (!F.cp) return false; const sp = G.speed; G = JSON.parse(F.cp); G.speed = sp; G.t0 = Date.now(); if (window.Systems) Systems.migrate(G); return true; };
 
   // ---------- audio (never throws) ----------
   F.music = key => { try { if (window.Audio && typeof Audio.music === "function") Audio.music(key); } catch (e) {} };
   F.sfx = key => { try { if (window.Audio && typeof Audio.sfx === "function") Audio.sfx(key); } catch (e) {} };
-  F.applyVolume = () => { try { if (window.Audio && typeof Audio.setVolume === "function" && G) Audio.setVolume(G.vol ? G.vol.music : 0.7, G.vol ? G.vol.sfx : 0.8); } catch (e) {} };
+  F.applyVolume = () => { try { if (G && G.vol && G.vol.music === 0.7 && !G.vol.v2) { G.vol.music = 0.5; G.vol.v2 = 1; }   // the old default was too loud next to the sfx
+    if (window.Audio && typeof Audio.setVolume === "function" && G) Audio.setVolume(G.vol ? G.vol.music : 0.5, G.vol ? G.vol.sfx : 0.8); } catch (e) {} };
 
   // ---------- creatures ----------
   F.mk = (id, lv) => {
@@ -89,9 +91,11 @@ const Flow = (() => {
     const c = F.setCounts(u); const sets = Object.keys(c).filter(s => c[s] >= 2).sort((a, b) => c[b] - c[a]); if (!sets.length) return null;
     const s = sets[0], idx = (u.sb && u.sb[s] != null) ? u.sb[s] : 0; return { set: s, idx, level: c[s] >= 3 ? 2 : 1, b: Data.SETS[s].b[idx] };
   };
-  F.xpMult = () => { let m = 1; G.party.forEach(u => { const a = F.activeBonus(u); if (a && a.b.st && a.b.st.xp) m += a.b.st.xp[2 - a.level] / 100 / G.party.length; }); return m; };
+  F.xpBonus = u => { const a = F.activeBonus(u); return a && a.b.st && a.b.st.xp ? a.b.st.xp[2 - a.level] / 100 : 0; };   // Fast Learner: this creature earns +15% (+7% with two pieces) experience
+  F.xpMult = () => 1 + G.party.reduce((s, u) => s + F.xpBonus(u), 0) / Math.max(1, G.party.length);   // the party average (kept for old callers); victory gives every creature its own bonus
   // apply gear for a fight: stat bonuses change stats temporarily (reverted after); fx tags go on u.fx for the battle rules
   F.applyGear = party => {
+    if (window.Evo) Evo.applyAll(party);   // evolution: the active form's stat boost, traits and upgraded personal move (reverted after the gear in revertGear)
     party.forEach(u => {
       u._save = { stats: { ...u.stats }, maxHp: u.maxHp, hp: u.hp }; u.fx = {};
       const a = F.activeBonus(u); if (!a) return;
@@ -100,13 +104,17 @@ const Flow = (() => {
       const v = k => (st[k] ? st[k][2 - a.level] : 0);
       ["def", "res", "spd"].forEach(k => { if (v(k)) u.stats[k] = Math.round(u.stats[k] * (1 + v(k) / 100)); });
       if (v("startMp")) u.stats.foc += 10 * v("startMp");          // +10 Focus = +1 starting MP
+      if (v("minMp")) u.stats.foc = Math.max(u.stats.foc, 10 * v("minMp"));   // Quiet Mind: a floor, not an extra (a creature that already starts with that much MP gains nothing)
       if (v("hp")) { const nm = Math.round(u.maxHp * (1 + v("hp") / 100)); u.hp += nm - u.maxHp; u.maxHp = nm; }
     });
+    if (G.items && G.items.springCharm > 0) party.forEach(u => { u.stats.foc += 10; });   // Spring Charm (Cinderwatch hot spring): +1 starting MP for everyone, reverted with the gear
+    if (window.Systems && Systems.applyCheer) Systems.applyCheer(party);   // Crowd Cheer (arena): a small stat bonus, reverted with the gear
   };
   F.revertGear = party => party.forEach(u => {
     if (u._save) { u.stats = u._save.stats; const r = u.maxHp ? u.hp / u.maxHp : 1; const wasHp = u._save.maxHp; u.maxHp = wasHp; u.hp = Math.max(u.alive ? 1 : 0, Math.min(wasHp, Math.round(r * wasHp))); delete u._save; }
     u.fx = {}; u.buffs = [];
   });
+  (function wrapRevertForEvo() { const rg = F.revertGear; F.revertGear = party => { rg(party); if (window.Evo) Evo.revertAll(party); }; })();
 
   // ---------- skill book ----------
   F.bookUnlocked = k => G.book.includes(k);
@@ -131,7 +139,11 @@ const Flow = (() => {
     G.rumours[town].push(i); if (town === "amber" && i === 0) { G.flags["lore.bearer"] = true; G.best.duneBearer = Object.assign(G.best.duneBearer || {}, { breakKnown: true }); }
     return list[i];
   };
-  F.seen = (id, beaten) => { const b = (G.best[id] = G.best[id] || { seen: 0, beaten: 0 }); b.seen++; if (beaten) { b.beaten++; G.kills[id] = (G.kills[id] || 0) + 1; } };
+  F.seen = (id, beaten, level) => {
+    const b = (G.best[id] = G.best[id] || { seen: 0, beaten: 0 }); b.seen++; if (beaten) { b.beaten++; G.kills[id] = (G.kills[id] || 0) + 1; }
+    if (b.ch === undefined) { b.ch = G.ch; b.where = G.region; }   // journal: where and in which chapter it was first met
+    if (level) { b.lv = b.lv || [level, level]; b.lv[0] = Math.min(b.lv[0], level); b.lv[1] = Math.max(b.lv[1], level); }
+  };
 
   // ---------- dialogue shortcuts ----------
   F.say = (who, text) => UI.say([[who, text]]);
@@ -159,7 +171,7 @@ const Flow = (() => {
     if (tbl) {
       const arr = Array.isArray(tbl) ? tbl : (tbl.groups || tbl.list || tbl.table || tbl.entries || []);
       if (arr.length) {
-        entry = pickW(arr.map(x => (typeof x === "string" ? { foes: [x] } : Array.isArray(x) ? { foes: x } : x)));
+        entry = (window.Systems && Systems.takePending && Systems.takePending(tableId)) || pickW(arr.map(x => (typeof x === "string" ? { foes: [x] } : Array.isArray(x) ? { foes: x } : x)));   // pending = the roll the Quiet Sigil already looked at
         ids = [].concat(entry.foes || entry.enemies || entry.group || entry.units || entry.id || []);
         lvR = entry.lv || entry.level || entry.levels || tbl.lv || tbl.level || tbl.levels;
         ids = ids.map(x => (typeof x === "string" ? x : x && x.id)).filter(Boolean);
@@ -172,29 +184,34 @@ const Flow = (() => {
   };
 
   // ---------- battle ----------
-  F.arenaOf = region => ({ dunes: "dunes", cistern: "cistern", quarry: "quarry", flats: "flats", undercroft: "undercroft", maze: "boneMaze", hollow: "hollow", basin: "basin" })[region] || "desert";
+  F.arenaOf = region => ({ dunes: "dunes", cistern: "cistern", quarry: "quarry", flats: "flats", undercroft: "undercroft", maze: "boneMaze", hollow: "hollow", basin: "basin" })[region]
+    || (Data.REGIONS[region] && Data.REGIONS[region].arena) || "desert";   // chapters 3+: Data.REGIONS[id].arena names the battle arena (keys in BUILD_PLAN_2.md)
   F.lastOutcome = null;
-  // fights: opts { boss, bg, intro, noFlee, scripted }. Returns "win" | "flee". A defeat offers retry or wake-up (throws Interrupt("wake")).
+  const ITEM_KEY = { potion: "sunwater", ashenEmber: "ember" };   // Core.ITEMS key -> G.items key
+  // fights: opts { boss, bg, intro, noFlee, music, goldMult, xpBonus, cup, flood }. Returns "win" | "flee" (| "lose" with opts.cup). A defeat offers retry or wake-up (throws Interrupt("wake")).
   F.fight = async (foes, opts = {}) => {
     const bg = opts.bg || F.arenaOf(G.region);
-    const startState = JSON.stringify({ party: G.party, items: G.items, collection: G.collection });
+    const startState = JSON.stringify({ party: G.party, items: G.items, collection: G.collection }, (k, v) => (k === "view" || (v && v.isObject3D) ? undefined : v));   // u.view holds the 3D model and (arena-boss.js) a link back to the unit: it must never be serialised
     for (;;) {
-      F.music(opts.boss ? (opts.music || "boss") : (foes.some(e => /^raid|legion/i.test(e.id || "")) ? "battleSoldiers" : "battle")); F.sfx("encounter");
+      F.music(opts.boss ? (opts.music || "boss") : (opts.music || (foes.some(e => /^raid|legion/i.test(e.id || "")) ? "battleSoldiers" : "battle"))); F.sfx("encounter");
       F.applyGear(G.party);
       let r = null;
       try {
         if (!window.Arena3D || !Arena3D.fight) throw new Error("no arena");
-        const it = { potion: G.items.sunwater || 0, antidote: G.items.antidote || 0, ashenEmber: G.items.ember || 0 };
+        // item bag: Core.ITEMS keys <-> G.items keys (potion = sunwater, ashenEmber = ember; every other Core item uses the same key in G.items)
+        const it = {}; Object.keys(Core.ITEMS || {}).forEach(k => { it[k] = G.items[ITEM_KEY[k] || k] || 0; });
         G.party.forEach(u => { u.offMove = u.slot || null; });
-        r = await Arena3D.fight({ party: G.party, foes, boss: !!opts.boss, bg, items: it, speedF: F.speedF, auto: !!(window.dbg && window.dbg.auto), intro: opts.intro });
-        if (r.items) { G.items.sunwater = r.items.potion || 0; G.items.antidote = r.items.antidote || 0; G.items.ember = r.items.ashenEmber || 0; r.potions = null; }
+        r = await Arena3D.fight({ party: G.party, foes, boss: !!(opts.boss || opts.noFlee), bg, items: it, speedF: F.speedF, auto: !!(window.dbg && window.dbg.auto), intro: opts.intro, flood: opts.flood });
+        if (r.items) { Object.keys(it).forEach(k => { if (r.items[k] != null) G.items[ITEM_KEY[k] || k] = r.items[k]; }); r.potions = null; }
       } catch (e) { console.error("fight failed", e); r = { res: "win", potions: G.items.sunwater || 0 }; }
+      F.lastResult = r;
       F.revertGear(G.party);
       if (r.potions != null) G.items.sunwater = r.potions;
-      if (r.res === "win") { F.music("victory"); await F.victory(foes, opts); F.music(F.regionMusic()); return "win"; }
+      if (r.res === "win") { F.music("victory"); await F.victory(foes, opts); F.music(opts.keepMusic ? opts.music : F.regionMusic()); return "win"; }
       if (r.res === "flee") { F.music(F.regionMusic()); return "flee"; }
       // defeat
       F.music("gameover"); F.sfx("ko");
+      if (opts.cup) return "lose";   // arena cups run their own retry (Systems.cup): no prompt, nothing restored here
       const i = await UI.choose("Your team falls...", [{ label: "Try again" + (opts.boss ? " (free, right before the fight)" : "") }, { label: "Wake up at the last town (full heal)", info: "You keep everything you had before the fight." }], { top: "38%" });
       const st = JSON.parse(startState); G.party = st.party; G.items = st.items; G.collection = st.collection;
       if (i === 0) { foes = foes.map(e => F.mkEnemy(e.id, e.level, (e.name || "").slice((Core.ENEMIES[e.id] ? Core.ENEMIES[e.id].name : (e.name || "")).length) )); continue; }
@@ -205,29 +222,30 @@ const Flow = (() => {
   F.boss = async (foes, opts = {}) => { F.checkpoint(); return F.fight(foes, { ...opts, boss: true }); };
 
   F.victory = async (foes, opts) => {
-    const mult = F.xpMult();
-    let xp = foes.reduce((s, e) => s + Math.round((e.xp || 6) * e.level / 2), 0), gold = foes.reduce((s, e) => s + Math.round((e.gold || 4) * e.level / 2), 0);
-    if (opts.xpBonus) xp = Math.round(xp * opts.xpBonus);
-    xp = Math.round(xp * mult); G.gold += gold;
+    let xp = Core.fightXp ? Core.fightXp(foes, F.avgLevel()) : foes.reduce((s, e) => s + Math.round((e.xp || 6) * e.level / 2), 0), gold = Core.fightGold ? Core.fightGold(foes) : foes.reduce((s, e) => s + Math.round((e.gold || 4) * e.level / 2), 0);   // Core.fightXp/fightGold (RULES-BOSS): the XP curve for levels 10-85
+    if (opts.xpBonus) xp = Math.round(xp * opts.xpBonus); if (opts.xpMult != null) xp = Math.round(xp * opts.xpMult);
+    if (opts.goldMult != null) gold = Math.round(gold * opts.goldMult); G.gold += gold;
     G.party.forEach(u => { if (!u.alive) { u.alive = true; u.hp = Math.max(1, u.hp); } u.buffs = []; });
     const avg = F.avgLevel();
     G.collection.forEach(u => { u.xp += Math.round(xp * (u.level < avg ? 0.6 : 0.3)); let n = 0; while (u.xp >= Core.xpToNext(u.level) && n++ < 30) { u.xp -= Core.xpToNext(u.level); u.level++; u.points = (u.points || 0) + 3; u.maxHp = Core.maxHpOf(u.stats, u.level); u.hp = u.maxHp; } });
-    const ups = Core.giveXp(G.party, xp);
+    let ups = []; G.party.forEach(u => { ups = ups.concat(Core.giveXp([u], Math.round(xp * (1 + F.xpBonus(u))))); });   // Fast Learner: each creature earns its own bonus
+    if (window.Evo) Evo.checkAll(G.party.concat(G.collection), t => UI.toast(t, 4000));   // evolution: a form whose level and stat requirements are met is unlocked for good
+    if (window.Systems && Systems.afterXp) ups = Systems.afterXp(ups);   // a guest companion follows the party's level and takes no points
     const drops = [];
     foes.forEach(e => {
-      F.seen(e.id || e.art, true);
+      F.seen(e.id || e.art, true, e.level);
       (Data.DROPS[e.id] || []).forEach(([k, p]) => { if (Math.random() < p * (opts.boss ? 1 : 1)) { drops.push(k); } });
     });
     drops.forEach(k => F.give(k, 1, true));
     const names = {}; drops.forEach(k => { const nm = (Data.MATS[k] || Data.GOODS[k] || [k])[0]; names[nm] = (names[nm] || 0) + 1; });
-    await Menus.results({ xp, gold, ups, drops: names, boss: !!opts.boss });
+    await Menus.results({ xp, gold, ups, drops: names, boss: !!opts.boss, titan: foes.some(e => e.titan || (Core.ENEMIES && Core.ENEMIES[e.id] && Core.ENEMIES[e.id].titan) || (Core.BOSS_META && Core.BOSS_META[e.id] && Core.BOSS_META[e.id].kind === "optTitan")) });   // QA-A: the optional Titans (T3+) say it too
   };
 
   // ---------- inn and shop ----------
-  F.innCost = key => (key === "orun" && !G.inns.orun ? 0 : Data.priceOf("sunwater", F.tier()) * 3);
+  F.innCost = key => (key === "orun" && !G.inns.orun ? 0 : Math.round(Data.priceOf("sunwater", F.tier()) * 3 * ((Data.INNS[key] && Data.INNS[key].mult) || 1)));   // Data.INNS[key].mult: 0.5 resistance camp, 1.5 imperial town (ECONOMY.md)
   F.inn = async key => {
     const inn = Data.INNS[key] || { n: "Inn" }, cost = F.innCost(key);
-    const i = await UI.choose(`${inn.n}: a bed and a hot meal. Full heal for HP and MP.`, [{ label: cost ? `Stay the night (${cost} kakal)` : "Stay the night (free, the first one)", disabled: G.gold < cost }, { label: "Not now" }], { back: true });
+    const i = await UI.choose(`${inn.n}: a bed and a hot meal. Everyone wakes at full HP, the fallen too.`, [{ label: cost ? `Stay the night (${cost} kakal)` : "Stay the night (free)", disabled: G.gold < cost }, { label: "Not now" }], { back: true });
     if (i !== 0) return false;
     G.gold -= cost; G.inns[key] = (G.inns[key] || 0) + 1; G.nights++; F.music(null); await UI.fade(true, 600); F.healAll(); G.lastTown = G.region === "hollow" ? "saltgate" : G.region; F.save(true); await UI.sleep(500);
     F.music("town"); await UI.fade(false, 600); UI.toast("Everyone is fully healed. Game saved.");
@@ -239,11 +257,11 @@ const Flow = (() => {
   F.goLater = (region, entry) => { setTimeout(() => F.enter(region, entry), 0); };
   F.go = (region, entry) => { F.goLater(region, entry); throw new Interrupt("go"); };   // always the last call of a script: unwinds it, then the new region starts
   F.enter = async (region, entry) => {
-    const my = ++F.token; G.region = region; G.entry = entry || "start";
+    const my = ++F.token; const prevRegion = G.region; G.region = region; G.entry = entry || "start";
     const R = Data.REGIONS[region] || {};
-    if (R.town) G.lastTown = region;
+    if (R.town) { G.lastTown = region; (G.visited = G.visited || {})[region] = true; }   // the ferry pass lists visited towns
     await UI.fade(true, 350);
-    F.visit = {}; if (region === "dunes") G.flags["dunes.dusk"] = !G.flags["l1.done"] && Math.random() < 0.4;
+    F.visit = {}; if (region === "dunes" || (Story.duskSet && Story.duskSet[region])) { if (!(Story.duskSet && Story.duskSet[region] && Story.duskSet[prevRegion])) G.flags["dunes.dusk"] = !G.flags["l1.done"] && Math.random() < 0.4; }   // the dusk hound roams the dunes and the CH1-EXPAND maps (Story.duskSet): the roll is only repeated when you come in from outside that area
     F.music(R.music || "desert");
     if (F.engine && F.engine.enter) await F.engine.enter(region, entry);
     await UI.fade(false, 450);
@@ -261,6 +279,7 @@ const Flow = (() => {
 
   // ---------- script dispatch (chapter files fill Story.*) ----------
   window.Story = window.Story || { talk: {}, trigger: {}, chest: {}, gather: {}, arrive: {} };
+  Story.finish = Story.finish || {}; Story.start = Story.start || {};   // dbg.jump(n): chapter files register finish[k](F, G) and start[k] = { region, entry }
   F.runTrigger = async (id, region) => { const fn = Story.trigger[id]; if (fn) return fn(F, region || G.region); console.warn("no trigger", id); };
   F.guard = async fn => { F.locked++; try { return await fn(); } catch (e) { if (e instanceof Interrupt) { if (e.kind === "wake") await F.wake(); } else console.error(e); } finally { F.locked--; } };
   F.hookTalk = (npc, region) => F.guard(async () => {
@@ -284,7 +303,7 @@ const Flow = (() => {
   });
   F.hookExit = (to, entry) => F.guard(async () => { F.go(to, entry); });
   F.hookMenu = () => (F.locked ? Promise.resolve() : Menus.main());
-  F.encounterMult = () => { if (G.flags.wardstone) return 0.5; if (G.charm && G.charm.until > Date.now()) return G.charm.kind === "incense" ? 0.5 : 2; return 1; };
+  F.encounterMult = () => (window.Systems ? Systems.encounterMult() : (G.flags.wardstone ? 0.5 : 1));   // charms: src/systems.js
 
   // Visible-condition helper for hub and engines
   F.vis = cond => !cond || cond(F.sstate());

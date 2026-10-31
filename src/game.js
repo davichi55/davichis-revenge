@@ -40,6 +40,7 @@ Flow.toTitle = () => { Flow.token++; Engine.stopOthers("Title"); game.scene.star
 // refuse exits the story is not ready for (world-engine mode; the hub uses the same rules through its visible conditions)
 Story.exitGate = (to, F) => {
   const f = k => F.f(k);
+  { const W = window.World && World.REGIONS && World.REGIONS[toWorld(to)]; if (W && W.boat && !f("ship")) return "(I have no ship. The sea can wait.)"; }
   if (to === "dunes" && G.region === "orun" && !f("pro.packed")) return f("pro.dunmar") ? "(Not yet. The lessons and the vault first.)" : "(I should talk to Master Ithiel and Old Dunmar first.)";
   if (to === "undercroft" && !f("pro.dunmar")) return "(Dunmar's lessons. I should find him first.)";
   if (to === "cistern" && !f("sp.letter")) return "(A dead-end cistern. I don't know why I'd go in there.)";
@@ -94,7 +95,7 @@ class Title extends Phaser.Scene {
     const img = this.add.image(W / 2, H / 2, "title"); img.setScale(Math.max(W / img.width, H / img.height));
     this.add.rectangle(0, 0, W, H, 0x000000, 0.35).setOrigin(0);
     txt(this, W / 2, 56, "DAVICHI'S REVENGE", 56, COL.gold, { ox: 0.5, head: true }).setStroke("#000", 6);
-    txt(this, W / 2, 124, "Milestone 1 · Prologue to the Dune Bearer", 18, COL.dim, { ox: 0.5 }).setStroke("#000", 4);
+    txt(this, W / 2, 124, "A tale of tamers, titans and an empire", 18, COL.dim, { ox: 0.5 }).setStroke("#000", 4);
     UI.ensure(); Flow.music("title");
     const my = ++Flow.token;
     for (;;) {
@@ -106,7 +107,7 @@ class Title extends Phaser.Scene {
       if (i === 1 && Flow.load()) { Flow.applyVolume(); await UI.fade(true, 400); Flow.enter(G.region, G.entry || "start"); return; }
       if (i === 0) {
         if (info && !(await UI.confirm("Start over? Your saved game stays until you save again.", "New game", "Back"))) continue;
-        Flow.newGame(); G.vol = window.__vol || { music: 0.7, sfx: 0.8 }; Flow.applyVolume();
+        Flow.newGame(); G.vol = window.__vol || { music: 0.5, sfx: 0.8 }; Flow.applyVolume();
         Flow.music("story");
         for (const p of LORE) await UI.card(p);
         Flow.enter("orun", "start"); return;
@@ -146,20 +147,27 @@ async function hubLoop(region, token) {
 // ---------- test hooks ----------
 window.dbg = {
   get G() { return G; }, Core, Flow, Data, Story, Menus, UI, auto: false, noWorld: false,
-  newGame(packIdx = 0, level = 3) { UI.reset(); Flow.newGame(); const pk = Data.PACKS[packIdx]; G.pack = pk.id; const sl = Story.assignSlots(pk.id); G.slots = sl.slots; G.unchosen = sl.unchosen; G.mirror = sl.mirror; G.party = pk.ids.map(id => Flow.mk(id, level)); G.vol = { music: 0.7, sfx: 0.8 }; return G; },
-  // jump to a chapter with a ready party: "prologue" | 1 | 2 | 3 (end of M1 reached) ; or a region id
+  newGame(packIdx = 0, level = 3) { UI.reset(); Flow.newGame(); const pk = Data.PACKS[packIdx]; G.pack = pk.id; const sl = Story.assignSlots(pk.id); G.slots = sl.slots; G.unchosen = sl.unchosen; G.mirror = sl.mirror; G.party = pk.ids.map(id => Flow.mk(id, level)); G.vol = { music: 0.5, sfx: 0.8 }; return G; },
+  // jump to a chapter with a ready party: "prologue" | 1 | 2 | 3..11 | "post" ; or a region id
   jump(where = 1, packIdx = 0, level) {
-    const F = Flow, lv = level || ({ prologue: 1, 1: 3, 2: 6, 3: 10 }[where] || 4);
-    this.newGame(packIdx, lv);
+    const F = Flow, lv = level || ({ prologue: 1, 1: 3, 2: 6, 3: 10, 4: 16, 5: 22, 6: 27, 7: 38, 8: 44, 9: 50, 10: 58, 11: 64, post: 70 }[where] || 4);
+    this.newGame(packIdx, lv); const wn = where === "post" ? 12 : where;
     const f = k => (G.flags[k] = true);
     if (where === "prologue") { Flow.newGame(); G.party = []; G.region = "orun"; F.enter("orun", "start"); return G; }
     ["pro.start", "pro.dunmar", "pro.l1", "pro.l2", "pro.lessons", "pro.packed"].forEach(f); G.quests.m_lessons = "done"; G.items.sunwater = 8; G.items.journal = 1;
     let region = "dunes";
-    if (where >= 1 || where === "sandpiper") { f("ch1.start"); f("sp.seen"); region = "sandpiper"; G.ch = 1; G.quests.m_escape = 0; G.lastTown = "sandpiper"; G.gold = 120; }
-    if (where >= 2) { ["sp.letter", "sp.rested", "ci.karvan", "am.seen"].forEach(f); G.ch = 2; G.quests.m_escape = "done"; G.quests.m_cistern = "done"; G.quests.m_research = 0; G.lastTown = "amberWells"; region = "amberWells"; G.gold = 400; F.giveGear("G16", 3, true); G.items.sunwater = 12; }
-    if (where >= 3) { ["am.wagon", "am.letter", "hol.seen", "bear.done", "sg.seen"].forEach(f); G.quests.m_research = "done"; G.quests.m_bearer = "done"; region = "saltgate"; G.lastTown = "saltgate"; G.gold = 600; }
+    if (wn >= 1 || where === "sandpiper") { f("ch1.start"); f("sp.seen"); region = "sandpiper"; G.ch = 1; G.quests.m_escape = 0; G.lastTown = "sandpiper"; G.gold = 120; }
+    if (wn >= 2) { ["sp.letter", "sp.rested", "ci.karvan", "am.seen"].forEach(f); G.ch = 2; G.quests.m_escape = "done"; G.quests.m_cistern = "done"; G.quests.m_research = 0; G.lastTown = "amberWells"; region = "amberWells"; G.gold = 400; F.giveGear("G16", 3, true); G.items.sunwater = 12; }
+    if (wn >= 3) { ["am.wagon", "am.letter", "hol.seen", "bear.done", "sg.seen"].forEach(f); G.quests.m_research = "done"; G.quests.m_bearer = "done"; region = "saltgate"; G.lastTown = "saltgate"; G.gold = 600; }
+    // chapters 3-11 and "post": every chapter file registers Story.finish[k] (apply what finishing chapter k gives) and Story.start[k] ({ region, entry })
+    let entry = "start";
+    const ch = typeof wn === "number" ? wn : 0;
+    if (ch >= 3) {
+      for (let k = 3; k < ch; k++) if (Story.finish && Story.finish[k]) Story.finish[k](F, G);
+      const st = Story.start && Story.start[ch]; G.ch = ch; if (st) { region = st.region; entry = st.entry || "start"; }
+    }
     if (typeof where === "string" && Data.REGIONS[where]) region = where;
-    G.region = region; G.entry = "start"; F.enter(region, "start"); return G;
+    G.region = region; G.entry = entry; F.enter(region, entry); return G;
   },
   region(id, entry) { return Flow.enter(id, entry || "start"); },
   give(k, n = 1) { Flow.give(k, n); }, gold(n = 100) { G.gold += n; },
@@ -170,6 +178,8 @@ window.dbg = {
   worldCheck() { const out = {}; if (!window.World) return "no World"; Object.entries(World.REGIONS).forEach(([id, R]) => { out[id] = { mapped: toStory(id), npcs: (R.npcs || []).map(n => n.id).filter(Boolean), triggers: (R.triggers || []).map(t => t.id), chests: (R.chests || []).map(c => c.id), gathers: (R.gathers || []).map(c => c.id), exits: (R.exits || []).map(e => e.to) }; }); return out; },
   save() { return Flow.save(); },
 };
+
+if (window.Systems) { window.dbg.sys = Systems.dbg; }
 
 window.game = new Phaser.Game({
   type: Phaser.AUTO, parent: "game", width: W, height: H, pixelArt: true, backgroundColor: "#120d0a",
