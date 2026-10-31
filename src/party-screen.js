@@ -7,6 +7,9 @@ const STAT_INFO = {
   spd: "Who acts first. At 2x the enemy's speed: +1 action per turn.", foc: "Starting MP in a fight: +1 MP per 10 Focus.",
   lck: "Critical hits, and the chance your status effects land.",
 };
+// prologue: Old Dunmar lends the practice creatures; their points are not the player's to spend (Danny 2026-10-31)
+const LOANER_LINE = "(Old Dunmar's practice creatures. Not mine to train.)";
+const loaner = () => { try { return !G.pack; } catch (e) { return false; } };
 function partyScreen(startAt = 0) {
   const w = partyScreen0(startAt); return w.then(r => { if (window.Systems) Systems.endSession(); return r; });
 }
@@ -167,7 +170,7 @@ function partyScreen0(startAt = 0) {
       if (u.guest && (d.add !== undefined || d.slot !== undefined || d.skill !== undefined || d.sb !== undefined)) { msg = u.name + " is a guest: nothing to change here."; return api.redraw(); }
       if (d.c !== undefined) { cur = +d.c; return api.redraw(); }
       if (d.s !== undefined && d.add === undefined) { sel = +d.s; return api.redraw(); }
-      if (d.add !== undefined) { if (u.points) { Core.spendPoint(u, Core.STATS[+d.add]); sel = +d.add; Flow.sfx("menuOk"); if (window.Evo) Evo.checkAll([u], t => UI.toast(t, 4000)); } return api.redraw(); }
+      if (d.add !== undefined) { if (loaner()) { UI.toast(LOANER_LINE, 3200); return; } if (u.points) { Core.spendPoint(u, Core.STATS[+d.add]); sel = +d.add; Flow.sfx("menuOk"); if (window.Evo) Evo.checkAll([u], t => UI.toast(t, 4000)); } return api.redraw(); }
       if (d.sb !== undefined) { const [s, i] = d.sb.split(":"); u.sb = u.sb || {}; u.sb[s] = +i; return api.redraw(); }
       if (d.slot !== undefined) {
         const sl = d.slot, pick = await GearUI.choose(u, sl);   // -1 closed, 0 take it off, else the piece id
@@ -192,7 +195,7 @@ function partyScreen0(startAt = 0) {
       if (k === "ArrowRight") cur = (cur + 1) % n; else if (k === "ArrowLeft") cur = (cur + n - 1) % n;
       else if (/^[1-9]$/.test(k)) cur = Math.min(n - 1, +k - 1);
       else if (k === "ArrowDown") sel = (sel + 1) % Core.STATS.length; else if (k === "ArrowUp") sel = (sel + Core.STATS.length - 1) % Core.STATS.length;
-      else if ((k === "Enter" || k === " " || k === "+") && api.tab === 0) { const u = roster()[cur]; if (u.points && !u.guest) Core.spendPoint(u, Core.STATS[sel]); }
+      else if ((k === "Enter" || k === " " || k === "+") && api.tab === 0) { const u = roster()[cur]; if (loaner()) UI.toast(LOANER_LINE, 3200); else if (u.points && !u.guest) Core.spendPoint(u, Core.STATS[sel]); }
       else return;
       api.redraw();
     },

@@ -2,6 +2,16 @@
 "use strict";
 const Menus = (() => {
   const esc = UI.esc, M = {};
+  // Items > materials and goods (Danny 2026-10-31): what each thing is for. Materials name their skill-book move and progress; goods their base value and any active quest that asks for them
+  const WANTS = { lanterns: { lanternWick: 4 }, needle: { adderFang: 5, wraithQuill: 1 }, ring3: { saltCrystal: 3 }, bounty2: { automatonCore: 3 } };
+  function itemInfoRows() {
+    const book = {}; Object.values(Data.BOOK || {}).forEach(b => (book[b.mat] = b));
+    const wanted = k => Object.keys(G.quests).filter(q => G.quests[q] !== "done" && Data.QUESTS[q]).filter(q => ((Data.QUESTS[q].wants || WANTS[q] || {})[k])).map(q => `${Data.QUESTS[q].t} (${(Data.QUESTS[q].wants || WANTS[q])[k]})`);
+    const row = (name, n, line, tag) => `<div class="row"><div class="g">${esc(name)} <small style="display:inline;color:#f2c14e">x${n}</small><small>${line}</small></div>${tag ? `<span style="color:#8fe0a0;font-size:14px;white-space:nowrap">${tag}</span>` : ""}</div>`;
+    const mats = Object.keys(G.mats).filter(k => G.mats[k] > 0).map(k => { const b = book[k]; return row(Data.MATS[k][0], G.mats[k], b ? `Skill book: ${esc(b.n)} (${Math.min(G.mats[k], b.need)}/${b.need})${G.book.includes(Object.keys(Data.BOOK).find(x => Data.BOOK[x] === b)) ? " · unlocked" : ""}` : esc(Data.MATS[k][1] || ""), b ? "skill book" : ""); });
+    const goods = Object.keys(G.goods).filter(k => G.goods[k] > 0).map(k => { const w = wanted(k); return row(Data.GOODS[k][0], G.goods[k], `Sells for about ${Data.GOODS[k][1]} kakal each${w.length ? " · Wanted: " + esc(w.join(", ")) : ""}`, w.length ? "wanted" : ""); });
+    return mats.concat(goods).join("") || `<div class="row"><div class="g">None yet.</div></div>`;
+  }
   const bar = (f, c = "#58c26a") => `<div style="height:6px;background:#000;margin-top:3px"><i style="display:block;height:100%;width:${Math.max(0, Math.min(100, f * 100))}%;background:${c}"></i></div>`;
   const gold = () => `${G.gold} kakal`;
   const itemName = k => (Data.ITEMS[k] && Data.ITEMS[k].n) || (Data.MATS[k] && Data.MATS[k][0]) || (Data.GOODS[k] && Data.GOODS[k][0]) || k;
@@ -99,7 +109,7 @@ const Menus = (() => {
           + (window.Systems && Systems.ui ? Systems.ui.charmsHtml() : "") + `<h3 style="margin-top:12px">Skill Book</h3><div style="color:#b7a58a;margin-bottom:6px">Collect materials, unlock moves. Any creature can carry one off-style move (Party > Skill).</div>`
           + Object.entries(Data.BOOK).map(([k, b]) => { const have = G.mats[b.mat] || 0, un = G.book.includes(k); return `<div class="row"><div class="g">${esc(b.n)}<small>${esc(b.d)}</small><small>${esc(Data.MATS[b.mat][0])}: ${Math.min(have, b.need)}/${b.need}${have > b.need ? " (+" + (have - b.need) + " spare)" : ""}</small></div>${un ? `<b style="color:#7ee081">Unlocked</b>` : `<button class="b" data-unlock="${k}" ${have >= b.need ? "" : "disabled"}>Unlock</button>`}</div>`; }).join("")
           + `<h3 style="margin-top:12px">Gear</h3>` + (window.GearUI && GearUI.listHtml ? GearUI.listHtml() : "")
-          + `<h3 style="margin-top:12px">Materials and trade goods</h3>` + ([...Object.keys(G.mats).filter(k => G.mats[k] > 0).map(k => `${esc(Data.MATS[k][0])} x${G.mats[k]}`), ...Object.keys(G.goods).filter(k => G.goods[k] > 0).map(k => `${esc(Data.GOODS[k][0])} x${G.goods[k]}`)].join(" · ") || "None yet.");
+          + `<h3 style="margin-top:12px">Materials and trade goods</h3>` + itemInfoRows();
       } else if (tn === "Journal" && window.Systems && Systems.ui) {
         body.innerHTML = Systems.ui.journalHtml(foot);
       } else if (tn === "Travel") {
