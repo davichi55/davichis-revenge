@@ -44,7 +44,7 @@
   const CHIP = { burn: ["\u{1F525}", "#ff8a3a", "Burn"], bleed: ["\u{1FA78}", "#e04a4a", "Bleed"], poison: ["☠", "#9be06a", "Poison"], shock: ["⚡", "#ffe45c", "Shock"], chill: ["❄", "#9fd8ff", "Chill"],
     freeze: ["\u{1F9CA}", "#7fe3ff", "Freeze"], wet: ["\u{1F4A7}", "#6fb7ff", "Wet"], slow: ["\u{1F40C}", "#c9b28a", "Slow"], stun: ["\u{1F4AB}", "#ffd23f", "Stun"], steam: ["♨", "#d6d6d6", "Steam"], petrify: ["\u{1F5FF}", "#b0a090", "Petrify"] };
   const STAT_LABEL = { atk: "ATK", def: "DEF", pow: "POW", res: "RES", spd: "SPD", foc: "FOC", lck: "LCK", dr: "GUARD", shield: "SHIELD", taunt: "TAUNT", hot: "REGEN", sres: "STATUS-RES", vuln: "EXPOSED", wrathStore: "WRATH", swell: "SWELL",
-    counter: "COUNTER", cover: "COVERED", hounds: "HOUNDS", decoy: "DECOY", antlers: "ANTLERS", dust: "DUST", braceDeep: "BRACE", redHot: "RED-HOT", stunImmune: "UNSTUNNABLE", mp: "MP", endure: "ENDURE" };
+    counter: "COUNTER", cover: "COVERED", hounds: "HOUNDS", decoy: "DECOY", antlers: "ANTLERS", dust: "DUST", braceDeep: "BRACE", tithe: "TITHE", redHot: "RED-HOT", stunImmune: "UNSTUNNABLE", mp: "MP", endure: "ENDURE" };
   const GROUPS = [["damage", "Attacks"], ["support", "Support"], ["control", "Control"], ["personal", "Personal"], ["skill", "Skill book (off-style slot)"]];
 
   let ready = null, renderer, scene, camera, world, dust, torchLights = [], units = [], ctx = null, active = false, speedF = () => 1, shake = 0, introT = 0, marker = null, manifest = {}, manifestTried = false;

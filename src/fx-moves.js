@@ -856,6 +856,8 @@
   R("riptide", { col: ["water", "steam"] }, [["wave", { kind: "water", on: "tgt", rows: 1, s: 0.8, ms: 500 }], par(["knock", { d: 1.4, ms: 200 }], ["spr", { tex: "hourglass", hf: 1.2, pop: 1, bob: 0.1, ms: 700 }])]);
   R("abyssalHunger", { col: ["dark", "water"] }, [["vortex", { kind: "dark", on: "tgt", ms: 650, go: 1 }], ["bite", { teeth: 2, col: ["dark", "violet"] }], ["drain", { col: ["dark", "water"], n: 18, tex: "dot", ms: 600 }]]);
   R("tidalWave", { col: ["water", "steam"] }, [["rear", { ms: 200, h: 0.4, a: 0.2 }], ["wave", { kind: "water", on: "foes", rows: 4, s: 1.25, ms: 640 }], ["shake", { v: 0.2 }]]);
+  // Tithe of the Deep: it bleeds a share of its own life into the sea (blood drops fall away, the water whirls round it), then the deep answers with a dark swell that stays on it until the release
+  R("deepTithe", { col: ["water", "blood"] }, [["crouch", { ms: 260, sy: 0.88 }], par(["spr", { on: "src", tex: "drop", n: 5, rise: 1.0, ms: 560, size: 0.35, col: "blood", spread: 0.5, hf: 0.7 }], ["vortex", { on: "src", kind: "water", ms: 640 }], ["shake", { v: 0.04 }]), par(["gather", { ms: 420, tex: "bubble", n: 18, col: ["water", "violet"], r: 1.6 }], ["aura", { on: "src", tex: "bubble", ms: 600, vy: 1.8, r: 0.9, col: ["water", "violet"] }], ["ring", { on: "src", n: 2, gap: 120, r: 3.0, col: ["water", "violet"] }]), ["arrows", { dir: "up", on: "src", col: ["water", "gold"] }]]);
 
   // ============================== PERSONAL MOVES (one per creature, see PERSONAL_MOVES.md) ==============================
   const lowest = c => c.mine.filter(u => u !== c.src).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0] || c.src;

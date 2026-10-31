@@ -115,6 +115,7 @@
   // target: enemy | allEnemies | ally | allyDown | self | team.  kind: phys | spell | best (higher of Attack/Power).
   // p = power per hit, hits, el = element, bk = break tags (medium/strong moves of that tag count toward the enemy's break), st = statuses [type,stacks,chance?],
   // db = debuffs [stat,val,turns], tide = Tide gained, grp = menu group, fx = custom effect, skill = skill-book move (no style bonuses)
+  const TIDE_K = 1.6, TITHE_K = 0.3, TITHE_HP = 0.2;   // release damage x(1 + TIDE_K per Tide); Tithe of the Deep: costs TITHE_HP of max HP, the release gets x(1 + TITHE_K per Tide held at the pact)
   const MOVES = {};
   function mv(id, name, lvl, mp, target, o) { MOVES[id] = Object.assign({ id, name, lvl, mp, target, kind: "phys", grp: "damage" }, o); return MOVES[id]; }
   // --- Minotaur ---
@@ -191,13 +192,14 @@
   // --- Leviathan ---
   mv("tailSlap", "Tail Slap", 1, 0, "enemy", { basic: 1, grp: "basic", kind: "best", p: 0.9, el: "self", tide: 1, desc: "Heavy slap. +1 MP, +1 Tide." });
   mv("undertow", "Undertow", 1, 1, "enemy", { kind: "spell", p: 0.6, el: "water", st: [["wet", 1]], tide: 1, desc: "Drags the target under: small water hit, makes it wet, +1 Tide." });
+  mv("deepTithe", "Tithe of the Deep", 1, 0, "self", { grp: "support", needTide: 1, hpCostPct: TITHE_HP, notWhile: "tithe", fx: "deepTithe", desc: "Costs " + Math.round(TITHE_HP * 100) + "% of its max HP, no MP. Its next Maelstrom or Tidal Wave (within 3 turns) deals x(1 + " + TITHE_K + " per Tide held now) more damage: 1 Tide = x" + (1 + TITHE_K).toFixed(1) + ", 5 Tide = x" + (1 + 5 * TITHE_K).toFixed(1) + ". Needs at least 1 Tide. The Tide stays." });
   mv("deepBreath", "Deep Breath", 3, 1, "self", { grp: "support", tide: 2, fx: "deepBreath", desc: "+2 Tide." });
-  mv("maelstrom", "Maelstrom", 4, 3, "enemy", { kind: "best", p: 1.0, el: "water", bk: ["impact"], fx: "maelstrom", desc: "Damage grows with Tide, uses all Tide. Counts toward impact breaks." });
+  mv("maelstrom", "Maelstrom", 4, 3, "enemy", { kind: "best", p: 1.0, el: "water", bk: ["impact"], fx: "maelstrom", desc: "Damage x(1 + " + TIDE_K + " per Tide), uses all Tide. Counts toward impact breaks." });
   mv("swell", "Swell", 6, 2, "self", { grp: "support", fx: "swell", desc: "+1 Tide at the start of each of its next 3 turns." });
   mv("braceDeep", "Brace the Deep", 8, 1, "self", { grp: "support", fx: "braceDeep", desc: "Takes 35% less damage until its next turn; +1 Tide when hit (max 2)." });
   mv("riptide", "Riptide", 12, 2, "enemy", { kind: "spell", p: 0.8, el: "water", tide: 1, fx: "riptide", desc: "Hit that pushes the enemy's turn back, +1 Tide." });
   mv("abyssalHunger", "Abyssal Hunger", 16, 2, "enemy", { kind: "spell", p: 0.6, el: "dark", fx: "abyssal", desc: "Drains MP from the enemy into itself." });
-  mv("tidalWave", "Tidal Wave", 20, 3, "allEnemies", { kind: "best", p: 0.55, el: "water", fx: "tidalWave", desc: "Damage on all enemies grows with Tide, uses all Tide." });
+  mv("tidalWave", "Tidal Wave", 20, 3, "allEnemies", { kind: "best", p: 0.55, el: "water", fx: "tidalWave", desc: "Damage on all enemies x(1 + " + TIDE_K + " per Tide), uses all Tide." });
 
   // --- late-game moves (MOVE-RESEARCH 2026-10-31): levels 28-60, one new job each (see logs/MOVE-RESEARCH.md) ---
   mv("decimate", "Decimate", 34, 3, "enemy", { p: 1.8, fx: "decimate", desc: "Heavy blow, 80% harder on an enemy at 35% HP or less. A kill gives back 2 MP." });
@@ -230,7 +232,7 @@
     phoenix: ["emberPeck", "warmLight", "rejuvenate", "cleansingFlame", "flameWard", "healWave", "rebirth", "purge", "sunfire", "emberWish", "dawnVeil", "heartfireOffering"],
     gorgon: ["serpentLash", "hiss", "venomMark", "petrifyingGaze", "crackArmour", "shatterShield", "coil", "stoneGaze", "curseOfStone", "verdictOfStone", "hissingChoir"],
     dragon: ["claw", "ember", "torrent", "frostBreath", "thunderclap", "attune", "inferno", "blizzard", "detonate", "stormchain", "stormGathering", "cometCall"],
-    leviathan: ["tailSlap", "undertow", "deepBreath", "maelstrom", "swell", "braceDeep", "riptide", "abyssalHunger", "tidalWave", "ebbTide", "risingFlood", "weightOfDeep"],
+    leviathan: ["tailSlap", "undertow", "deepTithe", "deepBreath", "maelstrom", "swell", "braceDeep", "riptide", "abyssalHunger", "tidalWave", "ebbTide", "risingFlood", "weightOfDeep"],
   };
   Object.values(STYLE_MOVES).forEach(l => l.sort((a, b) => MOVES[a].lvl - MOVES[b].lvl));   // learn order = level order (the menus and the next-move hint rely on it)
 
@@ -853,6 +855,7 @@
     if (u.mp < mpCost(u, id)) return false;
     if ((m.hpCost || m.hpCostPct) && u.hp <= Math.round(u.maxHp * hpFrac(u, m)) + 1) return false;
     if (m.needTide && !(u.tide >= m.needTide)) return false;
+    if (m.notWhile && hasBuff(u, m.notWhile)) return false;
     if (m.target === "allyDown" && !ctx.party.some(p => !p.alive && !p.rise)) return false;
     if ((m.target === "enemy" || m.target === "allEnemies") && !ctx.foes.some(f => f.alive)) return false;
     return true;
@@ -997,6 +1000,7 @@
     maelstrom(c, u, m, t, ts) { release(c, u, m, ts); },
     tidalWave(c, u, m, t, ts) { release(c, u, m, ts); },
     swell(c, u) { addBuff(u, "swell", 1, 3); say(c, u.name + " gathers the deep."); },
+    deepTithe(c, u) { addBuff(u, "tithe", 1 + TITHE_K * u.tide, 3, { force: 1 }); say(c, u.name + " pays the deep its tithe."); },
     braceDeep(c, u) { hold(u, u, "dr", 0.35); hold(u, u, "braceDeep", 1); u.braceTide = 0; say(c, u.name + " braces against the current."); },
     riptide(c, u, m, t, ts) { genericAttack(c, u, m, ts); if (t.alive) { delayTurn(c, t, "The riptide drags " + t.name + " back!"); if (fxl(u, "draggingCurrent")) debuff(c, u, t, "spd", -fxv(u, "draggingCurrent", 0.15, 0.07), 2); } },   // Dragging Current
     abyssal(c, u, m, t, ts) {
@@ -1110,8 +1114,8 @@
   }
   const ctxTeam = (c, u) => (u.side === "p" ? c.party : c.foes);
   function release(c, u, m, ts) {
-    const full = u.tide >= 5 && u.passive === "highWater", mult = (1 + 0.8 * u.tide) * (1 + fxv(u, "heavierTide", 0.2, 0.1)), maxed = u.tide >= gearTideMax(u);   // Heavier Tide
-    genericAttack(c, u, m, ts, { pmul: mult, strong: true }); u.tide = 0; c.ev.push({ t: "tide", tgt: u, v: 0, n: 0 });
+    const full = u.tide >= 5 && u.passive === "highWater", tb = getBuff(u, "tithe"), mult = (1 + TIDE_K * u.tide) * (1 + fxv(u, "heavierTide", 0.2, 0.1)) * (tb ? tb.val : 1), maxed = u.tide >= gearTideMax(u);   // Heavier Tide
+    genericAttack(c, u, m, ts, { pmul: mult, strong: true }); u.tide = 0; if (tb) u.buffs = u.buffs.filter(b => b !== tb); c.ev.push({ t: "tide", tgt: u, v: 0, n: 0 });
     if (u.evo) EVO.release(c, u);   // evolution trait: the team heals when it releases Tide
     if (full) ts.forEach(x => x.alive && ctrlRoll(c, u, x, 0.9) && addStatus(c, u, x, "stun", 1, { sure: 1 }));
     if (maxed && fxl(u, "crashingWave")) ts.forEach(x => x.alive && addStatus(c, u, x, "wet", 1, { sure: 1, dur: fxl(u, "crashingWave") >= 2 ? 0 : 1 }));   // Crashing Wave: a release at maximum Tide soaks the target
@@ -1490,7 +1494,7 @@
     const ev = ctx.ev, mates = ctx.foes.filter(f => f.alive && f !== e);
     if (a.hold && tgt && tgt.alive && !tgt.held) { tgt.held = { by: e, t: a.hold === true ? 2 : a.hold }; ev.push({ t: "held", src: e, tgt }); say(ctx, e.name + " seizes " + tgt.name + "!"); }
     if (a.steal && tgt && tgt.alive) {
-      const b = tgt.buffs.find(x => x.val > 0 && x.turns < 50 && x.type !== "taunt" && x.type !== "cover");
+      const b = tgt.buffs.find(x => x.val > 0 && x.turns < 50 && x.type !== "taunt" && x.type !== "cover" && x.type !== "tithe");
       if (b) { tgt.buffs = tgt.buffs.filter(x => x !== b); addBuff(e, b.type, b.val, b.turns, { force: 1 }); ev.push({ t: "steal", src: e, tgt, stat: b.type }); say(ctx, e.name + " steals " + tgt.name + "'s boost!"); }
       else if (tgt.mp > 0) { tgt.mp--; ev.push({ t: "steal", src: e, tgt, stat: "mp" }); say(ctx, e.name + " drains a spark of " + tgt.name + "'s energy."); }
     }
@@ -1676,6 +1680,15 @@
     }
     return null;
   }
+  // Leviathan plan: how much Tide to build before releasing (full Tide when the fight is big and it is safe, less to finish a weak foe or when in danger) and whether to pay the Tithe first
+  function levPlan(u, S) {
+    const tmax = gearTideMax(u), foe = S.foe, hpF = u.hp / u.maxHp, totalHp = S.foes.reduce((a, f) => a + f.hp, 0);
+    const big = !!foe.boss || totalHp >= u.maxHp * 0.6, safe = hpF > 0.45 && S.avg > 0.5;
+    const weak = S.foes.length === 1 && foe.hp / foe.maxHp < 0.3;
+    const need = weak ? 2 : big && safe ? tmax : 3;
+    const tithe = big && !weak && hpF > 0.5 && u.tide >= Math.min(need, tmax) && !hasBuff(u, "tithe");   // it pays when the release is next, and only with HP to spare
+    return { tmax, need, tithe };
+  }
   function autoChoice(ctx, u) {
     const mv = movesOf(u), foes = ctx.foes.filter(f => f.alive), team = ctx.party.filter(a => a.alive);
     const ok = id => mv.includes(id) && canUse(ctx, u, id);
@@ -1687,12 +1700,13 @@
     const S = { ok, foe, lowest, avg, tele, team, foes };
     const R = (move, target, opt) => ({ move, target: target === undefined ? foe : target, opt });
     const F = id => focus(ctx, u, id);
+    const lev = u.style === "leviathan" ? levPlan(u, S) : null;
     const covered = f => hasBuff(f, "dr");
     const fresh = (f, s) => !f.st[s] && canStatus(f, s);
     // 1. try to break an enemy with a matching medium/strong move (any style, including the off-style slot)
     const breakable = foes.filter(f => f.breakType && !f.broken && (f.boss || f.hp / f.maxHp > 0.4));
     for (const f of breakable) {
-      const mid = mv.filter(id => ok(id) && MOVES[id].mp >= 2 && ((MOVES[id].bk || []).includes(f.breakType) || ((MOVES[id].el === f.breakType) && MOVES[id].el))).sort((a, b) => MOVES[a].mp - MOVES[b].mp);
+      const mid = mv.filter(id => ok(id) && MOVES[id].mp >= 2 && !(lev && (id === "maelstrom" || id === "tidalWave" || id === "weightOfDeep") && u.tide < lev.need) && ((MOVES[id].bk || []).includes(f.breakType) || ((MOVES[id].el === f.breakType) && MOVES[id].el))).sort((a, b) => MOVES[a].mp - MOVES[b].mp);
       if (mid.length && (f.breakPts > 0 || u.mp >= MOVES[mid[0]].mp)) {
         if (u.style === "phoenix" && lowest.hp / lowest.maxHp < 0.5) break;
         const best = f.breakType === "impact" && ok("skullCrush") ? "skullCrush" : mid[0];
@@ -1836,19 +1850,19 @@
         return R(basic, F(basic));
       }
       case "leviathan": {
-        const big = foes.slice().sort((a, b) => b.hp - a.hp)[0];
-        const need = foes.length === 1 && foe.hp / foe.maxHp < 0.3 ? 2 : 3;
-        if (tele && ok("braceDeep") && !hasBuff(u, "braceDeep")) return R("braceDeep", u);
-        if (avg < 0.55 && u.tide >= 2 && ok("ebbTide")) return R("ebbTide", u);
-        if ((foe.boss || foes.length > 1) && !(ctx.flood && ctx.flood.t > 0) && u.mp >= 4 && ctx.party.some(a => a !== u && a.alive && (a.element === "shock" || a.element === "ice" || a.offMove === "coldSnap")) && ok("risingFlood")) return R("risingFlood", u);
-        if (foe.boss && u.tide >= 3 && u.tide < 5 && u.mp >= 3 && ok("weightOfDeep")) return R("weightOfDeep", foe);
+        const { need, tmax } = lev;
+        const keep = u.tide >= need - 1 ? 3 : 0, spare = id => u.mp - mpCost(u, id) >= keep;   // with the release close, keep the 3 MP for it
+        if (tele && ok("braceDeep") && spare("braceDeep") && !hasBuff(u, "braceDeep")) return R("braceDeep", u);
+        if (avg < 0.4 && u.tide >= 2 && !hasBuff(u, "tithe") && ok("ebbTide")) return R("ebbTide", u);
+        if ((foe.boss || foes.length > 1) && !(ctx.flood && ctx.flood.t > 0) && u.mp >= 4 && u.tide < need - 1 && ctx.party.some(a => a !== u && a.alive && (a.element === "shock" || a.element === "ice" || a.offMove === "coldSnap")) && ok("risingFlood")) return R("risingFlood", u);
+        if (u.tide >= need && u.mp >= 3 && lev.tithe && ok("deepTithe")) return R("deepTithe", u);   // pay the deep first, then release
         if (foes.length > 1 && u.tide >= need && ok("tidalWave")) return R("tidalWave", u);
         if (u.tide >= need && ok("maelstrom")) return R("maelstrom", foe.boss ? foe : F("maelstrom"));
-        if (u.tide >= 5 && ok("tidalWave")) return R("tidalWave", u);
-        if (pers) return pers;
-        if (ok("swell") && u.tide <= 2 && !hasBuff(u, "swell") && u.mp >= 5) return R("swell", u);
-        if (ok("deepBreath") && u.tide <= 3 && u.mp >= 4) return R("deepBreath", u);
-        if (ok("riptide") && foe.boss && foe.actedRound !== ctx.round && u.mp >= 4) return R("riptide", foe);
+        if (u.tide >= tmax && ok("tidalWave")) return R("tidalWave", u);
+        if (pers && spare(pers.move)) return pers;
+        if (ok("deepBreath") && u.tide <= tmax - 2 && u.mp >= 4) return R("deepBreath", u);
+        if (ok("swell") && u.tide <= 1 && !hasBuff(u, "swell") && u.mp >= 5) return R("swell", u);
+        if (ok("riptide") && foe.boss && foe.actedRound !== ctx.round && u.mp >= 4 && spare("riptide")) return R("riptide", foe);
         // set up a partner's combo: wet + shock (Conductive) or wet + chill (Freeze)
         const comboMate = (u.side === "p" ? ctx.party : ctx.foes).some(a => a !== u && a.alive && (a.element === "shock" || a.element === "ice" || a.offMove === "coldSnap"));
         const dry = foes.find(f => !f.st.wet && !f.st.freeze);
