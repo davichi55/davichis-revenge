@@ -41,6 +41,15 @@
     if (R.boat) { m.parallax = null; }
     return m;
   };
+  // Part 3 (Danny 2026-11-01, award-winning 2D games, research Part 3): each can be switched off on its own here
+  //   grain: Cuphead-style film grain that also dithers fog and vignette gradients (changes 6 times a second)
+  //   outline: Hollow Knight / Ori readability: a thin dark edge and a touch more colour on the hero, followers, people and chests
+  //   chapter: Gris-style colour as progression: every chapter leans toward its own colour (G.ch), over the map's own grade
+  //   stepped: fog and cloud drift advance 12 times a second, at the cadence of the hand-drawn sprites
+  A.F = { grain: true, outline: true, chapter: true, stepped: true };
+  //              [wash colour, wash alpha, hue turn]
+  const CHAPTER = [null, null, null, [0x2f7a50, 0.06, 3], [0x2f7a50, 0.06, 3], [0xc8963c, 0.05, -2], [0xc8963c, 0.05, -2], [0x7a2a44, 0.06, -5], [0x7a2a44, 0.06, -5], [0x2c3c64, 0.07, 4], [0x523a7c, 0.06, 6], [0xd0602c, 0.05, -4], [0x3050a8, 0.05, 5]];
+  A.chapterOf = () => { try { return CHAPTER[Math.min(CHAPTER.length - 1, Math.max(0, G.ch | 0))]; } catch (e) { return null; } };
   A.on = () => { try { return G.atmos !== false; } catch (e) { return true; } };
 
   function tex(sc) {
@@ -54,16 +63,20 @@
         x.strokeStyle = "rgba(40,70,36,0.6)"; x.lineWidth = 1.5; x.beginPath(); x.moveTo(2, 0); x.lineTo(L - 4, 0); x.stroke(); x.restore(); } });
     mk("atm_wisp", 300, 90, (x, w, h) => { for (let i = 0; i < 6; i++) { const cx = 40 + Math.random() * 220, cy = 30 + Math.random() * 30, r = 30 + Math.random() * 40, g = x.createRadialGradient(cx, cy, 2, cx, cy, r); g.addColorStop(0, "rgba(255,255,255,0.5)"); g.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = g; x.fillRect(0, 0, w, h); } });
   }
+  // three half-resolution grain frames (a TileSprite loses the per-pixel alpha in WebGL, so plain images that cycle)
+  function grainTex(sc) { for (let n = 0; n < 3; n++) { const key = "atm_grain" + n; if (sc.textures.exists(key)) continue; const W = 512, H = 300, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d"), im = x.createImageData(W, H);
+    for (let i = 0; i < W * H; i++) { const v = Math.random() < 0.5 ? 255 : 0, o = i * 4; im.data[o] = im.data[o + 1] = im.data[o + 2] = v; im.data[o + 3] = Math.floor(Math.random() * Math.random() * 60); }
+    x.putImageData(im, 0, 0); sc.textures.addCanvas(key, c); } }
   const LIGHT_KEYS = /crystal|glowShroom|Lantern|lantern|Lamp|lamp|Brazier|brazier|torch|Torch|candle|Candle|campfire|FirePit|CookFire|iceSpire|lanternBuoy/;
 
   A.build = sc => {
     A.clear(sc); if (!A.on()) return;
     try {
-      tex(sc); const R = sc.R, m = A.moodOf(R), st = sc.atmos = { m, fog: [], clouds: [], frame: [], halos: [], fx: null };
+      tex(sc); const R = sc.R, m = A.moodOf(R), st = sc.atmos = { m, fog: [], clouds: [], frame: [], halos: [], fx: null, extra: [], outlined: [], step: 0 }, ch = A.F.chapter ? A.chapterOf() : null, webgl = sc.renderer && sc.renderer.type === Phaser.WEBGL;
       sc.events.once("shutdown", () => A.clear(sc));
       // 1. colour grade
       if (m.grade && sc.renderer && sc.renderer.type === Phaser.WEBGL && sc.cameras.main.postFX) {
-        const cm = sc.cameras.main.postFX.addColorMatrix(); cm.saturate(m.grade[0], true); if (m.grade[1]) cm.contrast(m.grade[1], true); /* Phaser adds 1 itself: 0 = unchanged */ if (m.grade[2]) cm.hue(m.grade[2], true); st.fx = cm;
+        const cm = sc.cameras.main.postFX.addColorMatrix(); cm.saturate(m.grade[0], true); if (m.grade[1]) cm.contrast(m.grade[1], true); /* Phaser adds 1 itself: 0 = unchanged */ const hue = (m.grade[2] || 0) + (ch ? ch[2] : 0); if (hue) cm.hue(hue, true); st.fx = cm;
       }
       // 2. bloom: a wide soft halo round lights
       const k = m.bloom || 1;
@@ -80,17 +93,32 @@
       if (m.parallax) { const key = m.parallax === "leaves" ? "atm_leaves" : "atm_wisp", n = 7;
         for (let i = 0; i < n; i++) { const top = i % 2 === 0, s = sc.add.image(0, 0, key).setScrollFactor(0).setDepth(9450).setScale(m.parallax === "leaves" ? 1.6 + Math.random() * 0.6 : 2 + Math.random()).setFlipX(Math.random() < 0.5).setFlipY(top && m.parallax === "leaves").setAlpha(m.parallax === "leaves" ? 0.95 : 0.13);
           st.frame.push({ s, bx: i * (1360 / n) + Math.random() * 60, top, dy: top ? -30 - Math.random() * 30 : 540 + 20 + Math.random() * 30 }); } }
+      // 5. chapter colour wash
+      if (ch) st.extra.push(sc.add.rectangle(0, 0, 960, 540, ch[0], ch[1]).setOrigin(0, 0).setScrollFactor(0).setDepth(9502).setBlendMode(Phaser.BlendModes.MULTIPLY));
+      // 6. film grain (half resolution, under the vignette)
+      if (A.F.grain) { grainTex(sc); st.grain = sc.add.image(0, 0, "atm_grain0").setOrigin(0, 0).setScrollFactor(0).setDepth(9590).setScale(2).setAlpha(0.6); st.extra.push(st.grain); }
+      // 7. outlines on the hero, followers, people and chests
+      if (A.F.outline && webgl) A.outline(sc);
     } catch (e) { console.warn("atmos", e); }
+  };
+  A.outline = sc => {
+    const st = sc.atmos; if (!st) return;
+    const objs = [sc.hero].concat((sc.followers || []).map(f => f.s), (sc.npcs || []).map(n => n.s), (sc.chests || []).map(c => c.s));
+    for (const o of objs) if (o && o.preFX && !st.outlined.includes(o)) { try { const g = o.preFX.addGlow(0x0c0705, 1.6, 0, false, 0.1, 3), c = o.preFX.addColorMatrix(); c.saturate(0.12, true); st.outlined.push(o); o._atm = [g, c]; } catch (e) { /* no FX on this one */ } }
   };
   A.clear = sc => {
     const st = sc.atmos; sc.atmos = null; if (!st) return;
     try { if (st.fx && sc.cameras.main.postFX) sc.cameras.main.postFX.remove(st.fx); } catch (e) { /* ignore */ }
     for (const list of [st.fog, st.clouds, st.frame, st.halos]) for (const o of list) try { o.s.destroy(); } catch (e) { /* ignore */ }
+    for (const o of st.extra) try { o.destroy(); } catch (e) { /* ignore */ }
+    for (const o of st.outlined) try { if (o.preFX && o._atm) o._atm.forEach(fx => o.preFX.remove(fx)); o._atm = null; } catch (e) { /* ignore */ }
   };
   A.update = (sc, time, dt) => {
     const st = sc.atmos; if (!st) return; const v = sc.cameras.main.worldView, cam = sc.cameras.main;
-    for (const f of st.fog) { f.x += f.vx * dt; const px = v.x + ((f.x - v.x * 0.2) % 1600 + 1600) % 1600 - 320, py = v.y + ((f.y + Math.sin(time * 0.0002 + f.ph) * 30) % 760 + 760) % 760 - 110; f.s.setPosition(Math.round(px), Math.round(py)); }
-    for (const c of st.clouds) { c.x += c.vx * dt; c.y += c.vy * dt; c.s.setPosition(Math.round(v.x + ((c.x - v.x * 0.1) % 2000 + 2000) % 2000 - 500), Math.round(v.y + ((c.y - v.y * 0.1) % 1200 + 1200) % 1200 - 330)); }
+    let ddt = dt; if (A.F.stepped) { const k = Math.floor(time / 83); ddt = k !== st.step ? 0.083 : 0; st.step = k; }   // drift moves in 12 fps steps; the camera follow stays smooth
+    if (st.grain && Math.floor(time / 160) !== st.gstep) { st.gstep = Math.floor(time / 160); st.grain.setTexture("atm_grain" + (st.gstep % 3)).setPosition(-Math.floor(Math.random() * 64), -Math.floor(Math.random() * 30)).setFlip(Math.random() < 0.5, Math.random() < 0.5); }
+    for (const f of st.fog) { f.x += f.vx * ddt; const px = v.x + ((f.x - v.x * 0.2) % 1600 + 1600) % 1600 - 320, py = v.y + ((f.y + Math.sin(time * 0.0002 + f.ph) * 30) % 760 + 760) % 760 - 110; f.s.setPosition(Math.round(px), Math.round(py)); }
+    for (const c of st.clouds) { c.x += c.vx * ddt; c.y += c.vy * ddt; c.s.setPosition(Math.round(v.x + ((c.x - v.x * 0.1) % 2000 + 2000) % 2000 - 500), Math.round(v.y + ((c.y - v.y * 0.1) % 1200 + 1200) % 1200 - 330)); }
     for (const h of st.halos) { if (h.src && !h.src.visible) { h.s.setVisible(false); continue; } h.s.setVisible(true).setAlpha(h.a * (0.8 + 0.2 * Math.sin(time * 0.002 + h.ph))); }
     for (const p of st.frame) { const x = ((p.bx - cam.scrollX * 1.3) % 1360 + 1360) % 1360 - 200, y = p.dy + (p.top ? -1 : 1) * (((cam.scrollY * 0.3) % 30 + 30) % 30); p.s.setPosition(Math.round(x), Math.round(y)); }
   };
