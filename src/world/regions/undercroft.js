@@ -6,7 +6,7 @@
     look: "A damp cellar under a laboratory: old flagstones, puddles, brass pipes along the walls, a builder conduit with a faint gold light-line, rough dark stone walls. Moody, torch-lit.",
     legend: { floor: "damp grey flagstone cellar floor with puddles and moss", shallow: "shallow puddles and trickling water on the stone floor", rock: "solid dark stone cellar walls and rubble, black-brown", paved: "worn flagstones" },
     guide: [
-      ["floor", R(80, 560, 360, 240)], ["floor", L([[440, 680], [700, 680]], 72)], ["floor", R(700, 480, 300, 320)], ["floor", L([[850, 480], [850, 270]], 72)], ["floor", R(560, 90, 560, 210)], ["floor", L([[560, 190], [220, 190]], 72)], ["floor", R(80, 90, 220, 300)],
+      ["floor", R(80, 560, 360, 240)], ["floor", R(140, 780, 120, 80)],   /* the stair back up to Orun: the room ended at y 800, the exit starts at 808 (Danny: softlock) */["floor", L([[440, 680], [700, 680]], 72)], ["floor", R(700, 480, 300, 320)], ["floor", L([[850, 480], [850, 270]], 72)], ["floor", R(560, 90, 560, 210)], ["floor", L([[560, 190], [220, 190]], 72)], ["floor", R(80, 90, 220, 300)],
       ["shallow", E(250, 700, 70, 40)], ["shallow", L([[440, 680], [700, 680]], 30)], ["shallow", E(850, 640, 80, 50)], ["shallow", E(860, 200, 120, 50)], ["shallow", E(180, 250, 60, 40)],
     ],
     dark: { ambient: 0.7, radius: 200 },
