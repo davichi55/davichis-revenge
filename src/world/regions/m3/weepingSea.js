@@ -54,10 +54,10 @@
       { rect: [440, 430, 90, 120], to: "saltgate", entry: "from_sea", push: [1, 0] }, { rect: [450, 2900, 90, 120], to: "brassHarbour", entry: "from_sea", push: [1, 0] }, { rect: [440, 1650, 90, 120], to: "mournsGate", entry: "from_sea", push: [1, 0] },
       { rect: [2250, 740, 100, 90], to: "gullrest", entry: "from_sea", push: [0, 1] }, { rect: [2750, 1130, 100, 90], to: "maelstromCaves", entry: "from_sea", push: [0, 1] }, { rect: [2250, 2600, 100, 90], to: "cinderCrownIsle", entry: "from_sea", push: [0, -1] },
       { rect: [4660, 1750, 90, 120], to: "tzavan", entry: "from_sea", push: [-1, 0] }, { rect: [4660, 2950, 90, 120], to: "creepingShore", entry: "from_sea", push: [-1, 0] },
-      { rect: [4660, 850, 90, 120], to: "lowstep", entry: "from_sea", push: [-1, 0] }, { rect: [4660, 2350, 90, 120], to: "paleGate", entry: "from_sea", push: [-1, 0] }, { rect: [4660, 310, 90, 120], to: "rootdeepApproach", entry: "from_sea", push: [-1, 0], need: "ch9.start" },   // M4 docks
+      { rect: [4660, 850, 90, 120], to: "lowstep", entry: "from_sea", push: [-1, 0], need: "ch7.start", blocked: "seaLowstepShut" }, { rect: [4660, 2350, 90, 120], to: "paleGate", entry: "from_sea", push: [-1, 0], need: "ch8.start", blocked: "seaPaleGateShut" }, { rect: [4660, 310, 90, 120], to: "rootdeepApproach", entry: "from_sea", push: [-1, 0], need: "ch9.start" },   // M4 docks
       //DOCKS-EXITS (M4/M5 append here)
       // M5 docks
-      { rect: [440, 1040, 90, 120], to: "saltmereCamp", entry: "from_sea", push: [1, 0] }, { rect: [4660, 440, 90, 120], to: "dawnwatchBastion", entry: "from_sea", push: [-1, 0], need: "ch11.start" },
+      { rect: [440, 1040, 90, 120], to: "saltmereCamp", entry: "from_sea", push: [1, 0], need: "ch10.start", blocked: "seaSaltmereShut" }, { rect: [4660, 440, 90, 120], to: "dawnwatchBastion", entry: "from_sea", push: [-1, 0], need: "ch11.start" },
       { rect: [3650, 780, 100, 90], to: "starhaven", entry: "from_sea", push: [0, -1], need: "stormSails" }, { rect: [3490, 1740, 120, 120], to: "lanternDeep", entry: "from_sea", push: [0, -1], need: "stormSails", show: "post.start" },
     ],
     chests: [{ id: "sunkenShipChest", x: 3000, y: 1500 }],

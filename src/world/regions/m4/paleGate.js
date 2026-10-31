@@ -28,8 +28,8 @@
     ],
     entries: { start: { x: 1330, y: 640, face: "left" }, from_sea: { x: 1330, y: 640, face: "left" }, from_tzavanCoast: { x: 720, y: 360, face: "down" }, inn: { x: 300, y: 600, face: "down" } },
     exits: [
-      { rect: [1490, 610, 60, 60], to: "weepingSea", entry: "from_paleGate", push: [1, 0], floor: "floor" },
-      { rect: [650, 50, 140, 50], to: "tzavanCoast", entry: "from_paleGate", push: [0, -1], floor: "road" },
+      { rect: [1490, 610, 60, 60], to: "weepingSea", entry: "from_paleGate", push: [1, 0], floor: "floor", need: "ch8.done", blocked: "paleDockShut" },
+      { rect: [650, 50, 140, 50], to: "tzavanCoast", entry: "from_paleGate", push: [0, -1], floor: "road", need: "ch8.guest", blocked: "paleRoadShut" },
     ],
     triggers: [
       { id: "paleArrive", rect: [1230, 580, 150, 120] }, { id: "emberwickJoins", rect: [500, 700, 280, 120] }, { id: "paleReturn", rect: [640, 340, 160, 50], once: false },

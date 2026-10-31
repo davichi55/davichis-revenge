@@ -291,6 +291,8 @@
 
   // ---------- the forge (S17) ----------
   S.done.forgeS17 = F => F.f("ch9.s17");
+  S.trigger.descentSealed = async F => { await UI.say([["hero", "(A shaft going down between the roots, sealed with a stone lid. Something under it knocks, slowly.)"]]); };
+  S.trigger.cellNineDoorShut = async F => { await UI.say([["hero", "(The glass door to cell nine is shut, and cold as a pond in winter. No keyhole.)"]]); };
   S.trigger.forgeS17 = async F => {
     if (F.f("ch9.s17")) return;
     F.music("tension");

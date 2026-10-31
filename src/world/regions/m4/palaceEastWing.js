@@ -29,7 +29,7 @@
     entries: { start: { x: 190, y: 1060, face: "right" }, from_palaceGarden: { x: 190, y: 1060, face: "right" }, from_palaceRoofs: { x: 1750, y: 200, face: "down" } },
     exits: [
       { rect: [56, 990, 70, 120], to: "palaceGarden", entry: "from_palaceEastWing", push: [1, 0], floor: "paved" },
-      { rect: [1700, 52, 100, 60], to: "palaceRoofs", entry: "from_palaceEastWing", push: [0, 1], need: "ch7.s12", blocked: "roofStairShut", floor: "paved" },
+      { rect: [1700, 52, 100, 60], to: "palaceRoofs", entry: "from_palaceEastWing", push: [0, 1], need: ["ch7.s12", "ch7.helm"], blocked: "roofStairShut", floor: "paved" },
     ],
     triggers: [{ id: "gaolerS12", rect: [1080, 640, 240, 120] }, { id: "imelaRoom", rect: [1540, 360, 110, 110] }],
     gather: [{ id: "davichiNote", x: 1760, y: 370, label: "A folded note on her table", color: "gold" }, { id: "thymeBox", x: 1300, y: 470, label: "A window box of thyme", color: 0x9ad88a }],

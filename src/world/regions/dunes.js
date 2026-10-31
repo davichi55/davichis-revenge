@@ -1,5 +1,5 @@
 // R1 Whisperglass Dunes: glass-sand dunes, legion patrols that hunt you, a buried builder door. Table "dunes" about every 40 s of walking.
-// Exits: orun (north-west), sandpiperRest (north-east), cisternBurntGate (south door + north gate), amberBasin (east); CH1-EXPAND: glassRidges (north), caravanGraveyard (south-west), oasisOutskirts (north-east), open once Sandpiper Rest has been reached.
+// Exits: orun (north-west), sandpiperRest (north-east), cisternBurntGate (south door + north gate; the north gate and amberBasin (east) stay shut until Karvan is beaten, ci.karvan: Danny 2026-10-31, the gate dropped you on his trigger); CH1-EXPAND: glassRidges (north), caravanGraveyard (south-west), oasisOutskirts (north-east), open once Sandpiper Rest has been reached.
 (function () {
   const { R, E, P, L } = World.shapes;
   World.def("whisperglassDunes", {
@@ -20,8 +20,8 @@
       { rect: [40, 140, 56, 120], to: "ashenOrun", entry: "from_dunes", push: [1, 0], show: "ch5.start" },
       { rect: [1930, 210, 50, 100], to: "sandpiperRest", entry: "from_dunes", push: [-1, 0], floor: "road" },
       { rect: [1180, 1400, 90, 50], to: "cisternBurntGate", entry: "from_dunes", push: [0, -1] },
-      { rect: [1722, 520, 70, 36], to: "cisternBurntGate", entry: "from_dunes_gate", push: [0, 1] },
-      { rect: [2220, 730, 50, 100], to: "amberBasin", entry: "from_dunes", push: [-1, 0] },
+      { rect: [1722, 520, 70, 36], to: "cisternBurntGate", entry: "from_dunes_gate", push: [0, 1], need: "ci.karvan", blocked: "ch1.gateShut" },
+      { rect: [2220, 730, 50, 100], to: "amberBasin", entry: "from_dunes", push: [-1, 0], need: "ci.karvan", blocked: "ch1.roadShut" },
       { rect: [1050, 40, 130, 50], to: "glassRidges", entry: "from_dunes", push: [0, 1], need: "sp.seen", blocked: "ch1x.wait" },
       { rect: [590, 1400, 110, 50], to: "caravanGraveyard", entry: "from_dunes", push: [0, -1], need: "sp.seen", blocked: "ch1x.wait" },
       { rect: [1700, 40, 130, 50], to: "oasisOutskirts", entry: "from_dunes", push: [0, 1], need: "sp.seen", blocked: "ch1x.wait" },

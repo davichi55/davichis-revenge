@@ -31,7 +31,7 @@
     entries: { start: { x: 1280, y: 1000, face: "left" }, from_sea: { x: 1280, y: 1000, face: "left" }, from_ahuacanSewers: { x: 150, y: 420, face: "down" }, from_palaceRoofs: { x: 1560, y: 410, face: "left" }, inn: { x: 1010, y: 940, face: "up" } },
     exits: [
       { rect: [1420, 940, 80, 70], to: "weepingSea", entry: "from_lowstep", push: [-1, 0], floor: "floor" },
-      { rect: [90, 352, 80, 56], to: "ahuacanSewers", entry: "from_lowstep", push: [0, -1], need: "ch7.start", blocked: "lowstepGrateShut", floor: "paved" },
+      { rect: [90, 352, 80, 56], to: "ahuacanSewers", entry: "from_lowstep", push: [0, -1], need: "ch7.briefed", blocked: "lowstepGrateShut", floor: "paved" },
     ],
     triggers: [{ id: "lowstepArrive", rect: [1180, 930, 150, 110] }, { id: "planBriefing", rect: [260, 370, 220, 70], when: "ch7.start" }],
     npcs: [

@@ -139,6 +139,7 @@
     UI.toast("The gate to the Great Stair is open.", 3000);
   };
   S.done.lastSupper = F => F.f("ch11.supper");
+  S.trigger.dawnStairGateShut = async F => { await UI.say([["hero", "(The gate to the stair is shut and barred. Behind me they are still hanging lanterns over a long table.)"]]); };
 
   M3.talkTown(BB, { inn: BB, shop: "dawnwatch", who: ["scout", "stallkeeper", "scout"], opts: {},
     innLine: "The Dawn Bed. A cot by the wall, a blanket, and all the sleep the night will give you. Nobody is charging for the quiet.",
@@ -188,6 +189,7 @@
     UI.toast("The Dawn Gate is open ahead.", 3000);
   };
   S.done.stairAssault = F => F.f("ch11.stair");
+  S.trigger.dawnGateShut = async F => { await UI.say([["hero", "(The Dawn Gate is shut. Between me and it, the stair is still a field of men fighting for the steps.)"]]); };
   S.chest.stairChest = M.loot("c.stair", [["ember", 4], ["tonic", 4]], 1300, "A chest behind a toppled statue of a man with a sun for a head. Four Ashen Embers, four Clearwater Tonics, and a purse of kakal that somebody on the stair meant to spend later.");
 })();
 

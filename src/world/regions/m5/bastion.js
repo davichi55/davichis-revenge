@@ -34,7 +34,7 @@
     entries: { start: { x: 340, y: 700, face: "right" }, from_sea: { x: 340, y: 700, face: "right" }, from_ahuacanGreatStair: { x: 1550, y: 400, face: "left" }, inn: { x: 600, y: 490, face: "down" } },
     exits: [
       { rect: [40, 640, 56, 120], to: "weepingSea", entry: "from_dawnwatchBastion", push: [1, 0], floor: "floor" },
-      { rect: [1594, 340, 56, 120], to: "ahuacanGreatStair", entry: "from_dawnwatchBastion", push: [-1, 0] },
+      { rect: [1594, 340, 56, 120], to: "ahuacanGreatStair", entry: "from_dawnwatchBastion", push: [-1, 0], need: "ch11.supper", blocked: "dawnStairGateShut" },
     ],
     triggers: [{ id: "bastionArrive", rect: [300, 640, 140, 120] }, { id: "lastSupper", rect: [800, 660, 220, 110] }],
     props,

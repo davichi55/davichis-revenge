@@ -65,6 +65,9 @@
   };
 
   // ---------- the cistern ----------
+  // dunes exits that stay shut until Karvan is beaten (the cistern is entered from the south door, the road east opens after him)
+  S.trigger["ch1.gateShut"] = async F => { F.sfx("clang"); await UI.say([["hero", "(Green bronze, barred from the other side. Behind it, shields knock against each other, and someone laughs.)"]]); };
+  S.trigger["ch1.roadShut"] = async F => { await UI.say([["hero", "(A wall of tower shields across the road, and a second wall behind it. They are waiting for someone. For me.)"]]); };
   S.chest["cistern.chest"] = async F => S.gearChest(F, "cistern.chest", "G5");
   S.trigger.karvan = async F => {
     if (F.f("ci.karvan")) return;

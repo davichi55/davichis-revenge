@@ -12,6 +12,7 @@
   // ---------- the dusk hound roams the dunes and these maps (flow.js F.enter rolls the dusk once per visit to the area) ----------
   S.duskSet = { dunes: 1, glassRidges: 1, caravanGraveyard: 1, oasisOutskirts: 1 };
   S.trigger["ch1x.wait"] = async F => { await UI.say([["hero", "(Sandpiper Rest first. Everything out here can wait until I have a roof.)"]]); };
+  S.trigger["cistern.gateSealed"] = async F => { F.sfx("clang"); await UI.say([["hero", "(Green bronze, bolted from the far side. Whoever bolted it is still out there.)"]]); };   // north gate of the cistern, from inside, before Karvan falls
 
   // ---------- quests and rumours ----------
   Q(D.QUESTS, {

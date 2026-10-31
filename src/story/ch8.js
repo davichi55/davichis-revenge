@@ -158,6 +158,9 @@
     F.questDone("m_pale"); F.quest("m_ops", 0);
   };
   S.done.paleArrive = F => F.f("ch8.arrived");
+  S.trigger.paleRoadShut = async F => { await UI.say([["hero", "(The cliff road runs off north into the dark. The sentries on the wall are watching it, and so I find I am too.)"]]); };
+  S.trigger.paleDockShut = async F => { await UI.say([["hero", "(The small dock is chained and the lamp over it is dark. Nobody here is sailing tonight.)"]]); };
+  S.trigger.seaPaleGateShut = async F => { await UI.say([["hero", "(White limewashed walls on the cliff and not one light on them. I know nobody up there who would ask me ashore.)"]]); };
 
   S.trigger.emberwickJoins = async F => {
     if (!F.f("ch8.arrived") || F.f("ch8.guest")) return;
@@ -315,6 +318,8 @@
   S.chest.coastChest1 = M2.loot("c.coast1", [["tonic", 3]], 400, "A chest in a signal tower, under a pile of oilcloth. Three Clearwater Tonics and a purse. Somebody was saving them for a long watch.");
   S.chest.coastChest2 = M2.loot("c.coast2", [["ember", 2]], 0, "Under the lintel of a ruined tollbooth, a clay jar sealed with wax. Two Ashen Embers, still warm from the sun.");
   S.done.tollS13 = F => F.f("ch8.s13");
+  S.trigger.coastRoadBarred = async F => { await UI.say([["hero", "(The tollbooth stands across the road north, its bar down and a dozen legionaries sitting behind it.)"]]); };
+  S.trigger.coastEastBarred = async F => { await UI.say([["hero", "(The orchard track begins behind the tollbooth. Crossbowmen on its roof cover every step of it.)"]]); };
   S.trigger.tollS13 = async F => {
     if (F.f("ch8.s13")) return;
     F.music("tension");

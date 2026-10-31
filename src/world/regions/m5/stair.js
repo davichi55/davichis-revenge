@@ -31,7 +31,7 @@
       ["ash", E(2780, 440, 190, 170)], ["ash", E(900, 1900, 300, 80)], ["ash", E(1700, 1600, 200, 80)],
     ],
     entries: { start: { x: 150, y: 1780, face: "right" }, from_dawnwatchBastion: { x: 150, y: 1780, face: "right" }, from_pyramidDawnGate: { x: 2850, y: 440, face: "left" } },
-    exits: [{ rect: [40, 1710, 56, 140], to: "dawnwatchBastion", entry: "from_ahuacanGreatStair", push: [1, 0] }, { rect: [2894, 370, 56, 140], to: "pyramidDawnGate", entry: "from_ahuacanGreatStair", push: [-1, 0] }],
+    exits: [{ rect: [40, 1710, 56, 140], to: "dawnwatchBastion", entry: "from_ahuacanGreatStair", push: [1, 0] }, { rect: [2894, 370, 56, 140], to: "pyramidDawnGate", entry: "from_ahuacanGreatStair", push: [-1, 0], need: "ch11.stair", blocked: "dawnGateShut" }],
     triggers: [{ id: "stairAssault", rect: [260, 1680, 300, 200] }],
     chests: [{ id: "stairChest", x: 800, y: 1330 }],
     gather: [{ id: "bannerThread1", x: 560, y: 1390, label: "A burnt standard", color: 0xe8b040 }, { id: "bannerThread2", x: 1980, y: 1260, label: "A banner in the ash", color: 0xe8b040 }],

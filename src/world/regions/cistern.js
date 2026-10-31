@@ -17,7 +17,7 @@
     entries: { start: { x: 800, y: 1000, face: "up" }, from_dunes: { x: 800, y: 1000, face: "up" }, from_dunes_gate: { x: 800, y: 140, face: "down" } },
     exits: [
       { rect: [750, 1050, 100, 40], to: "whisperglassDunes", entry: "from_cistern", push: [0, -1] },
-      { rect: [750, 44, 100, 40], to: "whisperglassDunes", entry: "from_cistern_gate", push: [0, 1] },
+      { rect: [750, 44, 100, 40], to: "whisperglassDunes", entry: "from_cistern_gate", push: [0, 1], need: "ci.karvan", blocked: "cistern.gateSealed" },
     ],
     triggers: [{ id: "karvanAmbush", rect: [700, 96, 200, 50] }],
     chests: [{ id: "g5_bullringBronze", x: 1450, y: 540 }],

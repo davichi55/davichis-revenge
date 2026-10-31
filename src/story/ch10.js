@@ -231,6 +231,7 @@
     await F.banter("war");
   };
   S.done.saltmereArrive = F => F.f("sc.seen");
+  S.trigger.seaSaltmereShut = async F => { await UI.say([["hero", "(Marsh mist, reed beds, and no quay I can see. The keel would be in the mud before I got a rope ashore.)"]]); };
   S.trigger.warCouncil = async F => {
     M.ensure(F, 10);
     if (F.f("ch10.council")) { await say("saffa", "The table is yours when you want it. The line holds until you say it does not."); return; }

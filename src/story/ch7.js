@@ -153,6 +153,14 @@
     F.set("ch7.briefed"); F.give("lowstepToken", 1, true); UI.toast("Ranna's pass received.", 2600);
   };
   S.done.planBriefing = F => F.f("ch7.briefed");
+  // blocked exits (the world maps run these when a gated exit is walked into)
+  S.trigger.lowstepGrateShut = async F => { await UI.say([["hero", "(An iron grate behind the vats, a new chain through the bars. The boy sitting beside it watches me and keeps his hands in his lap.)"]]); };
+  S.trigger.sewerGratingShut = async F => { await UI.say([["hero", "(The grating up into the court is under water. The current holds it shut.)"]]); };
+  S.trigger.innerGateSealed = async F => { await UI.say([["hero", "(The inner gate is barred, and the collar altar on its lintel is humming.)"]]); };
+  S.trigger.trellisGateShut = async F => { await UI.say([["hero", "(The trellis gate to the East Wing is chained. The sundial's shadow lies across the lock.)"]]); };
+  S.trigger.roofStairShut = async F => { await UI.say([["hero", "(The roof stair is shut behind a third court. There is a lamp lit in that window.)"]]); };
+  S.trigger.ropeBridgeShut = async F => { await UI.say([["hero", "(The rope bridge is hauled up on the far side. Before it, the last gate of the roofs is still shut.)"]]); };
+  S.trigger.seaLowstepShut = async F => { await UI.say([["hero", "(Lamps climbing a black hill, and a chain boom across the dock. No pilot would bring a ship in there for me.)"]]); };
   M3.talkTown("lowstep", { innLine: F => F.f("ch7.helm") ? "The Mender's Corner. A bed, a bowl, and nobody's business." : "The Mender's Corner. A bed, a bowl, and no questions about who you were before.", inn: "lowstep",
     shopLine: "Imperial stock, imperial prices. The Throne's tax is in the cheese.", shop: "lowstep", who: ["porter", "oldwoman", "child"] });
   T("lowstep").mender = T("lowstep").innkeeper;

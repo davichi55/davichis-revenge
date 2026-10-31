@@ -521,5 +521,7 @@
     coilHillBlocked: async F => { await UI.say([["hero", "(A legion checkpoint across the hill road. They look at papers there, and I have none.)"]]); },
     canopyBlocked: async F => { await UI.say([["hero", "(Sheer cliff. If there is a path north, it is not one I can see.)"]]); },
     spireBlocked: async F => { await UI.say([["hero", "(Two altar platforms watch the way to the Spire. Neither is quiet.)"]]); },
+    imelaHouseLocked: async F => { await UI.say([["hero", "(The west house has its shutters latched and its door shut. Nobody answers my knock.)"]]); },
+    imelaTrapdoorHidden: async F => { await UI.say([["hero", "(Pantry shelves, jars, dust. Nothing in the floor that I can see.)"]]); },
   });
 })();
