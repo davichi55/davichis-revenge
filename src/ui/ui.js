@@ -12,13 +12,13 @@ const UI = (() => {
   #ui .box .face img { width: 108px; height: 108px; object-fit: contain; image-rendering: pixelated; }
   #ui .box .face .ini { font-family: "Marcellus SC", serif; font-size: 44px; color: #8a6a3a; }
   #ui .box .nm { font-family: "Marcellus SC", serif; color: #f2c14e; font-size: 20px; margin-bottom: 4px; }
-  #ui .box .tx { font-size: 21px; line-height: 1.38; white-space: pre-wrap; }
+  #ui .box .tx { font-size: 21px; line-height: 1.5; white-space: pre-wrap; }
   #ui .box .nx { position: absolute; right: 18px; bottom: 8px; color: #b7a58a; font-size: 16px; animation: uibl .8s infinite alternate; }
   @keyframes uibl { from { opacity: 1 } to { opacity: .15 } }
   #ui .pan { position: absolute; background: rgba(27,19,14,.97); border: 2px solid #8a6a3a; box-shadow: 0 0 0 4px rgba(27,19,14,.97), 0 0 0 5px #3a2a1a; padding: 12px 14px; min-width: 280px; max-width: 94vw; max-height: 88vh; overflow-y: auto; }
   #ui .pan h4 { margin: 0 0 8px; font-family: "Marcellus SC", serif; font-weight: 400; font-size: 17px; color: #b7a58a; }
   #ui .pan .opt { display: block; width: 100%; text-align: left; font: inherit; font-size: 20px; color: #f4e9d4; background: none; border: 0; padding: 4px 6px; cursor: pointer; }
-  #ui .pan .opt.sel { color: #f2c14e; background: #2c1f12; } #ui .pan .opt.sel::before { content: "> "; } #ui .pan .opt.off { color: #6d5f4f; cursor: default; }
+  #ui .pan .opt.sel { color: #f2c14e; background: #2c1f12; } #ui .pan .opt.sel::before { content: "> "; } #ui .pan .opt.off { color: #9a8a74; cursor: default; }
   #ui .pan .info { margin-top: 8px; color: #b7a58a; font-size: 15px; min-height: 2.6em; border-top: 1px solid #3a2a1a; padding-top: 6px; }
   #ui .toast { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); background: rgba(27,19,14,.95); border: 1px solid #8a6a3a; color: #f2c14e; padding: 6px 16px; font-size: 18px; pointer-events: none; transition: opacity .5s; white-space: nowrap; max-width: 94vw; overflow: hidden; text-overflow: ellipsis; }
   #ui .fade { position: absolute; inset: 0; background: #000; opacity: 0; transition: opacity .5s; pointer-events: none; z-index: 5; }
@@ -51,7 +51,7 @@ const UI = (() => {
   #ui .pk b { display: block; font-family: "Marcellus SC", serif; font-weight: 400; color: #f2c14e; font-size: 18px; margin-top: 4px; }
   #ui .pk small { color: #b7a58a; font-size: 13.5px; display: block; margin-top: 2px; line-height: 1.25; }
   #ui .win img { max-width: 100%; max-height: 100%; object-fit: contain; image-rendering: pixelated; } #ui .row img { width: 56px; height: 50px; }
-  #ui .pk .art { height: 62px; } #ui .pk .art img { height: 60px; width: 60px; } #ui .pk { padding: 6px 6px; } #ui .pk small { font-size: 12.5px; }
+  #ui .pk .art { height: 62px; } #ui .pk .art img { height: 60px; width: 60px; } #ui .pk { padding: 6px 6px; } #ui .pk small { font-size: 14px; }
   #ui .shake { animation: uishake .5s infinite; } @keyframes uishake { 0%,100% { transform: translate(0,0) } 25% { transform: translate(-3px,2px) } 75% { transform: translate(3px,-2px) } }
   `;
   let root = null, fadeEl = null;
@@ -68,6 +68,17 @@ const UI = (() => {
   person("narr", "", []);
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+  // held keys (Danny 2026-11-01, logs/FEEL-NUMBERS.md): confirm keys never auto-repeat (a held Enter skipped dialogue unread at the OS repeat rate);
+  // arrows/WASD start repeating after 400 ms, then step every 100 ms, and e.__held tells lists not to wrap round on a repeat
+  const KG = { t0: {}, last: {} }, NAV = /^(Arrow(Up|Down|Left|Right)|[wasdWASD])$/;
+  function keyGate(e) {
+    const now = performance.now(), k = e.key;
+    if (!e.repeat) { KG.t0[k] = KG.last[k] = now; e.__held = false; return true; }
+    if (!NAV.test(k) || now - (KG.t0[k] || 0) < 400 || now - (KG.last[k] || 0) < 100) return false;
+    KG.last[k] = now; e.__held = true; return true;
+  }
+  // screen shake setting: G.shake "full" | "reduced" | "off"; unset = reduced when the system asks for reduced motion
+  function shakeMult() { let v; try { v = G.shake; } catch (e) {} if (!v) { try { v = matchMedia("(prefers-reduced-motion: reduce)").matches ? "reduced" : "full"; } catch (e) { v = "full"; } } return v === "off" ? 0 : v === "reduced" ? 0.4 : 1; }
   function ensure() {
     if (root) return root;
     const st = document.createElement("style"); st.id = "ui-css"; st.textContent = CSS; document.head.appendChild(st);
@@ -77,6 +88,7 @@ const UI = (() => {
     addEventListener("keydown", e => {
       const top = stack[stack.length - 1]; if (!top) return;
       e.stopImmediatePropagation(); e.preventDefault();
+      if (!keyGate(e)) return;
       if (top.key) top.key(e);
     }, true);
     addEventListener("keyup", e => { if (stack.length) e.stopImmediatePropagation(); }, true);
@@ -125,11 +137,11 @@ const UI = (() => {
         full = L.text; pos = 0; done = false; clearInterval(timer);
         const tx = ovl.querySelector(".tx"), nx = ovl.querySelector(".nx");
         const step = Math.max(1, Math.round(1.4 / (window.UI_SPEED || 1)));
-        timer = setInterval(() => { pos = Math.min(full.length, pos + step); tx.textContent = full.slice(0, pos); if (pos >= full.length) { done = true; nx.style.display = ""; clearInterval(timer); } }, 16);
+        timer = setInterval(() => { pos = Math.min(full.length, pos + step); tx.textContent = full.slice(0, pos); if (pos >= full.length) { done = true; nx.style.display = ""; clearInterval(timer); } }, 22);   // about 45 characters a second (was 62; silent reading is ~22, Ren'Py's example 40)
         if (L.sfx && window.Audio && Audio.sfx) try { Audio.sfx(L.sfx); } catch (e) {}
       };
       const adv = () => { if (!done) { pos = full.length; ovl.querySelector(".tx").textContent = full; done = true; ovl.querySelector(".nx").style.display = ""; clearInterval(timer); } else next(); };
-      m.key = e => { if (["Enter", " ", "e", "E", "ArrowDown", "z", "Z"].includes(e.key)) adv(); else if (e.key === "Escape" && opts.escSkips) finish(); };   // Cinema: Esc skips the rest of this dialogue
+      m.key = e => { if (e.__held) return; if (["Enter", " ", "e", "E", "ArrowDown", "z", "Z"].includes(e.key)) adv(); else if (e.key === "Escape" && opts.escSkips) finish(); };   // Cinema: Esc skips the rest of this dialogue
       ovl.addEventListener("pointerdown", adv);
       stack.push(m); next();
     });
@@ -156,8 +168,9 @@ const UI = (() => {
       pan.addEventListener("pointerover", e => { const b = e.target.closest("[data-i]"); if (b && +b.dataset.i !== sel) { sel = +b.dataset.i; draw(); } });
       m.key = e => {
         const k = e.key, n = options.length;
-        if (k === "ArrowDown" || k === "s" || k === "S") { for (let t = 0; t < n; t++) { sel = (sel + 1) % n; if (!options[sel].disabled) break; } draw(); }
-        else if (k === "ArrowUp" || k === "w" || k === "W") { for (let t = 0; t < n; t++) { sel = (sel + n - 1) % n; if (!options[sel].disabled) break; } draw(); }
+        const mv = d => { let i = sel; for (let t = 0; t < n; t++) { const j = i + d; if (e.__held && (j < 0 || j >= n)) break; i = (j + n) % n; if (!options[i].disabled) { sel = i; break; } } draw(); };   // a held key stops at the ends
+        if (k === "ArrowDown" || k === "s" || k === "S") mv(1);
+        else if (k === "ArrowUp" || k === "w" || k === "W") mv(-1);
         else if (k === "Enter" || k === " " || k === "e" || k === "E") { if (!options[sel].disabled) finish(sel); }
         else if ((k === "Escape" || k === "Backspace") && o.back) finish(-1);
         else if (/^[1-9]$/.test(k) && +k <= n && !options[+k - 1].disabled) finish(+k - 1);
@@ -210,6 +223,7 @@ const UI = (() => {
   }
 
   function toast(text, ms = 2200) {
+    ms = Math.max(ms, Math.min(7000, 1000 + 50 * String(text).length));   // 1 s to notice + 20 characters a second to read, at most 7 s
     ensure(); const t = document.createElement("div"); t.className = "toast"; t.textContent = text; root.appendChild(t);
     const old = root.querySelectorAll(".toast"); old.forEach((x, i) => { if (x !== t) x.style.top = 14 + (old.length - 1 - i) * 36 + "px"; });
     setTimeout(() => (t.style.opacity = 0), ms); setTimeout(() => t.remove(), ms + 600);
@@ -219,6 +233,6 @@ const UI = (() => {
   const confirm_ = (q, yes = "Yes", no = "No") => choose(q, [{ label: yes }, { label: no }], { back: true }).then(i => i === 0);
 
   const reset = () => { stack.length = 0; if (root) root.querySelectorAll(".ovl").forEach(e => e.remove()); };   // test hooks: drop every open modal (e.g. the title menu when dbg jumps straight into a game)
-  return { reset, say, choose, window: window_, card, toast, fade, sleep, confirm: confirm_, art, esc, person, PEOPLE, open, _fb, faceHtml, creatureFace, ensure };
+  return { keyGate, shakeMult, reset, say, choose, window: window_, card, toast, fade, sleep, confirm: confirm_, art, esc, person, PEOPLE, open, _fb, faceHtml, creatureFace, ensure };
 })();
 window.UI = UI;

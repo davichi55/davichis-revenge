@@ -365,7 +365,7 @@
       if (w) { await this.walk(id, w.x + 70, w.y + 40, 1200); this.face(id, "left"); }
       await this.anim(id, "fadeOut", { ms: 600 }); this.remove(id);
     }
-    shake(strength, ms) { const sc = this.sc; if (!sc || this.dead) return; try { const s = strength == null ? 4 : strength; sc.cameras.main.shake(this._dur(ms || 400), new Phaser.Math.Vector2(s / W, s / H), true); } catch (e) { /* ignore */ } }
+    shake(strength, ms) { const sc = this.sc; if (!sc || this.dead) return; try { const s = (strength == null ? 4 : strength) * (window.UI && UI.shakeMult ? UI.shakeMult() : 1); if (s <= 0) return; sc.cameras.main.shake(this._dur(ms || 400), new Phaser.Math.Vector2(s / W, s / H), true); } catch (e) { /* ignore */ } }
     flash(color, ms) {
       if (!this.frame) return; const f = this.frame.querySelector(".flash"); if (!f) return; f.style.background = color == null ? "#fff" : (typeof color === "number" ? "#" + color.toString(16).padStart(6, "0") : color);
       const d = this._dur(ms || 300); f.style.transition = "none"; f.style.opacity = 0.9; requestAnimationFrame(() => { f.style.transition = `opacity ${d}ms ease-out`; f.style.opacity = 0; });

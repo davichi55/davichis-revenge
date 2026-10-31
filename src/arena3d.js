@@ -47,7 +47,7 @@
     counter: "COUNTER", cover: "COVERED", hounds: "HOUNDS", decoy: "DECOY", antlers: "ANTLERS", dust: "DUST", braceDeep: "BRACE", tithe: "TITHE", redHot: "RED-HOT", stunImmune: "UNSTUNNABLE", mp: "MP", endure: "ENDURE" };
   const GROUPS = [["damage", "Attacks"], ["support", "Support"], ["control", "Control"], ["personal", "Personal"], ["skill", "Skill book (off-style slot)"]];
 
-  let ready = null, renderer, scene, camera, world, dust, torchLights = [], units = [], ctx = null, active = false, speedF = () => 1, shake = 0, shakeLast = 0, shakePeak = 0, shakeT = 0, shakeDur = 0.2, introT = 0, marker = null, manifest = {}, manifestTried = false;
+  let ready = null, renderer, scene, camera, world, dust, torchLights = [], units = [], ctx = null, active = false, speedF = () => 1, freezeT = 0, shake = 0, shakeLast = 0, shakePeak = 0, shakeT = 0, shakeDur = 0.2, introT = 0, marker = null, manifest = {}, manifestTried = false;
   const tex = {}, assets = {}, el = {}; let arenaCtl = null;   // arenaCtl: the controller of the arena built by src/arena-sets.js (ARENA agent)
   const camP = { y: 4.6, z: 14.5, ly: 1.9, k: 1, base: 42, id: "std" };   // camera framing of this fight; src/arena-layout.js picks a wider preset for huge bosses
   const $ = s => el.root.querySelector(s);
@@ -71,18 +71,18 @@
       #a3 .brk { font-size: 14px; color: #b7a58a; margin-top: 3px; } #a3 .brk.on { color: #f2c14e; }
       #a3 .chips { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; min-height: 2px; }
       #a3 .chips span { font-size: 12px; line-height: 1; padding: 2px 4px; background: rgba(0,0,0,.55); border: 1px solid #000; border-radius: 3px; white-space: nowrap; }
-      #a3 .chips span em { font-style: normal; font-size: 10px; color: #b7a58a; margin-left: 2px; }
+      #a3 .chips span em { font-style: normal; font-size: 12px; color: #b7a58a; margin-left: 2px; }
       #a3 .party { right: 16px; bottom: 16px; width: 350px; background: rgba(24,17,13,.9); border: 2px solid #6b5236; padding: 10px 12px; }
       #a3 .pm { margin-bottom: 8px; } #a3 .pm:last-child { margin-bottom: 0; } #a3 .pm.on .nm { color: #f2c14e; } #a3 .pm.down { opacity: .45; }
       #a3 .row { display: flex; justify-content: space-between; font-size: 17px; }
       #a3 .mp { display: flex; gap: 3px; margin-top: 3px; } #a3 .mp b { width: 10px; height: 5px; background: #2a3440; } #a3 .mp b.on { background: #6fb7ff; }
-      #a3 .tide { display: flex; gap: 3px; margin-top: 2px; align-items: center; font-size: 11px; color: #4ad0c8; } #a3 .tide b { width: 14px; height: 5px; background: #1c3a3a; } #a3 .tide b.on { background: #4ad0c8; box-shadow: 0 0 4px #4ad0c8; }
+      #a3 .tide { display: flex; gap: 3px; margin-top: 2px; align-items: center; font-size: 12px; color: #4ad0c8; } #a3 .tide b { width: 14px; height: 5px; background: #1c3a3a; } #a3 .tide b.on { background: #4ad0c8; box-shadow: 0 0 4px #4ad0c8; }
       #a3 .cmd { position: absolute; left: 16px; bottom: 16px; width: 440px; max-width: calc(100vw - 32px); max-height: calc(100vh - 120px); overflow-y: auto; background: rgba(24,17,13,.94); border: 2px solid #6b5236; padding: 8px 12px 10px; }
       #a3 .cmd[hidden] { display: none; }
       #a3 .cmd h4 { margin: 2px 0 6px; font-size: 15px; font-weight: 400; color: #b7a58a; }
       #a3 .cmd button { display: block; width: 100%; text-align: left; font: inherit; font-size: 19px; color: #f4e9d4; background: none; border: 0; padding: 3px 4px; cursor: pointer; }
-      #a3 .cmd button.sel { color: #f2c14e; } #a3 .cmd button.sel::before { content: "> "; } #a3 .cmd button:disabled { color: #6d5f4f; cursor: default; }
-      #a3 .cmd .hd { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #8f7a5c; margin: 6px 0 1px; border-bottom: 1px solid #3a2c1f; }
+      #a3 .cmd button.sel { color: #f2c14e; } #a3 .cmd button.sel::before { content: "> "; } #a3 .cmd button:disabled { color: #9a8a74; cursor: default; }
+      #a3 .cmd .hd { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #9a8a74; margin: 6px 0 1px; border-bottom: 1px solid #3a2c1f; }
       #a3 .cmd p { margin: 6px 0 0; font-size: 14px; color: #b7a58a; min-height: 2.4em; }
       #a3 .num { position: absolute; font-size: 26px; pointer-events: none; text-shadow: 0 2px 0 #000, 0 0 6px #000; transition: transform .9s ease-out, opacity .9s ease-in; white-space: nowrap; }
       #a3 .dmg { position: absolute; pointer-events: none; font-size: 40px; font-weight: 700; transform: translate(-50%, -50%); -webkit-text-stroke: 2px #1a0d06; text-shadow: 0 3px 0 #000, 0 0 10px rgba(0,0,0,.8); animation: a3pop 1.5s ease-out forwards; white-space: nowrap; }
@@ -247,7 +247,8 @@
     requestAnimationFrame(frame);
     const dt = Math.min(0.05, clock.getDelta()), t = clock.elapsedTime;
     if (!active) return;
-    if (FX()) FX().update(dt);
+    const frozen = freezeT > 0; if (frozen) freezeT -= dt;   // hit-stop: creatures and hit sparks hold for a moment on impact; the camera shake keeps going
+    if (FX()) FX().update(frozen ? 0 : dt);
     if (arenaCtl) arenaCtl.update(dt, t);
     if (root.ArenaBoss) root.ArenaBoss.update(dt, t);
     // fixed camera: a slow push-in at the start, then one steady wide shot
@@ -255,7 +256,7 @@
     camera.position.set(0, camP.y + 1.5 * f, Math.min(20.8, camP.z + 6 * f));
     if (shake > shakeLast + 1e-6) { shakePeak = shake; shakeDur = 0.1 + 1.4 * shake; shakeT = 0; }   // a new impulse (callers raise `shake` to its peak)
     if (shakePeak > 0) { shakeT += dt; const k = Math.max(0, 1 - shakeT / shakeDur); shake = shakePeak * k * k; if (k <= 0) shakePeak = shake = 0;
-      camera.position.x += (Math.random() - 0.5) * shake; camera.position.y += (Math.random() - 0.5) * shake; }
+      const sm = window.UI && UI.shakeMult ? UI.shakeMult() : 1; camera.position.x += (Math.random() - 0.5) * shake * sm; camera.position.y += (Math.random() - 0.5) * shake * sm; }
     shakeLast = shake;
     camera.lookAt(0, camP.ly, 0);
     units.forEach(u => {
@@ -278,7 +279,7 @@
         v.hitT = Math.max(0, v.hitT - dt * 3); const sq = v.hitT * 0.14;
         v.model.scale.x = v.model.scale.z = 1 + sq * 0.5; v.model.scale.y *= 1 - sq; v.model.rotation.x = Math.sin(t * 40) * sq * 0.6;   // squash when hit
       }
-      if (v.mixer) v.mixer.update(dt);
+      if (v.mixer) v.mixer.update(freezeT > 0 ? 0 : dt);
     });
     if (marker && marker.visible && marker.userData.unit && marker.userData.unit.view) { const v = marker.userData.unit.view; marker.position.set(v.group.position.x, v.h + 0.9 + Math.sin(t * 6) * 0.12, v.group.position.z); marker.rotation.y = t * 2; }
     if (dust) { const p = dust.geometry.attributes.position; for (let i = 0; i < p.count; i++) { let y = p.getY(i) + dt * 0.25; if (y > 8) y = 0; p.setY(i, y); } p.needsUpdate = true; }
@@ -349,6 +350,8 @@
     clearTimeout(bubbleT); bubbleT = setTimeout(() => bubbleEl && (bubbleEl.style.opacity = "0"), 1600 * speedF() + 400);
   }
   const pick = list => list[Math.floor(Math.random() * list.length)];
+  // hit-stop (Danny 2026-11-01, logs/FEEL-NUMBERS.md): 50 ms normal hit, 100 ms crit or heavy hit, 150 ms break or knock-out; shorter at Fast, none at Instant
+  const hitStop = ms => { const f = speedF(); if (f < 0.1) return; freezeT = Math.max(freezeT, ms / 1000 * f); };
   const flashTimes = [];
   function flash(color, ms = 220) {
     const now = performance.now(); while (flashTimes.length && now - flashTimes[0] > 1000) flashTimes.shift(); if (flashTimes.length >= 3) return; flashTimes.push(now);   // WCAG 2.3.1: at most 3 flashes a second
@@ -437,7 +440,7 @@
         if (FX()) FX().status(e.tgt, e.dot); float(e.tgt, "-" + e.v, (CHIP[e.dot] || ["", "#ff9a6a"])[1]); sfx(EL_SFX[e.el] || "hit"); hud(); await wait(160); return;
       }
       if (FX()) FX().hit(e.tgt, e.el, e.kind, lastUse && lastUse.src === e.src ? lastUse.P : 1, e.crit);
-      playClip(e.tgt, "hurt", 1.6); if (e.tgt.view) e.tgt.view.hitT = 1; tint(e.tgt, 0xff6060); shake = Math.max(shake, e.crit ? 0.18 : e.tgt.boss ? 0.05 : 0.09);
+      hitStop(e.crit || e.v > e.tgt.maxHp * 0.22 ? 100 : 50); playClip(e.tgt, "hurt", 1.6); if (e.tgt.view) e.tgt.view.hitT = 1; tint(e.tgt, 0xff6060); shake = Math.max(shake, e.crit ? 0.18 : e.tgt.boss ? 0.05 : 0.09);
       sfx(e.crit ? "crit" : EL_SFX[e.el] || (e.v > e.tgt.maxHp * 0.22 ? "hitHeavy" : e.kind === "spell" ? "spell" : "hit"));
       popNum(e.tgt, e.v, e.tgt.side === "p" ? "#ff7a66" : e.crit ? "#ffd23f" : "#fff4e0", [e.crit ? "CRITICAL" : "", e.note, e.tgt.broken ? "BROKEN x1.5" : "", e.absorbed ? e.absorbed + " blocked" : ""].filter(Boolean).join(" · "));
       if (lastUse && e.src && lastUse.src === e.src) { lastUse.total += e.v; log(`${e.src.name}: ${lastUse.move}  —  ${lastUse.total} damage`); }
@@ -456,9 +459,9 @@
     else if (e.t === "reflect") { float(e.tgt, "Reflected!", "#e8f0ff"); flash("#ffffff", 150); await wait(300); }
     else if (e.t === "cleanse") { float(e.tgt, "Cleansed", "#ffe9a0"); sfx("heal"); hud(); await wait(160); }
     else if (e.t === "breakPt") { float(e.tgt, `Crack ${e.pts}/${e.need || 2}`, "#f2c14e"); hud(); await wait(260); }
-    else if (e.t === "broken") { seenFx("broken"); if (FX()) FX().brk(e.tgt); coachSay(pick(["Now! It's open!", "Hit it while it's down!", "Its guard is broken!"])); sfx("break"); banner("BROKEN!", "#f2c14e"); flash("#ffd27a"); shake = 0.25; log(`${e.tgt.name} is BROKEN! It takes 50% more damage.`); hud(); await wait(900); }
+    else if (e.t === "broken") { hitStop(150); seenFx("broken"); if (FX()) FX().brk(e.tgt); coachSay(pick(["Now! It's open!", "Hit it while it's down!", "Its guard is broken!"])); sfx("break"); banner("BROKEN!", "#f2c14e"); flash("#ffd27a"); shake = 0.25; log(`${e.tgt.name} is BROKEN! It takes 50% more damage.`); hud(); await wait(900); }
     else if (e.t === "phase") { sfx("telegraph"); flash("#ff3b2a", 500); shake = 0.35; banner("PHASE " + (e.tgt.phaseNo || ""), "#ff6b57"); log(e.text); hud(); await wait(1700); }
-    else if (e.t === "ko") { if (e.tgt.side === "p") coachSay(pick([e.tgt.name + "! Get up!", "Hold on, " + e.tgt.name + "!"]), "idle"); sfx("ko"); if (FX()) FX().ko(e.tgt); if (e.tgt.view) e.tgt.view.alive = 0; log(`${e.tgt.name} falls!`); hud(); await wait(500); }
+    else if (e.t === "ko") { hitStop(150); if (e.tgt.side === "p") coachSay(pick([e.tgt.name + "! Get up!", "Hold on, " + e.tgt.name + "!"]), "idle"); sfx("ko"); if (FX()) FX().ko(e.tgt); if (e.tgt.view) e.tgt.view.alive = 0; log(`${e.tgt.name} falls!`); hud(); await wait(500); }
     else if (e.t === "revive") { if (FX()) FX().revive(e.tgt); sfx("heal"); if (e.tgt.view) e.tgt.view.alive = 1; tint(e.tgt, 0xffe080, 300); log(e.text || `${e.tgt.name} is back on its feet!`); hud(); await wait(500); }
     else if (e.t === "telegraph") { seenFx("telegraph"); sfx("telegraph"); coachSay(pick(["Brace yourselves!", "Something big is coming!", "Guard up, all of you!"]), "idle"); $(".warn").textContent = "⚠ " + e.text; log(e.text); await wait(1000); }
   }
@@ -479,10 +482,11 @@
         b.onmouseenter = () => { if (!o.disabled) { sel = i; draw(); } }; b.onclick = () => done(i); list.appendChild(b);
       });
       const selectable = () => options.map((o, i) => (o.disabled || o.header ? -1 : i)).filter(i => i >= 0);
-      const step = d => { const s = selectable(); if (!s.length) return; let k = s.indexOf(sel); if (k < 0) k = 0; sel = s[(k + d + s.length) % s.length]; draw(); };
+      const step = (d, held) => { const s = selectable(); if (!s.length) return; let k = s.indexOf(sel); if (k < 0) k = 0; if (held && (k + d < 0 || k + d >= s.length)) return; sel = s[(k + d + s.length) % s.length]; draw(); };   // a held key stops at the ends
       const key = e => {
-        if (["ArrowDown", "s", "ArrowRight"].includes(e.key)) { step(1); e.preventDefault(); }
-        else if (["ArrowUp", "w", "ArrowLeft"].includes(e.key)) { step(-1); e.preventDefault(); }
+        if (window.UI && UI.keyGate && !UI.keyGate(e)) { e.preventDefault(); return; }   // held keys: no auto-repeat on confirm, 400 ms / 100 ms on arrows (ui.js)
+        if (["ArrowDown", "s", "ArrowRight"].includes(e.key)) { step(1, e.__held); e.preventDefault(); }
+        else if (["ArrowUp", "w", "ArrowLeft"].includes(e.key)) { step(-1, e.__held); e.preventDefault(); }
         else if (["Enter", " "].includes(e.key)) { if (!options[sel].disabled) done(sel); e.preventDefault(); }
         else if (["Escape", "Backspace"].includes(e.key) && back) { done(-1); e.preventDefault(); }
         else if (/^[1-9]$/.test(e.key)) { const i = options.findIndex(o => o._n === +e.key); if (i >= 0 && !options[i].disabled) done(i); e.preventDefault(); }
