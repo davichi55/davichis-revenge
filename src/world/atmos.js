@@ -46,7 +46,7 @@
   //   outline: Hollow Knight / Ori readability: a thin dark edge and a touch more colour on the hero, followers, people and chests
   //   chapter: Gris-style colour as progression: every chapter leans toward its own colour (G.ch), over the map's own grade
   //   stepped: fog and cloud drift advance 12 times a second, at the cadence of the hand-drawn sprites
-  A.F = { grain: true, outline: true, chapter: true, stepped: true };
+  A.F = { grain: false, outline: true, chapter: true, stepped: false };   // 2026-11-01 lead review: grain made the crisp pixel art look dirty, stepped fog read as stutter next to the smooth motes and sprites: both off (code kept)
   //              [wash colour, wash alpha, hue turn]
   const CHAPTER = [null, null, null, [0x2f7a50, 0.06, 3], [0x2f7a50, 0.06, 3], [0xc8963c, 0.05, -2], [0xc8963c, 0.05, -2], [0x7a2a44, 0.06, -5], [0x7a2a44, 0.06, -5], [0x2c3c64, 0.07, 4], [0x523a7c, 0.06, 6], [0xd0602c, 0.05, -4], [0x3050a8, 0.05, 5]];
   A.chapterOf = () => { try { return CHAPTER[Math.min(CHAPTER.length - 1, Math.max(0, G.ch | 0))]; } catch (e) { return null; } };
