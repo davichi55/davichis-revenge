@@ -110,7 +110,8 @@
   S.trigger.raidStart = async () => {};
 
   // ---------- Undercroft: three lessons ----------
-  const heal = async F => { F.healAll(); UI.toast("A cool pool in the wall heals everyone."); };
+  // between lessons the loaners are patched up (Danny: the old "cool pool in the wall" line pointed at a pool nobody could see)
+  const heal = async F => { F.healAll(); await UI.say([["narr", "Old Dunmar tips a bucket of spring water over the creatures. They shake it off, good as new."]]); };
   const lessonN = F => (F.f("pro.l1") ? (F.f("pro.l2") ? 3 : 2) : 1);
   S.trigger.cellarTutorial = async F => { if (!F.f("pro.dunmar")) return; if (!F.f("pro.l1")) await S.trigger.lesson(F); if (F.f("pro.l1") && !F.f("pro.l2")) await S.trigger.lesson(F); };
   S.trigger.undercroftDeep = async F => { if (!F.f("pro.dunmar")) return; while (!F.f("pro.lessons")) { const before = lessonN(F); await S.trigger.lesson(F); if (lessonN(F) === before && !F.f("pro.lessons")) return; } };
