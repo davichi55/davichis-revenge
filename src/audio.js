@@ -25,7 +25,8 @@
   var vol = { music: 0.5, sfx: 0.8 }, muted = false;
   var unlocked = false, gestureOk = false;
   var sfxCache = {}, warned = {}, live = [];
-  var slots = { music: { kind: 'music', want: null, cur: null, curKey: null }, ambient: { kind: 'ambient', want: null, cur: null, curKey: null } };
+  var VARIANTS = { battle: ['battle', 'battle2', 'battle3', 'battle4'], desert: ['desert', 'desert2', 'desert3'] };   // tools-audio/gen-variants.js
+  var slots = { music: { kind: 'music', want: null, cur: null, curKey: null, base: null, lastPick: {} }, ambient: { kind: 'ambient', want: null, cur: null, curKey: null } };
   var ambOverride;                                   // undefined = follow the music's "amb" bed, a string = explicit ambient loop, null = explicit silence
   var musicCat = null, musicBed = null;              // cat and "amb" bed of the music that is playing (battle / boss / titan music silences the ambience)
 
@@ -223,6 +224,13 @@
       try {
         key = key || null;
         var sl = slots.music;
+        // variants (Danny 2026-10-31: one battle and one desert track all of chapter 1): a new pick each time the key starts, never the same twice in a row; staying in desert areas keeps the current one
+        var vs = key && VARIANTS[key];
+        if (vs) {
+          if (sl.base === key && sl.want && (sl.cur || !unlocked) && !(opts && opts.restart)) return;
+          var group = key, pool = vs.filter(function (v) { return v !== sl.lastPick[group]; });
+          key = pool[Math.floor(Math.random() * pool.length)]; sl.lastPick[group] = key; sl.base = group;
+        } else sl.base = key;
         if (key === sl.want && (sl.cur || !unlocked) && !(opts && opts.restart)) return;   // same key: no restart
         sl.want = key; applySlot(sl, opts);
         if (!unlocked) loadManifest(function () {});
