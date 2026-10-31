@@ -28,7 +28,7 @@
     m_canopy: { t: "The Canopy", main: true, ch: 4, steps: ["Climb the cliff path to the canopy village of feather-weavers."] },
     m_letters: { t: "The Marigold Stitch", main: true, ch: 4, steps: ["Mother Yaxa knows the stitching on the satchel strap: the Marigold feather stitch. Three families still sew it, in the Hollow down the long stair.", "Find what Imela's house still holds (0/4)."] },
     m_spire: { t: "The Plumed Coil", main: true, ch: 4, steps: ["A Titan nests above the canopy. Ithiel wants to know how it flies.", "Climb the Canopy Spire."] },
-    lanterns: { t: "Lanterns for Plume Rest", ch: 4, steps: ["The weaver at Plume Rest needs four lantern wicks, taken from the Lantern Bat Knights (0/4)."] },
+    lanterns: { t: "Lanterns for Plume Rest", ch: 4, steps: ["The weaver at Plume Rest needs four lantern wicks, taken from the Lantern Bat Knights on the rope bridges of Featherfall Canopy, outside the village (0/4)."] },
     wellStone: { t: "Under the Stone by the Well", ch: 4, steps: ["Neeli keeps what strangers leave under the flat stone by the well. Ask her again when the stone has something new."] },
   });
   const BASIC = ["sunwater", "antidote"];
@@ -181,7 +181,7 @@
       await c.say([["yaxa", "Hush. The feathers listen."]]);
       ["w1", "w2", "w3", "yaxa"].forEach(id => c.remove(id));
       const d = rel(c, -170, 30); c.actor("dun", { art: "npcDunmar", x: d.x, y: d.y, name: "Dunmar" });
-      await c.say([["dunmar", "Lad. Quillshade's cage has a lock I do not like the look of. Bring me the key from the Windhollow, whenever you feel like it."]]);
+      await c.say([["dunmar", "Lad. Quillshade's cage has a lock I do not like the look of. Bring me the key from the Windhollow, whenever you feel like it. The cliff-top ruin with the open cages, at the far east edge of the canopy."]]);
       c.remove("dun");
     }, { music: "treetopTown" });
     F.quest("m_windhollow", 0); UI.toast("The Menagerie Wagon is here.");
@@ -213,7 +213,7 @@
   T(PR).weaver = async F => {
     const st = F.qstep("lanterns"), wicks = () => G.goods.lanternWick || 0;
     if (st === "done") { await UI.say([["weaver", "The lamps burn gold at night, all along the bridge. You can see them from the Spire."]]); return; }
-    if (st === undefined) { await UI.say([["weaver", "The lanterns on the west bridge have gone out, every one. Bat knights stole the wicks; they like the taste of the lamp-oil. Four wicks, from the knights, and I will pay you."]]); F.quest("lanterns", 0); return; }
+    if (st === undefined) { await UI.say([["weaver", "The lanterns on the west bridge have gone out, every one. Bat knights stole the wicks; they like the taste of the lamp-oil. Four wicks, from the knights out on the canopy bridges beyond the village gate, and I will pay you."]]); F.quest("lanterns", 0); return; }
     if (wicks() >= 4) {
       G.goods.lanternWick -= 4;
       await UI.say([["weaver", "Four good wicks. Singed at the ends, the way a knight chews them. Thank you. The bridge will be gold again tonight."]]);

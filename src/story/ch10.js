@@ -45,8 +45,8 @@
     m_answer: { t: "Ithiel's Answer", main: true, ch: 10, steps: ["Master Ithiel waits in the Veil Observatory, above the Sanctum. He owes you an answer."] },
     m_storm: { t: "The Thunder Spine", main: true, ch: 10, steps: ["The storm belt sits on the Thunder Spine. Climb to the summit."] },
     k8: { t: "The Prism Archive", ch: 10, steps: ["A builder light-lab stands in the marsh. Doors open to the right reaction. Find the Keeper of the Light."] },
-    bounty10: { t: "Bounty: Ballista Crews", ch: 10, steps: ["Corvin pays for the siege ballistae along the trenches: destroy three (0/3).", "Tell Corvin."] },
-    bounty11: { t: "Bounty: Storm Rocs", ch: 10, steps: ["Rhaz wants the Storm Rocs off the pilgrim stair thinned: three (0/3).", "Tell Rhaz."] },
+    bounty10: { t: "Bounty: Ballista Crews", ch: 10, steps: ["Corvin pays for the siege ballistae in the Saltmere Trenches, north of the camp: destroy three (0/3).", "Tell Corvin."] },
+    bounty11: { t: "Bounty: Storm Rocs", ch: 10, steps: ["Rhaz wants the Storm Rocs off the pilgrim stair of the Thunder Spine thinned: three (0/3).", "Tell Rhaz."] },
     bounty12: { t: "Bounty: The Wax Choir", ch: 10, steps: ["Odan asks for three bone choirs silenced in the Veil Crypts (0/3).", "Tell Odan."] },
   });
   D.BREAKS = D.BREAKS || {};

@@ -92,12 +92,12 @@
     labMaster: async F => {
       const st = F.qstep("tidy");
       if (st === undefined) {
-        await UI.say([["scholar", "You're Dunmar's apprentice? The lab is a mess. Three things have gone missing: a scroll, a jar of lamp-oil and a bottle of ink. Someone must have carried them off."], ["scholar", "Ask around. People in this city pick up everything. Bring them back and the old temple kit in my cupboard is yours."]]);
+        await UI.say([["scholar", "You're Dunmar's apprentice? The lab is a mess. Three things have gone missing: a scroll, a jar of lamp-oil and a bottle of ink. Someone must have carried them off."], ["scholar", "Ask around. People in this city pick up everything: the villagers on the avenues, and the scholar standing at my door. Bring them back and the old temple kit in my cupboard is yours."]]);
         F.quest("tidy", 0);
       } else if (st === 1) {
         await UI.say([["scholar", "My scroll! My oil! My ink! Marvellous. Here, the temple-school kit. It never fit me."]]);
         F.giveGear("G44", 3); F.questDone("tidy"); F.sfx("coin");
-      } else if (st === 0) await UI.say([["scholar", `Found ${[1, 2, 3].filter(n => F.f("tidy" + n)).length} of 3? Scroll, lamp-oil, ink. Ask the people on the avenues.`]]);
+      } else if (st === 0) await UI.say([["scholar", `Found ${[1, 2, 3].filter(n => F.f("tidy" + n)).length} of 3? Scroll, lamp-oil, ink. Ask the villagers on the avenues, and the scholar at my door.`]]);
       else await UI.say([["scholar", "The lab is tidy again, thanks to you."]]);
     },
     merchant: async F => { await UI.say([["clerk", "Academy shop. Flasks and antidotes, apprentice prices."]]); await F.shop("orun"); },

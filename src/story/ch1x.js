@@ -15,8 +15,8 @@
 
   // ---------- quests and rumours ----------
   Q(D.QUESTS, {
-    bell: { t: "The Tuning Bell", steps: ["Hassa in Sandpiper Rest lost her husband's lead bell somewhere on the Humming Ridges, north of the dunes. Find it.", "Bring the bell back to Hassa in Sandpiper Rest."] },
-    tally: { t: "The Dead Man's Tally", steps: ["Old Ossan wants his dead partner's strongbox from the Caravan Graveyard, south-west of the dunes. Jackals keep the place.", "Bring the strongbox back to Ossan in Sandpiper Rest."] },
+    bell: { t: "The Tuning Bell", steps: ["Hassa in Sandpiper Rest lost her husband's lead bell somewhere on the Humming Ridges, north of the dunes. Find it: west of the ring of singing stones, by a lone cairn.", "Bring the bell back to Hassa in Sandpiper Rest."] },
+    tally: { t: "The Dead Man's Tally", steps: ["Old Ossan wants his dead partner's strongbox from the Caravan Graveyard, south-west of the dunes. Jackals keep the place. Brem's wagon had a red cover with a sun on it.", "Bring the strongbox back to Ossan in Sandpiper Rest."] },
     adders: { t: "Adders in the Reeds", steps: ["The reed keeper at the Sandpiper Oasis wants three Glass Adders out of the reed beds (0/3).", "Go back to the reed keeper."] },
   });
   D.RUMOURS.sandpiper.push(
@@ -110,10 +110,10 @@
       if (st === "done") { G.flags.hassaTurn = ((G.flags.hassaTurn || 0) + 1) % 2; await S.rumourIdx(F, "sandpiper", G.flags.hassaTurn ? 3 : 5, "hassa"); return; }
       if (st === undefined) {
         await UI.say([["hassa", "Forgive me. You walk like someone who has gone a long way and means to go further. Do you pass the north ridges?"], ["hero", "Maybe. Why?"],
-          ["hassa", "My Dumar walked the lead camel. He tuned a bell to the ridge hum, so the whole string kept step, forty beasts in one stride. The storm took him, and the bell with him."], ["hassa", "The ridges can keep him. I would like the bell."], ["hero", "I'll look."]]);
+          ["hassa", "My Dumar walked the lead camel. He tuned a bell to the ridge hum, so the whole string kept step, forty beasts in one stride. The storm took him, and the bell with him."], ["hassa", "The ridges can keep him. I would like the bell. A drover swore he heard it ring once, west of the ring of singing stones, out by the lone cairn."], ["hero", "I'll look."]]);
         F.set("bell.started"); F.quest("bell", 0); return;
       }
-      if (!F.f("bell.got")) { await UI.say([["hassa", "Glass hides things. Look where it lies thickest, and listen for the note."]]); return; }
+      if (!F.f("bell.got")) { await UI.say([["hassa", "Glass hides things. Go to the ring of singing stones and walk west to the lone cairn. Listen for the note."]]); return; }
       await UI.say([["hero", "(The bell rings once in the satchel, all by itself.)"], ["hassa", "...That is his note. Hm."], ["hassa", "Take this. He would say it is too much. He said that about everything I ever gave anyone."]]);
       F.gold(60); F.give("sunwater", 2); F.questDone("bell");
     },
@@ -123,10 +123,11 @@
       if (st === "done") { await S.rumourIdx(F, "sandpiper", 4, "ossan"); return; }
       if (st === undefined) {
         await UI.say([["ossan", "Sit down, you make my back hurt standing like that. Ossan. I ran salt north with a man named Brem for thirty years."], ["ossan", "Three years gone he took the last wagon out through the white bed, south-west of here. They say the waystation well went dry and nobody walked out."],
-          ["ossan", "His strongbox has the tally. Every wagon, every debt, mine and his. I cannot walk that far, and the jackals keep the place."], ["hero", "What do I get?"], ["ossan", "The truth about thirty years of salt prices. And some kakal. I am not sentimental."]]);
+          ["ossan", "His strongbox has the tally. Every wagon, every debt, mine and his. I cannot walk that far, and the jackals keep the place."], ["hero", "What do I get?"], ["ossan", "The truth about thirty years of salt prices. And some kakal. I am not sentimental."],
+          ["ossan", "His wagon had a red cover with a sun on it. He painted that sun on everything he owned, even me once, when I fell asleep. And he hid things under things."]]);
         F.set("tally.started"); F.quest("tally", 0); return;
       }
-      if (!F.f("tally.got")) { await UI.say([["ossan", "Under a wagon, he would have said. Brem put everything under something."]]); return; }
+      if (!F.f("tally.got")) { await UI.say([["ossan", "The red cover with the sun. The sand eats the rest, but that red stays. Under it, he would have said. Brem put everything under something."]]); return; }
       await UI.say([["ossan", "Huh. The box. ...He lied about the price of salt, you know. For thirty years, by exactly one kakal a sack. The old thief."], ["ossan", "Here. Spend it on something that is not a flask. ...Spend it on a flask, then."]]);
       F.gold(80); F.give("sunwater", 2); F.questDone("tally");
     },

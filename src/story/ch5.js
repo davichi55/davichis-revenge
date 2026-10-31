@@ -125,16 +125,16 @@
     m_contract: { t: "A Guild Contract", main: true, ch: 6, steps: ["Take a contract from one of the three guild masters of Kharam Oasis."] },
     m_vote: { t: "The Concord's Vote", main: true, ch: 6, steps: ["Bring Rhaz the proof from the Quarry of the Stone Giants, and the proof of one other guild (the Fen Shrine or the Sunbird Roost).", "Stand before the Concord in the guild hall."] },
     m_plan: { t: "The Rescue Plan", main: true, ch: 6, steps: ["Hadiya will lay out the plan at the well-stone in Kharam Oasis.", "Wait for Ranna's answer."] },
-    needle: { t: "The Silent Needle", ch: 5, steps: ["Sefa Quill wants five Adder Fangs and the quill of an Archive Wraith.", "Bring them to Sefa Quill in Haldar's Reach."] },
+    needle: { t: "The Silent Needle", ch: 5, steps: ["Sefa Quill wants five Adder Fangs, from the Glass Adders of the Whisperglass Dunes, and the quill of an Archive Wraith, one of the clerks' ghosts in the Undervaults beneath Ashen Orun.", "Bring them to Sefa Quill in Haldar's Reach."] },
     lantern: { t: "The Last Lantern", ch: 5, steps: ["The lantern-builder needs kakal for the frame, the roof and the oil. Give what you can."] },
-    hollowbell: { t: "A Bell in the Dry", ch: 6, steps: ["Old Hollowbell rings when the water is low. He was seen in the dry cisterns and out in the Kharam desert."] },
+    hollowbell: { t: "A Bell in the Dry", ch: 6, steps: ["Old Hollowbell rings when the water is low. He walks the Kharam Road, west of Kharam Oasis, and the dry cisterns of Ashen Orun. You hear the bell before you see him."] },
     bounty1: { t: "Bounty: Mesa Rocs", ch: 6, steps: ["Rhaz wants the Kharam road cleared of five Mesa Rocs (0/5).", "Return to Rhaz."] },
-    bounty2: { t: "Bounty: Automaton Cores", ch: 6, steps: ["Peya wants three Automaton Cores from the rusting builder machines.", "Bring them to Peya."] },
-    bounty3: { t: "Bounty: Siren Eels", ch: 6, steps: ["Corvin wants the siren eels of the harbour channel silenced (0/3).", "Return to Corvin."] },
+    bounty2: { t: "Bounty: Automaton Cores", ch: 6, steps: ["Peya wants three Automaton Cores from the rusting builder machines on the Kharam Road.", "Bring them to Peya."] },
+    bounty3: { t: "Bounty: Siren Eels", ch: 6, steps: ["Corvin wants the siren eels silenced (0/3). They sing in the open water beyond Brass Harbour.", "Return to Corvin."] },
     pilgrim: { t: "Water for the Pilgrims", ch: 6, steps: ["A pilgrim in Cinderwatch needs five Sunwater Flasks for the ash shrine on the slope."] },
-    family: { t: "Everyone Has a Price", ch: 6, steps: ["A mother and two children were sold at Tzavan's market. They wait in a cell under the Hall.", "The family is free. Let the overseer's cell door stand open."] },
+    family: { t: "Everyone Has a Price", ch: 6, steps: ["A mother and two children were sold at Tzavan's market. They wait in cell twelve, at the east end of the cell row under the Hall. The cell stair is the guarded one on the east side of the arena.", "The family is free. Let the overseer's cell door stand open."] },
     ring1: { t: "The Net Fighter", ch: 6, steps: ["Casso, a retired net-fighter in Tzavan, wants to see what you can do against his old net.", "Bring Casso the news."] },
-    ring2: { t: "Ghost in the Cell", ch: 6, steps: ["Meret swears a ghost sits in her old cell in the arena barracks.", "Tell Meret the cell is quiet."] },
+    ring2: { t: "Ghost in the Cell", ch: 6, steps: ["Meret swears a ghost sits in her old cell in the arena barracks, the first cell along the north wall from the foot of the guarded stair on the east side of the arena.", "Tell Meret the cell is quiet."] },
     ring3: { t: "Sand and Salt", ch: 6, steps: ["Brun needs three Salt Crystals to pack a wound the arena doctors will not touch.", "Bring Brun three Salt Crystals."] },
   });
   Object.assign(D.INNS, {
@@ -547,14 +547,14 @@
     if (st === "done") { await UI.say([["sefa", "Wear it well. And never tell me what for."]]); return; }
     if (st === undefined) {
       await UI.say([["sefa", "You have the look of a man who owes the Company a letter. I owe the Concord nothing, which is rarer. Sefa Quill. Forty years I made medicines for the Concord, and a few other things for a few other people."],
-        ["sefa", "I am making the last needle I shall ever make. It wants five fangs of a glass adder and the quill of an archive wraith. The wraith's, mind. The ink must be dead."], ["sefa", "Bring them, and the kit is yours. I have no use for it. I have used it."]]);
+        ["sefa", "I am making the last needle I shall ever make. It wants five fangs of a glass adder and the quill of an archive wraith. The wraith's, mind. The ink must be dead. They drift in the Undervaults, under your old Academy. The adders sleep in the Whisperglass Dunes."], ["sefa", "Bring them, and the kit is yours. I have no use for it. I have used it."]]);
       F.quest("needle", 0); return;
     }
     const fangs = G.goods.adderFang || 0, quill = G.goods.wraithQuill || 0;
     if (fangs >= 5 && quill >= 1) {
       G.goods.adderFang -= 5; G.goods.wraithQuill -= 1; F.questDone("needle"); F.giveGear("G27", 3); F.gold(2 * m(5)); F.sfx("coin");
       await UI.say([["sefa", "Five fangs, clean. And a quill that has stopped writing. ...Good. A needle does one thing, and does it to the right person. Take the kit."]]);
-    } else await UI.say([["sefa", `Fangs: ${Math.min(5, fangs)} of 5. Quill: ${quill ? 1 : 0} of 1. The adders keep to the dunes; the clerks' ghosts keep to the cold. Both are patient. So am I.`]]);
+    } else await UI.say([["sefa", `Fangs: ${Math.min(5, fangs)} of 5. Quill: ${quill ? 1 : 0} of 1. The adders keep to the Whisperglass Dunes; the clerks' ghosts keep to the Undervaults, under the lab in Ashen Orun. Both are patient. So am I.`]]);
   };
 
   // ---------- Dunmar's wagon: lab creatures are freed with the dungeon keys (K1-K5 here; chapters 7-10 free K6-K9 where the wagon stands then) ----------

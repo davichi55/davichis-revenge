@@ -138,8 +138,8 @@
     m_landing: { t: "Ixcalo", main: true, ch: 3, steps: ["Find the smugglers' village along the shore.", "Find a way along the river to Ninefold Ferry."] },
     m_pass: { t: "The Imperial Road", main: true, ch: 3, steps: ["The road east is held by Fort Ocelan.", "Get past Fort Ocelan. Three of Redroot's people are in its cells."] },
     m_coil: { t: "Coil Hill", main: true, ch: 3, steps: ["Past the fort the road climbs to Coil Hill. The Harvest Office is cutting a new pyramid there."] },
-    kite: { t: "The Lost Kite", ch: 3, steps: ["Pip's red kite is snagged in the high mangrove by the wreck on Creeping Shore.", "Take the kite back to Pip."] },
-    pearls: { t: "Snappers on the Ferry Lines", ch: 3, steps: ["Tahlen wants three Pearl-Backed Snappers cleared from the shallows. They bite the ferry lines (0/3).", "Tell Tahlen the lines are clear."] },
+    kite: { t: "The Lost Kite", ch: 3, steps: ["Pip's red kite is snagged in the bare dead tree on the south shore of Creeping Shore, east of the wreck with the chest.", "Take the kite back to Pip."] },
+    pearls: { t: "Snappers on the Ferry Lines", ch: 3, steps: ["Tahlen wants three Pearl-Backed Snappers cleared from the Silt River shallows, through the west gate of Ninefold Ferry. They bite the ferry lines (0/3).", "Tell Tahlen the lines are clear."] },
     steam: { t: "Steam for the Camp", ch: 3, steps: ["The healer at Redroot Camp wants to see six steamstones from the Boiling Pools, for burn salves."] },
   });
   const BASIC = ["sunwater", "antidote"], BOMBS = ["cinderBomb", "rimeFlask", "soakJar", "sparkJar", "venomPot"];
@@ -353,13 +353,13 @@
     }
     const L = [];
     if (F.f("ch4.done")) L.push("Back to the sand, lad? I do not like it. I like it less that I keep not saying so.");
-    if (F.f("ch4.start") && !F.f("k2.freed")) L.push("Quillshade's cage has a lock I do not like the look of. The Windhollow key, lad. Whenever you feel like it.");
+    if (F.f("ch4.start") && !F.f("k2.freed")) L.push("Quillshade's cage has a lock I do not like the look of. The Windhollow key, lad. It is the cliff-top ruin with the open cages, at the far east edge of the canopy. Whenever you feel like it.");
     if (F.f("ch3.s1")) L.push("I heard about the pyramid. One of ours, in a collar. ...Do not tell me what it looked like, lad.");
     if (F.f("ch3.fort")) L.push("Fort Ocelan, was it? Shields all the way down, I hear. Shields have a seam.");
     L.push("No keys yet, lad. Bring one when you find it. And wipe your boots, this wagon has been through enough.");
     await UI.say([["dunmar", M.cycle("dm.n", L.length > 2 ? L.slice(0, 2).concat(L.slice(-1)) : L)]]);
   };
-  Q(Data.QUESTS, { m_windhollow: { t: "The Windhollow Key", ch: 4, steps: ["Dunmar wants the Windhollow key for Quillshade's cage."] } });
+  Q(Data.QUESTS, { m_windhollow: { t: "The Windhollow Key", ch: 4, steps: ["Dunmar wants the Windhollow key for Quillshade's cage. The Windhollow is the cliff-top ruin with open cages, at the far east edge of Featherfall Canopy."] } });
 
   // ---------- 3.0 the voyage (Story.begin[3]) ----------
   S.begin[3] = async F => {
@@ -443,10 +443,10 @@
     const st = F.qstep("kite");
     if (st === "done") { await UI.say([["pip", "It flies! Grandmother says only on days the soldiers are not looking."]]); return; }
     if (st === undefined) {
-      await UI.say([["pip", "My kite went up into the high mangrove by the wreck and the tide came. Grandmother will skin me."], ["hero", "(He is looking at the helmet, not at me.)"], ["pip", "Are you real? Is there a face in there?"]]);
+      await UI.say([["pip", "My kite went up into a dead tree on the south shore, east of the wreck, and the tide came. Grandmother will skin me."], ["hero", "(He is looking at the helmet, not at me.)"], ["pip", "Are you real? Is there a face in there?"]]);
       F.quest("kite", 0); F.set("kite.started"); return;
     }
-    if (st === 0) { await UI.say([["pip", "The high mangrove. By the wreck. The red one is mine. Please."]]); return; }
+    if (st === 0) { await UI.say([["pip", "The dead tree, east of the wreck, on the south shore. You will see the red paper from far off. It is mine. Please."]]); return; }
     if (F.item("lostKite")) {
       F.take("lostKite", 1);
       await UI.say([["pip", "You got it. You got it! There is a tear. ...It is fine. It is a good tear."], ["oma", "He will fly it in the first wind. Mind you, so will I."]]);
@@ -562,7 +562,7 @@
     const st = F.qstep("pearls");
     if (st === "done") { await UI.say([["tahlen", M.cycle("tl.n", ["Eat. You are thin under all that tin.", "The lines are quiet, and the eels are fat. You have done Ninefold a kindness.", "Keep your head down on the road, friend. Keep it up when it matters."])]]); return; }
     if (st === undefined) {
-      await UI.say([["tahlen", "You look like a man who can hit things. Good. Snappers bite the ferry lines, three of them in the shallows this week. Clear them out and I will pay you in pearls."], ["tahlen", "Pearl-Backed Snappers. Hard shells, soft tempers. The shallows west of the dock."]]);
+      await UI.say([["tahlen", "You look like a man who can hit things. Good. Snappers bite the ferry lines, three of them in the shallows this week. Clear them out and I will pay you in pearls."], ["tahlen", "Pearl-Backed Snappers. Hard shells, soft tempers. The shallows west of the dock, out the town's west gate onto the Silt River."]]);
       F.quest("pearls", 0); G.flags.pearlBase = G.kills.pearlBackedSnapper || 0; return;
     }
     const n = (G.kills.pearlBackedSnapper || 0) - (G.flags.pearlBase || 0);

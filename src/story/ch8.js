@@ -18,10 +18,10 @@
     m_ops: { t: "Operations", main: true, ch: 8, steps: ["Strike the empire in three places: cut the salt road on the Tzavan coast, break the altar at the Sunmaw pyramid, and take the ledgers from the Governor's Villa."] },
     m_prison: { t: "The Black Mirror", main: true, ch: 8, steps: ["The Villa's ledgers say it: cell nine of the Black Mirror holds one creature, to be kept alive. Find the prison."] },
     salt: { t: "The Salt Road", ch: 8, steps: ["Break the tollbooth on the Tzavan coast, cut three convoys on the Royal Road, and free the Red Salt Mines (0/3 convoys)."] },
-    m_k6: { t: "The Veiled Cistern", ch: 8, steps: ["A cage in the Menagerie Wagon wants a glass key. The Veiled Cistern lies under a ruined village on the Tzavan clifftop."] },
+    m_k6: { t: "The Veiled Cistern", ch: 8, steps: ["A cage in the Menagerie Wagon wants a glass key. The Veiled Cistern lies under the ruined village in the south-east corner of the Tzavan Coast clifftop."] },
     cistern: { t: "Statues in the Glass", ch: 8, steps: ["Turn the mirror stands so a beam of light crosses the cistern onto the sealed door. Keep out of the statues' gaze."] },
-    granary: { t: "The Hidden Granary", ch: 8, steps: ["Widow Tuk's husband hid a granary from the overseers. She does not remember where.", "The pressman says it is behind a wall of vines in the Orchard Hills."] },
-    bounty4: { t: "Bounty: Gargoyle Shards", ch: 8, steps: ["The quartermaster at Pale Gate wants five Salt Gargoyle shards (0/5)."] },
+    granary: { t: "The Hidden Granary", ch: 8, steps: ["Widow Tuk's husband hid a granary from the overseers. She does not remember where.", "The pressman says it is behind a stone arch grown over with vines, in the far south-east corner of the Orchard Hills."] },
+    bounty4: { t: "Bounty: Gargoyle Shards", ch: 8, steps: ["The quartermaster at Pale Gate wants five Salt Gargoyle shards, shed by the gargoyles on the Red Salt Flats (0/5)."] },
     bounty5: { t: "Bounty: A Chained Gang", ch: 8, steps: ["Free one of the chained gangs in the Red Salt Mines. The quartermaster pays on word."] },
     bounty6: { t: "Bounty: Overseer's Hounds", ch: 8, steps: ["Three Overseer's Hounds off the Royal Road (0/3). Report to the quartermaster."] },
   });
@@ -413,12 +413,12 @@
       await say("widow", "Ask the pressman. He carried the last load up the hill. He will not tell me, because he thinks I would go.");
       F.quest("granary", 0); return;
     }
-    await say("widow", st === 0 ? "The pressman. He knows. He is a stubborn man; ask him as if you already knew." : "A wall of vines on the hillside. Find it, and bring back what you can. I will not be able to thank you properly.");
+    await say("widow", st === 0 ? "The pressman. He knows. He is a stubborn man; ask him as if you already knew." : "A stone arch under vines, in the south-east corner of the hills. Find it, and bring back what you can. I will not be able to thank you properly.");
   };
   T("tukOrchard").pressman = async F => {
     const st = F.qstep("granary");
     if (st === 0) {
-      await say("pressman", "The widow sent you. She would. ...The hill above the third terrace, on the side the overseers never walk. A wall of vines, a stone with a notch. Behind the notch, the door.");
+      await say("pressman", "The widow sent you. She would. ...Go up into the hills and east along the lowest terrace, to the far south-east corner, where the overseers never walk. A stone arch gone green with vines, and a stone in it with a notch. Not the low flowering terrace walls. Behind the notch, the door.");
       await say("pressman", "I carried the last sack up it myself. I have not been back. Every time I think of it, I smell the grain.");
       F.quest("granary", 1); return;
     }

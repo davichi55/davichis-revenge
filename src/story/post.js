@@ -69,7 +69,7 @@
     await stage(async c => {
       M3.actors(c, [["brisk", "npcBrisk", 120, -10, { flip: true }]]);
       c.tint("#f0c0a0", 0.1, 400);
-      await c.say([["narr", "Morning at Dawnwatch. The banners on the wall are the same banners, and nobody quite knows what to do with them. From the cove comes a smell of tar and bread."], ["captain", "Friend, the storm belt is quiet. The scholars at Starhaven have been sending kites."]]);
+      await c.say([["narr", "Morning at Dawnwatch. The banners on the wall are the same banners, and nobody quite knows what to do with them. From the cove comes a smell of tar and bread."], ["captain", "Friend, the storm belt is quiet. The scholars at Starhaven have been sending kites. Sail west from the cove, a little south, past the storm belt. Their island is the one behind the weather."]]);
       c.tint("#f0c0a0", 0, 400); c.follow();
     }, { music: "bastion" });
   };
@@ -95,11 +95,11 @@
     lanternBead: Q(key("Lantern Bead", "Cosmetic. A glass bead from Lantern Deep that glows when the room is dark. It does nothing and is very hard to put down."), { f: 25 }),
   });
   Q(D.QUESTS, {
-    m_starhaven: { t: "Starhaven", ch: 12, steps: ["The old Academy scholars have a camp on a star-metal island beyond the storm belt, and they have been sending kites."] },
+    m_starhaven: { t: "Starhaven", ch: 12, steps: ["The old Academy scholars have a camp on a star-metal island beyond the storm belt, north-east on the Weeping Sea, east of the Maelstrom. They have been sending kites."] },
     m_crater: { t: "The Crater Garden", ch: 12, steps: ["In the Starfall Isles there is a crater full of glass flowers, and something sleeps in it."] },
-    m_drowned: { t: "The Drowned Capital", ch: 12, steps: ["A builder city lies under the sea. A diving bell goes down from the mid-east."] },
-    m_deep: { t: "Lantern Deep", ch: 12, steps: ["A lightless trench lies below the lantern reef. Follow the creatures that glow."] },
-    m_league: { t: "The Grand Cup", ch: 12, steps: ["Tzavan's Grand Cup is open. The champion has not lost in eleven years."] },
+    m_drowned: { t: "The Drowned Capital", ch: 12, steps: ["A builder city lies under the sea. A diving bell goes down from a buoy off the east coast, between Lowstep and Tzavan, beside two lantern buoys and a wreck."] },
+    m_deep: { t: "Lantern Deep", ch: 12, steps: ["A lightless trench lies below three lantern buoys in the open sea, east of the Maelstrom and south of the diving bell. Follow the creatures that glow."] },
+    m_league: { t: "The Grand Cup", ch: 12, steps: ["Tzavan's Grand Cup is open. Enter it at the arena clerk's counter in Tzavan. The champion has not lost in eleven years."] },
   });
   D.LORE.sleepers = "The sleepers. Something fell from the sky a very long time ago, and sleeps in the Crater Garden of the Starfall Isles. It is not dead. When you stand close, the mark on your gauntlet answers it.";
   D.LORE.builderLogs = "Builder logs of the Drowned Capital: \"We set the locks. We did not tell the sleepers' names.\" and: \"The count resumes when the last lock is gone.\"";
@@ -109,7 +109,7 @@
   const ALL = M.BAS.concat(M.CURES, ["tonic", "ember", "incense", "candle", "starfallCloak", "lanternBead"], M.BOMBS, M.WARDS);
   Q(D.INNS, { starhaven: { n: "The Star Lamp", mult: 1.0 } });
   Q(D.SHOPS, { starhaven: { n: "Starhaven research stores", who: "merchant", stock: ALL, buys: 1.0 } });
-  M3.rumours("starhaven", ["The Last Warden still guards a city that has no one left to guard.", "A whale swallowed a star. It still burns inside her.", "The trench below the lantern reef is dark. Follow the creatures that glow."], []);
+  M3.rumours("starhaven", ["The Last Warden still guards a city that has no one left to guard. A diving bell goes down to it, off the east coast, between Lowstep and Tzavan.", "A whale swallowed a star. It still burns inside her.", "The trench below the three lantern buoys is dark, east of the Maelstrom and south of the bell. Follow the creatures that glow."], []);
 
   // ---------- regions ----------
   const yes = () => true, WARM = "bg_ruins";

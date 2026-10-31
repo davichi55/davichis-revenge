@@ -22,8 +22,8 @@
     chests: [{ id: "graveChest1", x: 2780, y: 540 }, { id: "graveChest2", x: 520, y: 1650 }],
     gather: [{ id: "shardHeap", x: 1260, y: 1590, label: "A great shell under the wagon", color: "gold" }, { id: "tallyBox", x: 2250, y: 720, label: "A strongbox under a wagon", color: "gold", show: "tally.started" }],
     npcs: [{ id: "tallyBoard", art: "noticeBoard", name: "Tally board", x: 1620, y: 420, hint: "E / Space: read the board" }],
-    props: [
-      ["supplyWagon", 1200, 700], ["cart", 1750, 640], ["supplyWagon", 2260, 790], ["cart", 1900, 1100], ["supplyWagon", 1000, 1250], ["cart", 600, 1350], ["cart", 2500, 1350], ["supplyWagon", 1500, 1500], ["cart", 800, 520], ["crates", 1240, 770, {}], ["crates", 2310, 840, {}], ["barrel", 2210, 840], ["barrel", 1830, 680],
+    props: [   // only Brem's wagon (2260, 790, over the tally strongbox) keeps its red sun cover; the others are sun-bleached (Ossan's clue)
+      ["supplyWagon", 1200, 700, { tint: 0x9a8e80 }], ["cart", 1750, 640], ["supplyWagon", 2260, 790], ["cart", 1900, 1100], ["supplyWagon", 1000, 1250, { tint: 0x9a8e80 }], ["cart", 600, 1350], ["cart", 2500, 1350], ["supplyWagon", 1500, 1500, { tint: 0x9a8e80 }], ["cart", 800, 520], ["crates", 1240, 770, {}], ["crates", 2310, 840, {}], ["barrel", 2210, 840], ["barrel", 1830, 680],
       ["camelBones", 1100, 900], ["camelBones", 1600, 1000], ["camelBones", 2000, 1400], ["camelBones", 700, 1100], ["ribs", 1400, 560], ["ribs", 2000, 900], ["skullPile", 1500, 800, { solid: [14, 8] }], ["deadTree", 1300, 1100], ["deadTree", 2100, 1000], ["deadTree", 900, 1400], ["cairn", 1560, 120], ["cairn", 3010, 1560],
       ["tent", 1950, 1300, {}], ["hayBales", 1450, 1380],
     ],

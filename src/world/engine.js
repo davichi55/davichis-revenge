@@ -405,8 +405,9 @@
       }
       for (const g of R.gather || []) {
         const col = g.color || "gold", tex = col === "blue" ? "glowBlue" : "glowGold", glow = this.add.image(g.x, g.y - 4, tex).setBlendMode(Phaser.BlendModes.ADD).setDepth(g.y).setScale(0.5).setAlpha(0.7), star = this.add.image(g.x, g.y - 10, "star").setScale(2).setDepth(g.y + 1);
-        const rec = Object.assign({ glow, star, on: true, ph: Math.random() * 6 }, g); this.gathers.push(rec);
-        this.conds.push({ cnd: { show: g.show, hide: g.hide }, objs: [glow, star], rec });
+        const beacon = this.add.image(g.x, g.y - 12, tex).setBlendMode(Phaser.BlendModes.ADD).setDepth(9400).setScale(0.7).setAlpha(0.6), bstar = this.add.image(g.x, g.y - 14, "star").setScale(2.4).setDepth(9401);   // Danny 2026-10-31: wagons and rocks hid the spots, so a soft glow shines through everything in front of it
+        const rec = Object.assign({ glow, star, beacon, bstar, on: true, ph: Math.random() * 6 }, g); this.gathers.push(rec);
+        this.conds.push({ cnd: { show: g.show, hide: g.hide }, objs: [glow, star, beacon, bstar], rec });
       }
     }
     makePeople() {
@@ -468,7 +469,7 @@
         else if (on !== this.altOn) { this.altOn = on; this.tweens.add({ targets: this.altImg, alpha: on ? 1 : 0, duration: 2200, ease: "Sine.easeInOut" }); }
       }
       for (const c of this.chests) { const op = !!this.flags["chest." + c.id]; if (c.s && c.s.texture.key !== (op ? "chestOpen" : "chestClosed")) c.s.setTexture(op ? "chestOpen" : "chestClosed"); }
-      for (const g of this.gathers) { const got = !!this.flags["gather." + g.id]; if (got) { g.glow.setVisible(false); g.star.setVisible(false); g.done = true; } }
+      for (const g of this.gathers) { const got = !!this.flags["gather." + g.id]; if (got) { g.glow.setVisible(false); g.star.setVisible(false); g.beacon.setVisible(false); g.bstar.setVisible(false); g.done = true; } }
     }
 
     // ---------- ambience ----------
@@ -916,7 +917,7 @@
         if (time > (e.nextMote || 0) && Math.abs(x + w / 2 - this.pos.x) < 700 && Math.abs(y + h / 2 - this.pos.y) < 450) { e.nextMote = time + 220; const m = this.add.image(x + Math.random() * w, y + h * (0.3 + Math.random() * 0.7), "star").setBlendMode(Phaser.BlendModes.ADD).setDepth(9400).setScale(1.2).setAlpha(0.9); this.tweens.add({ targets: m, y: m.y - 26 - Math.random() * 16, alpha: 0, duration: 1100, onComplete: () => m.destroy() }); }
         if (e.arrow) { const k = 6 + pu * 8, cx = Math.min(Math.max(x + w / 2 - e.out[0] * k, 14), R.w - 14), cy = Math.min(Math.max(y + h / 2 - e.out[1] * k, 14), R.h - 14); e.arrow.setPosition(Math.round(cx), Math.round(cy)).setAlpha(0.55 + 0.45 * pu); }
       }
-      for (const g of this.gathers) if (!g.done && g.on) { const pu = 0.5 + 0.5 * Math.sin(time * 0.004 + g.ph); g.glow.setAlpha(0.35 + 0.4 * pu).setScale(0.45 + 0.15 * pu); g.star.setAlpha(0.5 + 0.5 * pu).setY(g.y - 10 - pu * 4); }
+      for (const g of this.gathers) if (!g.done && g.on) { const pu = 0.5 + 0.5 * Math.sin(time * 0.004 + g.ph); g.glow.setAlpha(0.35 + 0.4 * pu).setScale(0.45 + 0.15 * pu); g.star.setAlpha(0.5 + 0.5 * pu).setY(g.y - 10 - pu * 4); g.beacon.setAlpha(0.5 + 0.4 * pu).setScale(1.3 + 0.4 * pu); g.bstar.setAlpha(0.55 + 0.45 * pu).setScale(2.6 + pu).setY(g.y - 16 - pu * 6); }
       // wandering townspeople
       for (const n of this.npcs) if (n.P && n.on && n.s && !(this.busy && Math.hypot(this.pos.x - n.x, this.pos.y - n.y) < 90)) {
         if (Math.hypot(this.pos.x - n.x, this.pos.y - n.y) < 52) continue;

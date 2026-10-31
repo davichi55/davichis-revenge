@@ -859,10 +859,10 @@
       const st = F.qstep("family");
       if (st === "done") { await say("slaveMerchant", "The cell stands open, I am told. Empty. It will go in the ledger as an escape. It is entered in the ledger."); return; }
       if (st === undefined) {
-        await UI.say([["narr", "Behind the rope, a line of people sit on a stone bench with numbers chalked on their sleeves. A woman holds two children very close, one under each arm, and does not look at the buyers. The children do not look at anyone."], ["slaveMerchant", "Everyone has a price. Yours is high."], ["hero", "..."], ["slaveMerchant", "The mother and the two small ones are lot twelve. They were sold this morning to a buyer at the Hall, and are waiting in a cell under it until he comes. Do not look at me like that. It is entered in the ledger."]]);
+        await UI.say([["narr", "Behind the rope, a line of people sit on a stone bench with numbers chalked on their sleeves. A woman holds two children very close, one under each arm, and does not look at the buyers. The children do not look at anyone."], ["slaveMerchant", "Everyone has a price. Yours is high."], ["hero", "..."], ["slaveMerchant", "The mother and the two small ones are lot twelve. They were sold this morning to a buyer at the Hall, and are waiting in a cell under it until he comes. The cell stair is the guarded one on the east side of the arena; twelve is the last door along the north wall. Do not look at me like that. It is entered in the ledger."]]);
         F.quest("family", 0); return;
       }
-      await say("slaveMerchant", "Lot twelve is in the cells under the Hall. I would not go. The overseer there has been told what to do with visitors.");
+      await say("slaveMerchant", "Lot twelve is in the cells under the Hall, at the far east end. Down the guarded stair beside the arena. I would not go. The overseer there has been told what to do with visitors.");
     },
     ring1: async F => {
       const st = F.qstep("ring1");
@@ -878,9 +878,9 @@
     ring2: async F => {
       const st = F.qstep("ring2");
       if (st === "done") { await say("ring2", "My old cell is quiet. I sleep better now, and I do not sleep, if you follow."); return; }
-      if (st === undefined) { await say("ring2", "There is a ghost in my old cell in the barracks. It sits on the bunk. It folds the blanket every night, and I did not put it there to be folded. I will not go back down. You might."); F.quest("ring2", 0); return; }
+      if (st === undefined) { await say("ring2", "There is a ghost in my old cell in the barracks. It sits on the bunk. It folds the blanket every night, and I did not put it there to be folded. I will not go back down. You might. The cell stair is the guarded one on the east side of the arena. Mine is the first cell on the north wall."); F.quest("ring2", 0); return; }
       if (F.f("ring2.cell")) { F.questDone("ring2"); F.give("candle", 3, true); await UI.say([["ring2", "Quiet? Truly quiet? Then I owe you a candle. Three. They are for luring things, but the old women say they also keep the dark from the bed."]]); }
-      else await say("ring2", "It is in the barracks, in the cell at the end of the second row. The one with the folded blanket.");
+      else await say("ring2", "It is down the guarded stair on the east side of the arena. The first cell along the north wall. The one with the folded blanket.");
     },
     ring3: async F => {
       const st = F.qstep("ring3");

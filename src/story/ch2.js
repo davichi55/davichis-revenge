@@ -39,7 +39,7 @@
         await F.banter("wagon");
         await UI.say([
           ["dunmar", "The cells here open with keys, old keys from the old dungeons. Bring me one and I can free one of my cages. Their creatures are as good as your own."],
-          ["dunmar", "There's a story about a bull in the walls under this oasis. Old Mazeheart waits down the stair in the maze, if you dare."],
+          ["dunmar", "There's a story about a bull in the walls under this oasis. Old Mazeheart waits down the stair under the rib arch in the north-east corner of town, if you dare."],
         ]);
         UI.toast("The Menagerie Wagon is here.");
       } else if (F.item("keyK1")) {

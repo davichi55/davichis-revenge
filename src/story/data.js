@@ -386,7 +386,7 @@ const Data = (() => {
     m_boat:     { t: "The Smuggler's Boat", main: true, steps: ["Find the captain on Saltgate's docks."] },
     tidy:       { t: "Tidy the Lab", steps: ["Dunmar wants the lab tidied: find three things out of place (0/3).", "Return to Dunmar."] },
     debt:       { t: "The Scholar's Debt", steps: ["Pell the scholar is hiding from his creditors in Amber Wells. Hear him out.", "Pay Pell's debts (60 kakal) and he will pay you back in the only coin he has."] },
-    shard:      { t: "Quarry Order", steps: ["The shard foreman wants three Dune Scorpion Knights cleared from the roads (0/3).", "Return to the foreman."] },
+    shard:      { t: "Quarry Order", steps: ["The shard foreman wants three Dune Scorpion Knights cleared from the Amber Wells Basin road and the Scorpion Quarry (0/3).", "Return to the foreman."] },
     bellow:     { t: "A Bellow in the Walls", steps: ["Old Mazeheart hears a bull under the oasis. Find the Bone Maze.", "Use the Bone Maze key at the wagon."] },
   };
 

@@ -164,7 +164,7 @@
     }, { music: "roots" });
   };
   S.done.nestEnter = F => F.f("nest.seen");
-  Q(D.QUESTS, { m_k7: { t: "The Hollow Nest", ch: 9, steps: ["A cage in the Menagerie Wagon wants an ash-wood key. The Hollow Nest is an old tree on the Rootdeep Approach, full of ash and fire."] } });
+  Q(D.QUESTS, { m_k7: { t: "The Hollow Nest", ch: 9, steps: ["A cage in the Menagerie Wagon wants an ash-wood key. The Hollow Nest is an old burnt tree at the south-west edge of the Rootdeep Approach, where thorn bushes grow round a charred branch. It is full of ash and fire."] } });
   [1, 2, 3].forEach(n => {
     S.done["fire" + n] = F => F.f("nest.f" + n);
     S.trigger["fire" + n] = async F => {
@@ -215,7 +215,7 @@
   };
   T("ashfeatherCamp").oldDunmar = async F => {
     if (F.item("keyK7") > 0 || F.item("keyK6") > 0) { await M3.wagon(F); return; }
-    await say("dunmar", cycle("dm9", ["The front needs medicine and cages, lad. So the wagon came. A cage of ash-wood, grey, warm in the middle. It wants a nest key.", "Nineteen years of crates going east, and I never asked. I am asking now. Everyone I ask says 'as agreed'.", "Mind the roots. They are older than the cages and they never forget the way home."]));
+    await say("dunmar", cycle("dm9", ["The front needs medicine and cages, lad. So the wagon came. A cage of ash-wood, grey, warm in the middle. It wants a nest key. The old burnt tree at the south-west edge of the Rootdeep Approach, past the thorn bushes. The ash there is knee-deep.", "Nineteen years of crates going east, and I never asked. I am asking now. Everyone I ask says 'as agreed'.", "Mind the roots. They are older than the cages and they never forget the way home."]));
   };
 
   // ---------- 8.0 the Silver Cup (Tzavan) ----------
