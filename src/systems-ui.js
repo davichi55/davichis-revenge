@@ -21,7 +21,23 @@
     if (/^raid|legion|optio|centurion|soldier|archer|spearman|shield|general|admiral/i.test(id)) return "Soldiers";
     return "Creatures";
   };
-  U.CATS = ["All", "Creatures", "Soldiers", "Bosses", "Titans", "Legends", "Champions' Wall"];
+  U.CATS = ["All", "Creatures", "Soldiers", "Bosses", "Titans", "Legends", "Champions' Wall", "Areas"];
+  // Areas (Danny 2026-10-31): per area you have been to, which of its creature kinds you have met; unmet ones stay hidden
+  U.areasHtml = () => {
+    const order = Object.keys(G.been || {});
+    Object.keys(G.best).map(id => G.best[id]).filter(b => b && b.where).sort((a, b) => (a.ch || 0) - (b.ch || 0)).forEach(b => { if (!order.includes(b.where)) order.unshift(b.where); });   // older saves: areas known from first meetings
+    if (G.region && !order.includes(G.region)) order.push(G.region);
+    const rows = order.map(rid => ({ rid, ids: window.World && World.areaFoes ? World.areaFoes(rid) : [] })).filter(r => r.ids.length).reverse();   // newest first
+    if (!rows.length) return `<div class="row"><div class="g">No wild areas yet.</div></div>`;
+    const total = rows.length, pg = rows.slice(U.page * PER, U.page * PER + PER);
+    return pg.map(({ rid, ids }) => {
+      const met = ids.filter(i => G.best[i] && G.best[i].seen), all = met.length >= ids.length;
+      const nm = (Data.REGIONS[rid] && Data.REGIONS[rid].n) || (World.REGIONS[rid] && World.REGIONS[rid].name) || pretty(rid);
+      const name = i => (Core.ENEMIES && Core.ENEMIES[i] && Core.ENEMIES[i].name) || (Data.NAMES && Data.NAMES[i]) || pretty(i);
+      const list = ids.map(i => (G.best[i] && G.best[i].seen ? esc(name(i)) : `<span style="color:#6d5f4f">???</span>`)).join(", ");
+      return `<div class="row"><div class="g"><b style="font-weight:400">${esc(nm)}</b> <small style="display:inline;color:${all ? "#7ee081" : "#f2c14e"}">${all ? "all " + ids.length + " met" : met.length + " of " + ids.length + " met"}</small><small>${list}</small></div></div>`;
+    }).join("") + (total > PER ? pager(total, "b") : "");
+  };
   U.bestiary = () => {
     const ids = Object.keys(G.best).filter(id => G.best[id] && G.best[id].seen);
     // the wall also lists champions that are not in best (never fought in the field)
@@ -144,7 +160,8 @@
       if (G.flags["lore.bearer"]) h += `<h3 style="margin-top:12px">Lore</h3><div class="row"><div class="g">${esc(Data.LORE.bearerBreak)}</div></div>`;
     } else if (U.jt === 2) {
       const all = U.bestiary(); h += chips(U.CATS, U.cat, "cat");
-      if (U.cat === "Champions' Wall") {
+      if (U.cat === "Areas") h += U.areasHtml();
+      else if (U.cat === "Champions' Wall") {
         const wall = (S.state().arena || {}).wall || [];
         h += wall.length ? wall.map(w => `<div class="row"><div class="g"><b style="font-weight:400">${esc(w.n)}</b><small>${esc((Data.CUPS[w.cup] || {}).n || "")} champion · Level ${w.lv} · beaten in chapter ${w.ch}</small></div></div>`).join("") : `<div class="row"><div class="g">Nobody on the wall yet. Win a cup in Tzavan.</div></div>`;
       } else {

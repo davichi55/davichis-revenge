@@ -260,6 +260,7 @@ const Flow = (() => {
     const my = ++F.token; const prevRegion = G.region; G.region = region; G.entry = entry || "start";
     const R = Data.REGIONS[region] || {};
     if (R.town) { G.lastTown = region; (G.visited = G.visited || {})[region] = true; }   // the ferry pass lists visited towns
+    (G.been = G.been || {})[region] = true;   // every area entered, in order: the bestiary's Areas list
     await UI.fade(true, 350);
     F.visit = {}; if (region === "dunes" || (Story.duskSet && Story.duskSet[region])) { if (!(Story.duskSet && Story.duskSet[region] && Story.duskSet[prevRegion])) G.flags["dunes.dusk"] = !G.flags["l1.done"] && Math.random() < 0.4; }   // the dusk hound roams the dunes and the CH1-EXPAND maps (Story.duskSet): the roll is only repeated when you come in from outside that area
     F.music(R.music || "desert");

@@ -6,6 +6,17 @@
   "use strict";
   const World = window.World = window.World || {};
   World.REGIONS = World.REGIONS || {};
+  // every creature kind that random fights or patrols in an area can bring (encounter table, zones, army tables), for the minimap line and the bestiary's Areas list
+  World.areaFoes = rid => {
+    const R = World.REGIONS[rid]; if (!R) return [];
+    const e = R.encounter || {}, tabs = new Set([e.table].concat((e.zones || []).map(z => z.table), ((R.amb && R.amb.armies) || []).map(a => a.table)).filter(Boolean)), ids = new Set();
+    tabs.forEach(t => {
+      let tbl = null; try { tbl = Core.ENCOUNTERS[t]; } catch (x) {}
+      const arr = tbl ? (Array.isArray(tbl) ? tbl : tbl.groups || tbl.list || tbl.table || tbl.entries || []) : ((window.Data && Data.ENC[t] && Data.ENC[t].groups) || []);
+      arr.forEach(x => [].concat(typeof x === "string" || Array.isArray(x) ? x : x.foes || x.enemies || x.group || x.units || x.id || []).forEach(f => { const id = typeof f === "string" ? f : f && f.id; if (id) ids.add(id); }));
+    });
+    return [...ids];
+  };
   const H = World.hooks = World.hooks || {};
   if (/[?&]raf/.test(location.search)) window.requestAnimationFrame = cb => setTimeout(() => cb(performance.now()), 16);
   // two overlapping scene loads can add the same texture key twice; Phaser then returns null and its loader crashes ("Cannot set properties of null"). Return the existing texture instead.
@@ -170,20 +181,24 @@
         const frame = this.add.rectangle(x - 3, y - 3, W + 6, H + 6, 0x120c09, 0.85).setOrigin(0).setStrokeStyle(1, 0xb08a4a, 0.9).setScrollFactor(0).setDepth(21000);
         const img = this.add.image(x, y, key).setOrigin(0).setScale(s).setAlpha(0.82).setScrollFactor(0).setDepth(21001);
         const g = this.add.graphics().setScrollFactor(0).setDepth(21002);
-        this.mini = { x, y, s: s / CELL, frame, img, g, t: 0, W, H, side: "right", sideT: 0 }; this.showMinimap();
+        const label = this.add.text(x + W / 2, y + H + 6, "", { fontFamily: "Marcellus, Georgia, serif", fontSize: "12px", color: "#e8d5a8", backgroundColor: "#120c09cc", padding: { x: 5, y: 1 } }).setOrigin(0.5, 0).setScrollFactor(0).setDepth(21003);
+        this.mini = { x, y, s: s / CELL, frame, img, g, label, t: 0, W, H, side: "right", sideT: 0 }; this.showMinimap();
         this.events.once("shutdown", () => { if (this.textures.exists(key)) this.textures.remove(key); this.mini = null; });
       } catch (e) { console.warn("minimap", e); this.mini = null; }
     }
-    showMinimap() { if (!this.mini) return; let on = true; try { on = G.minimap !== false; } catch (e) {} [this.mini.frame, this.mini.img, this.mini.g].forEach(o => o.setVisible(on)); }
+    // creatures of this area met so far (Danny 2026-10-31: know when you have seen every kind); World.areaFoes is shared with the bestiary's Areas list
+    areaLine() { const ids = World.areaFoes(this.rid); if (!ids.length) return ""; let best = {}; try { best = G.best || {}; } catch (e) {} const n = ids.filter(i => best[i] && best[i].seen).length; return n >= ids.length ? `All ${ids.length} creatures met` : `Creatures met ${n}/${ids.length}`; }
+    showMinimap() { if (!this.mini) return; let on = true; try { on = G.minimap !== false; } catch (e) {} [this.mini.frame, this.mini.img, this.mini.g].forEach(o => o.setVisible(on)); const t = this.areaLine(); this.mini.label.setText(t).setVisible(on && !!t); if (t) this.mini.label.setColor(/^All/.test(t) ? "#9fe08a" : "#e8d5a8"); }
     updateMinimap(time) {
       const m = this.mini; if (!m || !m.img.visible || time - m.t < 100) return; m.t = time;
+      if (!(time < m.lt + 1000)) { m.lt = time; const t = this.areaLine(); if (t !== m.label.text) { if (/^All/.test(t) && m.label.text) { try { UI.toast(`Every creature of ${this.R.name || "this area"} met`); } catch (e) {} } this.showMinimap(); } }   // refreshed after fights; a toast when the last kind is met
       // never cover the hero or a character (Danny: the Maze Guardian hid under it): hop to the other top corner when something is near this one
       const cam = this.cameras.main, wv = cam.worldView, scr = (x, y) => [(x - wv.x) * cam.zoom, (y - wv.y) * cam.zoom];
-      const busy = side => { const x0 = side === "right" ? 960 - 12 - m.W - 3 : 9, x1 = x0 + m.W + 6, y1 = 12 + m.H + 3, pad = 70;
+      const busy = side => { const x0 = side === "right" ? 960 - 12 - m.W - 3 : 9, x1 = x0 + m.W + 6, y1 = 12 + m.H + (m.label.visible ? 24 : 3), pad = 70;
         const pts = [scr(this.pos.x, this.pos.y - 30)].concat((this.npcs || []).filter(n => n.s && n.s.visible).map(n => scr(n.x, n.y - 30)));
         return pts.some(([px, py]) => px > x0 - pad && px < x1 + pad && py < y1 + pad + 30); };
-      if (time > m.sideT && busy(m.side)) { const other = m.side === "right" ? "left" : "right"; if (!busy(other)) { m.side = other; m.sideT = time + 1200; const nx = other === "right" ? 960 - 12 - m.W : 12, dx = nx - m.x; m.x = nx; m.frame.x += dx; m.img.x += dx; } }
-      const both = busy("right") && busy("left"); m.frame.setAlpha(both ? 0.25 : 0.85); m.img.setAlpha(both ? 0.25 : 0.82); m.g.setAlpha(both ? 0.4 : 1);   // nowhere free: fade it out
+      if (time > m.sideT && busy(m.side)) { const other = m.side === "right" ? "left" : "right"; if (!busy(other)) { m.side = other; m.sideT = time + 1200; const nx = other === "right" ? 960 - 12 - m.W : 12, dx = nx - m.x; m.x = nx; m.frame.x += dx; m.img.x += dx; m.label.x += dx; } }
+      const both = busy("right") && busy("left"); m.frame.setAlpha(both ? 0.25 : 0.85); m.img.setAlpha(both ? 0.25 : 0.82); m.g.setAlpha(both ? 0.4 : 1); m.label.setAlpha(both ? 0.3 : 1);   // nowhere free: fade it out
       const g = m.g, X = v => m.x + v * m.s, Y = v => m.y + v * m.s; g.clear();
       g.fillStyle(0x16100e, 1); for (const d of this.dynSolids) if (d.on) g.fillRect(X(d.r[0]), Y(d.r[1]), Math.max(1, (d.r[2] - d.r[0]) * m.s), Math.max(1, (d.r[3] - d.r[1]) * m.s));   // doors and walls that open with the story
       for (const e of this.exits || []) if (e.on && e.glow) { g.fillStyle(0xffc84a, 1); g.fillCircle(X(e.rect[0] + e.rect[2] / 2), Y(e.rect[1] + e.rect[3] / 2), 3); }
