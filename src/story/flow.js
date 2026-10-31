@@ -298,7 +298,8 @@ const Flow = (() => {
     if (F.locked > 1) return;
     const foes = F.rollEncounter(tableId); if (!foes) return;
     G.flags["enc.n"] = (G.flags["enc.n"] || 0) + 1;
-    const res = await F.fight(foes, { bg: F.arenaOf(region || G.region) });
+    const sc = window.World && World.scene, xm = sc && sc.encPending != null ? sc.encPending : 1; if (sc) sc.encPending = null;   // random fights come more often (max ~20 s apart): XP per fight is scaled so XP per minute stays the same
+    const res = await F.fight(foes, { bg: F.arenaOf(region || G.region), xpMult: xm < 1 ? xm : undefined });
     F.afterFight && F.afterFight(res);
   });
   F.hookExit = (to, entry) => F.guard(async () => { F.go(to, entry); });

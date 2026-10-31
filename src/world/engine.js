@@ -770,9 +770,11 @@
       if (this.time.now < this.safeUntil || this.safeDist > 0) return;
       const z = this.zoneAt(this.pos.x, this.pos.y); if (!z || !z.table || !z.rate) return;
       this.walkT += dt;
-      if (this.walkT >= z.rate * this.encFrac * (1 / Math.max(0.05, window.Flow && Flow.encounterMult ? Flow.encounterMult() : 1))) {
+      // Danny 2026-10-31: at most ~20 s of walking per fight everywhere; XP per fight shrinks by the same factor so XP per minute of walking (the level bands) stays as tuned
+      const rate = Math.min(z.rate, World.ENC_MAX || 20); this.encXpScale = Math.min(1, rate / z.rate);
+      if (this.walkT >= rate * this.encFrac * (1 / Math.max(0.05, window.Flow && Flow.encounterMult ? Flow.encounterMult() : 1))) {
         if (window.Systems && Systems.skipFight && Systems.skipFight(z.table)) { this.walkT = 0; this.encFrac = 0.5 + Math.random(); }   // Quiet Sigil: a weak fight never starts
-        else this.startEncounter(z.table, "steps");
+        else { this.encPending = this.encXpScale; this.startEncounter(z.table, "steps"); }   // flow scales this fight's XP (patrol fights keep full XP)
       }
     }
     async startEncounter(table, why) {
