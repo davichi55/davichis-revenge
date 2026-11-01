@@ -49,7 +49,7 @@
   M.mat = (flag, mat, n, text, book, sfx) => async F => {
     if (F.f(flag)) return false; F.set(flag); const before = F.matCount(mat); F.give(mat, n); if (sfx !== false) F.sfx(sfx || "coin");
     await UI.say([["narr", text]]);
-    if (book && before < 10 && F.matCount(mat) >= 10) UI.toast("New in the Skill Book: " + book + ".", 3200);
+    if (book && before < 5 && F.matCount(mat) >= 5) UI.toast("New in the Skill Book: " + book + ".", 3200);
   };
   // a skill-book gathering spot in one call (chapters 6-12, SKILLBOOK agent): the handler S.gather[id] plus the hub-menu entry of region rid
   M.bookSpot = (rid, id, label, flag, mat, n, text, book) => {
@@ -122,10 +122,10 @@
     eelGland: ["Eel Spark Gland", 28], caveChip: ["Cave Chip", 28], trollCap: ["Troll Cap", 26], mimicTooth: ["Mimic Tooth", 30], watcherFeather: ["Watcher Feather", 34], featherCloak: ["Feather Cloak Clasp", 28],
   });
   Q(Data.BOOK, {
-    soak:       { n: "Soak", mat: "riverPearl", need: 10, d: "Cheap water move, 1 MP. Makes the target Wet.", move: "soak" },
-    douse:      { n: "Steamstone Douse", mat: "steamstone", need: 10, d: "Water move, 2 MP. Makes the target Wet.", move: "douse" },
-    dampenWing: { n: "Dampen Wing", mat: "galeDown", need: 10, d: "Slows the enemy for 2 turns, 2 MP. Counts toward slow breaks.", move: "dampenWing" },
-    sporeCloud: { n: "Spore Cloud", mat: "gloomcapSpores", need: 10, d: "Poison on every enemy, 3 MP.", move: "sporeCloud" },
+    soak:       { n: "Soak", mat: "riverPearl", need: 5, d: "Cheap water move, 1 MP. Makes the target Wet.", move: "soak" },
+    douse:      { n: "Steamstone Douse", mat: "steamstone", need: 5, d: "Water move, 2 MP. Makes the target Wet.", move: "douse" },
+    dampenWing: { n: "Dampen Wing", mat: "galeDown", need: 5, d: "Slows the enemy for 2 turns, 2 MP. Counts toward slow breaks.", move: "dampenWing" },
+    sporeCloud: { n: "Spore Cloud", mat: "gloomcapSpores", need: 5, d: "Poison on every enemy, 3 MP.", move: "sporeCloud" },
   });
   Data.BREAKS = Data.BREAKS || {};
   Q(Data.BREAKS, {
@@ -612,7 +612,7 @@
     if (n >= 3) {
       await UI.say([["tahlen", "Three Snappers! The ferrymen are calling you a saint. Do not let it go to your head. Here: pearls, and coin for the boots."]]);
       F.give("riverPearl", 5); F.gold(120); F.questDone("pearls"); F.sfx("coin");
-      if (F.matCount("riverPearl") >= 10) UI.toast("New in the Skill Book: Soak.", 3000);
+      if (F.matCount("riverPearl") >= 5) UI.toast("New in the Skill Book: Soak.", 3000);
     } else await UI.say([["tahlen", `${Math.max(0, n)} of 3 Snappers so far. West of the dock, in the shallows. Mind the pearls on their backs; they bite harder when you stare.`]]);
   };
 

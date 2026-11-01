@@ -476,7 +476,7 @@
 (function () {
   const S = window.Story, D = window.Data, M2 = S.m2, add = (id, ...drops) => { D.DROPS[id] = (D.DROPS[id] || []).concat(drops); };
   Object.assign(D.MATS, { lanternGlass: ["Lantern Glass", "A bead of cold light in clear jelly. It does not go out, and it does not go anywhere."] });
-  Object.assign(D.BOOK, { lanternVigil: { n: "Lantern Vigil", mat: "lanternGlass", need: 10, d: "2 MP. For 2 turns, one blow that would defeat the ally leaves it on 1 HP instead.", move: "lanternVigil" } });
+  Object.assign(D.BOOK, { lanternVigil: { n: "Lantern Vigil", mat: "lanternGlass", need: 5, d: "2 MP. For 2 turns, one blow that would defeat the ally leaves it on 1 HP instead.", move: "lanternVigil" } });
   add("lanternEel", ["lanternGlass", 0.3]); add("lanternJelly", ["lanternGlass", 0.2]);
   M2.bookSpot("drownedCapital", "lanternGlass1", "Lantern beads on a coral post", "g.lantern1", "lanternGlass", 5, "A lantern-eel's shed skin hangs from a coral post, strung with beads of cold light. You take five. They stay lit in your fist and the water around your wrist goes quiet.", "Lantern Vigil");
   M2.bookSpot("drownedCapital", "lanternGlass2", "Cold light in the jelly", "g.lantern2", "lanternGlass", 5, "On the far plaza the drowned lamps have grown a skin of clear jelly, and the light inside has outlasted the city. Five more beads.", "Lantern Vigil");

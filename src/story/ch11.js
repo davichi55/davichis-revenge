@@ -440,7 +440,7 @@
 (function () {
   const S = window.Story, D = window.Data, M2 = S.m2, add = (id, ...drops) => { D.DROPS[id] = (D.DROPS[id] || []).concat(drops); };
   Object.assign(D.MATS, { bannerThread: ["Dawn Thread", "Red-and-gold silk, scorched at one end. Someone was proud of the colour once."] });
-  Object.assign(D.BOOK, { bannerDecoy: { n: "Banner Decoy", mat: "bannerThread", need: 10, d: "2 MP. Draws single-target attacks onto the user and it takes 25% less damage, until its next turn.", move: "bannerDecoy" } });
+  Object.assign(D.BOOK, { bannerDecoy: { n: "Banner Decoy", mat: "bannerThread", need: 5, d: "2 MP. Draws single-target attacks onto the user and it takes 25% less damage, until its next turn.", move: "bannerDecoy" } });
   add("sunPriestGolem", ["bannerThread", 0.3]); add("bloodAltarWraith", ["bannerThread", 0.2]);
   M2.bookSpot("ahuacanGreatStair", "bannerThread1", "A burnt standard", "g.thread1", "bannerThread", 5, "A burnt standard lies across the stair, its silk scorched but still red and gold. You unpick the border threads, five hanks of Dawn Thread, while the fighting goes on somewhere else.", "Banner Decoy");
   M2.bookSpot("ahuacanGreatStair", "bannerThread2", "A banner in the ash", "g.thread2", "bannerThread", 5, "A banner has been trodden into the ash by both sides in turn. The silk is the only thing on the stair that is still beautiful. Five more hanks.", "Banner Decoy");

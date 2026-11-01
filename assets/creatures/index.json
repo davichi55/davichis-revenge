@@ -2018,5 +2018,45 @@
  "wellEater": {
   "w": 285,
   "h": 210
+ },
+ "cinderLich": {
+  "w": 125,
+  "h": 220
+ },
+ "soulJar": {
+  "w": 46,
+  "h": 78
+ },
+ "cinderThrall": {
+  "w": 72,
+  "h": 106
+ },
+ "boneRattlePriest": {
+  "w": 58,
+  "h": 112
+ },
+ "oathBerserker": {
+  "w": 110,
+  "h": 123
+ },
+ "sunTemplar": {
+  "w": 77,
+  "h": 123
+ },
+ "quickTransmuter": {
+  "w": 59,
+  "h": 106
+ },
+ "cutpurse": {
+  "w": 53,
+  "h": 101
+ },
+ "bountyHunter": {
+  "w": 58,
+  "h": 118
+ },
+ "bronzeJuggernaut": {
+  "w": 107,
+  "h": 132
  }
 }

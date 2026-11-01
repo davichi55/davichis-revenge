@@ -88,7 +88,7 @@
   S.gather.pearlMussels = async F => {
     F.set("g.mussels"); F.give("riverPearl", 3); F.sfx("coin");
     await UI.say([["narr", "The mussels in the shallows are shut tight and heavy. Three of them hold a pearl, small and a little warm."]]);
-    if (F.matCount("riverPearl") >= 10) UI.toast("New in the Skill Book: Soak.");
+    if (F.matCount("riverPearl") >= 5) UI.toast("New in the Skill Book: Soak.");
   };
 
   // ---------- lore spots ----------

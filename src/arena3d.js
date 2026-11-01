@@ -467,6 +467,11 @@
     else if (e.t === "broken") { hitStop(150); seenFx("broken"); if (FX()) FX().brk(e.tgt); coachSay(pick(["Now! It's open!", "Hit it while it's down!", "Its guard is broken!"])); sfx("break"); banner("BROKEN!", "#f2c14e"); flash("#ffd27a"); shake = 0.25; log(`${e.tgt.name} is BROKEN! It takes 50% more damage.`); hud(); await wait(900); }
     else if (e.t === "phase") { sfx("telegraph"); flash("#ff3b2a", 500); shake = 0.35; banner("PHASE " + (e.tgt.phaseNo || ""), "#ff6b57"); log(e.text); hud(); await wait(1700); }
     else if (e.t === "ko") { hitStop(150); if (e.tgt.side === "p") coachSay(pick([e.tgt.name + "! Get up!", "Hold on, " + e.tgt.name + "!"]), "idle"); sfx("ko"); if (FX()) FX().ko(e.tgt); if (e.tgt.view) e.tgt.view.alive = 0; log(`${e.tgt.name} falls!`); hud(); await wait(500); }
+    else if (e.t === "flee") {   // a foe runs out of the arena (the Cutpurse): it slides away from the party and is gone
+      log(e.text || `${e.tgt.name} runs away!`); sfx("debuff"); const v = e.tgt.view;
+      if (v) { v.anim = null; const g = v.group, x0 = g.position.x; for (let i = 1; i <= 18; i++) { g.position.x = x0 - i * 0.7; await wait(22); } g.visible = false; }
+      hud(); await wait(300);
+    }
     else if (e.t === "revive") { if (FX()) FX().revive(e.tgt); sfx("heal"); if (e.tgt.view) e.tgt.view.alive = 1; tint(e.tgt, 0xffe080, 300); log(e.text || `${e.tgt.name} is back on its feet!`); hud(); await wait(500); }
     else if (e.t === "telegraph") { seenFx("telegraph"); if (e.exec) seenFx("executioner"); sfx("telegraph"); coachSay(e.exec && e.tgt ? pick([e.tgt.name + " is marked!", "It wants " + e.tgt.name + "!", "Taunt it, or guard " + e.tgt.name + "!"]) : pick(["Brace yourselves!", "Something big is coming!", "Guard up, all of you!"]), "idle"); $(".warn").textContent = "⚠ " + e.text; if (e.exec && e.tgt) { float(e.tgt, "MARKED", "#ff5a4a"); banner("EXECUTION", "#ff5a4a"); } log(e.text); await wait(1000); }
     else if (e.t === "trait") { seenFx({ echo: "echo", banner: "banner", wall: "wall", braced: "braced", barrier: "barrier" }[e.kind]); sfx(e.kind === "echo" ? "spell" : e.down ? "break" : e.kind === "braced" ? "hitHeavy" : "buff"); if (e.label) banner(e.label, e.color); if (e.tgt && e.kind === "braced") float(e.tgt, "Recoil", "#ff9a8a"); log(e.text || e.label); hud(); await wait(e.kind === "echo" ? 520 : 650); }
@@ -600,7 +605,7 @@
     clearFighters(); const bg = BG_ALIAS[opts.bg] || opts.bg; if (!(await buildArenaSets(opts.bg))) buildArena(ARENAS[bg] ? bg : "desert");
     const keys = new Set([...opts.foes.map(f => f.art || f.id), ...opts.party.map(p => p.art || p.id), "knight"]);
     await Promise.all([...keys].map(ensureAsset));
-    ctx = Core.newBattle(opts.party, opts.foes);
+    ctx = Core.newBattle(opts.party, opts.foes); ctx.items = state.items;   // the Cutpurse (rules/m6.js) takes from the same bag the Items menu uses
     await Promise.all(opts.foes.map(f => ensureAsset(f.art || f.id)));   // QA-A: units added by a start hook (Maelstrom heads) were in opts.foes without art loaded -> "M" placeholders
     const fm = formation(opts.foes);
     opts.foes.forEach((e, i) => { const p = fm[i] || [-4 - i * 1.5, -2 + i]; makeView(e, e.art || e.id, p[0], p[1]); });   // 4-5 foes (summons) have no classic slot: ArenaLayout places them

@@ -275,7 +275,7 @@
   pm("moodScales", "kirinth", "Mood Scales", 14, 1, "self", { fx: "moodScales", choices: [["fire", "Fire"], ["water", "Water"], ["ice", "Ice"], ["shock", "Shock"]], desc: "Pick an element: 40% less damage from it for 2 turns; its next spell of that element costs 1 less." });
   pm("dreamEater", "bakuroth", "Dream Eater", 24, 2, "ally", { fx: "dreamEater", desc: "Eats the statuses off an ally: +1 Tide each (max 3)." });
 
-  // --- skill-book moves (shared, one equipped off-style slot; unlocked by gathering 10 of a material) ---
+  // --- skill-book moves (shared, one equipped off-style slot; unlocked by gathering 5 of a material) ---
   function sk(id, name, mp, target, o) { return mv(id, name, 0, mp, target, Object.assign({ grp: "skill", skill: 1 }, o)); }
   sk("ramStrike", "Ram Strike", 2, "enemy", { kind: "best", p: 1.5, bk: ["impact"], charge: 1, desc: "Impact blow. Counts toward impact breaks." });
   sk("dampenWing", "Dampen Wing", 2, "enemy", { kind: "spell", p: 0.4, db: [["spd", -0.3, 2]], bk: ["slow"], desc: "Slows the enemy for 2 turns. Counts toward slow breaks." });
@@ -295,7 +295,7 @@
   sk("bannerDecoy", "Banner Decoy", 2, "self", { grp: "skill", fx: "bannerDecoy", desc: "Draws single-target attacks onto itself and takes 25% less damage, until its next turn." });
   sk("lanternVigil", "Lantern Vigil", 2, "ally", { grp: "skill", fx: "lanternVigil", desc: "For 2 turns, one blow that would defeat the ally leaves it on 1 HP instead." });
 
-  // gathering unlocks (10 pieces each, WORLD_MAP.md section 3)
+  // gathering unlocks (5 pieces each since 2026-11-01, Danny; WORLD_MAP.md section 3 said 10)
   const MATERIALS = {
     duneclawShard: { name: "Duneclaw Shard", desc: "A hard scorpion-shell splinter. Unlocks Ram Strike." },
     galeDown: { name: "Gale Down", desc: "Jungle harpy feather. Unlocks Dampen Wing." },
@@ -325,22 +325,22 @@
     lanternGlass: { name: "Lantern Glass", desc: "A bead of cold light in clear jelly. Unlocks Lantern Vigil." },
   };
   const SKILLBOOK = {
-    ramStrike: { material: "duneclawShard", count: 10, titan: "T1 Dune Bearer", note: "Impact move for the Dune Bearer's sky-stone." },
-    dampenWing: { material: "galeDown", count: 10, titan: "T2 Plumed Coil", note: "Slow." },
-    coldSnap: { material: "rimecrystal", count: 10, titan: "T3 Mother of the Maelstrom", note: "Chill." },
-    douse: { material: "steamstone", count: 10, titan: "T4 Ember Wolf", note: "Wet." },
-    sporeCloud: { material: "gloomcapSpores", count: 10, titan: "T5 Gate Hound", note: "Poison on all." },
-    kindle: { material: "cinderglassEmber", count: 10, titan: "T6 Root Gnawer", note: "Fire." },
-    soak: { material: "riverPearl", count: 10, titan: "T7 Storm Ram", note: "Cheap wet." },
-    revive: { material: "cinderPlume", count: 10, titan: null, note: "Revive a fallen ally." },
-    kelpPoultice: { material: "wrackKelp", count: 10, titan: null, note: "Small team heal for packs without a healer (ch6)." },
-    chiselCrack: { material: "chiselSteel", count: 10, titan: null, note: "Armour break, shell breaks (ch6)." },
-    giltShield: { material: "giltFlake", count: 10, titan: null, note: "Shield for an ally (ch7)." },
-    bitterRue: { material: "orchardRue", count: 10, titan: null, note: "Cleanse 2 (ch8)." },
-    rootDraught: { material: "glowrootSap", count: 10, titan: null, note: "MP gift (ch9)." },
-    staticSnare: { material: "stormglass", count: 10, titan: null, note: "Shock and a stun try (ch10)." },
-    bannerDecoy: { material: "bannerThread", count: 10, titan: null, note: "Taunt and guard (ch11)." },
-    lanternVigil: { material: "lanternGlass", count: 10, titan: null, note: "Endure for an ally (post-game)." },
+    ramStrike: { material: "duneclawShard", count: 5, titan: "T1 Dune Bearer", note: "Impact move for the Dune Bearer's sky-stone." },
+    dampenWing: { material: "galeDown", count: 5, titan: "T2 Plumed Coil", note: "Slow." },
+    coldSnap: { material: "rimecrystal", count: 5, titan: "T3 Mother of the Maelstrom", note: "Chill." },
+    douse: { material: "steamstone", count: 5, titan: "T4 Ember Wolf", note: "Wet." },
+    sporeCloud: { material: "gloomcapSpores", count: 5, titan: "T5 Gate Hound", note: "Poison on all." },
+    kindle: { material: "cinderglassEmber", count: 5, titan: "T6 Root Gnawer", note: "Fire." },
+    soak: { material: "riverPearl", count: 5, titan: "T7 Storm Ram", note: "Cheap wet." },
+    revive: { material: "cinderPlume", count: 5, titan: null, note: "Revive a fallen ally." },
+    kelpPoultice: { material: "wrackKelp", count: 5, titan: null, note: "Small team heal for packs without a healer (ch6)." },
+    chiselCrack: { material: "chiselSteel", count: 5, titan: null, note: "Armour break, shell breaks (ch6)." },
+    giltShield: { material: "giltFlake", count: 5, titan: null, note: "Shield for an ally (ch7)." },
+    bitterRue: { material: "orchardRue", count: 5, titan: null, note: "Cleanse 2 (ch8)." },
+    rootDraught: { material: "glowrootSap", count: 5, titan: null, note: "MP gift (ch9)." },
+    staticSnare: { material: "stormglass", count: 5, titan: null, note: "Shock and a stun try (ch10)." },
+    bannerDecoy: { material: "bannerThread", count: 5, titan: null, note: "Taunt and guard (ch11)." },
+    lanternVigil: { material: "lanternGlass", count: 5, titan: null, note: "Endure for an ally (post-game)." },
   };
   Object.keys(SKILLBOOK).forEach(k => (SKILLBOOK[k].move = k));
 
@@ -604,6 +604,7 @@
     if (!tgt.alive) return false;
     const S = STATUS[type], ev = ctx.ev;
     if (tgt.immune && tgt.immune.includes(type)) { ev.push({ t: "immune", tgt, type }); return false; }
+    if (tgt.unstoppable && !tgt.broken && UNSTOPPABLE.includes(type)) { ev.push({ t: "immune", tgt, type }); return false; }   // the Juggernaut (rules/m6.js) until it is broken
     if (tgt.evo && src && src.side !== tgt.side && EVO.immune(tgt, type)) { ev.push({ t: "immune", tgt, type }); return false; }   // evolution trait: cannot be burned, poisoned...
     if (o.chance !== undefined && !o.sure) {
       let p = o.chance * (1 + (src ? src.stats.lck * 0.004 : 0)) * (src && src.fx ? 1 + fxv(src, "persuasive", 0.15, 0.07) : 1); const R = eff(tgt, "res");
@@ -657,8 +658,10 @@
     if (caster) gearCleanse(ctx, caster, tgt, gone);
     return done;
   }
+  const UNSTOPPABLE = ["slow", "stun", "freeze", "chill", "petrify"];
   function debuff(ctx, src, t, stat, val, turns) {
     if (!t.alive) return;
+    if (val < 0 && stat === "spd" && t.unstoppable && !t.broken) { ctx.ev.push({ t: "immune", tgt: t, type: stat }); return; }
     let v = val * (t.dbm === undefined ? 1 : t.dbm), turns2 = turns;
     if (v < 0 && src && src.side !== t.side && hasBuff(t, "veil")) { t.buffs = t.buffs.filter(b => b.type !== "veil"); ctx.ev.push({ t: "resist", tgt: t }); say(ctx, "The dawn veil shields " + t.name + "."); return; }   // Dawn Veil
     if (v < 0 && src && src.side !== t.side) {
@@ -1364,7 +1367,7 @@
     const u = { id, side: "e", name: d.name + (tag || ""), art: d.art || id, level, stats: spread(ENEMY_PROFILES[d.profile], BASE_TOTAL + POINTS_PER_LEVEL * (level - 1)), mp: d.mp || 0, maxMp: d.mp || 0, buffs: [], st: {}, alive: true,
       broken: 0, breakPts: 0, breakHitRound: -9, boss: !!d.boss, human: HUMAN_IDS.includes(id) || !!d.human, phases: d.phases ? d.phases.map(p => ({ ...p })) : null, phaseNo: 1 };
     ["actions", "hpMult", "breakType", "breakNeed", "frontShield", "bigEvery", "bigHit", "bigName", "bigSingle", "pr", "swarm", "reflect", "coverBy", "ab", "open", "sr", "intro", "vscale", "vtint",
-      "grow", "riseWhile", "riseMax", "riseAfter", "riseFrac", "dieWith", "passive", "passiveName", "element", "general", "collar", "slot", "personal", "partOf", "titan", "legend", "sig", "arenaFx", "guards", "airMult", "shellMult", "tollEvery", "rootsMax", "echo", "exec", "banner", "hoplite", "brace", "barrier", "bigTgt", "bigSt", "copyShot"].forEach(k => d[k] !== undefined && (u[k] = d[k]));
+      "grow", "riseWhile", "riseMax", "riseAfter", "riseFrac", "dieWith", "passive", "passiveName", "element", "general", "collar", "slot", "personal", "partOf", "titan", "legend", "sig", "arenaFx", "guards", "airMult", "shellMult", "tollEvery", "rootsMax", "echo", "exec", "banner", "hoplite", "brace", "barrier", "bigTgt", "bigSt", "copyShot", "focusMult"].forEach(k => d[k] !== undefined && (u[k] = d[k]));
     if (d.hooks) u.hooks = d.hooks.slice();
     u.rs = Object.assign({}, d.rs); u.immune = d.immune ? d.immune.slice() : [];
     if (u.breakType && u.breakNeed === undefined) u.breakNeed = 1;
@@ -1755,6 +1758,7 @@
       if (f.coverBy && foes.some(x => x !== f && x.id === f.coverBy)) mult *= 0.5;
       if (f.broken) mult *= 1.5; else if (f.frontShield) mult *= 1 - f.frontShield;
       if (f.wallFrom) mult *= 1 - f.wallFrom; if (f.banner) mult *= 2.2; if (f.hoplite) mult *= 1.4;   // boss traits: the Banner Bearer falls first, a hoplite before the foes it shields
+      if (f.focusMult) mult *= f.focusMult;   // rules/m6.js: the Auto AI goes for the Lich's soul jar, the necromancer and the cutpurse first
       const s = f.hp / Math.max(0.05, mult);
       if (s < bs) { bs = s; best = f; }
     });

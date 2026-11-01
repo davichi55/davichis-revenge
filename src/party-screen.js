@@ -186,7 +186,7 @@ function partyScreen0(startAt = 0) {
         return api.redraw();
       }
       if (d.skill !== undefined) {
-        const keys = G.book.slice(); if (!keys.length) { msg = "No moves unlocked yet. Gather 10 of a material and unlock it in the Skill Book."; return api.redraw(); }
+        const keys = G.book.slice(); if (!keys.length) { msg = "No moves unlocked yet. Gather 5 of a material and unlock it in the Skill Book."; return api.redraw(); }
         const i = await UI.choose(`Off-style move for ${u.name}`, [{ label: "None" }].concat(keys.map(k => ({ label: Data.BOOK[k].n, info: Data.BOOK[k].d }))), { back: true });
         if (i === 0) u.slot = null; else if (i > 0) u.slot = keys[i - 1];
         return api.redraw();

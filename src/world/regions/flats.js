@@ -1,5 +1,6 @@
 // R2 Cinderglass Flats: scorched glass plain with fire-pits. Table "flats" ~25 s. Chest g12_cinderSerpentPit (G12).
 // Gathering spots: cinderglassEmber1/2 (Cinderglass Ember), cinderPlume1/2 (Cinder Plume). A hidden pool (lore) sits north-east.
+// Trigger cinderLich: the optional boss's black glass coffin in the north (760, 210).
 (function () {
   const { R, E, P, L } = World.shapes;
   World.def("cinderglassFlats", {
@@ -16,6 +17,7 @@
     entries: { start: { x: 160, y: 560, face: "right" }, from_basin: { x: 160, y: 560, face: "right" } },
     exits: [{ rect: [40, 500, 60, 120], to: "amberBasin", entry: "from_flats", push: [1, 0] }],
     chests: [{ id: "g12_cinderSerpentPit", x: 1370, y: 480 }],
+    triggers: [{ id: "cinderLich", rect: [670, 225, 180, 110] }],   // the Cinder Lich's coffin (src/story/m6foes.js, rules/m6.js)
     gather: [
       { id: "cinderglassEmber1", x: 600, y: 430, label: "gather Cinderglass Ember", color: "gold" }, { id: "cinderglassEmber2", x: 1100, y: 880, label: "gather Cinderglass Ember", color: "gold" },
       { id: "cinderPlume1", x: 420, y: 880, label: "gather Cinder Plume", color: "blue" }, { id: "cinderPlume2", x: 1240, y: 240, label: "gather Cinder Plume", color: "blue" },
@@ -24,6 +26,10 @@
       ["firePit", 700, 300], ["firePit", 1000, 330], ["firePit", 800, 780], ["firePit", 1300, 680], ["firePit", 520, 650], ["obsidianSpike", 1150, 180], ["obsidianSpike", 340, 200], ["obsidianSpike", 1540, 880], ["ashBrazier", 300, 520], ["ashBrazier", 300, 610],
       ["steamVent", 640, 560], ["steamVent", 1180, 600], ["hornSkull", 900, 560], ["burntTree", 460, 400], ["burntTree", 1400, 380], ["burntTree", 1050, 960], ["slagPile", 760, 430], ["glassCluster", 600, 780],
       ["reeds", 1500, 270], ["reeds", 1610, 280], ["reeds", 1560, 320],
+      // the Cinder Lich's tomb under the north rim: a black glass coffin, pillars, candles, skull racks facing it, bones on the way up from the road
+      ["cryptSarcophagus", 760, 210], ["m4_glassPillarBlack", 675, 210], ["m4_glassPillarBlack", 845, 210], ["cryptAltar", 760, 172, { solid: false }], ["cryptCandleStand", 715, 252], ["cryptCandleStand", 805, 252],
+      ["m2_skullRack", 625, 245], ["m2_skullRack", 895, 245, { flip: true }], ["cryptShroudedBones", 920, 195], ["skullPile", 600, 195],
+      ["skull", 790, 470], ["bones", 775, 405], ["ribs", 830, 345], ["skull", 860, 290],
     ],
     scatter: [
       { keys: [["obsidianSpike", 1], ["glassCluster", 3], ["slagPile", 2], ["burntTree", 2], ["steamVent", 1]], n: 55, seed: 41 },

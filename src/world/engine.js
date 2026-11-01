@@ -116,6 +116,7 @@
         if (R.gridUrl) this.load.json("grid_" + this.rid, R.gridUrl);
         this.party.forEach(id => { const k = "cr_" + id; if (!this.textures.exists(k) && !this.textures.exists("crx_" + id)) this.load.image(k, "assets/creatures/" + id + ".png"); });
         (R.legends || []).forEach(l => { const art = window.Systems && Systems.legendArt ? Systems.legendArt(l) : null; if (art && !this.textures.exists("lg_" + art)) this.load.image("lg_" + art, "assets/creatures/" + art + ".png"); });   // legend silhouettes (SYSTEMS)
+        ((R.amb && R.amb.hunters) || []).forEach(d => { const k = "cr_" + d.art; if (!this.textures.exists(k)) this.load.image(k, "assets/creatures/" + d.art + ".png"); });   // bounty hunters walk the map in their battle sprite
       };
       if (this.cache.json.exists("regman")) queue();
       else { this.load.json("regman", "assets/regions/sprites/manifest.json"); this.load.once("filecomplete-json-regman", queue); }
@@ -686,6 +687,13 @@
         const u = this.mkUnit(g, "galley", 0, 0, { frames: ["galley"], still: true, kind: "legion", right: false }); u.sh.setScale(1.7, 0.8);
         if (d.show !== undefined || d.hide !== undefined) this.conds.push({ cnd: { show: d.show, hide: d.hide }, objs: [], rec: g, army: true });
       });
+      // bounty hunters (rules/m6.js): one figure in its own sprite walks a lane, comes for you when it sees you, and runs story trigger `trigger` on touch (not a random table)
+      (a.hunters || []).forEach((d, i) => {
+        const key = "cr_" + d.art; if (!this.textures.exists(key)) return;
+        const g = this.addGroup(d.lane, d.mode || "pingpong", d.speed || 38, d.s0 === undefined ? 60 : d.s0, d.mode === "loop", { name: d.id || "hunter" + i, cfg: Object.assign({ cry: "There you are.", chaseSpeed: 92 }, d), trigger: d.trigger });
+        const u = this.mkUnit(g, key, 0, 0, { frames: [key], still: true, kind: "legion", right: false }), im = this.textures.get(key).getSourceImage(); u.s.setScale((d.size || 60) / im.height);
+        if (d.show !== undefined || d.hide !== undefined) this.conds.push({ cnd: { show: d.show, hide: d.hide }, objs: [], rec: g, army: true });
+      });
       this.stands = []; [].concat(a.standoff || []).forEach(so => this.buildStandoff(so));   // one stand-off or an array of them (WORLD-M5)
       if (this.wrecks.length) {
         this.wrecks.forEach(([x, y]) => { this.P("wagon", x, y, { solid: [30, 12], shadow: "box" }); this.P("debris", x + 56, y + 14, { shadow: false }); this.P("bones", x - 52, y + 10, { shadow: false }); });
@@ -767,11 +775,14 @@
       if (this.hyena) this.hyena.setScale(1, 1 + Math.sin(t * 0.003) * 0.02);
       // touching a legion soldier or the beasts starts an encounter
       const h = this.pos, hit = (x, y, r, px, py) => Math.hypot(x - px, y - py) < r; let touch = null;
-      for (const g of this.groups) { if (g.hidden || g.off || this.isHidden(g.name) || g.s < 0) continue; for (const u of g.units) if (u.kind === "legion" && !u.dead && u.placed && (hit(u.x, u.y, 40, h.x, h.y) || this.followers.some(f => hit(u.x, u.y, 32, f.x, f.y)))) { touch = touch || { name: g.name, table: g.table }; } }
+      for (const g of this.groups) { if (g.hidden || g.off || this.isHidden(g.name) || g.s < 0) continue; for (const u of g.units) if (u.kind === "legion" && !u.dead && u.placed && (hit(u.x, u.y, 40, h.x, h.y) || this.followers.some(f => hit(u.x, u.y, 32, f.x, f.y)))) { touch = touch || { name: g.name, table: g.table, trigger: g.trigger }; } }
       for (const S of this.stands || []) if (!S.noTouch && !this.isHidden(S.name)) for (const u of S.L) if (!u.dead && hit(u.x, u.y, 44, h.x, h.y)) touch = touch || { name: S.name, table: S.table };
       if (!bh) for (const b of this.beasts) if (hit(b.x, b.y, 40, h.x, h.y)) touch = touch || { name: "beasts" };
       this.touch = touch;
-      if (touch && !this.busy && this.time.now > this.safeUntil && this.safeDist <= 0) this.startEncounter((touch.table || this.defaultTable()), touch.name);
+      if (touch && !this.busy && this.time.now > this.safeUntil && this.safeDist <= 0) {
+        if (touch.trigger) { this.hideFor(touch.name, 8000); this.runHook("trigger", touch.trigger, this.rid).then(() => { if (this.sys && this.sys.isActive()) { this.safeUntil = this.time.now + 4000; this.safeDist = 96; } }); }   // a bounty hunter: his own story fight
+        else this.startEncounter((touch.table || this.defaultTable()), touch.name);
+      }
     }
 
     // ---------- encounters ----------

@@ -234,6 +234,7 @@ const Flow = (() => {
     const drops = [];
     foes.forEach(e => {
       F.seen(e.id || e.art, true, e.level);
+      if (e.fled) return;   // the Cutpurse ran: no drops
       (Data.DROPS[e.id] || []).forEach(([k, p]) => { if (Math.random() < p * (opts.boss ? 1 : 1)) { drops.push(k); } });
     });
     drops.forEach(k => F.give(k, 1, true));

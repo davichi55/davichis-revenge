@@ -1050,8 +1050,8 @@
     chiselSteel: ["Chisel Steel", "A sliver off a giant's chisel. The edge has not dulled since the last hand that held it."],
   });
   Object.assign(D.BOOK, {
-    kelpPoultice: { n: "Kelp Poultice", mat: "wrackKelp", need: 10, d: "3 MP. Heals every ally for 56% of the user's Power (Healing Wave: 77%).", move: "kelpPoultice" },
-    chiselCrack: { n: "Chisel Crack", mat: "chiselSteel", need: 10, d: "2 MP. Hit that lowers enemy Defense by 20% for 3 turns. Counts toward shell breaks.", move: "chiselCrack" },
+    kelpPoultice: { n: "Kelp Poultice", mat: "wrackKelp", need: 5, d: "3 MP. Heals every ally for 56% of the user's Power (Healing Wave: 77%).", move: "kelpPoultice" },
+    chiselCrack: { n: "Chisel Crack", mat: "chiselSteel", need: 5, d: "2 MP. Hit that lowers enemy Defense by 20% for 3 turns. Counts toward shell breaks.", move: "chiselCrack" },
   });
   add("sirenEel", ["wrackKelp", 0.25]); add("caveCrabKnight", ["wrackKelp", 0.25]);
   add("chiselImp", ["chiselSteel", 0.3]); add("giantstoneSentry", ["chiselSteel", 0.25]);

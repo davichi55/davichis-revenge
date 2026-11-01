@@ -473,7 +473,7 @@
 (function () {
   const S = window.Story, D = window.Data, M2 = S.m2, add = (id, ...drops) => { D.DROPS[id] = (D.DROPS[id] || []).concat(drops); };
   Object.assign(D.MATS, { glowrootSap: ["Glowroot Sap", "Amber sap that glows when shaken. It tastes of struck flint and wakes you like a slap."] });
-  Object.assign(D.BOOK, { rootDraught: { n: "Root Draught", mat: "glowrootSap", need: 10, d: "1 MP. An ally gains 3 MP (on itself that is 2 MP net).", move: "rootDraught" } });
+  Object.assign(D.BOOK, { rootDraught: { n: "Root Draught", mat: "glowrootSap", need: 5, d: "1 MP. An ally gains 3 MP (on itself that is 2 MP net).", move: "rootDraught" } });
   add("rootWorm", ["glowrootSap", 0.3]); add("gnawling", ["glowrootSap", 0.2]);
   M2.bookSpot("rootdeepApproach", "glowrootSap1", "Glowing sap in a split root", "g.sap1", "glowrootSap", 5, "Where a root has split the path, amber sap beads along the crack and glows when you shake it. You fill a vial and the glow settles behind your eyes like a second pulse. Five measures of Glowroot Sap.", "Root Draught");
   M2.bookSpot("rootdeepApproach", "glowrootSap2", "Sap beading on a root", "g.sap2", "glowrootSap", 5, "The east bank has the same roots, bleeding the same slow light. Five more measures. The ground hums under the vial.", "Root Draught");

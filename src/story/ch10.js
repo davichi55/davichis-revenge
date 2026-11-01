@@ -721,7 +721,7 @@
 (function () {
   const S = window.Story, D = window.Data, M2 = S.m2, add = (id, ...drops) => { D.DROPS[id] = (D.DROPS[id] || []).concat(drops); };
   Object.assign(D.MATS, { stormglass: ["Stormglass", "Sand fused hollow where lightning struck. Hold it to your ear before the sky clears its throat."] });
-  Object.assign(D.BOOK, { staticSnare: { n: "Static Snare", mat: "stormglass", need: 10, d: "2 MP. Shock hit that adds 1 shock, then a 50% base chance to stun for 1 turn (Luck against Resistance; bosses resist repeats).", move: "staticSnare" } });
+  Object.assign(D.BOOK, { staticSnare: { n: "Static Snare", mat: "stormglass", need: 5, d: "2 MP. Shock hit that adds 1 shock, then a 50% base chance to stun for 1 turn (Luck against Resistance; bosses resist repeats).", move: "staticSnare" } });
   add("thunderRamCalf", ["stormglass", 0.3]); add("stormRoc", ["stormglass", 0.2]);
   M2.bookSpot("thunderSpine", "stormglass1", "Hollow lightning-glass", "g.glass1", "stormglass", 5, "Where lightning has struck the road twice, the sand has fused into hollow glass tubes. They hum when the sky changes its mind. You lift five out, careful not to knock them together.", "Static Snare");
   M2.bookSpot("thunderSpine", "stormglass2", "Fused sand tubes", "g.glass2", "stormglass", 5, "A second strike-mark, older, the glass gone cloudy. It rings like a bell when you flick it. Five more tubes.", "Static Snare");

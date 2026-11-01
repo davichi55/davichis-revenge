@@ -526,7 +526,7 @@
 (function () {
   const S = window.Story, D = window.Data, M2 = S.m2, add = (id, ...drops) => { D.DROPS[id] = (D.DROPS[id] || []).concat(drops); };
   Object.assign(D.MATS, { giltFlake: ["Gilt Flake", "Gold leaf peeled off a palace screen, thin enough to read a letter through."] });
-  Object.assign(D.BOOK, { giltShield: { n: "Gilt Shield", mat: "giltFlake", need: 10, d: "2 MP. A shield worth 18% of the ally's max HP for 2 turns.", move: "giltShield" } });
+  Object.assign(D.BOOK, { giltShield: { n: "Gilt Shield", mat: "giltFlake", need: 5, d: "2 MP. A shield worth 18% of the ally's max HP for 2 turns.", move: "giltShield" } });
   add("eagleCohortArcher", ["giltFlake", 0.3]); add("templeHound", ["giltFlake", 0.25]);
   M2.bookSpot("palaceGarden", "giltFlake1", "A flaking gilded trellis", "g.gilt1", "giltFlake", 5, "The trellis at the end of the path is gilded, and the gilding is coming away in curls. A gardener's bucket stands under it, half full of the stuff, swept up and never collected. Five flakes of gold leaf.", "Gilt Shield");
   M2.bookSpot("palaceGarden", "giltFlake2", "Gold leaf under a screen", "g.gilt2", "giltFlake", 5, "A garden screen, gold on both faces, shedding leaf like a tree in autumn. Imperial gold, wasted on a hedge. Five more flakes.", "Gilt Shield");

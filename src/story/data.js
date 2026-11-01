@@ -158,11 +158,11 @@ const Data = (() => {
   const GOODS = { sandGlass: ["Glass-Sand Vial", 6], scarabShell: ["Scarab Shell", 7], adderFang: ["Adder Fang", 8], impWing: ["Imp Wing", 6], slimeJar: ["Slug Slime", 4], inkVial: ["Ink Vial", 5], boneChip: ["Bone Chip", 6],
     scorpPlate: ["Scorpion Plate", 14], emberSlag: ["Ember Slag", 12], legionCoin: ["Legion Coin", 9], lizScale: ["Lizard Scale", 10], saltCrust: ["Salt Crust", 9], curio: ["Odd Curio", 5], mossClump: ["Cistern Moss", 6], catMist: ["Heat-Haze Jar", 8] };
   const MATS = { duneclawShard: ["Duneclaw Shard", "Hard as a mason's chisel."], cinderglassEmber: ["Cinderglass Ember", "A coal that never goes out."], cinderPlume: ["Cinder Plume", "A feather that is warm on one side."] };
-  // skill book: 10 pieces unlock a move that any creature can equip in its off-style slot
+  // skill book: 5 pieces unlock a move (10 until 2026-11-01) that any creature can equip in its off-style slot
   const BOOK = {
-    ramStrike: { n: "Ram Strike", mat: "duneclawShard", need: 10, d: "Impact move, 2 MP. Counts toward impact breaks.", move: "ramStrike" },
-    kindle:    { n: "Kindle", mat: "cinderglassEmber", need: 10, d: "Fire move, 2 MP. Adds burn.", move: "kindle" },
-    revive:    { n: "Revive", mat: "cinderPlume", need: 10, d: "Revives a fallen ally at 20% HP, 3 MP.", move: "revive" },
+    ramStrike: { n: "Ram Strike", mat: "duneclawShard", need: 5, d: "Impact move, 2 MP. Counts toward impact breaks.", move: "ramStrike" },
+    kindle:    { n: "Kindle", mat: "cinderglassEmber", need: 5, d: "Fire move, 2 MP. Adds burn.", move: "kindle" },
+    revive:    { n: "Revive", mat: "cinderPlume", need: 5, d: "Revives a fallen ally at 20% HP, 3 MP.", move: "revive" },
   };
   const priceOf = (key, tier) => {
     const it = ITEMS[key]; if (!it || it.f == null) return 0;

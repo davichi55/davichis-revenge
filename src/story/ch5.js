@@ -112,7 +112,7 @@
     leechSac: ["Leech Sac", 30], bogGlass: ["Bog-Lantern Glass", 34], giantChip: ["Giant-Stone Chip", 40], impChisel: ["Imp's Chisel", 30], hawkFeather: ["Emberhawk Feather", 40], chickDown: ["Golden Down", 36],
     wolfMane: ["Lion-Wolf Mane", 34], bullTusk: ["Boar-Bull Tusk", 34] });
   D.MATS.rimecrystal = ["Rimecrystal", "Ice that never melts, even in a fist."];
-  D.BOOK.coldSnap = { n: "Cold Snap", mat: "rimecrystal", need: 10, d: "Ice move, 2 MP. Adds chill. Chill and Wet together make a Freeze.", move: "coldSnap" };
+  D.BOOK.coldSnap = { n: "Cold Snap", mat: "rimecrystal", need: 5, d: "Ice move, 2 MP. Adds chill. Chill and Wet together make a Freeze.", move: "coldSnap" };
   D.BREAKS = D.BREAKS || {};
 
   Object.assign(D.QUESTS, {
@@ -416,7 +416,7 @@
   [1, 2, 3].forEach(n => { S.gather["rimecrystal" + n] = async F => {
     if (F.f("g.cold" + n)) return false; F.set("g.cold" + n); F.give("rimecrystal", 4); F.sfx("coin");
     await UI.say([["narr", ["Ice grown out of the black stone like fingers. It does not melt in your hand. Four rimecrystals go into the satchel.", "A cluster the colour of a winter sky. You chip four rimecrystals free. The cold climbs your wrist and stops there.", "The last cluster, thick as a tree trunk. Four more rimecrystals, and a feeling of being watched by something very patient."][n - 1]]]);
-    if (F.matCount("rimecrystal") >= 10 && !F.f("book.cold")) { F.set("book.cold"); UI.toast("New in the Skill Book: Cold Snap."); }
+    if (F.matCount("rimecrystal") >= 5 && !F.f("book.cold")) { F.set("book.cold"); UI.toast("New in the Skill Book: Cold Snap."); }
   }; });
   S.chest.g28_shattererChisel = async F => S.gearChest2(F, "g28_shattererChisel", "G28");
   M3.spot("coldVaults", "coldDoorLate", async F => {

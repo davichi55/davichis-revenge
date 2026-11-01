@@ -46,6 +46,7 @@
         { id: "saltPatrol", lane: [[1500, 960], [2500, 980]], mode: "pingpong", speed: 28, rows: 2, cols: 3, sight: 200, table: "saltFlats", cry: "Halt! The flats are closed after dusk!" },
         { id: "saltPatrolN", lane: [[900, 500], [1100, 700], [700, 800]], mode: "loop", speed: 26, rows: 2, cols: 3, sight: 190, table: "saltFlats" },
       ],
+      hunters: [{ id: "hunter3", art: "bountyHunter", lane: [[500, 1150], [900, 1020], [1300, 1150]], mode: "pingpong", speed: 34, sight: 230, trigger: "hunter3", hide: "x.hunter3", cry: "Third time pays for all!" }],   // Itzcan the bounty hunter (src/story/m6foes.js)
     },
   });
 })();

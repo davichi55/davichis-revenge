@@ -42,6 +42,7 @@
     ],
     encounter: { table: "kharamRoad", rate: 30 },
     amb: { birds: 4, butterflies: [], dust: 0xd8b888, motes: 30, tint: [0x4a3a20, 0.05], warm: [0xff9a40, 0.06], water: true,
-      armies: [{ id: "patrolRoad", lane: [[1900, 1000], [2400, 990], [2800, 970], [2400, 990]], mode: "pingpong", speed: 32, rows: 2, cols: 4, sight: 220, table: "kharamRoad" }] },
+      armies: [{ id: "patrolRoad", lane: [[1900, 1000], [2400, 990], [2800, 970], [2400, 990]], mode: "pingpong", speed: 32, rows: 2, cols: 4, sight: 220, table: "kharamRoad" }],
+      hunters: [{ id: "hunter2", art: "bountyHunter", lane: [[1290, 900], [1280, 640], [1300, 300]], mode: "pingpong", speed: 34, sight: 230, trigger: "hunter2", hide: "x.hunter2", cry: "You! Stay right there!" }] },   // Itzcan the bounty hunter (src/story/m6foes.js) on the north road
   });
 })();

@@ -640,7 +640,7 @@
 (function () {
   const S = window.Story, D = window.Data, M2 = S.m2, add = (id, ...drops) => { D.DROPS[id] = (D.DROPS[id] || []).concat(drops); };
   Object.assign(D.MATS, { orchardRue: ["Orchard Rue", "A bitter grey herb. Tuk's pickers chew it for the fever and for the foreman's mood."] });
-  Object.assign(D.BOOK, { bitterRue: { n: "Bitter Rue", mat: "orchardRue", need: 10, d: "2 MP. Removes up to 2 statuses or lowered stats from an ally.", move: "bitterRue" } });
+  Object.assign(D.BOOK, { bitterRue: { n: "Bitter Rue", mat: "orchardRue", need: 5, d: "2 MP. Removes up to 2 statuses or lowered stats from an ally.", move: "bitterRue" } });
   add("orchardSatyr", ["orchardRue", 0.3]); add("sunmawCultist", ["orchardRue", 0.15]);
   M2.bookSpot("orchardHills", "orchardRue1", "A hedgerow of grey rue", "g.rue1", "orchardRue", 5, "Along the hedge between two terraces grows a low grey herb with a smell that makes your eyes water. The pickers chew it against the fever. You pull five sprigs and your tongue goes numb just from holding them.", "Bitter Rue");
   M2.bookSpot("orchardHills", "orchardRue2", "Rue by the ditch", "g.rue2", "orchardRue", 5, "Rue grows thick where the irrigation ditch leaks. Nobody picks it for the press, so nobody has touched it. Five more sprigs.", "Bitter Rue");
