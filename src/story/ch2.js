@@ -101,7 +101,7 @@
   S.chest["quarry.chest"] = async F => S.gearChest(F, "quarry.chest", "G20");
   S.gather["quarry.shards"] = async F => { F.set("g.quarry"); F.give("duneclawShard", 6); F.sfx("coin"); await UI.say([["narr", "A shard pile at the bottom of the pit. You fill your satchel with Duneclaw Shards."]]); if (F.matCount("duneclawShard") >= 5) UI.toast("New in the Skill Book: Ram Strike."); };
   S.chest["flats.chest"] = async F => S.gearChest(F, "flats.chest", "G12");
-  S.gather["flats.embers"] = async F => { F.set("g.flats"); F.give("cinderglassEmber", 10); F.sfx("fire"); await UI.say([["narr", "You rake the fire-pits with a bone ladle. Ten Cinderglass Embers glow in the cold sand."]]); UI.toast("New in the Skill Book: Kindle."); };
+  S.gather["flats.embers"] = async F => { F.set("g.flats"); F.give("cinderglassEmber", 4); F.sfx("fire"); await UI.say([["narr", "You rake the fire-pits with a bone ladle. Four Cinderglass Embers glow in the cold sand."]]); if (F.matCount("cinderglassEmber") >= 5) UI.toast("New in the Skill Book: Kindle."); };
   S.gather["flats.plume"] = async F => { F.set("g.plume"); F.give("cinderPlume", 5); await UI.say([["narr", "A warm feather by the water. Then another. Five Cinder Plumes."]]); };
   S.trigger["flats.pool"] = async F => {
     if (F.f("pool.seen")) { await UI.say([["narr", "The pool is still. The fire-fox sleeps."]]); return; }

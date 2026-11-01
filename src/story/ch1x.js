@@ -80,8 +80,8 @@
 
   // ---------- gathering (skill-book materials first: Ram Strike, Kindle and Soak each get a head start here; the full ten still come from the quarry, the flats and the Silt River) ----------
   const gather = (id, flag, sfx, mat, n, text, toast) => { S.gather[id] = async F => { F.set(flag); F.give(mat, n); F.sfx(sfx); await UI.say([["narr", text]]); if (toast && F.matCount(mat) >= toast[0]) UI.toast(toast[1]); }; };
-  gather("emberVein", "g.emberVein", "fire", "cinderglassEmber", 3, "A seam of glass with a coal sealed inside it, still orange after who knows how many years. You chip out three embers and they sit warm in your palm.", [10, "New in the Skill Book: Kindle."]);
-  gather("shardHeap", "g.shardHeap", "coin", "duneclawShard", 4, "Under a wagon bed lies the shell of a scorpion the size of a door, picked clean. Its plates break off in clean, hard shards. You take four.", [10, "New in the Skill Book: Ram Strike."]);
+  gather("emberVein", "g.emberVein", "fire", "cinderglassEmber", 3, "A seam of glass with a coal sealed inside it, still orange after who knows how many years. You chip out three embers and they sit warm in your palm.", [5, "New in the Skill Book: Kindle."]);
+  gather("shardHeap", "g.shardHeap", "coin", "duneclawShard", 4, "Under a wagon bed lies the shell of a scorpion the size of a door, picked clean. Its plates break off in clean, hard shards. You take four.", [5, "New in the Skill Book: Ram Strike."]);
   gather("ridgeVials", "g.vials", "coin", "sandGlass", 4, "You kneel on the ridge and fill four little vials from the humming sand. Held to the ear, each one keeps a note.");
   gather("scorpShed", "g.scorpShed", "coin", "scorpPlate", 2, "A scorpion's shed shell, whole, on a warm ledge: two plates as long as your forearm.");
   gather("saltRake", "g.saltRake", "coin", "saltCrust", 4, "You rake a fresh grey crust off the pan with the flat of a spade. Four good lumps.");
