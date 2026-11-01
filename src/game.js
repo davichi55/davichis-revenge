@@ -10,6 +10,7 @@ const wait = (scene, ms) => Flow.wait(ms);
 const WORLD_ID = { orun: "orun", undercroft: "orunUndercroft", dunes: "whisperglassDunes", sandpiper: "sandpiperRest", cistern: "cisternBurntGate", amberWells: "amberWells", basin: "amberBasin", maze: "boneMaze", flats: "cinderglassFlats", quarry: "scorpionQuarry", hollow: "hollowSkyStone", saltgate: "saltgate" };
 const STORY_ID = {}; Object.entries(WORLD_ID).forEach(([k, v]) => (STORY_ID[v] = k));
 const toStory = id => STORY_ID[id] || id, toWorld = id => WORLD_ID[id] || id;
+if (window.World) World.toWorld = toWorld;   // the bestiary's Areas list (systems-ui.js) keeps story ids in G.been; World.areaFoes needs the map's id
 
 // ---------- the bridge to the world engine ----------
 const Engine = {

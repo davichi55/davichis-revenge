@@ -27,12 +27,14 @@
     const order = Object.keys(G.been || {});
     Object.keys(G.best).map(id => G.best[id]).filter(b => b && b.where).sort((a, b) => (a.ch || 0) - (b.ch || 0)).forEach(b => { if (!order.includes(b.where)) order.unshift(b.where); });   // older saves: areas known from first meetings
     if (G.region && !order.includes(G.region)) order.push(G.region);
-    const rows = order.map(rid => ({ rid, ids: window.World && World.areaFoes ? World.areaFoes(rid) : [] })).filter(r => r.ids.length).reverse();   // newest first
+    // G.been holds story ids ("flats"); the chapter 1-2 maps have other world ids ("cinderglassFlats"), so map them before asking World.areaFoes (one row per map)
+    const toW = id => (window.World && World.toWorld ? World.toWorld(id) : id), seenW = new Set();
+    const rows = order.map(rid => ({ rid, wid: toW(rid) })).filter(r => !seenW.has(r.wid) && seenW.add(r.wid)).map(r => Object.assign(r, { ids: window.World && World.areaFoes ? World.areaFoes(r.wid) : [] })).filter(r => r.ids.length).reverse();   // newest first
     if (!rows.length) return `<div class="row"><div class="g">No wild areas yet.</div></div>`;
     const total = rows.length, pg = rows.slice(U.page * PER, U.page * PER + PER);
-    return pg.map(({ rid, ids }) => {
+    return pg.map(({ rid, wid, ids }) => {
       const met = ids.filter(i => G.best[i] && G.best[i].seen), all = met.length >= ids.length;
-      const nm = (Data.REGIONS[rid] && Data.REGIONS[rid].n) || (World.REGIONS[rid] && World.REGIONS[rid].name) || pretty(rid);
+      const nm = (Data.REGIONS[rid] && Data.REGIONS[rid].n) || (World.REGIONS[wid] && World.REGIONS[wid].name) || pretty(rid);
       const name = i => (Core.ENEMIES && Core.ENEMIES[i] && Core.ENEMIES[i].name) || (Data.NAMES && Data.NAMES[i]) || pretty(i);
       const list = ids.map(i => (G.best[i] && G.best[i].seen ? esc(name(i)) : `<span style="color:#6d5f4f">???</span>`)).join(", ");
       return `<div class="row"><div class="g"><b style="font-weight:400">${esc(nm)}</b> <small style="display:inline;color:${all ? "#7ee081" : "#f2c14e"}">${all ? "all " + ids.length + " met" : met.length + " of " + ids.length + " met"}</small><small>${list}</small></div></div>`;
