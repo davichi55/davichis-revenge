@@ -115,6 +115,7 @@
     immune: ["poison", "bleed", "burn", "stun", "freeze", "chill", "slow", "petrify"], rs: { light: -0.3 },
     ab: [{ n: "Soul Pulse", healAlly: 0.06, w: 1 }] });
   BOSS_FOES.cinderLich = lv => [Core.makeEnemy("cinderLich", lv), Core.makeEnemy("soulJar", lv)];
+  Core.DMG.byId.cinderLich = 1.1;   // Danny 2026-11-01: beaten at level 6 with a healer, "maybe he can do a little bit more damage, like 10%"
 
   // ---------- where they walk: [table, foes, weight, lowest level, highest level] ----------
   { const EN = Core.ENCOUNTERS, NP = "boneRattlePriest", BZ = "oathBerserker", TP = "sunTemplar", TM2 = "quickTransmuter", CP = "cutpurse", JG = "bronzeJuggernaut", TH = "cinderThrall";
