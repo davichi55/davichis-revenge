@@ -305,7 +305,7 @@
       if (s.type === "tide") return "";
       const c = CHIP[s.type] || ["•", "#ddd", s.name];
       return `<span style="color:${c[1]}" title="${c[2]}">${c[0]}${s.n > 1 ? " " + s.n : ""}<em>${s.turns ? s.turns : ""}</em></span>`;
-    }).join("") + (u.reso ? `<span style="color:#ff8a6a" title="Resonance: the fourth stack shatters">♪ ${u.reso}/4</span>` : "") + (u.threaded ? `<span style="color:#9fd8ff" title="Threaded to the Soul Loom">THREAD</span>` : "");   // Harvest Engine (rules/m8.js)
+    }).join("") + (u.reso ? `<span style="color:#ff8a6a" title="Resonance: the fourth stack shatters">♪ ${u.reso}/4</span>` : "") + (u.threaded ? `<span style="color:#9fd8ff" title="Threaded to the Soul Loom">THREAD</span>` : "") + (u.frenzy ? `<span style="color:#ffd27a" title="Frenzy: +2% Attack per hit landed, at most +20%">FRENZY +${u.frenzy * 2}%</span>` : "");   // Harvest Engine (rules/m8.js)
   }
   function hud(activeU) {
     const phaseNote = e => (e.phases && (e.phases.length || e.phaseNo > 1) ? ` · phase ${e.phaseNo}/${e.phaseNo + e.phases.length}` : "");

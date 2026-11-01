@@ -42,7 +42,7 @@
   // ---------- styles ----------
   const STYLES = {
     minotaur: { name: "Minotaur", passive: "rampage", passiveName: "Rampage: +25% damage to a broken enemy", w: { hp: 2, atk: 4, pow: 0.3, def: 1, res: 0.5, spd: 0.6, foc: 0.6, lck: 0.8 } },
-    harpy: { name: "Harpy", passive: "relentless", passiveName: "Relentless: every 3rd hit it lands in one turn gives +1 MP", w: { hp: 1.3, atk: 2.5, pow: 0.3, def: 0.7, res: 0.8, spd: 4, foc: 0.8, lck: 2 } },
+    harpy: { name: "Harpy", passive: "relentless", passiveName: "Relentless: every hit it lands gives +2% Attack for the rest of the fight (Frenzy, at most +20%); every 3rd hit in one turn gives +1 MP", w: { hp: 1.3, atk: 2.5, pow: 0.3, def: 0.7, res: 0.8, spd: 4, foc: 0.8, lck: 2 } },
     hydra: { name: "Hydra", passive: "manyHeads", passiveName: "Many Heads: each different status on a target raises all damage over time on it by 10%", w: { hp: 2, atk: 0.5, pow: 3.2, def: 1, res: 1.3, spd: 0.8, foc: 1, lck: 2.2 } },
     colossus: { name: "Colossus", passive: "stoneskin", passiveName: "Stone Skin: +1 MP when hit (max 2 per turn)", w: { hp: 3, atk: 1, pow: 0.3, def: 3, res: 2, spd: 0.4, foc: 0.8, lck: 0.3 } },
     phoenix: { name: "Phoenix", passive: "ashes", passiveName: "From the Ashes: once per fight, rises at 25% HP", w: { hp: 2, atk: 0.3, pow: 3, def: 1, res: 2, spd: 1, foc: 2, lck: 0.4 } },
@@ -131,7 +131,7 @@
   mv("stampede", "Stampede", 24, 3, "allEnemies", { p: 1.6, bk: ["impact"], charge: 1, desc: "Hits all enemies. Counts toward impact breaks." });
   mv("wrath", "Wrath", 28, 2, "self", { grp: "support", fx: "wrath", desc: "Stores the damage it takes and adds it to its next hit." });
   // --- Harpy ---
-  mv("talonSwipe", "Talon Swipe", 1, 0, "enemy", { basic: 1, grp: "basic", p: 0.9, el: "self", desc: "Quick slash. +1 MP." });
+  mv("talonSwipe", "Talon Swipe", 1, 0, "enemy", { basic: 1, grp: "basic", p: 0.45, hits: 2, el: "self", desc: "Two quick slashes. +1 MP." });   // 2 hits (was 1 x 0.9, Danny 2026-11-01): same damage, twice the Frenzy
   mv("featherVolley", "Feather Volley", 1, 1, "enemy", { p: 0.5, hits: 3, desc: "3 small hits, each can crit." });
   mv("rend", "Rend", 4, 2, "enemy", { p: 0.7, hits: 2, st: [["bleed", 1]], stEach: 1, desc: "2 hits that each add a bleed stack." });
   mv("shriek", "Shriek", 6, 2, "enemy", { kind: "spell", p: 0.5, db: [["spd", -0.25, 2]], bk: ["slow"], grp: "control", desc: "Lowers enemy Speed for 2 turns. Counts toward slow breaks." });
@@ -571,8 +571,10 @@
     stun: { name: "Stun", max: 1, t: 1, ctrl: 1 }, freeze: { name: "Freeze", max: 1, t: 1, ctrl: 1 }, steam: { name: "Steam", max: 1, t: 2 }, petrify: { name: "Petrify", max: 3, t: 3 },
   };
   const DOTS = ["burn", "bleed", "poison", "shock"];
+  const FRENZY_PER = 0.02, FRENZY_MAX = 10;   // Harpy (Danny 2026-11-01): +2% Attack per hit landed, for the fight, at most +20%
   function eff(u, k) {
     let v = u.stats[k] * (1 + clamp(buffVal(u, k), -0.8, 3));
+    if (k === "atk" && u.frenzy) v *= 1 + FRENZY_PER * u.frenzy;   // Harpy Frenzy (bleed applied now uses it too)
     if (k === "spd") { if (u.st.slow) v *= 0.7; if (u.st.chill) v *= 1 - 0.06 * u.st.chill.n; }
     return Math.max(1, v);
   }
@@ -778,7 +780,7 @@
     if (tgt.grudge && tgt.grudge.tgt === src && tgt.grudge.n < 4) tgt.grudge.n++;
     if (hasBuff(tgt, "dust") && tgt.alive) { const d = getBuff(tgt, "dust"); const r = Math.min(tgt.maxHp - tgt.hp, Math.round(v * 0.2 * (d.owner && d.owner.fx ? healBoost(d.owner) : 1))); if (r > 0) { tgt.hp += r; ev.push({ t: "heal", tgt, v: r, hpAfter: tgt.hp }); } if (d.owner === tgt) { [...ctx.party].forEach(a => (a.buffs = a.buffs.filter(b => b.type !== "dust"))); } }
     if (hasBuff(tgt, "redHot") && kind === "phys" && src.side !== tgt.side && src.alive) addStatus(ctx, tgt, src, "burn", 1, { sure: 1 });
-    if (src.passive === "relentless" && passives && src.side === "p" && !tg.refl) { src.hitsTurn = (src.hitsTurn || 0) + 1; if (src.hitsTurn % 3 === 0) { src.mp = Math.min(src.maxMp, src.mp + 1); } }
+    if (src.passive === "relentless" && passives && src.side === "p" && !tg.refl) { src.frenzy = Math.min(FRENZY_MAX, (src.frenzy || 0) + 1); src.hitsTurn = (src.hitsTurn || 0) + 1; if (src.hitsTurn % 3 === 0) { src.mp = Math.min(src.maxMp, src.mp + 1); } }
     if (tg.bk && tg.strong) {
       countBreak(ctx, tgt, tg.bk);
       if (src.fx) gearBreak(ctx, src, tgt, tg);   // gear: Dead End (impact) and Shell Cracker (shell) count as 2 hits
@@ -1449,7 +1451,7 @@
   function newBattle(party, foes) {
     party.forEach(p => {
       p.mp = Math.floor(p.stats.foc / 10); p.buffs = []; p.st = {}; p.counter = false; p.rise = false; p.ashesUsed = false; p.stoneSkin = 0; p.tide = 0; p.alive = p.hp > 0;
-      p.attune = null; p.moodEl = null; p.unheard = false; p.diveReady = false; p.gallop = null; p.runes = null; p.grudge = null; p.ablaze = 0; p.sun = null; p.tails = 0; p.rooted = 0; p.hitsTurn = 0; p.loseAct = 0; p.maxMp = STYLES[p.style].passive === "highWater" ? 15 : 10;
+      p.attune = null; p.moodEl = null; p.unheard = false; p.diveReady = false; p.gallop = null; p.runes = null; p.grudge = null; p.ablaze = 0; p.sun = null; p.tails = 0; p.rooted = 0; p.hitsTurn = 0; p.frenzy = 0; p.loseAct = 0; p.maxMp = STYLES[p.style].passive === "highWater" ? 15 : 10;
       p.mp = Math.min(p.mp, p.maxMp); p.lastMove = p.lastMove || null; p.noBuff = 0; p.lastEl = null; p.gcIdx = 0; p.usedItem = false; p.moss = 0; p.omen = null; p.notes = 0; p.shave = false; p.terrorOn = 0; p.endedTurn = false;
       p.held = null; p.psyche = 0; p.fxs = {}; p.fxTurns = 0; p.spellsTurn = 0; p.opening = 0; p.spellBonus = 0; p.attuneBonus = 0;
       p.reso = 0; p.threaded = false; p.toma = 0; p.hookedR = 0;   // rules/m7.js and m8.js counters start fresh every fight
@@ -1504,7 +1506,7 @@
     if (u.evo) EVO.turn(ctx, u);   // evolution traits that act at the start of its turn (healing, rally, cleansing)
     let n;
     if (u.side === "e") n = u.actions || 1;
-    else { const fastest = Math.max(1, ...ctx.foes.filter(f => f.alive).map(f => eff(f, "spd"))); n = 2 + (eff(u, "spd") >= 2 * fastest * (1 - fxv(u, "overtake", 0.1, 0.05)) ? 1 : 0); }   // the 3rd action needs 2x the fastest foe's Speed (1.8x / 1.9x with Overtake)
+    else { const fastest = Math.max(1, ...ctx.foes.filter(f => f.alive).map(f => eff(f, "spd"))); n = 2 + (eff(u, "spd") >= 2 * fastest * (1 - fxv(u, "overtake", 0.1, 0.05)) ? 1 : 0) + (eff(u, "spd") >= 4 * fastest ? 1 : 0); }   // the 3rd action needs 2x the fastest foe's Speed (1.8x / 1.9x with Overtake), a 4th needs 4x (Danny 2026-11-01)
     if (u.st.shock && chance(0.12 * u.st.shock.n)) { n -= 1; ctx.ev.push({ t: "say", text: u.name + " is jolted and loses an action!" }); }
     if (u.loseAct) { n -= u.loseAct; u.loseAct = 0; ctx.ev.push({ t: "say", text: u.name + " loses an action." }); }
     if (u.hooks) { const x = hookRun(u, "turn", ctx, u); if (typeof x === "number") n += x; }
@@ -1963,6 +1965,7 @@
       }
       case "harpy": {
         if (tele && ok("dive") && !u.diveReady) return R("dive", u);
+        if (ok("rend") && !(foe.st.bleed && foe.st.bleed.n >= 7) && (u.frenzy || 0) >= 6 && canStatus(foe, "bleed")) return R("rend", foe);   // with Frenzy built up, keep the target bleeding (the bleed takes the Frenzy Attack)
         if (u.diveReady && ok("featherVolley")) return R("featherVolley", foe);
         if (foes.length > 1 && !foes.some(f => hasBuff(f, "spd")) && ok("scatterGale")) return R("scatterGale", u);
         if (foe.boss && team.length > 1 && !foe.augur && u.mp >= 2 && ok("augurEye")) return R("augurEye", foe);

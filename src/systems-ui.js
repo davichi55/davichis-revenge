@@ -126,13 +126,13 @@
     pow: ["Power", "Damage of spells, and how much heals and shields restore. Spell damage uses the same rule as Attack, against the target's Resistance. Healers and spellcasters live on this stat. Gorgons do not use it: they cast with Speed."],
     def: ["Defense", "Less damage from physical hits. When your Defense equals the attacker's Attack, its hits do half damage; more Defense keeps lowering it."],
     res: ["Resistance", "Less damage from spells (same rule as Defense, against Power). It also makes enemy statuses (burn, poison, stun...) land less often (up to 80% of them miss), and makes control effects such as stun, freeze and being held land less often."],
-    spd: ["Speed", "Who acts first each round. A creature with at least twice the Speed of the fastest enemy gets 3 actions that turn instead of 2. Slowing an enemy can push you over that line in the middle of a fight. A Gorgon also casts its spells with Speed."],
+    spd: ["Speed", "Who acts first each round. A creature with at least twice the Speed of the fastest enemy gets 3 actions that turn instead of 2, and with four times its Speed it gets 4. Slowing an enemy can push you over that line in the middle of a fight. A Gorgon also casts its spells with Speed."],
     foc: ["Focus", "Starting MP in every fight: 1 MP for each full 10 Focus. Fights start at 0 MP otherwise, so Focus means your first spells come a turn or two sooner."],
     lck: ["Luck", "Critical hits: 5% chance + 0.4% per Luck point (minus 0.2% per point of the target's Luck), between 2% and 60%; a critical hit does 1.5x damage. Luck makes your debuffs stronger: +1 point per 10 Luck, at most +15 (Attack -25% becomes -35% at 100 Luck). Luck also raises the chance your statuses land and lowers the enemy's critical chance on you."],
   };
   U.STYLE_TIP = {
     minotaur: "Hits hard and spends little MP: Attack first, HP so it survives in front, a little Speed.",
-    harpy: "Fast, many small hits: Speed (aim for twice the enemy's) and Attack, which also make its bleeds deeper, then Luck for critical hits.",
+    harpy: "Fast, many small hits: every hit builds its Frenzy (more Attack), so hit often, or build Frenzy first and then keep the enemy bleeding. Speed (twice the enemy's for a 3rd action, four times for a 4th) and Attack, then Luck for critical hits.",
     hydra: "Wears foes down with statuses: Power and Luck for stronger poison (Luck also helps them land), Focus for a hotter burn, some HP.",
     colossus: "Stands in front and takes the hits: HP, Defense and Resistance. Attack matters little.",
     phoenix: "Heals and rises again: Power for bigger heals, Focus so the first heal comes early, Resistance.",
