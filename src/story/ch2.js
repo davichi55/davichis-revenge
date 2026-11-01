@@ -105,8 +105,8 @@
   S.gather["flats.plume"] = async F => { F.set("g.plume"); F.give("cinderPlume", 4); await UI.say([["narr", "A warm feather by the water. Then another. Four Cinder Plumes."]]); };
   S.trigger["flats.pool"] = async F => {
     if (F.f("pool.seen")) { await UI.say([["narr", "The pool is still. The fire-fox sleeps."]]); return; }
-    F.set("pool.seen"); F.give("cinderPlume", 5);
-    await UI.say([["narr", "A hidden pool, warm as milk. At the bottom, curled in its own tails, a fox of red fire sleeps."], ["hero", "(Not mine to take. Not mine to wake.)"], ["narr", "Five more Cinder Plumes drift to the surface. You note the fox in the Journal and leave quietly."]]);
+    F.set("pool.seen"); F.give("cinderPlume", 4);
+    await UI.say([["narr", "A hidden pool, warm as milk. At the bottom, curled in its own tails, a fox of red fire sleeps."], ["hero", "(Not mine to take. Not mine to wake.)"], ["narr", "Four more Cinder Plumes drift to the surface. You note the fox in the Journal and leave quietly."]]);
   };
 
   // ---------- the Bone Maze (K1) ----------
