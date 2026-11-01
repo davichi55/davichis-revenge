@@ -27,14 +27,16 @@
       ["sand", L([[1250, 1050], [1450, 980]], 220)], ["sand", L([[2020, 960], [2250, 760]], 220)], ["sand", L([[1700, 1380], [1700, 1760]], 200)],
       ["road", R(2590, 290, 120, 100)], ["road", L([[40, 1100], [300, 1100]], 120)],
     ],
-    entries: { start: { x: 230, y: 1100, face: "right" }, from_starhaven: { x: 230, y: 1100, face: "right" }, from_craterGarden: { x: 2650, y: 420, face: "down" } },
-    exits: [{ rect: [40, 1040, 56, 120], to: "starhaven", entry: "from_starfallIsles", push: [1, 0] }, { rect: [2600, 296, 100, 70], to: "craterGarden", entry: "from_starfallIsles", push: [0, 1] }],
+    entries: { start: { x: 230, y: 1100, face: "right" }, from_starhaven: { x: 230, y: 1100, face: "right" }, from_craterGarden: { x: 2650, y: 420, face: "down" }, from_harvestWorks: { x: 1540, y: 1900, face: "right" } },
+    exits: [{ rect: [40, 1040, 56, 120], to: "starhaven", entry: "from_starfallIsles", push: [1, 0] }, { rect: [2600, 296, 100, 70], to: "craterGarden", entry: "from_starfallIsles", push: [0, 1] },
+      { rect: [1440, 1876, 60, 50], to: "harvestWorks", entry: "from_starfallIsles", push: [1, 0] }],   // post-game, optional: the sealed hatch down to the Harvest Works (src/story/harvest.js)
     chests: [{ id: "starfallChest1", x: 560, y: 1010 }, { id: "starfallChest2", x: 1800, y: 1300 }, { id: "starfallChest3", x: 1680, y: 1920 }],
     gather: [{ id: "starMetalShard", x: 1650, y: 960, label: "shard", color: 0xb0b8ff }],
-    props,
+    props: props.concat([["pyrGrate", 1470, 1905, { solid: false }], ["spineChainPost", 1430, 1870], ["spineChainPost", 1510, 1870], ["spineChainPost", 1430, 1945], ["m4_cliffSign", 1400, 1900], ["starhavenTent", 1680, 1800], ["starhavenLampPost", 1640, 1860, { solid: false }], ["skullPile", 1500, 1960]]),
     scatter: [{ keys: [["starhavenBeachGrass", 2], ["starhavenBlackRock", 1], ["starfallShards", 0.7], ["starfallMeteor", 0.5], ["starfallBurntTree", 0.3]], n: 130, seed: 7, on: ["ash", "grass", "sand"], opts: { solid: false }, scaleRange: [0.6, 1] }],
     encounter: { table: "starfall", rate: 26 },
-    npcs: [{ id: null, art: "npcScholarF", x: 800, y: 1120, path: [[420, 1100], [1000, 1120]], speed: 14 }],
+    npcs: [{ id: null, art: "npcScholarF", x: 800, y: 1120, path: [[420, 1100], [1000, 1120]], speed: 14 },
+      { id: "hwLookout", art: "npcScholarF", name: "Sela, on watch", x: 1610, y: 1830 }, { id: "hwPost", art: "m4_cliffSign", name: "A warning post", x: 1530, y: 1850, noTurn: true }],
     amb: { motes: 36, dust: 0xe0e8ff, tint: [0x20305a, 0.12], warm: [0xc8d8ff, 0.03], water: true, birds: 5, sparkle: { terrain: ["ash", "glass", "sand"], color: 0xd0dcff, rate: 8 } },
   });
 })();

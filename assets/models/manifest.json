@@ -3329,5 +3329,33 @@
   "scale": 1.25,
   "kind": "boss",
   "aspect": 1.009
+ },
+ "harvestEngine": {
+  "file": "models/harvestEngine.glb",
+  "yaw": 1.571,
+  "scale": 1.6,
+  "kind": "boss",
+  "aspect": 0.73
+ },
+ "bellowsHorn": {
+  "file": "models/bellowsHorn.glb",
+  "yaw": 1.571,
+  "scale": 0.9,
+  "kind": "enemy",
+  "aspect": 0.515
+ },
+ "soulLoom": {
+  "file": "models/soulLoom.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "enemy",
+  "aspect": 0.368
+ },
+ "collarDrone": {
+  "file": "models/collarDrone.glb",
+  "yaw": 1.571,
+  "scale": 0.7,
+  "kind": "enemy",
+  "aspect": 1.234
  }
 }

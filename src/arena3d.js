@@ -305,7 +305,7 @@
       if (s.type === "tide") return "";
       const c = CHIP[s.type] || ["•", "#ddd", s.name];
       return `<span style="color:${c[1]}" title="${c[2]}">${c[0]}${s.n > 1 ? " " + s.n : ""}<em>${s.turns ? s.turns : ""}</em></span>`;
-    }).join("");
+    }).join("") + (u.reso ? `<span style="color:#ff8a6a" title="Resonance: the fourth stack shatters">♪ ${u.reso}/4</span>` : "") + (u.threaded ? `<span style="color:#9fd8ff" title="Threaded to the Soul Loom">THREAD</span>` : "");   // Harvest Engine (rules/m8.js)
   }
   function hud(activeU) {
     const phaseNote = e => (e.phases && (e.phases.length || e.phaseNo > 1) ? ` · phase ${e.phaseNo}/${e.phaseNo + e.phases.length}` : "");
@@ -338,6 +338,19 @@
     d.style.left = (p[0] + (Math.random() - 0.5) * 40) + "px"; d.style.top = p[1] + "px";
     d.style.transition = "transform 1.3s ease-out, opacity .4s ease-in .9s";   // fully readable for 0.9 s (subtitle minimum 0.83 s), then a 0.4 s fade
     el.root.appendChild(d); requestAnimationFrame(() => { d.style.transform = "translateY(-50px)"; d.style.opacity = "0"; }); setTimeout(() => d.remove(), 1350);
+  }
+  // the Harvest Engine's voice: a dark full-width panel, monospace capitals typed out one by one, a scan flicker, a low shake; every other boss uses the plain log
+  async function machineVoice(lines, color) {
+    const d = document.createElement("div"); const c = color || "#ff5a4a";
+    d.style.cssText = "position:absolute;left:0;right:0;top:30%;padding:22px 0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(6,4,8,.92) 12%,rgba(6,4,8,.92) 88%,rgba(0,0,0,0));text-align:center;font:700 26px/1.5 'Courier New',Consolas,monospace;letter-spacing:6px;color:" + c + ";text-shadow:0 0 12px " + c + ",0 0 2px #000;pointer-events:none;z-index:60;";
+    el.root.appendChild(d); sfx("telegraph"); shake = Math.max(shake, 0.25); flash(c, 160);
+    const fl = setInterval(() => { d.style.opacity = Math.random() < 0.12 ? "0.55" : "1"; }, 70);
+    for (const line of lines) {
+      const row = document.createElement("div"); d.appendChild(row);
+      for (let i = 1; i <= line.length; i++) { row.textContent = line.slice(0, i) + (i < line.length ? "_" : ""); await wait(28); }
+      await wait(380);
+    }
+    log(lines.join(" ")); await wait(1100); clearInterval(fl); d.style.transition = "opacity .4s"; d.style.opacity = "0"; await wait(420); d.remove();
   }
   function banner(text, color) {
     const d = document.createElement("div"); d.className = "react"; d.style.color = color || "#ffd27a"; d.textContent = text; el.root.appendChild(d); setTimeout(() => d.remove(), 1700);
@@ -465,8 +478,10 @@
     else if (e.t === "cleanse") { float(e.tgt, "Cleansed", "#ffe9a0"); sfx("heal"); hud(); await wait(160); }
     else if (e.t === "breakPt") { float(e.tgt, `Crack ${e.pts}/${e.need || 2}`, "#f2c14e"); hud(); await wait(260); }
     else if (e.t === "broken") { hitStop(150); seenFx("broken"); if (FX()) FX().brk(e.tgt); coachSay(pick(["Now! It's open!", "Hit it while it's down!", "Its guard is broken!"])); sfx("break"); banner("BROKEN!", "#f2c14e"); flash("#ffd27a"); shake = 0.25; log(`${e.tgt.name} is BROKEN! It takes 50% more damage.`); hud(); await wait(900); }
-    else if (e.t === "phase") { sfx("telegraph"); flash("#ff3b2a", 500); shake = 0.35; banner("PHASE " + (e.tgt.phaseNo || ""), "#ff6b57"); log(e.text); hud(); await wait(1700); }
+    else if (e.t === "phase") { shown.delete(e.tgt); sfx("telegraph");   // the new phase starts at full HP: forget the last shown value of the old bar
+      flash("#ff3b2a", 500); shake = 0.35; banner("PHASE " + (e.tgt.phaseNo || ""), "#ff6b57"); log(e.text); hud(); await wait(1700); }
     else if (e.t === "ko") { hitStop(150); if (e.tgt.side === "p") coachSay(pick([e.tgt.name + "! Get up!", "Hold on, " + e.tgt.name + "!"]), "idle"); sfx("ko"); if (FX()) FX().ko(e.tgt); if (e.tgt.view) e.tgt.view.alive = 0; log(`${e.tgt.name} falls!`); hud(); await wait(500); }
+    else if (e.t === "machine") { await machineVoice(e.lines || [], e.color); }   // the Harvest Engine speaks (rules/m8.js): cold typed lines over a flickering dark panel
     else if (e.t === "flee") {   // a foe runs out of the arena (the Cutpurse): it slides away from the party and is gone
       log(e.text || `${e.tgt.name} runs away!`); sfx("debuff"); const v = e.tgt.view;
       if (v) { v.anim = null; const g = v.group, x0 = g.position.x; for (let i = 1; i <= 18; i++) { g.position.x = x0 - i * 0.7; await wait(22); } g.visible = false; }

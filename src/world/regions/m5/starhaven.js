@@ -32,7 +32,7 @@
     npcs: [
       { id: "innkeeper", art: "innkeeper", name: "Innkeeper", x: 660, y: 470 }, { id: "merchant", art: "merchant", name: "Quartermaster", x: 880, y: 760 }, { id: "quartermaster", art: "npcQuartermaster", name: "Quartermaster", x: 960, y: 800 },
       { id: "vael", art: "npcVael", name: "Master Oren Vael", x: 820, y: 560 }, { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 640, y: 900 }, { id: "mentor", art: "npcIthielGrey", name: "Master Ithiel", x: 1060, y: 380 }, { id: "imela", art: "npcImela", name: "Imela", x: 780, y: 610, hide: "post.imelaHome" },
-      { id: "calendarScholar", art: "npcCalendarScholar", name: "Calendar scholar", x: 1160, y: 500 }, { id: "r1", art: "npcScholarM", name: "Scholar", x: 500, y: 600 }, { id: "r2", art: "npcScholarF", name: "Scholar", x: 1000, y: 610 }, { id: "r3", art: "npcScholarM", name: "Scholar", x: 420, y: 760 },
+      { id: "calendarScholar", art: "npcCalendarScholar", name: "Calendar scholar", x: 1160, y: 500 }, { id: "hwEngineer", art: "npcForgemaster", name: "Old Tamsin", x: 1180, y: 720 }, { id: "r1", art: "npcScholarM", name: "Scholar", x: 500, y: 600 }, { id: "r2", art: "npcScholarF", name: "Scholar", x: 1000, y: 610 }, { id: "r3", art: "npcScholarM", name: "Scholar", x: 420, y: 760 },
       { id: null, art: "npcScholarF", x: 760, y: 640, path: [[600, 640], [940, 640]], speed: 14 }, { id: null, art: "npcScholarM", x: 860, y: 450, path: [[740, 440], [900, 470]], speed: 12 }, { id: null, art: "npcScholarF", x: 1300, y: 560, path: [[1100, 570], [1500, 560]], speed: 18 },
     ],
     amb: { motes: 24, dust: 0xe8f0ff, tint: [0x28385a, 0.1], warm: [0xc0d8ff, 0.03], water: true, birds: 4, sparkle: { terrain: ["ash", "glass"], color: 0xd8e8ff, rate: 7 } },

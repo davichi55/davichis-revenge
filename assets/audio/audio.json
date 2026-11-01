@@ -1913,5 +1913,21 @@
  "caveAmbience": {
   "type": "ambient",
   "alias": "ambCave"
+ },
+ "harvestEngine": {
+  "file": "music/harvestEngine.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 1,
+  "seconds": 120,
+  "cat": "boss"
+ },
+ "harvestWorks": {
+  "file": "music/harvestWorks.mp3",
+  "type": "music",
+  "loop": true,
+  "vol": 0.9,
+  "seconds": 100,
+  "cat": "dungeon"
  }
 }

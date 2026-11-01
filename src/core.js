@@ -1447,6 +1447,7 @@
       p.attune = null; p.moodEl = null; p.unheard = false; p.diveReady = false; p.gallop = null; p.runes = null; p.grudge = null; p.ablaze = 0; p.sun = null; p.tails = 0; p.rooted = 0; p.hitsTurn = 0; p.loseAct = 0; p.maxMp = STYLES[p.style].passive === "highWater" ? 15 : 10;
       p.mp = Math.min(p.mp, p.maxMp); p.lastMove = p.lastMove || null; p.noBuff = 0; p.lastEl = null; p.gcIdx = 0; p.usedItem = false; p.moss = 0; p.omen = null; p.notes = 0; p.shave = false; p.terrorOn = 0; p.endedTurn = false;
       p.held = null; p.psyche = 0; p.fxs = {}; p.fxTurns = 0; p.spellsTurn = 0; p.opening = 0; p.spellBonus = 0; p.attuneBonus = 0;
+      p.reso = 0; p.threaded = false; p.toma = 0; p.hookedR = 0;   // rules/m7.js and m8.js counters start fresh every fight
       p.tideMax = 5; p.momBonus = 0; p.repBonus = 0; p.danceBonus = 0; p.moveNo = 0; p.inoc = null; p.keepTide = 0; p.hurtSince = false; p.calm = false;
       if (p.fx) gearStart(p);   // set bonuses that act at the start of a fight (max MP, Tide, round-1 Speed)
     });
