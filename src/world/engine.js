@@ -149,7 +149,7 @@
       this.makeAmbience();
       this.makeSky();
       this.buildArmies();
-      this.buildLegends();
+      this.buildLegends(); this.buildTrigMarks();
       this.makeDark();
       this.keys = this.input.keyboard.addKeys({ up: "UP", down: "DOWN", left: "LEFT", right: "RIGHT", w: "W", a: "A", s: "S", d: "D" });
       this.input.keyboard.on("keydown-E", () => this.interact()); this.input.keyboard.on("keydown-SPACE", () => this.interact());
@@ -221,6 +221,7 @@
       mk("glow", 96, 96, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,170,70,0.9)"); g.addColorStop(0.35, "rgba(255,120,30,0.35)"); g.addColorStop(1, "rgba(255,100,20,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       mk("glowBlue", 96, 96, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(140,210,255,0.9)"); g.addColorStop(0.35, "rgba(80,150,255,0.35)"); g.addColorStop(1, "rgba(60,120,255,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       mk("glowGold", 96, 96, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,230,120,0.95)"); g.addColorStop(0.35, "rgba(255,200,60,0.4)"); g.addColorStop(1, "rgba(255,180,40,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
+      mk("markRing", 160, 80, (ctx, w, h) => { ctx.lineWidth = 7; ctx.strokeStyle = "rgba(255,226,130,0.95)"; ctx.shadowColor = "rgba(255,200,80,1)"; ctx.shadowBlur = 10; ctx.beginPath(); ctx.ellipse(w / 2, h / 2, w / 2 - 12, h / 2 - 10, 0, 0, Math.PI * 2); ctx.stroke(); ctx.lineWidth = 2; ctx.strokeStyle = "rgba(255,255,230,0.9)"; ctx.shadowBlur = 0; ctx.beginPath(); ctx.ellipse(w / 2, h / 2, w / 2 - 12, h / 2 - 10, 0, 0, Math.PI * 2); ctx.stroke(); });   // marked trigger zones (buildTrigMarks)
       mk("exitArrow", 22, 16, ctx => { ctx.strokeStyle = "rgba(255,236,160,1)"; ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.beginPath(); ctx.moveTo(3, 13); ctx.lineTo(11, 4); ctx.lineTo(19, 13); ctx.stroke(); });
       mk("light", 256, 256, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 4, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(0.55, "rgba(255,255,255,0.7)"); g.addColorStop(1, "rgba(255,255,255,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       mk("vignette", 960, 540, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, h * 0.38, w / 2, h / 2, w * 0.62); g.addColorStop(0, "rgba(14,6,20,0)"); g.addColorStop(1, "rgba(14,6,20,0.72)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
@@ -651,6 +652,28 @@
         if (d < 36 && o.away && !this.busy && this.time.now > this.safeUntil && this.time.now > o.cool) { o.away = false; this.touchLegend(o); }
       }
     }
+    // marked trigger zones (Danny 2026-11-01: make spots like the Dune Whisperer's ridge obvious): trigger field mark: true | { color: "blue" } draws a pulsing ground glow and rising sparkles while the trigger can still fire
+    buildTrigMarks() {
+      const ADD = Phaser.BlendModes.ADD; this.trigMarks = [];
+      for (const t of this.triggers) {
+        if (!t.mark) continue;
+        const [x, y, w, h] = t.rect, cx = x + w / 2, cy = y + h / 2, key = t.mark.color === "blue" ? "glowBlue" : "glowGold";
+        const ring = this.add.image(cx, cy, "markRing").setDepth(cy - 1).setAlpha(0);   // a drawn ring: visible on bright sand too, where an added glow is not
+        const glow = this.add.image(cx, cy - 18, key).setBlendMode(ADD).setDepth(cy + 1).setAlpha(0);
+        const beam = this.add.image(cx, cy - 60, key).setBlendMode(ADD).setDepth(cy + 1).setAlpha(0);   // a soft column of light, visible from across the map
+        this.trigMarks.push({ t, cx, cy, w, h, ring, glow, beam, ph: Math.random() * 6, spT: 0 });
+      }
+    }
+    updateTrigMarks(time, dt) {
+      for (const m of this.trigMarks || []) {
+        const on = this.trigOn(m.t), pu = 0.5 + 0.5 * Math.sin(time * 0.0028 + m.ph);
+        m.ring.setVisible(on).setAlpha(on ? 0.5 + 0.45 * pu : 0).setDisplaySize(m.w * (1.05 + 0.12 * pu), m.h * (0.8 + 0.1 * pu));
+        m.glow.setVisible(on).setAlpha(on ? 0.45 + 0.35 * pu : 0).setDisplaySize(90 + 20 * pu, 90 + 20 * pu);
+        m.beam.setVisible(on).setAlpha(on ? 0.3 + 0.25 * pu : 0).setDisplaySize(44 + 8 * pu, 150);
+        if (!on) continue;
+        m.spT -= dt; if (m.spT <= 0) { m.spT = 0.1; const st = this.add.image(Math.round(m.cx + (Math.random() - 0.5) * m.w * 0.8), Math.round(m.cy + (Math.random() - 0.5) * m.h * 0.5), "star").setBlendMode(Phaser.BlendModes.ADD).setDepth(m.cy + 2).setScale(1.6 + Math.random()).setAlpha(1); this.tweens.add({ targets: st, y: st.y - 40 - Math.random() * 40, alpha: 0, duration: 1300, onComplete: () => st.destroy() }); }
+      }
+    }
     async touchLegend(o) {
       const r = await this.runHook("legend", o.id, this.rid, o.sp);
       if (!this.sys || !this.sys.isActive()) return;
@@ -938,7 +961,7 @@
         n.ps += (n.speed || 22) * dt * n.pd; if (n.ps > n.P.L) { n.ps = n.P.L; n.pd = -1; } if (n.ps < 0) { n.ps = 0; n.pd = 1; }
         const a = pathAt(n.P, n.ps); if (Math.abs(a.hx) > 0.2) n.s.setFlipX(a.hx * n.pd > 0); n.x = a.x; n.y = a.y; n.s.setPosition(Math.round(n.x), Math.round(n.y - Math.abs(Math.sin(time * 0.01)) * 1)).setDepth(n.y); n.sh.setPosition(Math.round(n.x), Math.round(n.y) - 1).setDepth(n.y - 1);
       }
-      this.updateFollowers(time, dt); this.updateArmies(time, dt); this.updateSky(time, dt); this.updateLegends(time, dt);
+      this.updateFollowers(time, dt); this.updateArmies(time, dt); this.updateSky(time, dt); this.updateLegends(time, dt); this.updateTrigMarks(time, dt);
       const v = this.cameras.main.worldView;
       for (const m of this.motes) { m.x += m.vx * dt; m.y += Math.sin(time * 0.001 + m.ph) * 6 * dt; m.s.setPosition(Math.round(v.x + ((m.x - v.x) % 1000 + 1000) % 1000 - 20), Math.round(v.y + ((m.y - v.y) % 600 + 600) % 600 - 20)); }
       if (this.dark) this.updateDark(time);

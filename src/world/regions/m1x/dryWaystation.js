@@ -20,7 +20,7 @@
     dark: { ambient: 0.42, radius: 300, fireRadius: 160 },
     entries: { start: { x: 160, y: 800, face: "right" }, from_caravanGraveyard: { x: 160, y: 800, face: "right" } },
     exits: [{ rect: [40, 740, 56, 120], to: "caravanGraveyard", entry: "from_dryWaystation", push: [1, 0] }],
-    triggers: [{ id: "waystationEnter", rect: [560, 740, 100, 120] }, { id: "wellEater", rect: [700, 690, 260, 230] }],
+    triggers: [{ id: "waystationEnter", rect: [560, 740, 100, 120] }, { id: "wellEater", rect: [700, 690, 260, 230], mark: true }],
     chests: [{ id: "waystationChest1", x: 1760, y: 420 }, { id: "waystationChest2", x: 1760, y: 1180 }],
     npcs: [
       { id: "waystationLedger", art: "clerkDesk", name: "Keeper's desk", x: 1760, y: 780, hint: "E / Space: read the ledger" },

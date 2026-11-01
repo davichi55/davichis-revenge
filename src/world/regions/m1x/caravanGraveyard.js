@@ -18,7 +18,7 @@
       { rect: [1510, 40, 130, 50], to: "whisperglassDunes", entry: "from_caravanGraveyard", push: [0, 1] },
       { rect: [3054, 1550, 56, 120], to: "dryWaystation", entry: "from_caravanGraveyard", push: [-1, 0] },
     ],
-    triggers: [{ id: "duskWhisperer", rect: [800, 1000, 160, 120], once: false, when: "dunes.dusk" }, { id: "graveyardArrive", rect: [1500, 220, 150, 90] }],
+    triggers: [{ id: "duskWhisperer", rect: [800, 1000, 160, 120], once: false, when: "dunes.dusk", mark: true }, { id: "graveyardArrive", rect: [1500, 220, 150, 90] }],
     chests: [{ id: "graveChest1", x: 2780, y: 540 }, { id: "graveChest2", x: 520, y: 1650 }],
     gather: [{ id: "shardHeap", x: 1260, y: 1590, label: "A great shell under the wagon", color: "gold" }, { id: "tallyBox", x: 2250, y: 720, label: "A strongbox under a wagon", color: "gold", show: "tally.started" }],
     npcs: [{ id: "tallyBoard", art: "noticeBoard", name: "Tally board", x: 1620, y: 420, hint: "E / Space: read the board" }],

@@ -17,7 +17,7 @@
     entries: { start: { x: 160, y: 560, face: "right" }, from_basin: { x: 160, y: 560, face: "right" } },
     exits: [{ rect: [40, 500, 60, 120], to: "amberBasin", entry: "from_flats", push: [1, 0] }],
     chests: [{ id: "g12_cinderSerpentPit", x: 1370, y: 480 }],
-    triggers: [{ id: "cinderLich", rect: [670, 225, 180, 110] }],   // the Cinder Lich's coffin (src/story/m6foes.js, rules/m6.js)
+    triggers: [{ id: "cinderLich", rect: [670, 225, 180, 110], mark: { color: "blue" } }],   // the Cinder Lich's coffin (src/story/m6foes.js, rules/m6.js)
     gather: [
       { id: "cinderglassEmber1", x: 600, y: 430, label: "gather Cinderglass Ember", color: "gold" }, { id: "cinderglassEmber2", x: 1100, y: 880, label: "gather Cinderglass Ember", color: "gold" },
       { id: "cinderPlume1", x: 420, y: 880, label: "gather Cinder Plume", color: "blue" }, { id: "cinderPlume2", x: 1240, y: 240, label: "gather Cinder Plume", color: "blue" },
