@@ -46,7 +46,7 @@
     hydra: { name: "Hydra", passive: "manyHeads", passiveName: "Many Heads: each different status on a target raises all damage over time on it by 10%", w: { hp: 2, atk: 0.5, pow: 3.2, def: 1, res: 1.3, spd: 0.8, foc: 1, lck: 2.2 } },
     colossus: { name: "Colossus", passive: "stoneskin", passiveName: "Stone Skin: +1 MP when hit (max 2 per turn)", w: { hp: 3, atk: 1, pow: 0.3, def: 3, res: 2, spd: 0.4, foc: 0.8, lck: 0.3 } },
     phoenix: { name: "Phoenix", passive: "ashes", passiveName: "From the Ashes: once per fight, rises at 25% HP", w: { hp: 2, atk: 0.3, pow: 3, def: 1, res: 2, spd: 1, foc: 2, lck: 0.4 } },
-    gorgon: { name: "Gorgon", passive: "exposed", passiveName: "Exposed: each debuff on a target makes it take +5% damage from everyone", w: { hp: 1.4, atk: 0.4, pow: 2.4, def: 0.9, res: 1.5, spd: 2.6, foc: 1.2, lck: 2.4 } },
+    gorgon: { name: "Gorgon", passive: "exposed", passiveName: "Exposed: each debuff on a target makes it take +8% damage from everyone (at most +40%)", w: { hp: 1.4, atk: 0.4, pow: 2.4, def: 0.9, res: 1.5, spd: 2.6, foc: 1.2, lck: 2.4 } },
     dragon: { name: "Dragon", passive: "comboMaster", passiveName: "Combo Master: reactions it triggers deal +30%", w: { hp: 1.2, atk: 0.3, pow: 3.8, def: 0.6, res: 1.2, spd: 1.8, foc: 2.4, lck: 0.8 } },
     leviathan: { name: "Leviathan", passive: "highWater", passiveName: "High Water: max MP 15; at 5 Tide its next release also stuns", w: { hp: 3.2, atk: 1.6, pow: 2.2, def: 1.2, res: 1.2, spd: 0.5, foc: 2.2, lck: 0.6 } },
   };
@@ -170,11 +170,11 @@
   mv("purge", "Purge", 20, 2, "team", { grp: "support", fx: "purge", desc: "Removes all statuses from the team." });
   mv("sunfire", "Sunfire", 24, 2, "enemy", { kind: "spell", p: 1.4, el: "light", fx: "sunfire", desc: "Light damage; part of it heals the team." });
   // --- Gorgon ---
-  mv("serpentLash", "Serpent Lash", 1, 0, "enemy", { basic: 1, grp: "basic", kind: "spell", p: 0.8, el: "self", desc: "Whip-fast lash. +1 MP." });
-  mv("hiss", "Hiss", 1, 1, "enemy", { kind: "spell", p: 0.3, db: [["atk", -0.25, 2]], grp: "control", desc: "Lowers enemy Attack for 2 turns." });
-  mv("venomMark", "Venom Mark", 4, 1, "enemy", { kind: "spell", p: 0.3, el: "poison", db: [["res", -0.25, 3]], grp: "control", desc: "Lowers enemy Resistance for 3 turns." });
-  mv("petrifyingGaze", "Petrifying Gaze", 6, 2, "enemy", { kind: "spell", p: 0.4, db: [["spd", -0.35, 2]], bk: ["slow"], grp: "control", desc: "Lowers enemy Speed for 2 turns. Counts toward slow breaks." });
-  mv("crackArmour", "Crack Armour", 8, 2, "enemy", { kind: "spell", p: 0.5, db: [["def", -0.25, 3]], bk: ["shell"], grp: "control", desc: "Lowers enemy Defense for 3 turns. Counts toward shell breaks." });
+  mv("serpentLash", "Serpent Lash", 1, 0, "enemy", { basic: 1, grp: "basic", kind: "spell", p: 0.8, el: "self", db: [["spd", -0.1, 2]], desc: "Whip-fast lash that lowers enemy Speed a little for 2 turns. +1 MP." });
+  mv("hiss", "Hiss", 1, 1, "enemy", { kind: "spell", p: 0.3, db: [["atk", -0.25, 3]], grp: "control", desc: "Lowers enemy Attack for 3 turns." });
+  mv("venomMark", "Venom Mark", 4, 1, "enemy", { kind: "spell", p: 0.3, el: "poison", db: [["res", -0.25, 4]], grp: "control", desc: "Lowers enemy Resistance for 4 turns." });
+  mv("petrifyingGaze", "Petrifying Gaze", 6, 2, "enemy", { kind: "spell", p: 0.4, db: [["spd", -0.35, 3]], bk: ["slow"], grp: "control", desc: "Lowers enemy Speed for 3 turns. Counts toward slow breaks." });
+  mv("crackArmour", "Crack Armour", 8, 2, "enemy", { kind: "spell", p: 0.5, db: [["def", -0.25, 4]], bk: ["shell"], grp: "control", desc: "Lowers enemy Defense for 4 turns. Counts toward shell breaks." });
   mv("shatterShield", "Shatter Shield", 12, 2, "enemy", { kind: "spell", p: 0.6, bk: ["shell"], fx: "shatterShield", grp: "control", desc: "Breaks shields and barriers. Counts toward shell breaks." });
   mv("coil", "Coil", 16, 2, "enemy", { fx: "coil", grp: "control", desc: "The enemy loses 1 action next turn (bosses resist repeats)." });
   mv("stoneGaze", "Stone Gaze", 20, 3, "enemy", { fx: "stoneGaze", grp: "control", desc: "Petrifies (stuns) for 1 turn. Luck against the enemy's Resistance." });
@@ -416,7 +416,7 @@
   const hpFrac = (u, m) => (m.hpCost || m.hpCostPct || 0) * (u.fx ? 1 - fxv(u, "sandUnderfoot", 0.25, 0.12) : 1);   // share of max HP a move costs (Sand Underfoot makes it cheaper)
   const gearTideMax = u => 5 + (u && u.fx && fxl(u, "deeperReservoir") >= 2 ? 1 : 0);
   const healBoost = u => (u && u.fx ? 1 + fxv(u, "radiantHealing", 0.2, 0.1) : 1);
-  const exposedPer = ctx => 0.05 + Math.max(0, ...ctx.party.filter(p => p.alive && p.passive === "exposed" && p.fx).map(p => fxv(p, "deeperExposure", 0.03, 0.01)));
+  const exposedPer = ctx => 0.08 + Math.max(0, ...ctx.party.filter(p => p.alive && p.passive === "exposed" && p.fx).map(p => fxv(p, "deeperExposure", 0.03, 0.01)));
   const gearMp = (u, n) => { if (u.alive) u.mp = Math.min(u.maxMp, u.mp + n); };
   // "lasts 1 turn longer": every time with the full set, every second time with two pieces
   function gearMore(u, tag) { const l = fxl(u, tag); if (!l) return 0; if (l >= 2) return 1; const f = fxs(u); f[tag + "N"] = (f[tag + "N"] || 0) + 1; return f[tag + "N"] % 2 === 0 ? 1 : 0; }
@@ -725,9 +725,9 @@
     v *= 1 + buffVal(tgt, "vuln") + buffVal(tgt, "marked");
     if (tgt.hooks) { const hm = hookRun(tgt, "inMult", ctx, tgt, src, { kind, el, tg, v }); if (typeof hm === "number") v *= hm; }      // boss rules: damage taken (roots, airborne, front guards...)
     if (src.hooks) { const hm = hookRun(src, "outMult", ctx, src, tgt, { kind, el, tg, v }); if (typeof hm === "number") v *= hm; }     // boss rules: damage dealt
-    if (tgt.side === "e" && passives !== false && ctx.party.some(p => p.alive && p.passive === "exposed")) v *= 1 + Math.min(0.25, exposedPer(ctx) * debuffCount(tgt));
+    if (tgt.side === "e" && passives !== false && ctx.party.some(p => p.alive && p.passive === "exposed")) v *= 1 + Math.min(0.4, exposedPer(ctx) * debuffCount(tgt));
     const fv = tgt.side === "e" ? 1 + feetVuln(tgt) : 1; v *= fv;   // Heavy Feet
-    if (tgt.side === "p" && ctx.foes.some(f => f.alive && f.passive === "exposed")) v *= 1 + Math.min(0.25, 0.05 * debuffCount(tgt));   // a Gorgon general's Exposed works on the party too
+    if (tgt.side === "p" && ctx.foes.some(f => f.alive && f.passive === "exposed")) v *= 1 + Math.min(0.25, 0.05 * debuffCount(tgt));   // a Gorgon general's Exposed works on the party too (kept at 5% / 25% when the player's went to 8% / 40% on 2026-11-01)
     if (src.grudge && src.grudge.tgt === tgt) v *= 1 + 0.1 * src.grudge.n;
     if (tgt.notes > 0 && src.side === "p" && src !== tgt.notesBy) { v *= 1.15; tgt.notes--; }
     if (tgt.terrorOn && tg.strongHit) v *= 0.8;

@@ -281,7 +281,7 @@ const Data = (() => {
       bn("Deep Weakness", "Stat reductions you apply are {}% stronger.", [25], [12], { fx: "deepWeakness" }),
       bn("Cheap Stone", "Stone Gaze costs 1 less MP (never below 1).", [], "Every second Stone Gaze costs 1 less MP (never below 1).", { fx: "cheapStone" })] },
     G27: { n: "Venom Mark Assassins", pieces: ["Dark Assassin's Hood", "Night-Dyed Leathers", "Poisoned Needle-Blade"], b: [
-      bn("Deeper Exposure", "Exposed adds +{}% damage per debuff on the target instead of +5%, still at most +25%.", [8], [6], { fx: "deeperExposure" }),
+      bn("Deeper Exposure", "Exposed adds +{}% damage per debuff on the target instead of +8%, still at most +40%.", [11], [9], { fx: "deeperExposure" }),
       bn("Exploit", "+{}% damage against enemies with 2 or more debuffs (statuses or lowered stats).", [15], [7], { fx: "exploit" }),
       bn("Long Marks", "Stat reductions you apply last 1 turn longer.", [], "Every second stat reduction you apply lasts 1 turn longer.", { fx: "longMarks" })] },
     G28: { n: "Shatterer's Chisel", pieces: ["Stonecutter's Cap", "Stonecutter's Smock", "Shatterer's Chisel"], b: [
