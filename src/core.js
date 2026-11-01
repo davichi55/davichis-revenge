@@ -152,7 +152,7 @@
   mv("regrow", "Regrow a Head", 24, 2, "self", { grp: "support", fx: "regrow", desc: "Heals itself over 3 turns." });
   // --- Colossus ---
   mv("stoneFist", "Stone Fist", 1, 0, "allEnemies", { basic: 1, grp: "basic", p: 0.55, el: "self", bonusDef: 0.2, desc: "A punch into the ground that hits every enemy, harder the higher this creature's own Defense. +1 MP." });   // area since 2026-11-01 (Danny; was one target, 0.8 + 30% Defense)
-  mv("challenge", "Challenge", 1, 1, "self", { grp: "support", fx: "challenge", desc: "Single-target attacks must hit it for 2 turns." });
+  mv("challenge", "Challenge", 1, 1, "self", { grp: "support", fx: "challenge", desc: "Single-target attacks must hit it for 3 turns." });
   mv("fortify", "Fortify", 4, 1, "self", { grp: "support", fx: "fortify", desc: "+40% Defense and Resistance for 2 turns." });
   mv("bulwark", "Bulwark", 6, 2, "ally", { grp: "support", fx: "bulwark", desc: "Takes the single-target hits meant for one ally until its next turn." });
   mv("counterSt", "Counter Stance", 8, 2, "self", { grp: "support", fx: "counterSt", desc: "Strikes back after every hit it takes until its next turn." });
@@ -992,7 +992,7 @@
       genericAttack(c, u, m, [t], { p: (0.7 + 0.45 * n) * (1 + fxv(u, "ruptureRite", 0.3, 0.15)), strong: true }); if (!n) say(c, "No bleed to burst."); else say(c, "The wounds burst open!");   // Rupture Rite
     },
     regrow(c, u) { addBuff(u, "hot", Math.round(0.9 * eff(u, "pow") * 0.7 * healBoost(u) * (1 + fxv(u, "regrowth", 0.5, 0.25))), 3); say(c, u.name + " regrows a head."); },   // Radiant Healing, Regrowth
-    challenge(c, u) { addBuff(u, "taunt", 1, 2 + gearMore(u, "provocation"), { ch: 1 }); say(c, u.name + " challenges the enemy!"); },   // Provocation; ch marks it for Heavy Sleeper
+    challenge(c, u) { addBuff(u, "taunt", 1, 3 + gearMore(u, "provocation"), { ch: 1 }); /* 3 turns (Danny 2026-11-01): buffs tick at the end of each round and a Colossus usually acts last, so 2 covered only one enemy round */ say(c, u.name + " challenges the enemy!"); },   // Provocation; ch marks it for Heavy Sleeper
     fortify(c, u) { addBuff(u, "def", 0.4, 2); addBuff(u, "res", 0.4, 2); say(c, u.name + " hardens its shell."); },
     bulwark(c, u, m, t) { hold(u, t, "cover", 1, { by: u }); say(c, u.name + " steps in front of " + (t === u ? "itself" : t.name) + "."); },
     counterSt(c, u) { hold(u, u, "counter", 1); say(c, u.name + " takes a counter stance."); },
