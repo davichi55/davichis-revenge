@@ -1719,9 +1719,10 @@
       T(["dustwingImp", "dustwingImp"], 1, 2, 3), T(["raidShieldbearer", "raidSlinger"], 2, 3, 4), T(["raidSlinger", "raidSlinger"], 1, 3, 4)],
     cistern: [T(["dripWraith"], 3, 3, 5), T(["boneCrab"], 3, 3, 5), T(["cisternEel"], 3, 3, 5), T(["mossGolem"], 2, 4, 5), T(["raidTorchbearer"], 2, 4, 5), T(["cisternEel", "cisternEel"], 2, 3, 4),
       T(["boneCrab", "dripWraith"], 2, 4, 5), T(["raidTorchbearer", "raidShieldbearer", "raidSlinger"], 2, 4, 5)],
-    basin: [T(["cinderlizardHound"], 3, 5, 7), T(["duneScorpionKnight"], 3, 5, 7), T(["sunScarabSwarm"], 3, 5, 7), T(["saltHarpy"], 3, 5, 7), T(["dustSphinxCub"], 3, 5, 7), T(["raidSpearman", "raidArcher"], 2, 5, 7),
+    // basin + quarry: Dune Scorpion Knights common enough for the Quarry Order (3 in about 8 fights; Danny 2026-11-01)
+    basin: [T(["cinderlizardHound"], 3, 5, 7), T(["duneScorpionKnight"], 5, 5, 7), T(["duneScorpionKnight", "duneScorpionKnight"], 3, 6, 7), T(["sunScarabSwarm"], 3, 5, 7), T(["saltHarpy"], 3, 5, 7), T(["dustSphinxCub"], 3, 5, 7), T(["raidSpearman", "raidArcher"], 2, 5, 7),
       T(["sandstitchJackal", "sandstitchJackal", "sandstitchJackal"], 1, 4, 5), T(["saltHarpy", "saltHarpy"], 1, 5, 6), T(["raidSpearman", "raidArcher", "raidShieldbearer"], 2, 6, 7)],
-    quarry: [T(["quarryboundGargoyle"], 3, 6, 8), T(["slagImp"], 3, 6, 8), T(["basaltSkin"], 3, 6, 8), T(["mirrorBeetle"], 2, 6, 8), T(["duneScorpionKnight"], 2, 6, 8), T(["slagImp", "slagImp"], 2, 6, 7),
+    quarry: [T(["quarryboundGargoyle"], 3, 6, 8), T(["slagImp"], 3, 6, 8), T(["basaltSkin"], 3, 6, 8), T(["mirrorBeetle"], 2, 6, 8), T(["duneScorpionKnight"], 5, 6, 8), T(["duneScorpionKnight", "duneScorpionKnight"], 2, 7, 8), T(["slagImp", "slagImp"], 2, 6, 7),
       T(["basaltSkin", "slagImp"], 2, 7, 8), T(["emberScorpion", "slagImp"], 1, 7, 8)],
     flats: [T(["cinderlizardHound"], 3, 7, 9), T(["emberScorpion"], 3, 7, 9), T(["slagImp"], 2, 7, 9), T(["cinderlizardHound", "cinderlizardHound"], 2, 7, 8), T(["emberScorpion", "slagImp", "slagImp"], 1, 7, 8), T(["saltHarpy", "emberScorpion"], 1, 7, 9)],
     boneMaze: [T(["mazeBat"], 3, 7, 9), T(["boneBullCalf"], 3, 7, 9), T(["mazeBat", "mazeBat"], 2, 7, 8), T(["boneBullCalf", "mazeBat"], 2, 7, 9), T(["mazeBat", "mazeBat", "mazeBat"], 1, 7, 8), T(["basaltSkin", "boneBullCalf"], 1, 8, 9)],
