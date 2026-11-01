@@ -4,11 +4,11 @@
   const S = window.Story;
   // a chest that hands out one piece of a set per visit to the dungeon (up to 3), then flasks
   S.gearChest = async (F, id, set, extra) => {
-    F.visit = F.visit || {}; if (F.visit[id]) { await UI.say([["narr", "The chest is empty."]]); return; }
+    F.visit = F.visit || {}; if (F.visit[id]) { await UI.say([["narr", "The chest is empty."]]); return false; }
     F.visit[id] = true; F.sfx("door");
     const n = G.flags["gc." + id] || 0;
     if (extra) await extra(F, n);
-    if (n < 3) { G.flags["gc." + id] = n + 1; await UI.say([["narr", `You open the chest. Inside: ${Data.pieceName(Data.pieceId(set, Data.SLOTS.find(s => !F.owned(Data.pieceId(set, s))) || "helm"))} (${Data.SETS[set].n}).`]]); F.giveGear(set, 1); }
+    if (n < 3) { G.flags["gc." + id] = n + 1; await UI.say([["narr", `You open the chest. Inside: ${Data.pieceName(Data.pieceId(set, Data.SLOTS.find(s => !F.owned(Data.pieceId(set, s))) || "helm"))} (${Data.SETS[set].n}).`]]); F.giveGear(set, 1); return n + 1 < 3 ? false : undefined; }   // false = the map keeps the chest closed: one piece per visit, three visits (like S.gearChest2)
     else { F.give("sunwater", 2); await UI.say([["narr", "Only two Sunwater Flasks this time. You already own the whole set."]]); }
   };
 

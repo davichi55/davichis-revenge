@@ -288,6 +288,7 @@ const Flow = (() => {
   F.go = (region, entry) => { F.goLater(region, entry); throw new Interrupt("go"); };   // always the last call of a script: unwinds it, then the new region starts
   F.enter = async (region, entry) => {
     const my = ++F.token; const prevRegion = G.region; G.region = region; G.entry = entry || "start";
+    if (Story.fixGearChests) Story.fixGearChests();
     const R = Data.REGIONS[region] || {};
     if (R.town) { G.lastTown = region; (G.visited = G.visited || {})[region] = true; }   // the ferry pass lists visited towns
     (G.been = G.been || {})[region] = true;   // every area entered, in order: the bestiary's Areas list

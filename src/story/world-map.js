@@ -74,6 +74,9 @@
   };
   S.chest.g4_wardenHalls = async F => { if (!F.f("k1.done")) { await UI.say([["narr", "The chest is wrapped in bone chains. Something guards it."]]); return false; } return S.gearChest(F, "maze.chest", "G4"); };
   S.chest["maze.chest"] = S.chest.g4_wardenHalls;
+  // the four chapter 1-2 set chests give one piece per visit; until 2026-11-01 the map marked them open after the first piece. Reopen those in older saves (called by flow.js F.enter).
+  const GEAR_CHESTS = [["g5_bullringBronze", "cistern.chest"], ["g20_masonHammer", "quarry.chest"], ["g12_cinderSerpentPit", "flats.chest"], ["g4_wardenHalls", "maze.chest"]];
+  S.fixGearChests = () => GEAR_CHESTS.forEach(([w, s]) => { if (G.flags["chest." + w] && (G.flags["gc." + s] || 0) < 3) delete G.flags["chest." + w]; });
   // ----- Saltgate -----
   const SG = T.saltgate;
   SG.r1 = rum("saltgate", 0, "gossip"); SG.r2 = rum("saltgate", 1, "kitemaker"); SG.r3 = rum("saltgate", 2, "gossip");
