@@ -24,7 +24,7 @@
     exits: [{ rect: [830, 1120, 140, 56], to: "veilSanctum", entry: "from_veilObservatory", push: [0, -1], need: "ch10.mentorWon", floor: "floor" }],
     triggers: [{ id: "ithielMeeting", rect: [700, 430, 400, 110], hide: "ch10.mentorWon" }],
     props,
-    npcs: [{ id: "mentor", art: "npcIthielGrey", name: "Master Ithiel", x: 900, y: 354, show: "ch10.mentorWon" }],
+    npcs: [{ id: "mentor", art: "npcIthielGrey", name: "Master Ithiel", x: 900, y: 354, show: "ch10.mentorWon", hide: "ch11.start" }],
     amb: { motes: 36, dust: 0xa8c0ff, tint: [0x242c48, 0.22], warm: [0xffc880, 0.03], sparkle: { terrain: ["glass"], color: 0xbfd8ff, rate: 5 } },
     dark: { ambient: 0.62, radius: 360, fireRadius: 190 },
     lights: [[900, 320, 220, 0.95], [900, 780, 240, 0.55], [600, 700, 120, 0.5], [1200, 700, 120, 0.5], [700, 1020, 110, 0.6], [1100, 1020, 110, 0.6], [420, 520, 110, 0.4], [1380, 520, 110, 0.4]],

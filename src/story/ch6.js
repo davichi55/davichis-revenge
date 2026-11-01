@@ -342,7 +342,9 @@
     bounty3: { enemy: "sirenEel", n: 3, text: "The siren eels in the harbour channel sing the pilots onto the rocks. Silence three of them. Out on the open sea, by the Salt Heron's wake." },
   };
   const bountyProgress = id => { const b = BOUNTY[id]; return b.goods ? Math.min(b.n, G.goods[b.goods] || 0) : Math.min(b.n, kills(b.enemy, id + ".base")); };
+  const BACK = { rhaz: "The front can spare me for an afternoon. The board cannot spare anyone.", peya: "Yes, I am also at the camp. I go where the questions are. Today they are here.", corvin: "Back from the front for lunch. It is one of our rules. The board is open while I eat." };
   const board = async (F, master) => {
+    if (F.f("ch10.start") && BACK[master]) { F.visit = F.visit || {}; if (!F.visit["back." + master]) { F.visit["back." + master] = true; await say(master, BACK[master]); } }   // they lead their people at Saltmere and the Bastion from chapter 10 on (2026-11-01 audit)
     const q = GUILD[master].bounty, b = BOUNTY[q], st = F.qstep(q);
     if (st === "done") { await say(master, "The board is clear of yours. Come back when the road has had time to grow new problems."); return; }
     if (st === undefined) {

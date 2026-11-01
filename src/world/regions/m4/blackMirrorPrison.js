@@ -39,10 +39,10 @@
     ],
     triggers: [{ id: "prisonEnter", rect: [120, 1440, 200, 120] }, { id: "wardenS16", rect: [1000, 1110, 200, 90] }, { id: "forgeS17", rect: [1920, 760, 180, 120], show: ["ch9.s16", "!ch9.s17"] }],
     chests: [{ id: "prisonStore", x: 540, y: 940, show: "ch9.s16" }],
-    npcs: [
-      { id: "cell1", art: "npcPrisonerA", name: "Prisoner", x: 930, y: 590, hint: "E / Space: cell 1" }, { id: "cell2", art: "npcSlave", name: "Prisoner", x: 1080, y: 590, hint: "E / Space: cell 2" }, { id: "cell3", art: "npcPrisonerB", name: "Prisoner", x: 1230, y: 590, hint: "E / Space: cell 3" },
-      { id: "cell4", art: "npcSlave", name: "Prisoner", x: 1380, y: 590, hint: "E / Space: cell 4" }, { id: "cell5", art: "npcPrisonerC", name: "Prisoner", x: 1530, y: 590, hint: "E / Space: cell 5" }, { id: "cell6", art: "npcMiner", name: "Prisoner", x: 1680, y: 590, hint: "E / Space: cell 6" },
-      { id: "cell7", art: "npcSlave", name: "Prisoner", x: 640, y: 740, hint: "E / Space: cell 7" }, { id: "cell8", art: "npcPrisonerB", name: "Prisoner", x: 760, y: 740, hint: "E / Space: cell 8" },
+    npcs: [   // cells 1-8 match ch9.js CELLS (deserter, flockman, tamer, laundress, miner, glass stag, scholar, boy) and leave once freed (prison.fN)
+      { id: "cell1", art: "npcPrisonerA", name: "Prisoner", hide: "prison.f1", x: 930, y: 590, hint: "E / Space: cell 1" }, { id: "cell2", art: "npcPrisonerB", name: "Prisoner", hide: "prison.f2", x: 1080, y: 590, hint: "E / Space: cell 2" }, { id: "cell3", art: "npcPrisonerC", name: "Prisoner", hide: "prison.f3", x: 1230, y: 590, hint: "E / Space: cell 3" },
+      { id: "cell4", art: "npcLaundress", name: "Prisoner", hide: "prison.f4", x: 1380, y: 590, hint: "E / Space: cell 4" }, { id: "cell5", art: "npcMiner", name: "Prisoner", hide: "prison.f5", x: 1530, y: 590, hint: "E / Space: cell 5" }, { id: "cell6", art: "npcChainedBeast", name: "Prisoner", hide: "prison.f6", x: 1680, y: 590, hint: "E / Space: cell 6" },
+      { id: "cell7", art: "npcScholarM", name: "Prisoner", hide: "prison.f7", x: 640, y: 740, hint: "E / Space: cell 7" }, { id: "cell8", art: "npcChild", name: "Prisoner", hide: "prison.f8", x: 760, y: 740, hint: "E / Space: cell 8" },
       { id: null, art: "npcWarden", x: 1180, y: 760, still: true }, { id: null, art: "npcCollarsmith", x: 2060, y: 850, still: true }, { id: null, art: "npcLegionGuard", x: 1010, y: 1000, still: true }, { id: null, art: "npcLegionGuard", x: 1190, y: 1000, still: true },
     ],
     props,

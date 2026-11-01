@@ -169,6 +169,27 @@
     },
     r1: M3.rum(BB, 0, "scout", {}), r2: M3.rum(BB, 1, "stallkeeper", {}), r3: M3.rum(BB, 2, "scout", {}),
   });
+  // after the Emperor (ch11.emperor) and into the post-game, the Bastion cast stops talking about tomorrow (2026-11-01 audit: only Saffa had an after-line)
+  const POST = {
+    hadiya: ["hadiya", ["The sum came in at the end, like I said it would. It was smaller than I feared. Go and spend the rest somewhere with a view.", "I cancelled the second passage. You are staying for a while, I think."]],
+    imela: ["imela", ["You came home after. That was all I wanted, and I got it. Now go and look at the sea, Sparrow. I am going to sleep for a week.", "Hm. Sit. No, sit. There. Now I can see you properly."]],
+    oldDunmar: ["dunmar", ["The cages are open, lad. All of them. I still check the latches every morning. Old hands.", "The scholars out at Starhaven want the wagon. The wagon wants me. I suppose we are going."]],
+    mentor: ["mentor", ["It is over. I keep waiting to feel that it is. They tell me the scholars at Starhaven have a telescope I could sit under for a year.", "You do not have to forgive me. You only have to go on. You are doing that very well."]],
+    captain: ["captain", ["Friend! The Heron goes wherever you point her now. North-east is full of islands nobody has charted. Nobody but me, soon.", "I said I would be at the dock for the return. I was. I was early. I did not cry. Salt in the eye."]],
+    rhaz: ["rhaz", ["The east barricade is firewood now. The Wardens are going home to the dunes. Loudly.", "Show me the creatures again. Slower, this time. There is time."]],
+    peya: ["peya", ["There was a roof on it. I went up and looked. Now: what will you be, when it is over? It is over.", "Everyone is asking what comes next. I am asking what came before. Nobody likes my questions. I like them very much."]],
+    corvin: ["corvin", ["We kept all three rules to the end, including lunch. The Saltwater Compact is buying. Come down to the quay.", "If you ever need a boat warm and waiting, you know where the quay is. Lunch is included. It is a rule."]],
+    kessa: ["kessa", ["Not bad. For a tin can. ...Fine. Very good. Don't make it weird. Emberwick says thank you, in a warm way.", "I'm going back to the Corps to burn the list my village was on. Then I'm going to find out what I'm for."]],
+    dorrin: ["dorrin", ["Boss says there is no more last stew. Only stew. Best news all year. Also, hello.", "I made you a pie for the road. It is the good one this time. Probably."]],
+    mayle: ["mayle", ["Page four hundred. I left it blank. I think that is where the rest of it goes.", "I kept the list of names. Nobody needs it now. I am keeping it anyway."]],
+  };
+  Object.keys(POST).forEach(id => {
+    const pre = T(BB)[id], [who, lines] = POST[id];
+    T(BB)[id] = async F => {
+      if (!after(F) || (id === "oldDunmar" && ["keyK1", "keyK2", "keyK3", "keyK4", "keyK5", "keyK6", "keyK7", "keyK8", "keyK9"].some(k => F.item(k) > 0))) return pre(F);
+      await say(who, cycle(id + "Post", lines));
+    };
+  });
 
   // ---------- 6.A the Great Stair ----------
   S.trigger.stairAssault = async F => {

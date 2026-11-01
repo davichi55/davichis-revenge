@@ -128,7 +128,7 @@
     res: ["Resistance", "Less damage from spells (same rule as Defense, against Power). It also makes enemy statuses (burn, poison, stun...) land less often (up to 80% of them miss), and makes control effects such as stun, freeze and being held land less often."],
     spd: ["Speed", "Who acts first each round. A creature with at least twice the Speed of the fastest enemy gets 3 actions that turn instead of 2. Slowing an enemy can push you over that line in the middle of a fight."],
     foc: ["Focus", "Starting MP in every fight: 1 MP for each full 10 Focus. Fights start at 0 MP otherwise, so Focus means your first spells come a turn or two sooner."],
-    lck: ["Luck", "Critical hits: 5% chance + 0.4% per Luck point (minus 0.2% per point of the target's Luck), between 2% and 60%; a critical hit does 1.5x damage. Luck makes your debuffs stronger, 1% per 10 Luck (Attack -25% becomes -27.5% at 100 Luck). Luck also raises the chance your statuses land and lowers the enemy's critical chance on you."],
+    lck: ["Luck", "Critical hits: 5% chance + 0.4% per Luck point (minus 0.2% per point of the target's Luck), between 2% and 60%; a critical hit does 1.5x damage. Luck makes your debuffs stronger: +1 point per 10 Luck, at most +15 (Attack -25% becomes -35% at 100 Luck). Luck also raises the chance your statuses land and lowers the enemy's critical chance on you."],
   };
   U.STYLE_TIP = {
     minotaur: "Hits hard and spends little MP: Attack first, HP so it survives in front, a little Speed.",

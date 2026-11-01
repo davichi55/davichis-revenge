@@ -18,7 +18,7 @@
       { id: "innkeeper", art: "innkeeper", name: "Innkeeper", x: 660, y: 520 },
       { id: "merchant", art: "npcTrader", name: "Weaver-merchant", x: 1230, y: 640 },
       { id: "yaxa", art: "npcYaxa", name: "Mother Yaxa", x: 880, y: 440 },
-      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 380, y: 760 },
+      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 380, y: 760, show: "wagon.at=plumeRest" },
       { id: "r1", art: "npcWeaver", name: "Weaver", x: 1150, y: 330 },
       { id: "r2", art: "npcGranny", name: "Old man", x: 700, y: 170 },
       { id: "r3", art: "npcChild", name: "Child with a kite-string", x: 560, y: 370 },

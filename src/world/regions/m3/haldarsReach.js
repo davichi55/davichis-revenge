@@ -16,7 +16,7 @@
   // rope lifts, stair rails, tents and the refugee quarter, hanging washing
   props.push(["m2_ropeStump", 300, 740], ["m2_ropeStump", 1400, 740], ["m2_ropeStump", 700, 740], ["m2_ropeStump", 990, 740], ["m2_clothesLine", 500, 880], ["m2_clothesLine", 1180, 900, { flip: true }], ["m2_clothesLine", 340, 1020]);
   props.push(["tent", 330, 840, { tint: 0xe0c8a0 }], ["m2_hideTent", 470, 800], ["sailorTent", 1250, 840, { tint: 0xd0c0b0 }], ["tent", 1330, 960], ["m2_hideTent", 1300, 1060], ["sailorTent", 560, 1040], ["tent", 440, 960], ["campCrates", 520, 890], ["m2_campCrates", 1120, 880], ["campfire", 410, 900], ["campfire", 1290, 900], ["m2_waterBarrel", 770, 880], ["m2_waterBarrel", 940, 870],
-    ["menagerieWagon", 350, 960, { solid: [60, 20] }], ["cart", 1090, 960], ["trough", 860, 1010], ["m2_cookPot", 640, 960], ["hayBales", 1000, 1040], ["m2_waterJars", 780, 1040]);
+    ["menagerieWagon", 350, 960, { solid: [60, 20], show: "wagon.at=haldarsReach" }], ["cart", 1090, 960], ["trough", 860, 1010], ["m2_cookPot", 640, 960], ["hayBales", 1000, 1040], ["m2_waterJars", 780, 1040]);
   props.push(["rubblePile", 140, 1000], ["m2_cliffBoulder", 150, 600], ["m2_cliffBoulder", 1560, 300], ["deadTree", 1600, 820], ["m2_deadSnag", 120, 330], ["cairn", 1480, 640]);
   World.def("haldarsReach", {
     name: "Haldar's Reach", w: 1700, h: 1200, base: "rock", music: "resistance", rim: 44,
@@ -36,13 +36,13 @@
     triggers: [{ id: "reachArrive", rect: [700, 960, 300, 110] }, { id: "siegeS6", rect: [1450, 490, 130, 140], show: "!ch5.s6" }],
     npcs: [
       { id: "innkeeper", art: "npcVillagerF", name: "Innkeeper", x: 612, y: 640 }, { id: "merchant", art: "npcTrader", name: "Merchant", x: 810, y: 640 },
-      { id: "saffa", art: "npcSaffa", name: "Commander Saffa", x: 880, y: 440 }, { id: "hadiya", art: "npcHadiya", name: "Hadiya Wells", x: 1180, y: 310 },
-      { id: "odan", art: "npcOdan", name: "Brother Odan", x: 1060, y: 780 }, { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 430, y: 1000, show: "ch5.escape" },
+      { id: "saffa", art: "npcSaffa", name: "Commander Saffa", x: 880, y: 440, hide: "ch10.start" }, { id: "hadiya", art: "npcHadiya", name: "Hadiya Wells", x: 1180, y: 310, hide: "ch10.start" },   // cast moves with the camp (2026-11-01 audit)
+      { id: "odan", art: "npcOdan", name: "Brother Odan", x: 1060, y: 780, hide: "ch10.s19" }, { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 430, y: 1000, show: "wagon.at=haldarsReach" },
       { id: "sefa", art: "npcSefa", name: "Sefa Quill", x: 1230, y: 590 }, { id: "lanternBuilder", art: "npcLanternBuilder", name: "Lantern-builder", x: 860, y: 340 },
       { id: "careCart", art: "npcCareKeeper", name: "Care cart", x: 1130, y: 1030 },
       { id: "refugee1", art: "npcRefugeeW", name: "Refugee", x: 520, y: 940 }, { id: "refugee2", art: "npcRefugeeM", name: "Refugee", x: 1300, y: 930 }, { id: "refugee3", art: "npcRefugeeW", name: "Refugee", x: 700, y: 1000 },
       { id: "r1", art: "npcVillagerM", name: "Refugee", x: 700, y: 800 }, { id: "r2", art: "npcGranny", name: "Old woman", x: 1210, y: 560 }, { id: "r3", art: "npcChild", name: "Boy", x: 900, y: 800 },
-      { id: "kessa", art: "npcKessa", name: "Kessa Vorn", x: 650, y: 860, show: "ch5.kessa" }, { id: "dorrin", art: "npcDorrin", name: "Dorrin Hale", x: 720, y: 900, show: "ch5.kessa" }, { id: "mayle", art: "npcMayle", name: "Mayle Tarn", x: 590, y: 900, show: "ch5.kessa" },
+      { id: "kessa", art: "npcKessa", name: "Kessa Vorn", x: 650, y: 860, show: "ch5.kessa", hide: "ch8.guest" }, { id: "dorrin", art: "npcDorrin", name: "Dorrin Hale", x: 720, y: 900, show: "ch5.kessa", hide: "ch8.guest" }, { id: "mayle", art: "npcMayle", name: "Mayle Tarn", x: 590, y: 900, show: "ch5.kessa", hide: "ch8.guest" },
       { id: null, art: "npcResistFighter", x: 1500, y: 570, still: true }, { id: null, art: "npcResistFighter", x: 1500, y: 540, still: true, flip: true }, { id: null, art: "npcResistFighter", x: 800, y: 1120, still: true },
       { id: null, art: "npcPorter", x: 600, y: 520, path: [[460, 520], [1000, 520]], speed: 24 }, { id: null, art: "npcVillagerF", x: 900, y: 880, path: [[450, 860], [1250, 860], [1250, 940], [450, 940]], loop: true, speed: 22 }, { id: null, art: "npcRefugeeM", x: 1000, y: 200, path: [[500, 220], [1250, 220]], speed: 20 },
     ],

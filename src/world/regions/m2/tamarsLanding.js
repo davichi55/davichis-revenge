@@ -18,7 +18,7 @@
     npcs: [
       { id: "innkeeper", art: "innkeeper", name: "Innkeeper", x: 330, y: 600 },
       { id: "merchant", art: "npcTrader", name: "Smuggler", x: 1180, y: 600 },
-      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 830, y: 205 },
+      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 830, y: 205, show: "wagon.at=tamarsLanding" },
       { id: "oma", art: "npcOma", name: "Oma Wren", x: 700, y: 560 },
       { id: "r1", art: "npcFisher", name: "Fisher", x: 470, y: 650 },
       { id: "r2", art: "npcNetMender", name: "Net-mender", x: 300, y: 270 },

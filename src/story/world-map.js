@@ -8,7 +8,7 @@
   // ----- Sandpiper Rest -----
   T.sandpiper.merchant = T.sandpiper.clerk;
   T.sandpiper.r1 = rum("sandpiper", 0, "traveller"); T.sandpiper.r2 = rum("sandpiper", 1, "wellwoman");
-  T.sandpiper.r3 = async F => { await S.rumourIdx(F, "sandpiper", 2, "caravaner"); await UI.say([["caravaner", "Soldiers on the main road since last night. If you must go east, go under it. The Burnt Gate cistern is old but dry enough."]]); };
+  T.sandpiper.r3 = async F => { await S.rumourIdx(F, "sandpiper", 2, "caravaner"); await UI.say([["caravaner", F.f("ci.karvan") ? "The soldiers pulled off the main road this morning. Somebody beat their optio down in the Burnt Gate, they say. Was that you? You look like it was you." : "Soldiers on the main road since last night. If you must go east, go under it. The Burnt Gate cistern is old but dry enough."]]); };   // the caravaner's second line changes after Karvan (2026-11-01 audit)
   // ----- Cistern -----
   T.cistern = { burntGateSign: async F => { await UI.say([["narr", "A carved sign: THE BURNT GATE. Under it, scratched with a knife: \"The Optio sits beyond. Bring shields.\""]]); } };
   Tr.karvanAmbush = Tr.karvan; S.chest.g5_bullringBronze = S.chest["cistern.chest"];

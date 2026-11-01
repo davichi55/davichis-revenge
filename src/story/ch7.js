@@ -167,6 +167,7 @@
   T("lowstep").ranna = async F => {
     if (!F.f("ch7.briefed")) { await say("ranna", "The chalk is on the floor by the vats. Come and look at it before you start asking me things."); return; }
     if (!F.f("ch7.sewers")) { await say("ranna", cycle("rn7.a", ["Pavo is at the drain grate behind the dye-works. He talks. Let him talk; a boy who talks is a boy who is not afraid.", "Sleep first, then the drain. I mean it. I have buried people who did it the other way round.", "Bread, thyme and a window left open. That is the whole plan, if you need it short."])); return; }
+    if (F.f("ch7.done")) { await say("ranna", cycle("rn7.c", ["The red cloth came down. We folded it corner to corner and put it away. It is a good cloth; it will keep for the next time.", "Imela folds like that. You know that now. Go on, your mother is waiting somewhere better than a laundry.", "The palace sends its washing again. Same sheets. Different hands. We notice."])); return; }   // after chapter 7 (2026-11-01 audit)
     await say("ranna", cycle("rn7.b", ["The washerwomen are watching the palace stairs. If something happens, they will hang the red cloth.", "You are up late. Good. So is the palace.", "Go. I will be here. Someone should be."]));
   };
   T("lowstep").pavo = async F => {

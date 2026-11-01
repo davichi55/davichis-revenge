@@ -38,8 +38,8 @@
     npcs: [
       { id: "innkeeper", art: "npcRebelCook", name: "Innkeeper", x: 360, y: 600, hint: "E / Space: the Gate Bunk" },
       { id: "merchant", art: "merchant", name: "Merchant", x: 1060, y: 380 },
-      { id: "imela", art: "npcImela", name: "Imela", x: 650, y: 700 },
-      { id: "kessa", art: "npcKessa", name: "Kessa Vorn", x: 900, y: 700, show: "ch8.guest" }, { id: "dorrin", art: "npcDorrin", name: "Dorrin Hale", x: 960, y: 770, show: "ch8.guest" }, { id: "mayle", art: "npcMayle", name: "Mayle Tarn", x: 860, y: 770, show: "ch8.guest" },
+      { id: "imela", art: "npcImela", name: "Imela", x: 650, y: 700, hide: "ch9.start" },   // cast moves with the camp (2026-11-01 audit)
+      { id: "kessa", art: "npcKessa", name: "Kessa Vorn", x: 900, y: 700, show: "ch8.guest", hide: "ch9.cell9" }, { id: "dorrin", art: "npcDorrin", name: "Dorrin Hale", x: 960, y: 770, show: "ch8.guest", hide: "ch9.cell9" }, { id: "mayle", art: "npcMayle", name: "Mayle Tarn", x: 860, y: 770, show: "ch8.guest", hide: "ch9.cell9" },
       { id: "scout", art: "npcScout", name: "Ranna's scout", x: 770, y: 400 },
       { id: "quartermaster", art: "npcQuartermaster", name: "Quartermaster", x: 1220, y: 380, hint: "E / Space: the bounty board" },
       { id: "r1", art: "npcFighter", name: "Young fighter", x: 480, y: 800 }, { id: "r2", art: "npcSentry", name: "Sentry", x: 680, y: 330 }, { id: "r3", art: "npcRebelCook", name: "Cook", x: 1010, y: 690 },

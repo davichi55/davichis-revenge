@@ -458,7 +458,7 @@ const Data = (() => {
       exits: [["dunes", "Back out to the dunes", s => !s.f["ci.karvan"]], ["karvanAmbush", "The sealed gate ahead", s => !s.f["ci.karvan"], "trigger"], ["dunes", "Out through the opened gate", s => s.f["ci.karvan"]]],
       things: [["g5_bullringBronze", "A sunk chest", s => true, "chest"]] },
     amberWells:{ n: "Amber Wells", bg: "bg_desert", arena: "desert", music: "oasis", town: "amber", inn: "amber",
-      npcs: [["innkeeper", "The Seventh Date"], ["merchant", "Market"], ["oldDunmar", "Old Dunmar's wagon"], ["redScholar", "Man in a red robe"], ["guildMaster", "Guild master"], ["r1", "Market gossip"], ["r2", "Old woman"], ["r3", "Labourer"]],
+      npcs: [["innkeeper", "The Seventh Date"], ["merchant", "Market"], ["oldDunmar", "Old Dunmar's wagon", s => !s.f["ch3.landed"]], ["redScholar", "Man in a red robe"], ["guildMaster", "Guild master"], ["r1", "Market gossip"], ["r2", "Old woman"], ["r3", "Labourer"]],
       exits: [["basin", "The basin road", s => true], ["maze", "The stair down to the Bone Maze", s => true]], autos: ["amber.arrive"] },
     basin:     { n: "Amber Wells Basin", bg: "bg_desert", arena: "desert", music: "desert", table: "basin", fields: true,
       exits: [["amberWells", "South to Amber Wells", s => true], ["dunes", "West to the dunes", s => true], ["quarry", "Scorpion Quarry", s => s.f["am.wagon"]], ["flats", "Cinderglass Flats", s => s.f["am.wagon"]], ["saltgate", "North to Saltgate", s => s.f["am.wagon"]], ["hollow", "The Hollow of the Sky-Stone", s => s.f["am.wagon"]]], things: [] },

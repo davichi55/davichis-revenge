@@ -288,6 +288,7 @@ const Flow = (() => {
   F.go = (region, entry) => { F.goLater(region, entry); throw new Interrupt("go"); };   // always the last call of a script: unwinds it, then the new region starts
   F.enter = async (region, entry) => {
     const my = ++F.token; const prevRegion = G.region; G.region = region; G.entry = entry || "start";
+    if (G.flags["ch5.escape"] && !G.flags["ch9.start"] && G.flags["wagon.at"] !== "haldarsReach") G.flags["wagon.at"] = "haldarsReach";   // saves from before 2026-11-01: chapter 5 never recorded the wagon reaching Haldar's Reach
     const R = Data.REGIONS[region] || {};
     if (R.town) { G.lastTown = region; (G.visited = G.visited || {})[region] = true; }   // the ferry pass lists visited towns
     (G.been = G.been || {})[region] = true;   // every area entered, in order: the bestiary's Areas list

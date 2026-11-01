@@ -659,6 +659,7 @@
     return done;
   }
   const UNSTOPPABLE = ["slow", "stun", "freeze", "chill", "petrify"];
+  const LUCK_DEBUFF_CAP = 0.15;
   function debuff(ctx, src, t, stat, val, turns) {
     if (!t.alive) return;
     if (val < 0 && stat === "spd" && t.unstoppable && !t.broken) { ctx.ev.push({ t: "immune", tgt: t, type: stat }); return; }
@@ -668,7 +669,7 @@
       if (src.evo) { const d = EVO.debuffMod(src); v *= d[0]; turns2 += d[1]; }   // evolution traits: stronger and longer debuffs
       if (src.fx) { v *= 1 + fxv(src, "deepWeakness", 0.25, 0.12) + (stat === "spd" ? fxv(src, "shrillEcho", 0.5, 0.25) : 0); turns2 += gearMore(src, "longMarks"); }   // Deep Weakness, Shrill Echo, Long Marks
       if (stat === "spd" && t.fx && chance(fxv(t, "ironNose", 0.25, 0.12))) { ctx.ev.push({ t: "resist", tgt: t }); return; }          // Iron Nose Ring
-      if (src.side === "p") v *= 1 + eff(src, "lck") * 0.001;   // Luck: a creature's own debuffs are 1% stronger per 10 Luck (Danny 2026-11-01: Luck did nothing for sure-hit debuffers like the Gorgon)
+      if (src.side === "p") v -= Math.min(LUCK_DEBUFF_CAP, Math.max(0, src.stats.lck * (1 + clamp(buffVal(src, "lck"), -0.8, 3))) * 0.001) * (t.dbm === undefined ? 1 : t.dbm);   // Luck: +1 point of debuff per 10 Luck, at most +15 (-25% -> -35% at 100 Luck; Danny 2026-11-01); bosses take their usual share
     }
     addBuff(t, stat, v, turns2, { force: 1, by: src });
     ctx.ev.push({ t: "debuff", tgt: t, stat, val: v, turns: turns2 });

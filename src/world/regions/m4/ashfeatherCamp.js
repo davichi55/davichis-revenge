@@ -32,10 +32,10 @@
     npcs: [
       { id: "innkeeper", art: "npcRebelCook", name: "Innkeeper", x: 300, y: 520, hint: "E / Space: the Cracked Mirror" },
       { id: "merchant", art: "merchant", name: "Merchant", x: 1150, y: 760 },
-      { id: "imela", art: "npcImela", name: "Imela", x: 940, y: 650 },
+      { id: "imela", art: "npcImela", name: "Imela", x: 940, y: 650, hide: "ch10.start" },   // cast moves with the camp (2026-11-01 audit)
       { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 340, y: 830, show: "wagon.at=ashfeatherCamp" },
       { id: "captainDahl", art: "npcCaptainDahl", name: "Captain Dahl", x: 1010, y: 650 },
-      { id: "kessa", art: "npcKessa", name: "Kessa Vorn", x: 760, y: 840, show: "ch9.cell9" }, { id: "dorrin", art: "npcDorrin", name: "Dorrin Hale", x: 820, y: 880, show: "ch9.cell9" }, { id: "mayle", art: "npcMayle", name: "Mayle Tarn", x: 700, y: 880, show: "ch9.cell9" },
+      { id: "kessa", art: "npcKessa", name: "Kessa Vorn", x: 760, y: 840, show: "ch9.cell9", hide: "ch10.start" }, { id: "dorrin", art: "npcDorrin", name: "Dorrin Hale", x: 820, y: 880, show: "ch9.cell9", hide: "ch10.start" }, { id: "mayle", art: "npcMayle", name: "Mayle Tarn", x: 700, y: 880, show: "ch9.cell9", hide: "ch10.start" },
       { id: "scout", art: "npcScout", name: "Scout", x: 1110, y: 520, hint: "E / Space: the bounty rope" },
       { id: "r1", art: "npcFighter", name: "Fighter", x: 560, y: 700 }, { id: "r2", art: "npcRebelMedic", name: "Medic", x: 1230, y: 480 }, { id: "r3", art: "npcSentry", name: "Sentry", x: 1380, y: 700 },
       { id: null, art: "npcFighter", x: 600, y: 860, path: [[420, 860], [900, 860]], speed: 16 }, { id: null, art: "npcRebelCook", x: 800, y: 740, still: true },

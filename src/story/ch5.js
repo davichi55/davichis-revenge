@@ -469,13 +469,13 @@
       await c.say([["dunmar", "Lad! Do not ask. Get in the wagon."], ["hero", "Dunmar. How did you..."], ["dunmar", "I said, do not ask."], ["odan", "Quiet now. The hounds can hear a heartbeat in this canyon. Heaven can wait until we are behind a wall."]]);
       await c.fade(true, 500);
     });
-    F.set("ch5.escape"); F.questDone("m_escape2"); F.quest("m_reach", 0);
+    F.set("ch5.escape"); F.set("wagon.at", "haldarsReach"); F.questDone("m_escape2"); F.quest("m_reach", 0);
     F.go("haldarsReach", "from_ashenCanyon");
   };
   S.done.canyonFire = F => F.f("ch5.escape");
   // ---------- Haldar's Reach (5.F): arrival, the resistance, Dunmar's wagon, Kessa's team ----------
   M3.region("haldarsReach", { n: "Haldar's Reach", arena: "occupied", music: "resistance", town: "haldarsReach", inn: "haldars", autos: ["reachArrive"],
-    npcs: [["innkeeper", "The Last Lantern"], ["merchant", "Reach stores"], ["saffa", "Commander Saffa Qarim"], ["hadiya", "Hadiya Wells"], ["odan", "Brother Odan"], ["oldDunmar", "Old Dunmar's wagon"], ["sefa", "Sefa Quill"],
+    npcs: [["innkeeper", "The Last Lantern"], ["merchant", "Reach stores"], ["saffa", "Commander Saffa Qarim"], ["hadiya", "Hadiya Wells"], ["odan", "Brother Odan"], ["oldDunmar", "Old Dunmar's wagon", s => s.f["wagon.at"] === "haldarsReach"], ["sefa", "Sefa Quill"],
       ["lanternBuilder", "The lantern-builder"], ["careCart", "The care cart"], ["refugee1", "A refugee"], ["refugee2", "A refugee"], ["refugee3", "A refugee"], ["kessa", "Kessa Vorn", s => s.f["ch5.kessa"]],
       ["dorrin", "Dorrin Hale", s => s.f["ch5.kessa"]], ["mayle", "Mayle Tarn", s => s.f["ch5.kessa"]], ["r1", "A refugee on the stair"], ["r2", "An old woman at the forge"], ["r3", "A boy with a bucket"]],
     exits: [["ashenCanyon", "South into the canyon", () => true], ["brassHarbour", "The east road to Brass Harbour", s => s.f["ch5.s6"]], ["siegeS6", "The gate", s => s.f["ch5.reach"] && !s.f["ch5.s6"], "trigger"]], things: [] });

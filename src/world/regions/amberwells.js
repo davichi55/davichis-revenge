@@ -20,7 +20,7 @@
     props: props.concat([
       ["guildHall", 1100, 400], ["amberHouse", 300, 300], ["amberDomeHouse", 480, 280], ["amberHouse", 1480, 640], ["amberDomeHouse", 1280, 680], ["amberHouse", 1580, 900], ["guildHall", 1300, 960], ["amberHouse", 320, 1000], ["amberDomeHouse", 560, 1050],
       ["amberStall", 800, 820], ["amberStall", 700, 900], ["amberStall", 1000, 860], ["dateCrate", 780, 880], ["dateCrate", 1040, 900], ["terracottaJars", 880, 900], ["terracottaJars", 1160, 800],
-      ["menagerieWagon", 1150, 780], ["hayBales", 1060, 760], ["amberWell", 960, 560], ["amberWell", 1450, 240, {}], ["ribArch", 1390, 292, { dy: -50 }],
+      ["menagerieWagon", 1150, 780, { hide: "ch3.landed" }], ["hayBales", 1060, 760], ["amberWell", 960, 560], ["amberWell", 1450, 240, {}], ["ribArch", 1390, 292, { dy: -50 }],
       ["lampPost", 840, 1000], ["lampPost", 960, 1000], ["trough", 1300, 820], ["camel", 1480, 820], ["camel", 200, 800], ["cart", 250, 880], ["tent", 180, 980],
       ["reedInnPlaceholder", 0, 0],
     ].filter(p => p[0] !== "reedInnPlaceholder")),
@@ -28,7 +28,7 @@
     npcs: [
       { id: "innkeeper", art: "innkeeper", name: "Innkeeper", x: 300, y: 350 },
       { id: "merchant", art: "merchant", name: "Merchant", x: 800, y: 870 },
-      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 1110, y: 830 },
+      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 1110, y: 830, hide: "ch3.landed" },   // the wagon moves on to Tamar's Landing in chapter 3
       { id: "guildMaster", art: "npcTrader", name: "Guild Master", x: 1100, y: 450 },
       { id: "redScholar", art: "npcRedScholar", name: "Red Scholar", x: 700, y: 1000 },
       { id: "r1", art: "npcVillagerF", name: "Villager", x: 960, y: 700 },

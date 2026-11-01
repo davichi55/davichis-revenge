@@ -11,7 +11,7 @@
     [["m2_watchTower", 450, 280], ["m2_watchTower", 1390, 280], ["m2_watchTower", 450, 915], ["m2_watchTower", 1390, 915], ["m2_fortGate", 1400, 470, { solid: false }], ["bastionTorch", 1370, 480, fx], ["bastionTorch", 1430, 480, fx], ["bastionTorch", 470, 650, fx], ["bastionTorch", 470, 750, fx]],
     [["m4_rebelBanner", 700, 285, fx], ["m4_rebelBanner", 1100, 285, fx], ["saltmereBannerConcord", 500, 300, fx], ["saltmereBannerFlock", 1330, 300, fx]],
     // the yard: inn, supply stall, command table, the wagon, the training ground
-    [["harborInn", 580, 430, { solid: [60, 20] }], ["fishStall", 1250, 400], ["m4_campCrates", 1330, 440], ["m4_supplyStack", 1190, 460], ["m2_barracks", 900, 340, { solid: [70, 20] }], ["menagerieWagon", 590, 780], ["saltmereHorseLine", 760, 830, fx]],
+    [["harborInn", 580, 430, { solid: [60, 20] }], ["fishStall", 1250, 400], ["m4_campCrates", 1330, 440], ["m4_supplyStack", 1190, 460], ["m2_barracks", 900, 340, { solid: [70, 20] }], ["menagerieWagon", 590, 780, { show: "wagon.at=dawnwatchBastion" }], ["saltmereHorseLine", 760, 830, fx]],
     [["bastionWell", 760, 520], ["bastionHayCart", 1260, 780], ["bastionCrates", 1330, 700], ["bastionCrates", 1290, 840], ["bastionTrainingPost", 1100, 800], ["bastionTrainingPost", 1160, 840], ["m2_spearRack", 1030, 840], ["bastionMessFire", 1000, 440, fx]],
     // the long table, benches and the lantern lines
     [["m4_longTable", 900, 600], ["stoneBench", 780, 650, fx], ["stoneBench", 1020, 650, fx], ["stoneBench", 780, 560, fx], ["stoneBench", 1020, 560, fx], ["m4_hangLanterns", 800, 520, fx], ["m4_hangLanterns", 1000, 520, fx], ["m4_hangLanterns", 800, 700, fx], ["m4_hangLanterns", 1000, 700, fx], ["campfire", 900, 480, fx]],
@@ -41,10 +41,10 @@
     scatter: [{ keys: [["grass", 3], ["grass2", 2], ["rocks", 1]], n: 28, seed: 41, on: ["grass", "sand"], opts: { solid: false }, scaleRange: [0.6, 0.9] }],
     npcs: [
       { id: "innkeeper", art: "innkeeper", name: "Innkeeper", x: 640, y: 480 }, { id: "merchant", art: "merchant", name: "Quartermaster", x: 1250, y: 440 },
-      { id: "imela", art: "npcImela", name: "Imela", x: 860, y: 540 }, { id: "saffa", art: "npcSaffa", name: "Saffa", x: 940, y: 540 }, { id: "hadiya", art: "npcHadiya", name: "Hadiya", x: 820, y: 640 }, { id: "rhaz", art: "npcRhaz", name: "Rhaz", x: 980, y: 640 },
-      { id: "peya", art: "npcPeya", name: "Peya", x: 1060, y: 590 }, { id: "corvin", art: "npcCorvin", name: "Corvin", x: 740, y: 590 }, { id: "mentor", art: "npcIthielGrey", name: "Master Ithiel", x: 1080, y: 620 },
+      { id: "imela", art: "npcImela", name: "Imela", x: 860, y: 540, hide: "sh.seen" }, { id: "saffa", art: "npcSaffa", name: "Saffa", x: 940, y: 540 }, { id: "hadiya", art: "npcHadiya", name: "Hadiya", x: 820, y: 640 }, { id: "rhaz", art: "npcRhaz", name: "Rhaz", x: 980, y: 640 },
+      { id: "peya", art: "npcPeya", name: "Peya", x: 1060, y: 590 }, { id: "corvin", art: "npcCorvin", name: "Corvin", x: 740, y: 590 }, { id: "mentor", art: "npcIthielGrey", name: "Master Ithiel", x: 1080, y: 620, hide: "sh.seen" },
       { id: "kessa", art: "npcKessa", name: "Kessa", x: 880, y: 660 }, { id: "dorrin", art: "npcDorrin", name: "Dorrin", x: 940, y: 665 }, { id: "mayle", art: "npcMayle", name: "Mayle", x: 700, y: 640 },
-      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 660, y: 790 }, { id: "captain", art: "npcBrisk", name: "Brisk", x: 280, y: 740 }, { id: "calendarScholar", art: "npcCalendarScholar", name: "Calendar scholar", x: 1190, y: 520 },
+      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 660, y: 790, show: "wagon.at=dawnwatchBastion" }, { id: "captain", art: "npcBrisk", name: "Brisk", x: 280, y: 740 }, { id: "calendarScholar", art: "npcCalendarScholar", name: "Calendar scholar", x: 1190, y: 520, hide: "sh.seen" },   // these three move on to Starhaven (2026-11-01 audit)
       { id: "r1", art: "npcRecruit", name: "Soldier", x: 1130, y: 780 }, { id: "r2", art: "npcCook", name: "Cook", x: 1030, y: 470 }, { id: "r3", art: "npcWarden", name: "Warden", x: 1470, y: 560 },
       { id: null, art: "npcRecruit", x: 1250, y: 700, path: [[1100, 740], [1340, 740]], speed: 18 }, { id: null, art: "npcWarden", x: 700, y: 330, path: [[520, 330], [1300, 330]], speed: 16 }, { id: null, art: "npcPorter", x: 380, y: 700, path: [[300, 700], [520, 720]], speed: 20 },
       { id: null, art: "npcResistFighter", x: 1520, y: 520, path: [[1500, 420], [1500, 700]], speed: 16 },
