@@ -49,7 +49,7 @@ function partyScreen0(startAt = 0) {
   const poisonMv = m => (Core.GEAR ? Core.GEAR.poisonMove(m) : gives(m, ["poison"])), HEALS = (Core.GEAR && Core.GEAR.HEAL_MOVES) || [];
   const TIDE = { style: "leviathan", what: "Tide (Leviathan style)" };
   const NEEDS = {
-    lockedShields: { move: "shieldWall" }, shieldBrother: { move: "bulwark" }, earthquake: { move: "earthshaker" }, chargedAttune: { move: "attune" }, sharperDetonate: { move: "detonate" },
+    lockedShields: { move: "shieldWall" }, shieldBrother: { move: "challenge" }, earthquake: { move: "earthshaker" }, chargedAttune: { move: "attune" }, sharperDetonate: { move: "detonate" },
     masterMixing: { passive: "comboMaster", what: "the Combo Master passive (Dragon style)" },
     deadEnd: { any: m => (m.bk || []).includes("impact"), what: "an impact move" },
     cheapCruelty: { any: m => m.mp === 1 && (m.p || 0) > 0, what: "a 1 MP attack" },

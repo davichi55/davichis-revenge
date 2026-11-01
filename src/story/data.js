@@ -238,7 +238,7 @@ const Data = (() => {
       bn("Antivenom Blood", "{}% of the status effects used against you fail.", [30], [15], { fx: "hardToRattle" })] },
     G16: { n: "Tower Shield Phalanx", pieces: ["Bronze Helm", "Tower Shield", "Short Stabbing Sword"], b: [
       bn("Wall", "+{}% Defense.", [20], [10], { st: { def: [20, 10] } }),
-      bn("Shield Brother", "Enemy attacks that Bulwark sends onto you deal {}% less damage.", [25], [12], { fx: "shieldBrother" }),
+      bn("Shield Brother", "Enemy attacks that Challenge or Bulwark pull onto you deal {}% less damage.", [25], [12], { fx: "shieldBrother" }),
       bn("Locked Shields", "Shield Wall cuts the team's damage taken by {}% instead of 30%.", [40], [35], { fx: "lockedShields" })] },
     G17: { n: "Stoneguard of the Sun Gate", pieces: ["Mirror-Disc Helm", "Mirror-Disc Plate", "Sun-Gate Shield"], b: [
       bn("Mirror Plate", "+{}% Resistance.", [20], [10], { st: { res: [20, 10] } }),

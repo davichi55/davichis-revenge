@@ -154,6 +154,7 @@
   mv("stoneFist", "Stone Fist", 1, 0, "allEnemies", { basic: 1, grp: "basic", p: 0.55, el: "self", bonusDef: 0.2, desc: "A punch into the ground that hits every enemy, harder the higher this creature's own Defense. +1 MP." });   // area since 2026-11-01 (Danny; was one target, 0.8 + 30% Defense)
   mv("challenge", "Challenge", 1, 1, "self", { grp: "support", fx: "challenge", desc: "Single-target attacks must hit it for 3 turns." });
   mv("fortify", "Fortify", 4, 1, "self", { grp: "support", fx: "fortify", desc: "+40% Defense and Resistance for 2 turns." });
+  mv("lightningRod", "Lightning Rod", 6, 2, "allEnemies", { kind: "spell", grp: "damage", fx: "lightningRod", desc: "Calls down the storm. If no enemy is wet, rain soaks them all. If any are, lightning strikes every wet enemy (double damage on wet), with this creature's Resistance." });   // replaced Bulwark in the Colossus list (Danny 2026-11-01)
   mv("bulwark", "Bulwark", 6, 2, "ally", { grp: "support", fx: "bulwark", desc: "Takes the single-target hits meant for one ally until its next turn." });
   mv("counterSt", "Counter Stance", 8, 2, "self", { grp: "support", fx: "counterSt", desc: "Strikes back after every hit it takes until its next turn." });
   mv("shieldWall", "Shield Wall", 12, 3, "team", { grp: "support", fx: "shieldWall", desc: "The whole team takes 30% less damage until its next turn." });
@@ -229,7 +230,7 @@
     minotaur: ["gore", "hoofStomp", "labCharge", "bullRush", "roar", "skullCrush", "bloodrage", "reckless", "stampede", "wrath", "decimate", "hornStandard"],
     harpy: ["talonSwipe", "featherVolley", "rend", "shriek", "tailwind", "cyclone", "dive", "hitAndRun", "snatch", "augurEye", "scatterGale"],
     hydra: ["venomBite", "toxicSpit", "searingBreath", "lacerate", "corrode", "fester", "plagueCloud", "rupture", "regrow", "hungryVine", "spreadBlight", "tripleFang"],
-    colossus: ["stoneFist", "challenge", "fortify", "bulwark", "counterSt", "shieldWall", "crushWeight", "earthshaker", "unbreakable", "thornwall", "idolStandIn", "unbowed"],
+    colossus: ["stoneFist", "challenge", "fortify", "lightningRod", "counterSt", "shieldWall", "crushWeight", "earthshaker", "unbreakable", "thornwall", "idolStandIn", "unbowed"],
     phoenix: ["emberPeck", "warmLight", "rejuvenate", "cleansingFlame", "flameWard", "healWave", "rebirth", "purge", "sunfire", "emberWish", "dawnVeil", "heartfireOffering"],
     gorgon: ["serpentLash", "hiss", "venomMark", "petrifyingGaze", "crackArmour", "shatterShield", "coil", "stoneGaze", "curseOfStone", "verdictOfStone", "hissingChoir"],
     dragon: ["claw", "ember", "torrent", "frostBreath", "thunderclap", "attune", "inferno", "blizzard", "detonate", "stormchain", "stormGathering", "cometCall"],
@@ -463,7 +464,7 @@
     let m = 1;
     if (el) m *= 1 - fxv(tgt, "warded", 0.15, 0.07);
     if (el === "fire") m *= 1 - fxv(tgt, "ashenSkin", 0.2, 0.1);
-    if (ctx.lastRedirect === tgt && src.side !== tgt.side) m *= 1 - fxv(tgt, "shieldBrother", 0.25, 0.12);
+    if ((ctx.lastRedirect === tgt || hasBuff(tgt, "taunt")) && src.side !== tgt.side) m *= 1 - fxv(tgt, "shieldBrother", 0.25, 0.12);   // Shield Brother: hits that Bulwark or Challenge pull onto you
     if (kind === "phys" && tgt.hp < tgt.maxHp * 0.5) m *= 1 - fxv(tgt, "spiteSkin", 0.2, 0.1);
     const tb = getBuff(tgt, "taunt"); if (tb && tb.ch) m *= 1 - fxv(tgt, "heavySleeper", 0.15, 0.07);
     if (tgt.tide >= 3) m *= 1 - fxv(tgt, "pressureSkin", 0.15, 0.07);
@@ -698,7 +699,7 @@
       ev.push({ t: "reflect", src, tgt }); ev.push({ t: "say", text: tgt.name + " reflects the spell!" });
       return damage(ctx, tgt, src, base * 0.6, kind, { el, refl: 1, off: 1 });
     }
-    const A = src.side === "p" && src.style === "gorgon" && kind === "spell" ? eff(src, "spd") * GORGON_SPD : src.side === "p" && src.style === "colossus" && kind === "phys" ? Math.max(eff(src, "atk"), eff(src, "def") * COLOSSUS_DEF) : eff(src, kind === "phys" ? "atk" : "pow"), D = eff(tgt, kind === "phys" ? "def" : "res") * (src.fx ? 1 - fxv(src, "armourPiercer", 0.15, 0.07) : 1) * (src.evo ? EVO.pierce(src, kind) : 1);
+    const A = tg.useStat ? eff(src, tg.useStat) * (tg.statK || 1) : src.side === "p" && src.style === "gorgon" && kind === "spell" ? eff(src, "spd") * GORGON_SPD : src.side === "p" && src.style === "colossus" && kind === "phys" ? Math.max(eff(src, "atk"), eff(src, "def") * COLOSSUS_DEF) : eff(src, kind === "phys" ? "atk" : "pow"), D = eff(tgt, kind === "phys" ? "def" : "res") * (src.fx ? 1 - fxv(src, "armourPiercer", 0.15, 0.07) : 1) * (src.evo ? EVO.pierce(src, kind) : 1);
     let v = base * A * (A / (A + D)) * (0.9 + 0.2 * rnd());
     // level gap (Danny 2026-10-31): an enemy more than 5 levels below its target hits 4% softer per extra level, never below 35%
     const gap = src.side === "e" && tgt.side === "p" && src.level && tgt.level ? tgt.level - src.level - 5 : 0; if (gap > 0) v *= Math.max(0.35, 1 - 0.04 * gap);
@@ -1101,6 +1102,12 @@
       ts.forEach(a => { if (a !== u) { healFlat(c, a, paid, { src: u }); cleanse(c, a, 1, u); } }); say(c, u.name + " gives its own heartfire to the team.");
     },
     verdictOfStone(c, u, m, t, ts) { genericAttack(c, u, m, ts); if (t.alive) { const v = Math.min(0.3, 0.1 + 0.04 * debuffCount(t)); addBuff(t, "marked", v, 3, { force: 1, by: u }); c.ev.push({ t: "mark", src: u, tgt: t, val: v }); say(c, "A verdict of stone is passed on " + t.name + "."); } },
+    lightningRod(c, u, m, t, ts) {   // no wet enemy: rain soaks them all; otherwise lightning on every wet one (the Conductive rule doubles it and dries them), both powered by Resistance
+      const foes = ctxOpp(c, u).filter(f => f.alive), wet = foes.filter(f => f.st.wet);
+      if (!wet.length) { say(c, u.name + " raises its arms. The sky opens and rain hammers down."); genericAttack(c, u, Object.assign({}, m, { el: "water", p: 0.3 }), foes, { pre: tg => { tg.useStat = "res"; } }); foes.forEach(f => { if (f.alive) addStatus(c, u, f, "wet", 1, { sure: 1 }); }); return; }
+      say(c, "Lightning leaps down " + u.name + " into every wet enemy!");
+      genericAttack(c, u, Object.assign({}, m, { el: "shock", p: 1.2 }), wet, { pre: tg => { tg.useStat = "res"; } });
+    },
     stormchain(c, u, m, t, ts) { genericAttack(c, u, m, ts); const others = ctxOpp(c, u).filter(f => f.alive && f !== t); if (others.length) { say(c, "The lightning arcs!"); genericAttack(c, u, m, others, { pmul: 0.5 }); } },
     stormGathering(c, u) { u.psyche = 0.7; say(c, u.name + " gathers the storm."); },
     cometCall(c, u, m, t) { (c.later = c.later || []).push({ kind: "comet", src: u, tgt: t, left: 2, p: m.p }); say(c, "A comet is falling toward " + t.name + "..."); },
@@ -1937,10 +1944,13 @@
         if (shaky && u.hp / u.maxHp > 0.65 && ok("idolStandIn")) return R("idolStandIn", shaky);
         if (foes.length > 1 && !team.some(a => hasBuff(a, "thorns")) && ok("thornwall")) return R("thornwall", u);
         if (hurt && ok("bulwark") && !team.some(a => hasBuff(a, "cover"))) return R("bulwark", hurt);
+        const wetFoes = foes.filter(f => f.st.wet && !(f.reflect && f.reflect.includes("shock")));
+        if (ok("lightningRod") && wetFoes.length && (wetFoes.length >= 2 || foe.boss || foes.length === 1)) return R("lightningRod", u);   // conduct the wet
         if (!hasBuff(u, "taunt") && ok("challenge") && (foe.boss || foes.length === 1) && team.length > 1) return R("challenge", u);
         if (p2 && ["erodingRune", "serpentSpout", "redHotBronze", "plantThePillar"].includes(p2.move) && u.mp >= 3) return p2;
         if (!hasBuff(u, "def") && ok("fortify") && (foe.boss || tele)) return R("fortify", u);
         if (foes.length > 1 && ok("earthshaker")) return R("earthshaker", u);
+        if (!wetFoes.length && foes.length > 1 && u.mp >= 4 && ok("lightningRod")) return R("lightningRod", u);   // soak them all, then conduct next time
         if (foe.broken && ok("crushWeight")) return R("crushWeight", F("crushWeight"));
         if (u.mp >= 5 && ok("crushWeight")) return R("crushWeight", F("crushWeight"));
         if (u.mp >= 6 && ok("counterSt") && !hasBuff(u, "counter")) return R("counterSt", u);
