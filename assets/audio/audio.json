@@ -1047,8 +1047,8 @@
   "file": "sfx/roar.mp3",
   "type": "sfx",
   "loop": false,
-  "vol": 0.71,
-  "seconds": 2.8
+  "vol": 0.8,
+  "seconds": 3
  },
  "roarSmall": {
   "file": "sfx/roarSmall.mp3",
@@ -1929,5 +1929,33 @@
   "vol": 0.9,
   "seconds": 100,
   "cat": "dungeon"
+ },
+ "roarInsect": {
+  "file": "sfx/roarInsect.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 1,
+  "seconds": 3
+ },
+ "roarQuake": {
+  "file": "sfx/roarQuake.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.6,
+  "seconds": 3
+ },
+ "deathCry": {
+  "file": "sfx/deathCry.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.9,
+  "seconds": 3
+ },
+ "deathCollapse": {
+  "file": "sfx/deathCollapse.mp3",
+  "type": "sfx",
+  "loop": false,
+  "vol": 0.9,
+  "seconds": 4
  }
 }

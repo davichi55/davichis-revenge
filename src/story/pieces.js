@@ -48,7 +48,7 @@
     xocoPoisoner: { lv: 14, title: "The Legion's Taster", gold: 380,
       meet: [["narr", "In the ruins a woman sits on a fallen head of stone, stirring a skull cup with one finger. The jungle is very quiet around her. Nothing is buzzing."]], thought: "Everything here is dead. Even the flies.",
       after: [["narr", "She drops the skull cup. What spills out eats a little hole in the stone."]] },
-    rootWitch: { lv: 19, title: "Mother of the Blood Lilies", gold: 520,
+    rootWitch: { die: "deathCry", lv: 19, title: "Mother of the Blood Lilies", gold: 520,
       meet: [["narr", "Deep in the caves the roots grow up the walls into the shape of a woman. Red lilies open in her hair when she turns her head toward you."]], thought: "Do not breathe the flowers. Do not breathe the flowers.",
       after: [["narr", "The roots pull back into the walls. The lilies close, one by one, and drop."]] },
     condorKeeper: { lv: 20, title: "Master of the High Towers", gold: 540,
@@ -63,13 +63,13 @@
     mirrorChamberlain: { lv: 40, title: "Keeper of the Court's Faces", gold: 1100,
       meet: [["narr", "A tall man in gold and jade stands by the sundial. His face is a mirror. When he bows, his reflection in the pond bows a moment later, and so does a second one beside him."]], thought: "Which one of them is breathing?",
       after: [["narr", "The mirror mask cracks. Behind it there is only a tired, ordinary face, and then not even that."]] },
-    nightDrinker: { lv: 47, title: "Priest of the Black Sun", gold: 1300,
+    nightDrinker: { die: "deathCry", lv: 47, title: "Priest of the Black Sun", gold: 1300,
       meet: [["narr", "Behind the altar something pale unfolds from the shadow. Its cloak is made of red feathers. Its teeth are not."]], thought: "Light. I need light.",
       after: [["narr", "It shrieks and falls apart into a cloud of red feathers that blow out through the pyramid's mouth."]] },
     stormcaller: { lv: 61, title: "Who Brings the Rain Indoors", gold: 1700,
       meet: [["narr", "Rain is falling inside the archive. In the middle of it a woman in dark blue holds her hands apart, and lightning walks between her fingers."]], thought: "Stay close to her. The storm hits whoever hangs back.",
       after: [["narr", "The rain stops in the middle of a drop. Water runs off the shelves and out under the doors."]] },
-    deepAngler: { lv: 80, title: "The Light in the Deep", gold: 2400,
+    deepAngler: { die: "deathCry", lv: 80, title: "The Light in the Deep", gold: 2400,
       meet: [["narr", "A small light bobs in the black water, warm and gold, like a lamp in a window at home. Behind it, very slowly, a mouth opens."]], thought: "Do not reach for the light.",
       after: [["narr", "The great jaw sinks back into the dark. The little gold light goes out last."]] },
   };
@@ -84,7 +84,7 @@
       const res = await F.boss(Core.bossFoes(id, o.lv), { bg: F.arenaOf(G.region), intro: Core.ENEMIES[id].intro, music: "boss" });
       if (res !== "win") return;
       F.set("x." + id);
-      await S.stage(async c => { await c.say(o.after); F.sfx("coin"); F.gold(o.gold); c.follow(); });
+      await S.stage(async c => { if (o.die) c.sfx(o.die); await c.say(o.after); F.sfx("coin"); F.gold(o.gold); c.follow(); });
     };
   });
 

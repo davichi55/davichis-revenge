@@ -57,7 +57,7 @@
     F.set("x.cinderLich");
     await S.stage(async c => {
       await c.pan(TOMB.x, TOMB.y + 20, 600);
-      c.sfx("rockFall"); c.shake(3, 600); c.fx("dust", TOMB.x, TOMB.y + 30, { n: 24, scale: 1.6, color: 0x605860 });
+      c.sfx("deathCry"); c.sfx("rockFall"); c.shake(3, 600); c.fx("dust", TOMB.x, TOMB.y + 30, { n: 24, scale: 1.6, color: 0x605860 });
       await c.say([["narr", "The bones fall in a heap of ash and glass. One by one the candles go out."]]);
       c.fx("glow", TOMB.x, TOMB.y + 20, { color: 0xffd36a, ms: 2000 }); c.fx("sparkle", TOMB.x, TOMB.y + 10, { r: 26, ms: 1800 });
       F.sfx("coin"); F.gold(220); F.give("ember", 2); F.give("sunwater", 2);

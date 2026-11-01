@@ -116,7 +116,7 @@
       const h = c.hero;
       c.actor("mg", { art: "boneBullCalf", x: h.x - 10, y: h.y - 96, h: 120 });
       await c.wait(300);
-      c.sfx("roar"); await c.anim("mg", "shake", { ms: 500 });
+      c.sfx("deathCollapse"); await c.anim("mg", "shake", { ms: 500 });
       await c.anim("mg", "fall", { dir: "left", ms: 600 });
       c.sfx("rockFall"); c.shake(4, 700); c.fx("dust", h.x - 10, h.y - 96, { n: 22, scale: 1.8, color: 0xd8d0b8 });
       await c.anim("mg", "fadeOut", { ms: 900 });
@@ -235,7 +235,7 @@
     await S.stage(async c => {
       c.actor("bearer", { art: "duneBearer", x: 750, y: 262, h: 190 });
       await c.pan(750, 235, 700);
-      c.sfx("roar"); await c.anim("bearer", "bow"); c.shake(4, 900);
+      c.sfx("roarQuake"); await c.anim("bearer", "bow"); c.shake(4, 900);
       c.sfx("quake"); c.flash("#fff2c8", 400); c.fx("explosion", 750, 215, { scale: 1.2, shake: 3 });
       await c.wait(700);
       await c.say([["narr", "The Bearer sinks to its knees. The sky-stone cracks in half and thuds into the sand. The giant looks at you, and for an instant its eyes are not angry. Then it is still."]]);

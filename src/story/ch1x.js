@@ -147,7 +147,7 @@
       c.sfx("rumble"); c.shake(2, 700); c.fx("dust", WELL.x, WELL.y - 6, { n: 18, scale: 1.4, color: 0xd8c0a0 });
       await c.say([["narr", "The sand at the lip of the well starts to slide inward with a long, dry hiss, like water running out of a basin."]]);
       c.actor("we", { art: "wellEater", x: WELL.x - 28, y: WELL.y + 42, h: 96, face: "left", alpha: 0 });   // in front of the well, crawling out of it
-      c.sfx("roar"); c.shake(5, 600); c.fx("dust", WELL.x, WELL.y - 10, { n: 30, scale: 2, color: 0xd8c0a0 });
+      c.sfx("roarInsect"); c.shake(5, 600); c.fx("dust", WELL.x, WELL.y - 10, { n: 30, scale: 2, color: 0xd8c0a0 });
       await c.anim("we", "fadeIn", { ms: 500 }); c.emote("hero", "!");
       await c.anim("we", "lunge", { dx: -16 });
       await c.say([["narr", "Two mandibles as long as spears come up out of the well, then a flat head crusted with glass. A small bronze bell hangs from one jaw on a scrap of caravan rope."], hero("Forty-one mouths. Something here ate well.")]);
@@ -161,7 +161,7 @@
     await S.stage(async c => {
       c.actor("we", { art: "wellEater", x: WELL.x - 28, y: WELL.y + 42, h: 96, face: "left" });
       await c.pan(WELL.x, WELL.y - 20, 600);
-      c.sfx("roar"); await c.anim("we", "shake", { ms: 600 });
+      c.sfx("deathCollapse"); await c.anim("we", "shake", { ms: 600 });
       c.sfx("rockFall"); c.shake(4, 700); c.fx("dust", WELL.x, WELL.y - 8, { n: 26, scale: 1.8, color: 0xd8c0a0 });
       await c.anim("we", "fadeOut", { ms: 1000 }); c.remove("we");
       await c.say([["narr", "It drags itself down into the well, and the sand closes over it and stops moving."]]);

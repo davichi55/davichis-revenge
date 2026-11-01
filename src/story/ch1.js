@@ -94,7 +94,7 @@
     await Cinema.boss({ id: "raidOptioKarvan", name: "Optio Karvan", title: "Ninth Cohort", bg: "cistern", music: "boss" });
     const res = await F.boss([F.mkEnemy("raidOptioKarvan", 6), F.mkEnemy("raidShieldbearer", 5, " A"), F.mkEnemy("raidShieldbearer", 5, " B")], { intro: "Optio Karvan raises his shield wall!", music: "boss" });
     if (res !== "win") return;
-    F.set("ci.karvan"); F.giveGear("G16", 3); G.ch = 2; F.questDone("m_cistern");
+    F.set("ci.karvan"); F.giveGear("G16", 3); G.ch = 2; F.questDone("m_cistern"); F.quest("m_research", 0);   // Dunmar's last words: "Amber Wells. Look for a wagon." (2026-11-01: the journal was empty between Karvan and Amber Wells)
     G.best.raidOptioKarvan = Object.assign(G.best.raidOptioKarvan || {}, { seen: 1, beaten: 1 });
     // the beaten Optio limps off into the dark, his crew drags itself after him, and the bronze gate opens by itself
     await S.stage(async c => {

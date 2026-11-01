@@ -95,7 +95,7 @@
       c.sfx("rumble"); c.shake(4, 1600); c.fx("dust", ENG.x, ENG.y + 60, { n: 30, scale: 2, color: 0x8090a0 });
       await c.anim("eng", "fadeIn", { ms: 1200 }); c.fx("glow", ENG.x, ENG.y + 20, { color: 0x9fd8ff, ms: 2600 });
       await c.say([["narr", "The furnace in its chest catches. The hum becomes a roar you feel in your ribs, and every pipe on its back draws breath."]]);
-      c.emote("hero", "!"); c.shake(6, 900); c.sfx("roar");
+      c.emote("hero", "!"); c.shake(6, 900); c.sfx("roarQuake");
       await c.say([["engine", "MOTION DETECTED."], ["engine", "INTAKE SUSPENDED 14,600 DAYS AGO. STOCK: 0."], ["engine", "NEW STOCK DETECTED: 4."], ["engine", "RESUMING HARVEST."]]);
       await c.anim("eng", "lunge", { dx: -20 });
       await c.say([["narr", "Every horn on its back turns toward you at once."], hero("This is not a creature. There is nothing in there to talk to.")]);
@@ -107,7 +107,7 @@
     await S.stage(async c => {
       c.actor("eng", { art: "harvestEngine", x: ENG.x, y: ENG.y + 70, h: 150, face: "left" });
       await c.pan(ENG.x, ENG.y + 60, 900);
-      c.sfx("rockFall"); await c.anim("eng", "shake", { ms: 1400 }); c.shake(5, 1400);
+      c.sfx("deathCollapse"); c.sfx("rockFall"); await c.anim("eng", "shake", { ms: 1400 }); c.shake(5, 1400);
       await c.say([["engine", "YIELD... INSUFFICIENT."], ["engine", "CYCLE... ENDED."]]);
       await c.anim("eng", "fadeOut", { ms: 2200 }); c.remove("eng");
       await c.say([["narr", "The furnace goes dark. Up on the sorting floor, one tank after another goes dark too, and in each a small light rises and drifts away up the causeway, toward the hatch and the open sky."]]);
