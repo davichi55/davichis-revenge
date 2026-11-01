@@ -434,13 +434,15 @@
       }
       this.npcMoved = moved; if (moved.length) console.info("World: moved unreachable NPCs in " + this.rid + ": " + moved.join(", "));
     }
-    // a small speech bubble over talkable NPCs once you are fairly close: solid until you have spoken to them (flag talked.<region>.<id>, set on the first talk), faint after (Danny 2026-11-01)
+    // a small speech bubble over talkable NPCs once you are fairly close: solid while they have something you have not heard (never talked to, or a fact their talk checks has changed since: talkIsNew), faint otherwise
     updateTalkMarks() {
       if (!this.textures.exists("talkBubble")) return;
       this.talkMarks = this.talkMarks || new Map();
       for (const n of this.npcs || []) {
         if (!n.id || !n.s) continue;
-        let b = this.talkMarks.get(n); const show = n.on && n.s.visible && !this.busy && Math.hypot(this.pos.x - n.x, this.pos.y - n.y) < 300, talked = !!this.flags["talked." + this.rid + "." + n.id];
+        let b = this.talkMarks.get(n); const show = n.on && n.s.visible && !this.busy && Math.hypot(this.pos.x - n.x, this.pos.y - n.y) < 300;
+        if (show && (!n.newAt || this.time.now - n.newAt > 500)) { n.newAt = this.time.now; n.isNew = this.talkIsNew(n); }   // re-checked twice a second
+        const talked = !n.isNew;
         if (!show) { if (b) b.setVisible(false); continue; }
         if (!b) { b = this.add.image(n.x, n.y, "talkBubble").setOrigin(0.5, 1); this.talkMarks.set(n, b); }
         b.setVisible(true).setAlpha(talked ? 0.28 : 1).setPosition(Math.round(n.x + 10), Math.round(n.y - n.s.displayHeight - 4 + Math.sin(this.time.now * 0.004 + n.x) * 2)).setDepth(9050);
@@ -886,7 +888,34 @@
       if (tr) { this.fireTrigger(tr); return; }
       if (n && dn <= dc && dn <= dg) this.talkTo(n); else if (ch && dc <= dg && !this.flags["chest." + ch.id]) this.openChest(ch); else if (g) this.gatherAt(g);
     }
-    async talkTo(n) { if (n.id) this.flags["talked." + this.rid + "." + n.id] = true; if (n.s && n.sh) { const dx = this.pos.x - n.x; if (Math.abs(dx) > 6 && !n.noTurn) n.s.setFlipX(n.art && /^npc/.test(n.art) ? dx > 0 : n.s.flipX); } await this.runHook("talk", n.id, this.rid); }
+    async talkTo(n) {
+      if (n.id) this.flags["talked." + this.rid + "." + n.id] = true; if (n.s && n.sh) { const dx = this.pos.x - n.x; if (Math.abs(dx) > 6 && !n.noTurn) n.s.setFlipX(n.art && /^npc/.test(n.art) ? dx > 0 : n.s.flipX); }
+      const dep = n.id ? this.watchTalk() : null;
+      try { await this.runHook("talk", n.id, this.rid); } finally { if (dep) this.endWatch(dep, this.rid + "." + n.id); }
+    }
+    // which story facts a conversation checks (Danny 2026-11-01: the bubble should turn solid again when a character has new lines): while it runs, reads of G.flags and G.quests
+    // are recorded; afterwards their values are kept in G.talkDeps[region.id]. When one of them changes later, the character probably says something new (talkIsNew).
+    watchTalk() {
+      if (typeof G === "undefined" || !G || !G.flags) return null;
+      const reads = { f: new Set(), q: new Set() }, of = G.flags, oq = G.quests || {}, skip = /^(talked\.|trig\.|chest\.|gather\.|qfull\.|piece\.)/;
+      const pf = new Proxy(of, { get: (t, k) => { if (typeof k === "string" && !skip.test(k)) reads.f.add(k); return t[k]; } });
+      const pq = new Proxy(oq, { get: (t, k) => { if (typeof k === "string") reads.q.add(k); return t[k]; } });
+      G.flags = pf; G.quests = pq;
+      return { reads, pf, pq, of, oq, g: G };
+    }
+    endWatch(d, key) {
+      if (d.g === G) { if (G.flags === d.pf) G.flags = d.of; if (G.quests === d.pq) G.quests = d.oq; }   // a lost fight inside the talk can replace G (checkpoint): leave the new one alone
+      if (typeof G === "undefined" || !G) return;
+      const snap = { f: {}, q: {} }; d.reads.f.forEach(k => (snap.f[k] = G.flags[k] === undefined ? null : G.flags[k])); d.reads.q.forEach(k => (snap.q[k] = G.quests[k] === undefined ? null : G.quests[k]));
+      (G.talkDeps = G.talkDeps || {})[key] = snap;
+    }
+    talkIsNew(n) {
+      if (!this.flags["talked." + this.rid + "." + n.id]) return true;
+      const d = typeof G !== "undefined" && G && G.talkDeps && G.talkDeps[this.rid + "." + n.id]; if (!d) return false;
+      for (const k in d.f) if ((G.flags[k] === undefined ? null : G.flags[k]) !== d.f[k]) return true;
+      for (const k in d.q) if ((G.quests[k] === undefined ? null : G.quests[k]) !== d.q[k]) return true;
+      return false;
+    }
     async openChest(c) { const r = await this.runHook("chest", c.id); if (r !== false) { this.flags["chest." + c.id] = true; this.refresh(); this.spark(c.x, c.y - 14); } }
     async gatherAt(g) { const r = await this.runHook("gather", g.id); if (r !== false) { this.flags["gather." + g.id] = true; this.refresh(); this.spark(g.x, g.y - 10); } }
     pointerDown(p) {
