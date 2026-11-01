@@ -22,7 +22,7 @@
       { rect: [3054, 960, 56, 100], to: "oasisOutskirts", entry: "from_glassRidges", push: [-1, 0] },
       { rect: [2590, 650, 120, 60], to: "hummingHollow", entry: "from_glassRidges", push: [0, 1] },
     ],
-    triggers: [{ id: "duskWhisperer", rect: [2000, 1790, 160, 120], once: false, when: "dunes.dusk", mark: true }, { id: "ridgesArrive", rect: [1430, 1830, 150, 90] }],
+    triggers: [{ id: "duskWhisperer", rect: [2000, 1790, 160, 120], once: false, when: "dunes.dusk", hide: "l1.done", mark: true }, { id: "ridgesArrive", rect: [1430, 1830, 150, 90] }],
     chests: [{ id: "ridgeChest1", x: 2470, y: 1830 }, { id: "ridgeChest2", x: 370, y: 1880 }],
     gather: [{ id: "lostBell", x: 620, y: 880, label: "Something bright in the glass", color: "gold", show: "bell.started" }, { id: "ridgeVials", x: 1760, y: 540, label: "Humming glass sand", color: "gold" }],
     npcs: [

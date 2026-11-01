@@ -33,6 +33,7 @@
   if (window.Cinema && Cinema.bossLooks) Cinema.bossLooks.cinderLich = { entrance: "rise", glow: 0x9fd8ff };
   const TOMB = { x: 760, y: 210 };
   if (D.REGIONS.flats) D.REGIONS.flats.things.push(["cinderLich", "The black glass coffin", s => !s.f["x.cinderLich"], "trigger"]);
+  (S.done = S.done || {}).cinderLich = F => F.f("x.cinderLich");   // the coffin stays marked and can be tried again until the Lich is beaten (a flee or a loss no longer uses it up)
   S.trigger.cinderLich = async F => {
     if (F.f("x.cinderLich")) return;
     await S.stage(async c => {

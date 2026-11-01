@@ -26,7 +26,7 @@
       { rect: [590, 1400, 110, 50], to: "caravanGraveyard", entry: "from_dunes", push: [0, -1], need: "sp.seen", blocked: "ch1x.wait" },
       { rect: [1700, 40, 130, 50], to: "oasisOutskirts", entry: "from_dunes", push: [0, 1], need: "sp.seen", blocked: "ch1x.wait" },
     ],
-    triggers: [{ id: "dunesArrival", rect: [180, 250, 160, 100] }, { id: "duskWhisperer", rect: [1700, 1000, 160, 120], once: false, when: "dunes.dusk", mark: true }],
+    triggers: [{ id: "dunesArrival", rect: [180, 250, 160, 100] }, { id: "duskWhisperer", rect: [1700, 1000, 160, 120], once: false, when: "dunes.dusk", hide: "l1.done", mark: true }],
     chests: [{ id: "dunesBuriedChest", x: 1790, y: 1170, show: "ch6.buriedDoorOpen" }],
     props: [["builderDoorBuried", 1750, 1130, { solid: [40, 18] }], ["cairn", 1230, 1300], ["cairn", 1900, 380], ["cairn", 300, 300], ["deadTree", 1260, 780], ["camelBones", 1140, 600], ["camelBones", 1560, 940]],
     scatter: [

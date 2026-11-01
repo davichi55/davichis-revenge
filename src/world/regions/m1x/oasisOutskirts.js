@@ -23,7 +23,7 @@
       { rect: [1500, 1710, 130, 50], to: "whisperglassDunes", entry: "from_oasisOutskirts", push: [0, -1] },
       { rect: [2604, 740, 56, 120], to: "glassRidges", entry: "from_oasisOutskirts", push: [-1, 0] },
     ],
-    triggers: [{ id: "duskWhisperer", rect: [1900, 1400, 160, 120], once: false, when: "dunes.dusk", mark: true }],
+    triggers: [{ id: "duskWhisperer", rect: [1900, 1400, 160, 120], once: false, when: "dunes.dusk", hide: "l1.done", mark: true }],
     chests: [{ id: "oasisChest", x: 2330, y: 1210 }],
     gather: [{ id: "pearlMussels", x: 1100, y: 960, label: "Mussels in the shallows", color: "gold" }],
     npcs: [

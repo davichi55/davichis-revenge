@@ -288,7 +288,8 @@ const Flow = (() => {
   F.go = (region, entry) => { F.goLater(region, entry); throw new Interrupt("go"); };   // always the last call of a script: unwinds it, then the new region starts
   F.enter = async (region, entry) => {
     const my = ++F.token; const prevRegion = G.region; G.region = region; G.entry = entry || "start";
-    if (G.flags["ci.karvan"] && G.quests.m_research === undefined) G.quests.m_research = 0;   // saves from before 2026-11-01: the chapter 2 main quest now starts when Karvan falls
+    if (G.flags["ci.karvan"] && G.quests.m_research === undefined) G.quests.m_research = 0;
+    if (Story.done) for (const id in Story.done) { try { if (G.flags["trig." + id] && !Story.done[id](F)) delete G.flags["trig." + id]; } catch (e) {} }   // a story trigger that was used up without its step finishing (fled or lost) is given back (saves from before 2026-11-01)   // saves from before 2026-11-01: the chapter 2 main quest now starts when Karvan falls
     if (G.flags["ch5.escape"] && !G.flags["ch9.start"] && G.flags["wagon.at"] !== "haldarsReach") G.flags["wagon.at"] = "haldarsReach";   // saves from before 2026-11-01: chapter 5 never recorded the wagon reaching Haldar's Reach
     const R = Data.REGIONS[region] || {};
     if (R.town) { G.lastTown = region; (G.visited = G.visited || {})[region] = true; }   // the ferry pass lists visited towns

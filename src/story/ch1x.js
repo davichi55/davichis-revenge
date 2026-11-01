@@ -136,6 +136,7 @@
   // ---------- the Well-Eater: optional boss in the dry well of the Dry Waystation (rules: src/rules/bosses.js; fire glazes its sand pit) ----------
   if (window.Cinema && Cinema.bossLooks) Cinema.bossLooks.wellEater = { entrance: "rise", glow: 0x8fe8d8 };
   const WELL = { x: 830, y: 800 };
+  (S.done = S.done || {}).wellEater = F => F.f("x.wellEater");   // marked and retryable until beaten
   S.trigger.wellEater = async F => {
     if (F.f("x.wellEater")) return;
     await S.stage(async c => {
