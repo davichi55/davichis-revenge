@@ -346,7 +346,7 @@
 
   const ITEMS = {
     potion: { name: "Potion", target: "ally", desc: "Heals 25% of max HP." },
-    antidote: { name: "Antidote", target: "ally", desc: "Clears burn, bleed, poison, shock, chill and slow from one ally, and any lowered stat. Not Wet." },
+    antidote: { name: "Antidote", target: "ally", desc: "Clears poison and bleed from one ally." },   // Danny 2026-11-01: the full cleanse made cleansing moves pointless; that is the Clearwater Tonic's job
     ashenEmber: { name: "Ashen Ember", target: "allyDown", desc: "Revives a fallen ally at 30% HP." },
     tonic: { name: "Clearwater Tonic", target: "ally", desc: "Cures every status, Wet included, and every lowered stat on one ally." },
     soulDew: { name: "Soul Dew", target: "allyDown", desc: "Revives a fallen ally at full HP. Works once per fight." },
@@ -1699,7 +1699,7 @@
     ctx.ev.push({ t: "use", src: u, move: it.name, item: true, tgt: target });
     u.usedItem = true;
     if (itemId === "potion") healFlat(ctx, target, Math.round(target.maxHp * 0.25), { silent: 1 });
-    else if (itemId === "antidote") cleanse(ctx, target, 0);
+    else if (itemId === "antidote") ["poison", "bleed"].forEach(k => { if (target.st[k]) { delete target.st[k]; ctx.ev.push({ t: "cleanse", tgt: target, type: k }); } });
     else if (itemId === "ashenEmber") revive(ctx, target, 0.3);
     else if (itemId === "tonic") { Object.keys(target.st).forEach(k => { delete target.st[k]; ctx.ev.push({ t: "cleanse", tgt: target, type: k }); }); target.buffs = target.buffs.filter(b => b.val >= 0); target.moss = 0; if (target.omen) target.omen = null; }
     else if (itemId === "soulDew") { if (ctx.dewUsed) say(ctx, "The dew has already been spent this fight."); else { ctx.dewUsed = true; revive(ctx, target, 1); } }
@@ -2060,7 +2060,7 @@
     if (items.ashenEmber > 0 && ctx.party.some(a => !a.alive && !a.rise) && !movesOf(u).includes("rebirth")) return { item: "ashenEmber", target: ctx.party.find(a => !a.alive && !a.rise) };
     const healer = team.some(a => a.style === "phoenix" && a.mp >= 1);
     if (items.potion > 0 && worst.hp / worst.maxHp < (healer ? 0.3 : 0.4) && !(u.style === "phoenix" && worst.hp / worst.maxHp > 0.2)) return { item: "potion", target: worst };
-    if (items.antidote > 0) { const sick = team.find(a => (a.st.poison && a.st.poison.n >= 3) || (a.st.burn && a.st.burn.n >= 3) || (a.st.bleed && a.st.bleed.n >= 3)); if (sick && sick.hp / sick.maxHp < 0.6 && !movesOf(u).includes("cleansingFlame")) return { item: "antidote", target: sick }; }
+    if (items.antidote > 0) { const sick = team.find(a => (a.st.poison && a.st.poison.n >= 3) || (a.st.bleed && a.st.bleed.n >= 3)); if (sick && sick.hp / sick.maxHp < 0.6 && !movesOf(u).includes("cleansingFlame")) return { item: "antidote", target: sick }; }
     return null;
   }
 

@@ -135,7 +135,7 @@ const Data = (() => {
   const TIER_FLASK = [8, 12, 20, 32, 48, 68, 90, 110];
   const ITEMS = {
     sunwater: { n: "Sunwater Flask",  d: "Heals one creature by 25% of its max HP.", f: 1.0, use: "heal" },
-    antidote: { n: "Reed Antidote",   d: "Clears burn, bleed, poison, shock, chill and slow from one creature, and any lowered stat. Not Wet.", f: 0.6 },
+    antidote: { n: "Reed Antidote",   d: "Clears poison and bleed from one creature.", f: 1.25 },   // was a full cleanse for 5 kal (Danny 2026-11-01); the Clearwater Tonic is the full cleanse
     tonic:    { n: "Clearwater Tonic", d: "Cures every status, Wet included, and every lowered stat on one creature.", f: 1.5 },
     ember:    { n: "Ashen Ember",     d: "Revives a fallen creature at 30% HP, in a fight or from the menu.", f: 4, use: "revive" },
     incense:  { n: "Wayfarer's Incense", d: "Halves the fight rate for about 5 minutes of walking.", f: 2, use: "charm" },
@@ -443,7 +443,7 @@ const Data = (() => {
   // bg: art in assets/ ; fights: arena bg ("desert" | "ruins") ; npc ids are what talk() receives
   const REGIONS = {
     orun:      { n: "Orun, the Scholars' Academy", bg: "bg_desert", arena: "desert", music: "town", town: "orun", inn: "orun",
-      npcs: [["mentor", "Master Ithiel", s => !s.f["pro.packed"]], ["oldDunmar", "Old Dunmar"], ["labMaster", "Lab Master"], ["merchant", "Academy shop"], ["innkeeper", "The Lamp and Quill"], ["r1", "A villager"], ["r2", "A passer-by"], ["r3", "A scholar"], ["lockedLabDoor", "The locked lab door"]],
+      npcs: [["mentor", "Master Ithiel", s => !s.f["pro.packed"]], ["oldDunmar", "Old Dunmar", s => !s.f["pro.packed"]], ["labMaster", "Lab Master"], ["merchant", "Academy shop"], ["innkeeper", "The Lamp and Quill"], ["r1", "A villager"], ["r2", "A passer-by"], ["r3", "A scholar"], ["lockedLabDoor", "The locked lab door"]],
       exits: [["undercroft", "Down to the Undercroft", s => s.f["pro.dunmar"] && !s.f["pro.lessons"]], ["vault", "The creature vault", s => s.f["pro.lessons"] && !s.f["pro.packed"], "trigger"], ["dunes", "Out through the south gate", s => s.f["pro.packed"]]],
       things: [], autos: ["orun.start", "orun.vaultAuto"] },
     undercroft:{ n: "Orun Undercroft", bg: "bg_ruins", arena: "ruins", music: "dungeon", table: "undercroft", fields: false,

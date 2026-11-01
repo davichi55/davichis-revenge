@@ -38,10 +38,10 @@
       { keys: ["stoneBench", "lampPost"], n: 0 },
     ],
     npcs: [
-      { id: "mentor", art: "mentor", name: "Mentor", x: 1090, y: 478 },
+      { id: "mentor", art: "mentor", name: "Mentor", x: 1090, y: 478, hide: "pro.packed" },   // he stays behind to hold the soldiers when you flee with your pack (ch0 vault scene)
       { id: "innkeeper", art: "innkeeper", name: "Innkeeper", x: 330, y: 1040 },
       { id: "merchant", art: "merchant", name: "Shopkeeper", x: 740, y: 1040 },
-      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 1470, y: 556 },
+      { id: "oldDunmar", art: "npcDunmar", name: "Old Dunmar", x: 1470, y: 556, hide: "pro.packed" },   // he flees with the wagon to Amber Wells
       { id: "labMaster", art: "scholar", name: "Lab Master", x: 1700, y: 530 },
       { id: "r1", art: "npcVillagerF", name: "Villager", x: 355, y: 440 },
       { id: "r2", art: "npcVillagerM", name: "Villager", x: 880, y: 650 },
