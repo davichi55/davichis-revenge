@@ -434,16 +434,16 @@
       }
       this.npcMoved = moved; if (moved.length) console.info("World: moved unreachable NPCs in " + this.rid + ": " + moved.join(", "));
     }
-    // a small speech bubble over talkable NPCs you have not spoken to yet, once you are fairly close (flag talked.<region>.<id> is set on the first talk)
+    // a small speech bubble over talkable NPCs once you are fairly close: solid until you have spoken to them (flag talked.<region>.<id>, set on the first talk), faint after (Danny 2026-11-01)
     updateTalkMarks() {
       if (!this.textures.exists("talkBubble")) return;
       this.talkMarks = this.talkMarks || new Map();
       for (const n of this.npcs || []) {
         if (!n.id || !n.s) continue;
-        let b = this.talkMarks.get(n); const show = n.on && n.s.visible && !this.busy && !this.flags["talked." + this.rid + "." + n.id] && Math.hypot(this.pos.x - n.x, this.pos.y - n.y) < 300;
+        let b = this.talkMarks.get(n); const show = n.on && n.s.visible && !this.busy && Math.hypot(this.pos.x - n.x, this.pos.y - n.y) < 300, talked = !!this.flags["talked." + this.rid + "." + n.id];
         if (!show) { if (b) b.setVisible(false); continue; }
         if (!b) { b = this.add.image(n.x, n.y, "talkBubble").setOrigin(0.5, 1); this.talkMarks.set(n, b); }
-        b.setVisible(true).setPosition(Math.round(n.x + 10), Math.round(n.y - n.s.displayHeight - 4 + Math.sin(this.time.now * 0.004 + n.x) * 2)).setDepth(9050);
+        b.setVisible(true).setAlpha(talked ? 0.28 : 1).setPosition(Math.round(n.x + 10), Math.round(n.y - n.s.displayHeight - 4 + Math.sin(this.time.now * 0.004 + n.x) * 2)).setDepth(9050);
       }
     }
     makePeople() {
