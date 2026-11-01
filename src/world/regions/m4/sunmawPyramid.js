@@ -48,6 +48,8 @@
     lights,
     dark: { ambient: 0.5, radius: 280, color: 0x0a0204 },
     encounter: { zones: [{ rect: [1000, 80, 400, 280], table: null, rate: 0 }, { rect: [0, 0, 2400, 1600], table: "sunmaw", rate: 22 }] },
-    amb: { birds: 0, butterflies: [], water: false, motes: 44, dust: 0xe0a080, tint: [0x4a1010, 0.16], warm: [0xff6030, 0.08], weather: ["embers"], vignette: 1 },
+    amb: {
+      hunters: [{ id: "nightDrinker", art: "nightDrinker", lane: [[1140, 700], [1260, 700]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "nightDrinker", hide: "x.nightDrinker" }],   // optional gear-piece boss (src/story/pieces.js, rules/m7.js)
+      birds: 0, butterflies: [], water: false, motes: 44, dust: 0xe0a080, tint: [0x4a1010, 0.16], warm: [0xff6030, 0.08], weather: ["embers"], vignette: 1 },
   });
 })();

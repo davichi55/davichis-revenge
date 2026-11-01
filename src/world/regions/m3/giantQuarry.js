@@ -33,6 +33,8 @@
     scatter: [{ keys: [["rubblePile", 2], ["m2_rubbleHeap", 1], ["sandBoulder", 1], ["oreHeap", 1]], n: 36, on: ["red", "sand"], seed: 111, scaleRange: [0.8, 1.05] }, { keys: [["vaultRubble", 1], ["rubblePile", 1]], n: 10, on: ["floor"], seed: 112 }],
     lights: [[1200, 330, 220, 0.5]],
     encounter: { table: "giantQuarry", rate: 22 },
-    amb: { birds: 0, butterflies: [], dust: 0xd8b890, motes: 50, tint: [0x4a3020, 0.08], warm: [0xffa050, 0.05], smoke: [[1960, 1250, 0x707070]] },
+    amb: {
+      hunters: [{ id: "ironKnuckle", art: "ironKnuckle", lane: [[1440, 400], [1560, 400]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "ironKnuckle", hide: "x.ironKnuckle" }],   // optional gear-piece boss (src/story/pieces.js, rules/m7.js)
+      birds: 0, butterflies: [], dust: 0xd8b890, motes: 50, tint: [0x4a3020, 0.08], warm: [0xffa050, 0.05], smoke: [[1960, 1250, 0x707070]] },
   });
 })();

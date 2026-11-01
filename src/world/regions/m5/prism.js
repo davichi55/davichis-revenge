@@ -40,7 +40,9 @@
     gather: [{ id: "prism1", x: 300, y: 490, label: "tablet", color: 0xe8c860, show: "!lore.sunPiece3" }],
     props,
     encounter: { table: "prism", rate: 22 },
-    amb: { motes: 36, dust: 0xffe8c0, tint: [0x242030, 0.2], sparkle: { terrain: ["glass", "paved"], color: 0xffe9a8, rate: 6 } },
+    amb: {
+      hunters: [{ id: "stormcaller", art: "stormcaller", lane: [[1990, 880], [2110, 880]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "stormcaller", hide: "x.stormcaller" }],   // optional gear-piece boss (src/story/pieces.js, rules/m7.js)
+      motes: 36, dust: 0xffe8c0, tint: [0x242030, 0.2], sparkle: { terrain: ["glass", "paved"], color: 0xffe9a8, rate: 6 } },
     dark: { ambient: 0.66, radius: 230, fireRadius: 200 },
     lights: [[240, 880, 180, 0.8], [520, 640, 180, 0.8], [980, 920, 180, 0.8], [1220, 600, 180, 0.8], [1560, 900, 180, 0.8], [1700, 620, 180, 0.8], [2050, 700, 260, 1], [790, 790, 110, 0.7], [1370, 790, 110, 0.7], [1860, 790, 110, 0.7], [300, 470, 120, 0.7]],
     checkFlags: { "prism.d1": true, "prism.d2": true, "prism.d3": true, "k8.done": true },

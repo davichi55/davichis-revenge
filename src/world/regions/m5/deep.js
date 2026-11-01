@@ -30,7 +30,9 @@
     chests: [{ id: "g40_deepCurrentTrench", x: 2400, y: 300, show: "k9.done" }],
     props, npcs,
     encounter: { table: "deep", rate: 20 },
-    amb: { motes: 70, dust: 0x80d0ff, tint: [0x041838, 0.36], warm: [0x40a0ff, 0.03], sparkle: { terrain: ["glass", "paved"], color: 0x90e0ff, rate: 10 }, water: true },
+    amb: {
+      hunters: [{ id: "deepAngler", art: "deepAngler", lane: [[1190, 1350], [1310, 1350]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "deepAngler", hide: "x.deepAngler" }],   // optional gear-piece boss (src/story/pieces.js, rules/m7.js)
+      motes: 70, dust: 0x80d0ff, tint: [0x041838, 0.36], warm: [0x40a0ff, 0.03], sparkle: { terrain: ["glass", "paved"], color: 0x90e0ff, rate: 10 }, water: true },
     dark: { ambient: 0.92, radius: 190, fireRadius: 190 },
     lights: PATH.map(p => [p[0], p[1], 190, 0.7]).concat([[400, 1600, 180, 0.7], [850, 1450, 170, 0.6], [850, 850, 170, 0.6], [1250, 650, 170, 0.6], [1700, 750, 170, 0.6], [1900, 1100, 170, 0.6], [2100, 1300, 170, 0.6], [2300, 1050, 170, 0.6], [2400, 420, 300, 1], [2400, 300, 160, 0.8]]),
     checkFlags: { "k9.done": true, "deep.path": true },

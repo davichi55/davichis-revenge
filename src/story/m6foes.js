@@ -85,7 +85,7 @@
       });
       const res = await F.fight([F.mkEnemy("bountyHunter", h.lv), F.mkEnemy("houndOfTheCohort", h.lv - 1, " B")], { intro: "Itzcan swings his bola!", music: "boss" });
       if (res !== "win") return;
-      F.set("x." + id);
+      F.set("x." + id); if (S.pieceFrom) S.pieceFrom(F, "hunt:" + id);   // Itzcan carries a gear piece (src/story/pieces.js)
       await S.stage(async c => {
         const p = c.hero; c.actor("itz", { art: "bountyHunter", x: p.x + 70, y: p.y - 6, h: 62, face: "left" });
         if (n < 2) {

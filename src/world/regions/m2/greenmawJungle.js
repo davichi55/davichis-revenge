@@ -39,7 +39,7 @@
     amb: { birds: 14, water: false, dust: 0xd8e0b0, motes: 50, tint: [0x183018, 0.16], warm: [0xffd890, 0.05], night: 0.2, butterflies: K.flies(W, H, 6),
       armies: [{ id: "patrol1", lane: [[800, 1060], [1300, 1020], [1800, 1030], [2200, 1040]], mode: "pingpong", speed: 36, rows: 2, cols: 4, sight: 240, table: "jungleRoad" }, { id: "patrol2", lane: [[1500, 1010], [2000, 1060], [2450, 1000]], mode: "loop", speed: 32, rows: 2, cols: 3, sight: 240, table: "jungleRoad" }],
       chase: { lane: [[1700, 1030], [2000, 1050], [2300, 1020], [2550, 1000]], table: "jungleRoad" }, standoff: { x: 1250, y: 1230, table: "jungleRoad" },
-      hunters: [{ id: "hunter1", art: "bountyHunter", lane: [[1080, 1750], [1150, 1400], [1080, 1150]], mode: "pingpong", speed: 34, sight: 230, trigger: "hunter1", hide: "x.hunter1", cry: "There you are. Hold still." }] },   // Itzcan the bounty hunter (src/story/m6foes.js) on the redroot trail
+      hunters: [{ id: "xocoPoisoner", art: "xocoPoisoner", lane: [[2120, 1640], [2240, 1640]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "xocoPoisoner", hide: "x.xocoPoisoner" }, { id: "hunter1", art: "bountyHunter", lane: [[1080, 1750], [1150, 1400], [1080, 1150]], mode: "pingpong", speed: 34, sight: 230, trigger: "hunter1", hide: "x.hunter1", cry: "There you are. Hold still." }] },   // Itzcan the bounty hunter (src/story/m6foes.js) on the redroot trail
   };
   const trees = [["m2_jungleTreeA", 3], ["m2_jungleTreeB", 2], ["m2_giantCeiba", 1], ["m2_stranglerFig", 1.5], ["m2_jungleTreeSlim", 2], ["m2_fanPalm", 1.5], ["m2_bananaTree", 0.8], ["m2_treeFern", 1]];
   def.props = [

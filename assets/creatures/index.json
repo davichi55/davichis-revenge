@@ -2058,5 +2058,57 @@
  "bronzeJuggernaut": {
   "w": 107,
   "h": 132
+ },
+ "stoneSinger": {
+  "w": 124,
+  "h": 212
+ },
+ "singingStone": {
+  "w": 48,
+  "h": 101
+ },
+ "xocoPoisoner": {
+  "w": 133,
+  "h": 210
+ },
+ "rootWitch": {
+  "w": 141,
+  "h": 216
+ },
+ "bloodLily": {
+  "w": 50,
+  "h": 84
+ },
+ "condorKeeper": {
+  "w": 165,
+  "h": 210
+ },
+ "redCondor": {
+  "w": 138,
+  "h": 112
+ },
+ "blindOracle": {
+  "w": 118,
+  "h": 210
+ },
+ "ironKnuckle": {
+  "w": 137,
+  "h": 214
+ },
+ "mirrorChamberlain": {
+  "w": 109,
+  "h": 212
+ },
+ "nightDrinker": {
+  "w": 136,
+  "h": 214
+ },
+ "stormcaller": {
+  "w": 180,
+  "h": 214
+ },
+ "deepAngler": {
+  "w": 186,
+  "h": 220
  }
 }

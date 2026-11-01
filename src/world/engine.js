@@ -690,7 +690,8 @@
       // bounty hunters (rules/m6.js): one figure in its own sprite walks a lane, comes for you when it sees you, and runs story trigger `trigger` on touch (not a random table)
       (a.hunters || []).forEach((d, i) => {
         const key = "cr_" + d.art; if (!this.textures.exists(key)) return;
-        const g = this.addGroup(d.lane, d.mode || "pingpong", d.speed || 38, d.s0 === undefined ? 60 : d.s0, d.mode === "loop", { name: d.id || "hunter" + i, cfg: Object.assign({ cry: "There you are.", chaseSpeed: 92 }, d), trigger: d.trigger });
+        const lane = d.lane.map(([x, y]) => this.nearestFree(x, y));   // rough positions are fine: each point is snapped onto walkable ground
+        const g = this.addGroup(lane, d.mode || "pingpong", d.speed || 38, d.s0 === undefined ? 60 : d.s0, d.mode === "loop", { name: d.id || "hunter" + i, cfg: Object.assign({ cry: "There you are.", chaseSpeed: 92 }, d), trigger: d.trigger });
         const u = this.mkUnit(g, key, 0, 0, { frames: [key], still: true, kind: "legion", right: false }), im = this.textures.get(key).getSourceImage(); u.s.setScale((d.size || 60) / im.height);
         if (d.show !== undefined || d.hide !== undefined) this.conds.push({ cnd: { show: d.show, hide: d.hide }, objs: [], rec: g, army: true });
       });

@@ -45,6 +45,8 @@
     scatter: [{ keys: [["m4_cacaoTree", 2], ["m4_jasmineBush", 3], ["m4_flowerBed", 2], ["m4_hedge", 1]], n: 22, on: ["grass"], seed: 221, scaleRange: [0.85, 1] }],
     encounter: { zones: [{ rect: [940, 1330, 320, 170], table: null, rate: 0 }, { rect: [0, 0, 2200, 1500], table: "garden", rate: 40 }] },
     amb: {
+      hunters: [{ id: "mirrorChamberlain", art: "mirrorChamberlain", lane: [[1240, 900], [1360, 900]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "mirrorChamberlain", hide: "x.mirrorChamberlain" }],   // optional gear-piece boss (src/story/pieces.js, rules/m7.js)
+     
       birds: 3, butterflies: [[600, 900], [1500, 980], [1100, 600], [800, 1300], [1700, 700]], water: true, dust: 0xf0f0c0, motes: 40, tint: [0x20381c, 0.1], warm: [0xffe090, 0.06], vignette: 1, weather: ["clear"],
       armies: [
         { id: "gardenPatrolA", lane: [[400, 1100], [900, 1100], [900, 1300], [400, 1300]], mode: "loop", speed: 22, rows: 2, cols: 3, sight: 220, table: "garden", cry: "Halt! The garden is closed!" },

@@ -30,7 +30,9 @@
       { keys: [["redPillar", 2], ["oreHeap", 1], ["boulder", 2], ["agave", 1]], n: 40, on: ["red"], seed: 1603 },
     ],
     encounter: { table: "basin", rate: 38 },
-    amb: { birds: 3, water: false, dust: 0xe8c890, motes: 50, tint: [0x4a2a2a, 0.14], armies: [{ id: "patrol1", lane: [[1000, 800], [1300, 1100], [1800, 1000], [1300, 1100]], mode: "pingpong", speed: 34, rows: 2, cols: 3, sight: 200, table: "basin" }] },
+    amb: {
+      hunters: [{ id: "stoneSinger", art: "stoneSinger", lane: [[780, 1090], [900, 1090]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "stoneSinger", hide: "x.stoneSinger" }],   // optional gear-piece boss (src/story/pieces.js, rules/m7.js)
+      birds: 3, water: false, dust: 0xe8c890, motes: 50, tint: [0x4a2a2a, 0.14], armies: [{ id: "patrol1", lane: [[1000, 800], [1300, 1100], [1800, 1000], [1300, 1100]], mode: "pingpong", speed: 34, rows: 2, cols: 3, sight: 200, table: "basin" }] },
   };
   World.def("redMesaSteps", def);
 })();

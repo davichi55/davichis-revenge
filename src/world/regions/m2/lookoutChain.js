@@ -29,7 +29,9 @@
     ],
     lights: [[440, 1280, 120, 0.4], [2100, 270, 120, 0.4]],
     encounter: { table: "lookout", rate: 22 },
-    amb: { birds: 6, water: false, dust: 0xf0f0f8, motes: 50, tint: [0x203040, 0.1], warm: [0xffe0b0, 0.06], butterflies: [] },
+    amb: {
+      hunters: [{ id: "condorKeeper", art: "condorKeeper", lane: [[1700, 520], [1820, 520]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "condorKeeper", hide: "x.condorKeeper" }],   // optional gear-piece boss (src/story/pieces.js, rules/m7.js)
+      birds: 6, water: false, dust: 0xf0f0f8, motes: 50, tint: [0x203040, 0.1], warm: [0xffe0b0, 0.06], butterflies: [] },
   };
   const at = K.terrainAt(def);
   def.props = def.props.concat(K.blockedFill(def, 110, [["m2_cliffBoulder", 2], ["m2_cliffTree", 1.2], ["m2_mossBoulder", 1]], { seed: 1301, chance: 0.9, skip: (x, y) => at(x, y) === "water" && x > 60 && y > 60 && x < W - 60 && y < H - 60 }));

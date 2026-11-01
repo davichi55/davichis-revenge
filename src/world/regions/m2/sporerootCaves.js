@@ -27,7 +27,9 @@
     lights: [[330, 330, 220, 0.6], [1000, 340, 230, 0.6], [1000, 860, 230, 0.6], [1780, 860, 250, 0.6], [330, 830, 160, 0.6], [1560, 300, 150, 0.6], [1000, 1310, 170, 0.6], [680, 330, 130, 0.4], [1000, 600, 130, 0.4], [1390, 860, 130, 0.4]],
     dark: { ambient: 0.62, radius: 220, fireRadius: 200 },
     encounter: { table: "sporeCave", rate: 22 },
-    amb: { birds: 0, water: false, dust: 0x80f0d0, motes: 50, tint: [0x082030, 0.22], warm: [0x40d0b0, 0.05], drips: K.flies(W, H, 6, 9), butterflies: [], sparkle: { terrain: ["sand"], color: 0x80ffd0, rate: 4 } },
+    amb: {
+      hunters: [{ id: "rootWitch", art: "rootWitch", lane: [[1740, 1000], [1860, 1000]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "rootWitch", hide: "x.rootWitch" }],   // optional gear-piece boss (src/story/pieces.js, rules/m7.js)
+      birds: 0, water: false, dust: 0x80f0d0, motes: 50, tint: [0x082030, 0.22], warm: [0x40d0b0, 0.05], drips: K.flies(W, H, 6, 9), butterflies: [], sparkle: { terrain: ["sand"], color: 0x80ffd0, rate: 4 } },
   };
   const rockKeys = [["m2_paleRootPillar", 2], ["m2_stalagmite", 1.5], ["m2_glowShroomBig", 1.2], ["m2_dripRock", 1], ["m2_rootWall", 0.8]], at = K.terrainAt(def);
   def.props = def.props.concat(K.blockedFill(def, 96, rockKeys, { seed: 1131 }), K.fill([60, 60, W - 120, H - 120], 120, [["m2_glowShroomSmall", 2], ["m2_cavePuddle", 1], ["m2_caveBones", 0.3]], { seed: 1132, chance: 0.4, opts: { solid: false, shadow: false }, skip: (x, y) => at(x, y) !== "sand" }));

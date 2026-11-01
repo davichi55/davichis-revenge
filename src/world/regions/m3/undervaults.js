@@ -52,6 +52,8 @@
     lights: [[1210, 440, 160, 0.9], [560, 700, 110, 0.6], [340, 560, 110, 0.7], [1060, 1080, 110, 0.6], [2060, 940, 130, 0.8], [2230, 940, 130, 0.8], [2140, 300, 160, 0.8], [2310, 1380, 120, 0.7], [700, 1420, 110, 0.5], [1500, 1450, 110, 0.5]],
     dark: { ambient: 0.62, radius: 210, color: 0x04060e },
     encounter: { table: "vault", rate: 22 },
-    amb: { birds: 0, butterflies: [], motes: 50, dust: 0x9fb8e0, tint: [0x102040, 0.12], drips: [[430, 1580], [1000, 1500], [1700, 1520]], sparkle: { terrain: ["salt"] } },
+    amb: {
+      hunters: [{ id: "blindOracle", art: "blindOracle", lane: [[540, 620], [660, 620]], mode: "pingpong", speed: 8, sight: 0, size: 66, trigger: "blindOracle", hide: "x.blindOracle" }],   // optional gear-piece boss (src/story/pieces.js, rules/m7.js)
+      birds: 0, butterflies: [], motes: 50, dust: 0x9fb8e0, tint: [0x102040, 0.12], drips: [[430, 1580], [1000, 1500], [1700, 1520]], sparkle: { terrain: ["salt"] } },
   });
 })();
