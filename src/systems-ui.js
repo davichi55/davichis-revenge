@@ -68,7 +68,7 @@
   U.SUBS = ["Quests", "Rumours", "Bestiary", "Legends", "Stats", "Effects"];
   // ---------- effects guide (Danny 2026-10-31): how statuses, reactions and breaks work; an entry opens once it happened in a fight (G.seenFx, set by the arena) ----------
   U.FX_HELP = [
-    ["damage", "How damage works", "Physical moves use Attack against Defense, spells use Power against Resistance (a Gorgon casts with its Speed instead): damage = move power x your stat x your stat / (your stat + their defence). A critical hit does 1.5x. Hitting a weakness does more (WEAK), a resistance less (RESIST). A creature resists its own element a little.", true],
+    ["damage", "How damage works", "Physical moves use Attack against Defense, spells use Power against Resistance (a Gorgon casts with its Speed, a Colossus can hit with its Defense): damage = move power x your stat x your stat / (your stat + their defence). A critical hit does 1.5x. Hitting a weakness does more (WEAK), a resistance less (RESIST). A creature resists its own element a little.", true],
     ["mp", "MP and actions", "Every creature gets 2 actions per turn (3 if its Speed is at least twice the fastest enemy's). A basic attack gives +1 MP; other moves cost 1, 2 or 3 MP. Fights start at 0 MP plus 1 per 10 Focus, MP never carries over to the next fight, and a creature holds at most 10 MP (Leviathans 15). Medium and strong moves (2-3 MP) are the ones that break enemies; cheap moves shine once an enemy is broken.", true],
     ["items", "Items in battle", "Using an item takes one action, and each creature can use only one item per turn. A Sunwater flask heals 25% of max HP, an Ashen Ember brings a fallen creature back at 30% HP, a Reed Antidote clears poison and bleed, and a Clearwater Tonic clears every status and lowered stat. A night at an inn heals the whole team.", true],
     ["elements", "Elements", "Moves can carry an element: fire, water, ice, shock, earth, wind, light, dark, nature or poison. Foes can be weak to an element (WEAK: more damage) or resist it (RESIST: less). Every creature resists its own element a little (25% less). Some elements bring statuses with them, and some mix into reactions.", true],
@@ -124,7 +124,7 @@
     hp: ["HP", "How much damage it can take. Max HP = 30 + 5 per HP point + 3 per level. Every creature needs some; the ones that stand in front need a lot."],
     atk: ["Attack", "Damage of basic attacks and physical moves. Damage = move power x Attack x Attack / (Attack + the target's Defense), so Attack grows stronger the more you put in. Moves that use \"the higher of Attack and Power\" pick whichever is bigger."],
     pow: ["Power", "Damage of spells, and how much heals and shields restore. Spell damage uses the same rule as Attack, against the target's Resistance. Healers and spellcasters live on this stat. Gorgons do not use it: they cast with Speed."],
-    def: ["Defense", "Less damage from physical hits. When your Defense equals the attacker's Attack, its hits do half damage; more Defense keeps lowering it."],
+    def: ["Defense", "Less damage from physical hits. When your Defense equals the attacker's Attack, its hits do half damage; more Defense keeps lowering it. A Colossus also hits with its Defense (at 65%) when that beats its Attack."],
     res: ["Resistance", "Less damage from spells (same rule as Defense, against Power). It also makes enemy statuses (burn, poison, stun...) land less often (up to 80% of them miss), and makes control effects such as stun, freeze and being held land less often."],
     spd: ["Speed", "Who acts first each round. A creature with at least twice the Speed of the fastest enemy gets 3 actions that turn instead of 2, and with four times its Speed it gets 4. Slowing an enemy can push you over that line in the middle of a fight. A Gorgon also casts its spells with Speed."],
     foc: ["Focus", "Starting MP in every fight: 1 MP for each full 10 Focus. Fights start at 0 MP otherwise, so Focus means your first spells come a turn or two sooner."],
@@ -134,7 +134,7 @@
     minotaur: "Hits hard and spends little MP: Attack first, HP so it survives in front, a little Speed.",
     harpy: "Fast, many small hits: every hit builds its Frenzy (more Attack), so hit often, or build Frenzy first and then keep the enemy bleeding. Speed (twice the enemy's for a 3rd action, four times for a 4th) and Attack, then Luck for critical hits.",
     hydra: "Wears foes down with statuses: Power and Luck for stronger poison (Luck also helps them land), Focus for a hotter burn, some HP.",
-    colossus: "Stands in front and takes the hits: HP, Defense and Resistance. Attack matters little.",
+    colossus: "Stands in front and takes the hits: HP, Defense and Resistance. Its physical hits use Defense too (or Attack, if that is higher), and Stone Fist hits every enemy.",
     phoenix: "Heals and rises again: Power for bigger heals, Focus so the first heal comes early, Resistance.",
     gorgon: "Slows and weakens: Speed to act before the enemy and to power its spells, Luck to make every weakening bite deeper.",
     dragon: "Big spells and reactions: Power first, Focus for early MP, then Speed.",

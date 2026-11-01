@@ -151,7 +151,7 @@
   mv("rupture", "Rupture", 20, 3, "enemy", { fx: "rupture", desc: "Consumes all bleed for one big burst." });
   mv("regrow", "Regrow a Head", 24, 2, "self", { grp: "support", fx: "regrow", desc: "Heals itself over 3 turns." });
   // --- Colossus ---
-  mv("stoneFist", "Stone Fist", 1, 0, "enemy", { basic: 1, grp: "basic", p: 0.8, el: "self", bonusDef: 0.3, desc: "Heavy punch that hits harder the higher this creature's own Defense. +1 MP." });
+  mv("stoneFist", "Stone Fist", 1, 0, "allEnemies", { basic: 1, grp: "basic", p: 0.55, el: "self", bonusDef: 0.2, desc: "A punch into the ground that hits every enemy, harder the higher this creature's own Defense. +1 MP." });   // area since 2026-11-01 (Danny; was one target, 0.8 + 30% Defense)
   mv("challenge", "Challenge", 1, 1, "self", { grp: "support", fx: "challenge", desc: "Single-target attacks must hit it for 2 turns." });
   mv("fortify", "Fortify", 4, 1, "self", { grp: "support", fx: "fortify", desc: "+40% Defense and Resistance for 2 turns." });
   mv("bulwark", "Bulwark", 6, 2, "ally", { grp: "support", fx: "bulwark", desc: "Takes the single-target hits meant for one ally until its next turn." });
@@ -687,6 +687,7 @@
     ctx.ev.push({ t: "breakPt", tgt, pts: tgt.breakPts, need });
     if (tgt.breakPts >= need) { tgt.broken = 2; tgt.breakPts = 0; ctx.ev.push({ t: "broken", tgt }); if (tgt.hooks) hookRun(tgt, "broken", ctx, tgt); if (tgt.charging && tgt.charging.exec) { tgt.charging = null; dropExec(ctx, tgt); ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null; say(ctx, tgt.name + "'s execution is broken off!"); } }
   }
+  const COLOSSUS_DEF = 0.65;   // your Colossus hits with the higher of its Attack and Defense x0.65 (Danny 2026-11-01; x0.8 made it the second-best style)
   const GORGON_SPD = 0.8;   // your Gorgons cast with Speed x0.8 instead of Power (Danny 2026-11-01; boss-swap sim: full Speed made them as strong as the damage styles)
   function damage(ctx, src, tgt, base, kind, tg = {}) {
     if (!tgt.alive) return 0;
@@ -697,7 +698,7 @@
       ev.push({ t: "reflect", src, tgt }); ev.push({ t: "say", text: tgt.name + " reflects the spell!" });
       return damage(ctx, tgt, src, base * 0.6, kind, { el, refl: 1, off: 1 });
     }
-    const A = src.side === "p" && src.style === "gorgon" && kind === "spell" ? eff(src, "spd") * GORGON_SPD : eff(src, kind === "phys" ? "atk" : "pow"), D = eff(tgt, kind === "phys" ? "def" : "res") * (src.fx ? 1 - fxv(src, "armourPiercer", 0.15, 0.07) : 1) * (src.evo ? EVO.pierce(src, kind) : 1);
+    const A = src.side === "p" && src.style === "gorgon" && kind === "spell" ? eff(src, "spd") * GORGON_SPD : src.side === "p" && src.style === "colossus" && kind === "phys" ? Math.max(eff(src, "atk"), eff(src, "def") * COLOSSUS_DEF) : eff(src, kind === "phys" ? "atk" : "pow"), D = eff(tgt, kind === "phys" ? "def" : "res") * (src.fx ? 1 - fxv(src, "armourPiercer", 0.15, 0.07) : 1) * (src.evo ? EVO.pierce(src, kind) : 1);
     let v = base * A * (A / (A + D)) * (0.9 + 0.2 * rnd());
     // level gap (Danny 2026-10-31): an enemy more than 5 levels below its target hits 4% softer per extra level, never below 35%
     const gap = src.side === "e" && tgt.side === "p" && src.level && tgt.level ? tgt.level - src.level - 5 : 0; if (gap > 0) v *= Math.max(0.35, 1 - 0.04 * gap);
