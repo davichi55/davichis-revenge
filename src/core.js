@@ -1450,7 +1450,9 @@
   function econM(L) { if (L <= ECON_M[0][0]) return ECON_M[0][1]; for (let i = 1; i < ECON_M.length; i++) if (L <= ECON_M[i][0]) { const a = ECON_M[i - 1], b = ECON_M[i]; return a[1] + (b[1] - a[1]) * (L - a[0]) / (b[0] - a[0]); } return ECON_M[ECON_M.length - 1][1]; }
   const goldBase = level => Math.round(82 * econM(level) / 40);   // money of one average enemy (82 = what the M1 formula pays at L10)
   // total XP / kakal of a fight (used by Flow.victory); an enemy with xpAbs/goldAbs pays that, others pay the M1 formula
-  const fightXp = (foes, partyLv) => foes.reduce((s, e) => s + Math.round((e.xpAbs !== undefined ? e.xpAbs : Math.round((e.xp || 6) * e.level / 2)) * (partyLv ? xpGap(e.level, partyLv) : 1)), 0);   // partyLv (optional): XP falloff by level gap
+  // boss XP boost (Danny 2026-11-02): beating every boss and optional boss alone should keep you at about 80% of the boss level (a level 8 party at the level 10 Dune Bearer), so random fights are a choice, not a must. x2.5 up to level 10, down to x1.3 at level 14, then x1.3
+  const bossXpMult = L => (L <= 10 ? 2.5 : L < 14 ? 2.5 - (L - 10) * 0.3 : 1.3);
+  const fightXp = (foes, partyLv) => foes.reduce((s, e) => s + Math.round((e.xpAbs !== undefined ? e.xpAbs : Math.round((e.xp || 6) * e.level / 2)) * (partyLv ? xpGap(e.level, partyLv) : 1) * (e.boss ? bossXpMult(e.level) : 1)), 0);   // partyLv (optional): XP falloff by level gap
   const fightGold = foes => foes.reduce((s, e) => s + (e.goldAbs !== undefined ? e.goldAbs : Math.round((e.gold || 4) * e.level / 2)), 0);
 
   // ---------- battle context ----------
