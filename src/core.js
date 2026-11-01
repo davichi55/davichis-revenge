@@ -668,6 +668,7 @@
       if (src.evo) { const d = EVO.debuffMod(src); v *= d[0]; turns2 += d[1]; }   // evolution traits: stronger and longer debuffs
       if (src.fx) { v *= 1 + fxv(src, "deepWeakness", 0.25, 0.12) + (stat === "spd" ? fxv(src, "shrillEcho", 0.5, 0.25) : 0); turns2 += gearMore(src, "longMarks"); }   // Deep Weakness, Shrill Echo, Long Marks
       if (stat === "spd" && t.fx && chance(fxv(t, "ironNose", 0.25, 0.12))) { ctx.ev.push({ t: "resist", tgt: t }); return; }          // Iron Nose Ring
+      if (src.side === "p") v *= 1 + eff(src, "lck") * 0.001;   // Luck: a creature's own debuffs are 1% stronger per 10 Luck (Danny 2026-11-01: Luck did nothing for sure-hit debuffers like the Gorgon)
     }
     addBuff(t, stat, v, turns2, { force: 1, by: src });
     ctx.ev.push({ t: "debuff", tgt: t, stat, val: v, turns: turns2 });
