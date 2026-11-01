@@ -1,37 +1,25 @@
 // K1 The Bone Maze: winding bone-walled labyrinth under the oasis (dark). Table "boneMaze" ~20 s. Chest g4_wardenHalls (G4).
-// NPC oldMazeheart (the keeper); trigger k1Cage = the locked cage at the heart (frees the Minotaur lab extra).
+// NPC oldMazeheart (the keeper); trigger k1Cage = the bull chamber at the heart (the Maze Guardian; frees the Minotaur lab extra).
+// The walkable floor is traced from the painting (assets/regions/boneMaze.png, 2026-11-01, Danny: "the background painting doesnt match where you can walk"):
+// FLOOR = 8 px rects of the light bone corridors and the dirt path (sampled from the image), plus the round stone chamber and its link to the corridor below.
 (function () {
-  const { R, E, P, L } = World.shapes;
-  // a fixed maze on a 7 x 4 cell grid (200 px pitch), carved by a seeded depth-first walk
-  const COLS = 7, ROWS = 4, PX = 200, OX = 150, OY = 160; let seed = 77; const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const cx = c => OX + c * PX, cy = r => OY + r * PX, seen = {}, edges = [], deg = {}; const key = (c, r) => c + "," + r;
-  (function carve(c, r) { seen[key(c, r)] = 1; const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]].sort(() => rnd() - 0.5); for (const [dc, dr] of dirs) { const nc = c + dc, nr = r + dr; if (nc < 0 || nr < 0 || nc >= COLS || nr >= ROWS || seen[key(nc, nr)]) continue; edges.push([[c, r], [nc, nr]]); deg[key(c, r)] = (deg[key(c, r)] || 0) + 1; deg[key(nc, nr)] = (deg[key(nc, nr)] || 0) + 1; carve(nc, nr); } })(0, ROWS - 1);
-  // a few loops so it is not a pure tree
-  [[[2, 1], [3, 1]], [[4, 2], [5, 2]], [[1, 2], [1, 3]], [[5, 0], [6, 0]]].forEach(e => { if (!edges.some(x => (x[0][0] === e[0][0] && x[0][1] === e[0][1] && x[1][0] === e[1][0] && x[1][1] === e[1][1]) || (x[1][0] === e[0][0] && x[1][1] === e[0][1] && x[0][0] === e[1][0] && x[0][1] === e[1][1]))) edges.push(e); });
-  const guide = [["bone", E(cx(0), cy(ROWS - 1), 64, 64)]];
-  for (const [[a, b], [c, d]] of edges) { guide.push(["bone", L([[cx(a), cy(b)], [cx(c), cy(d)]], 76)]); guide.push(["bone", E(cx(a), cy(b), 56, 56)], ["bone", E(cx(c), cy(d), 56, 56)]); }
-  // the heart: a round chamber at the farthest cell, entrance cell at the bottom left
-  const hx = cx(COLS - 1), hy = cy(0); guide.push(["floor", E(hx, hy, 110, 100)]);
-  guide.push(["bone", L([[cx(0), cy(ROWS - 1)], [cx(0), 940]], 90)]);
-  const props = [], lights = [];
-  for (let c = 0; c < COLS; c++) for (let r = 0; r < ROWS; r++) {
-    const k = key(c, r), d = deg[k] || 0, x = cx(c), y = cy(r), h = Math.abs(Math.sin(c * 12.9 + r * 78.2) * 43758.5) % 1;
-    if (c === 0 && r === ROWS - 1) continue;
-    if (d === 1 && !(c === COLS - 1 && r === 0)) props.push(["boneBrazier", x + 30, y - 10], ["skullPile", x - 30, y + 24]);
-    else if (d >= 3) props.push(["bonePillar", x + 44, y - 30], h > 0.5 ? ["boneBrazier", x - 44, y - 30] : ["skullPile", x - 40, y + 44]);
-    else if (h > 0.55) props.push([h > 0.8 ? "spineArc" : "ribArch", x + 36, y + 42, { flip: h > 0.7 }]);
-  }
-  props.push(["boneBrazier", hx - 70, hy - 20], ["boneBrazier", hx + 70, hy - 20], ["bullSkullAltar", hx, hy - 60], ["hornGate", cx(0), 916, { dy: -60 }], ["boneBrazier", cx(0) - 50, 860], ["boneBrazier", cx(0) + 50, 860], ["bonePillar", hx - 90, hy + 70], ["bonePillar", hx + 90, hy + 70]);
+  const { R, E } = World.shapes;
+  const FLOOR = [[1296,80,48,8],[1280,88,88,8],[1264,96,112,8],[1256,104,128,8],[1256,112,136,8],[1248,120,144,8],[720,128,32,8],[1240,128,160,8],[240,136,96,8],[368,136,160,8],[648,136,112,8],[776,136,152,8],[1048,136,16,8],[1112,136,24,8],[1152,136,16,8],[1200,136,200,8],[200,144,336,8],[632,144,304,8],[1032,144,40,8],[1096,144,304,8],[192,152,360,8],[624,152,320,8],[1024,152,376,8],[184,160,768,8],[1016,160,384,8],[184,168,1216,8],[176,176,1224,8],[144,184,184,8],[352,184,40,8],[416,184,816,8],[1240,184,152,8],[136,192,56,8],[256,192,56,8],[360,192,24,8],[424,192,24,8],[488,192,24,8],[552,192,112,8],[688,192,536,8],[1248,192,144,8],[128,200,56,8],[560,200,24,8],[928,200,56,8],[1144,200,40,8],[1256,200,128,8],[936,208,24,8],[1264,208,112,8],[1280,216,88,8],[1288,224,64,8],[1344,280,32,8],[1328,288,56,8],[1320,296,64,8],[1320,304,56,8],[1312,312,64,8],[544,320,24,8],[768,320,16,8],[1304,320,72,8],[336,328,24,8],[400,328,112,8],[536,328,40,8],[600,328,24,8],[640,328,272,8],[928,328,16,8],[1200,328,16,8],[1240,328,136,8],[328,336,40,8],[384,336,192,8],[592,336,360,8],[1192,336,184,8],[120,208,64,144],[328,344,240,8],[592,344,368,8],[1184,344,192,8],[320,352,232,8],[584,352,408,8],[1144,352,232,8],[320,360,224,8],[576,360,416,8],[1136,360,248,8],[120,352,72,24],[320,368,232,8],[568,368,424,8],[1128,368,248,8],[320,376,672,8],[1128,376,232,8],[320,384,664,8],[1120,384,224,8],[328,392,520,8],[888,392,96,8],[1120,392,120,8],[1272,392,32,8],[344,400,40,8],[512,400,80,8],[720,400,64,8],[912,400,72,8],[1120,400,72,8],[920,408,64,96],[120,376,64,136],[1120,408,64,112],[920,504,72,16],[128,512,56,8],[520,408,64,120],[128,520,64,8],[760,520,24,8],[912,520,88,8],[1112,520,80,8],[120,528,96,8],[248,528,104,8],[712,528,24,8],[760,528,560,8],[512,528,72,16],[120,536,240,8],[704,536,624,8],[128,544,232,8],[520,544,56,8],[704,544,424,8],[1144,544,184,8],[136,552,232,8],[520,552,64,8],[712,552,416,8],[1152,552,184,8],[512,560,72,8],[736,560,392,8],[1152,560,200,8],[144,560,232,16],[512,568,80,8],[736,568,208,8],[952,568,184,8],[1160,568,200,8],[152,576,224,8],[728,576,208,8],[960,576,184,8],[1168,576,200,8],[520,576,72,16],[176,584,200,8],[968,584,168,8],[1176,584,192,8],[720,584,224,16],[296,592,72,8],[984,592,112,8],[1184,592,32,8],[1272,592,104,8],[312,600,56,8],[720,600,72,8],[920,600,16,8],[1312,600,64,8],[320,608,56,8],[320,616,24,8],[360,616,24,8],[320,624,64,8],[1320,608,64,48],[312,632,72,32],[1320,656,56,32],[320,664,72,32],[1320,688,64,16],[720,608,64,104],[312,696,80,16],[520,592,64,128],[1320,704,56,16],[304,712,88,8],[720,712,72,8],[144,720,16,8],[176,720,64,8],[264,720,128,8],[720,720,80,8],[936,720,40,8],[1312,720,64,8],[136,728,248,8],[720,728,288,8],[1048,728,112,8],[1184,728,184,8],[720,736,640,8],[520,720,72,32],[128,736,256,16],[720,744,632,16],[128,752,248,8],[528,752,64,8],[96,760,280,8],[528,760,56,8],[728,760,616,8],[96,768,272,8],[536,768,48,8],[736,768,592,8],[96,776,264,8],[568,776,16,8],[744,776,456,8],[1208,776,80,8],[1304,776,16,8],[104,784,240,8],[752,784,200,8],[976,784,176,8],[1176,784,8,8],[1216,784,64,8],[104,792,120,8],[272,792,48,8],[888,792,16,8],[1096,792,16,8],[104,800,104,8],[104,808,96,16],[96,824,104,8],[88,832,112,8],[80,840,120,8],[72,848,128,8],[56,856,144,8],[48,864,152,8],[8,872,192,8],[0,880,200,48],[0,928,192,16],[8,944,184,8],[24,952,160,8],[24,960,152,8],[8,968,168,8],[0,976,168,16],[8,992,152,8]];
+  const hx = 1322, hy = 156;   // the bull chamber
+  const guide = FLOOR.map(a => ["bone", R(a[0], a[1], a[2], a[3])]);
+  guide.push(["floor", E(hx, hy, 80, 76)], ["bone", R(1328, 208, 56, 88)]);
+  const props = [["boneBrazier", 1262, 140], ["boneBrazier", 1385, 130], ["bullSkullAltar", hx, 110], ["hornGate", 150, 916, { dy: -60 }], ["boneBrazier", 100, 860], ["boneBrazier", 186, 867]];
+  [[312, 362], [512, 740], [1150, 345], [1000, 520], [401, 128], [901, 128], [112, 400], [1312, 640], [712, 700]].forEach(([x, y]) => props.push(["boneBrazier", x, y]));   // against the corridor walls, so they light the way without standing in it
   World.def("boneMaze", {
     name: "K1: The Bone Maze", w: 1500, h: 1000, base: "rock", music: "dungeon", rim: 40,
     look: "A winding labyrinth of pale bone-dust corridors carved into dark rock, seen from above, ribs and horns half buried in the walls, scattered small bones, eerie. A round stone chamber at the end.",
     legend: { bone: "pale bone-dust floor with small scattered bones and vertebrae", floor: "round chamber of carved stone floor with a bull glyph", rock: "dark rock walls studded with giant bones, ribs and horns" },
     guide, dark: { ambient: 0.78, radius: 200, fireRadius: 130 },
-    entries: { start: { x: cx(0), y: 900, face: "up" }, from_wells: { x: cx(0), y: 900, face: "up" } },
-    exits: [{ rect: [cx(0) - 50, 946, 100, 40], to: "amberWells", entry: "from_boneMaze", push: [0, -1] }],
-    triggers: [{ id: "k1Cage", rect: [hx - 50, hy + 8, 100, 60] }],
-    chests: [{ id: "g4_wardenHalls", x: hx + 70, y: hy + 28 }],
-    npcs: [{ id: "oldMazeheart", art: "npcMazeKeeper", name: "Old Mazeheart", x: cx(0) + 70, y: 780 }],
+    entries: { start: { x: 150, y: 900, face: "up" }, from_wells: { x: 150, y: 900, face: "up" } },
+    exits: [{ rect: [40, 952, 120, 40], to: "amberWells", entry: "from_boneMaze", push: [0, -1] }],
+    triggers: [{ id: "k1Cage", rect: [hx - 45, hy - 30, 90, 80] }],
+    chests: [{ id: "g4_wardenHalls", x: hx + 40, y: hy + 36 }],
+    npcs: [{ id: "oldMazeheart", art: "npcMazeKeeper", name: "Old Mazeheart", x: 220, y: 780 }],
     props, scatter: [{ keys: [["skullPile", 1], ["bones", 3], ["bones2", 3], ["skull", 2]], n: 60, on: ["bone"], seed: 51, tries: 3000 }],
     encounter: { table: "boneMaze", rate: 20 },
     amb: { motes: 26, tint: [0x182838, 0.22], warm: null, dust: 0xc8d0d8, water: false },

@@ -111,17 +111,19 @@
 
   // ---------- the Bone Maze (K1) ----------
   // the Maze Guardian is beaten: it staggers, crumbles into horns and dust, and the camera finds the chest at the back of the cell. lines = what is said afterwards
+  // where the bull stands in the chamber (bonemaze.js: centre 1322,156): the side away from where the hero came in
+  S.mazeBullSpot = h => (h.x < 1300 ? { x: 1352, y: 176 } : h.y > 180 ? { x: 1322, y: 132 } : { x: 1290, y: 176 });
   S.mazeGuardianFalls = async (F, lines) => {
     await S.stage(async c => {
-      const h = c.hero;
-      c.actor("mg", { art: "boneBullCalf", x: h.x - 10, y: h.y - 96, h: 120 });
+      const h = c.hero, sp = S.mazeBullSpot(h);
+      c.actor("mg", { art: "boneBullCalf", x: sp.x, y: sp.y, h: 120 });
       await c.wait(300);
       c.sfx("deathCollapse"); await c.anim("mg", "shake", { ms: 500 });
       await c.anim("mg", "fall", { dir: "left", ms: 600 });
-      c.sfx("rockFall"); c.shake(4, 700); c.fx("dust", h.x - 10, h.y - 96, { n: 22, scale: 1.8, color: 0xd8d0b8 });
+      c.sfx("rockFall"); c.shake(4, 700); c.fx("dust", sp.x, sp.y, { n: 22, scale: 1.8, color: 0xd8d0b8 });
       await c.anim("mg", "fadeOut", { ms: 900 });
-      await c.pan(h.x + 70, h.y + 10, 900);
-      c.fx("glow", h.x + 70, h.y + 8, { color: 0xffd36a, ms: 2000 }); c.fx("sparkle", h.x + 70, h.y - 6, { r: 24, ms: 1800 });
+      await c.pan(1362, 200, 900);   // the chest (bonemaze.js chests g4_wardenHalls)
+      c.fx("glow", 1362, 198, { color: 0xffd36a, ms: 2000 }); c.fx("sparkle", 1362, 184, { r: 24, ms: 1800 });
       await c.say(lines);
       c.follow();
     });

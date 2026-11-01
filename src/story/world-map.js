@@ -51,7 +51,25 @@
   Tr.k1Cage = async F => {
     if (F.f("k1.done")) return;
     F.quest("bellow", 0);
-    await UI.say([["narr", "The deepest cell. A ring of bone, and a guardian rising from a pile of horns: a great skull on four legs, stamping."]]);
+    // staged arrival (Danny 2026-11-01: the guardian had only a death scene): the horn pile shakes, the bull stands up out of it and stamps, then the boss card
+    await S.stage(async c => {
+      const sp = S.mazeBullSpot(c.hero), x = sp.x, y = sp.y;
+      c.sfx("rumble"); c.shake(2, 900); c.fx("dust", x, y + 30, { n: 14, scale: 1.4, color: 0xd8d0b8 });
+      await c.pan(x, y + 20, 800);
+      await c.say([["narr", "The deepest cell. A ring of bone, and in the middle a pile of horns, rattling by itself."]]);
+      c.actor("mg", { art: "boneBullCalf", x, y, h: 120, alpha: 0 });
+      await c.anim("mg", "fall", { dir: "left", ms: 1 });
+      c.light(x, y - 20, 140, 0.6); c.fx("glow", x, y - 20, { color: 0xe8e0c8, n: 2 });
+      await c.anim("mg", "fadeIn", { ms: 700 });
+      c.sfx("rockFall"); c.fx("dust", x, y + 30, { n: 20, scale: 1.8, color: 0xd8d0b8 });
+      await c.anim("mg", "rise", { ms: 700 });
+      c.sfx("roarQuake"); c.shake(4, 800); await c.anim("mg", "shake", { ms: 500 });
+      await c.say([["narr", "A great skull on four legs pulls itself up out of the pile and stamps. Dust pours from its eye holes."], ["hero", "(So that is what has been bellowing.)"]]);
+      c.emote("hero", "!");
+      await c.anim("mg", "fadeOut", { ms: 400 });
+      c.follow();
+    });
+    await Cinema.boss({ id: "mazeGuardian", name: "The Maze Guardian", title: "Keeper of the Bone Maze", bg: "boneMaze" });
     const res = await F.boss([F.mkEnemy("mazeGuardian", 8), F.mkEnemy("mazeBat", 7, " B")], { bg: "boneMaze", intro: "The Maze's guardian lowers its horns!", xpBonus: 1.0 });
     if (res !== "win") return;
     F.set("k1.done"); F.quest("bellow", 1); F.set("k1.key"); F.give("keyK1", 1);
