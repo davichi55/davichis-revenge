@@ -3161,5 +3161,12 @@
   "scale": 1,
   "kind": "enemy",
   "aspect": 1.606
+ },
+ "wellEater": {
+  "file": "models/wellEater.glb",
+  "yaw": 1.571,
+  "scale": 1,
+  "kind": "boss",
+  "aspect": 1.933
  }
 }

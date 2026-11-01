@@ -80,6 +80,25 @@
   add("dreadShadeAdd", "Drowned Shade", "ghost", { hpMult: 0.9, immune: ["poison", "bleed"], ab: [{ n: "Cold Grasp", p: 0.6, k: "spell", el: "water", st: ["wet", 1, 0.5] }] });
   add("grandChampionPet", "Grand Champion's Hound", "beast", { hpMult: 1.4, ab: [{ n: "Maul", p: 0.7, st: ["bleed", 1, 0.5] }] });
 
+  // ================= M1 (chapter 1, optional) =================
+  // The Well-Eater (Dry Waystation): drags a hero into its sand pit (held). Any fire hit heats the pit, one point a round; three rounds in a row glaze it to glass
+  // (broken: the held hero climbs out, no Sand Pit). Any fire counts, not only strong moves, because chapter 1 parties rarely have a strong fire move yet.
+  // Strong fire moves are counted by the normal break rule (breakType "fire"); this hook adds the weak ones, sharing breakPts/breakHitRound.
+  HOOKS.glassPit = {
+    hit(ctx, u, src, v, info) {
+      if (!u.alive || u.broken || !src || src.side !== "p" || !info || info.el !== "fire" || !(v > 0) || u.breakHitRound === ctx.round) return;
+      if (info.tg && info.tg.strong && (info.tg.bk || []).includes("fire")) return;
+      u.breakPts = ctx.round - u.breakHitRound <= 1 ? (u.breakPts || 0) + 1 : 1; u.breakHitRound = ctx.round;
+      ctx.ev.push({ t: "breakPt", tgt: u, pts: u.breakPts, need: u.breakNeed });
+      if (u.breakPts < u.breakNeed) { Core.say(ctx, "The sand round " + u.name + " smokes and starts to fuse."); return; }
+      u.breakPts = 0; u.broken = 2; ctx.ev.push({ t: "broken", tgt: u });
+      Core.say(ctx, "The heat glazes the sand pit to glass. " + u.name + " scrabbles and cannot dig!");
+    },
+  };
+  boss("wellEater", "The Well-Eater", "beast", 6, 120, "guardian", { hpMult: 5.2, breakType: "fire", breakNeed: 3, hooks: ["glassPit"], rs: { fire: -0.25, earth: 0.25 }, vscale: 1.15, drops: [["wellMandible", 1]],
+    intro: "The sand in the well starts to slide. Two great mandibles rise out of it.", bigEvery: 4, bigHit: 0.9, bigName: "Mandible Crush", bigSingle: 1,
+    ab: [{ n: "Mandible Snap", p: 0.72, w: 4 }, { n: "Sand Pit", p: 0.35, hold: 2, w: 3, if: "nobodyHeld&!broken" }, { n: "Sand Spray", p: 0.28, aoe: 1, db: ["spd", -0.2, 2], w: 2 }, { n: "Dig In", self: ["dr", 0.35, 1], w: 1, if: "hp<0.6" }] });
+
   // ================= M2 (chapters 3-4) =================
   boss("fortCenturion", "Fort Ocelan Centurion", "human", 13, 170, "mid", { hpMult: 3.6, exec: { name: "Decimation", p: 1.2, on: 2 }, breakType: "impact", breakNeed: 2, pr: 0.15, drops: [["G42", 1]],
     intro: "The centurion draws a long gladius. \"This fort has held for forty years. It will hold for you.\"", bigEvery: 4, bigHit: 0.75, bigName: "Cohort Charge",

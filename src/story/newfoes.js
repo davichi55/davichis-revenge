@@ -7,14 +7,14 @@
     scytheEdge: ["Gilded Scythe Edge", 22], lacqueredScabbard: ["Lacquered Scabbard", 26], chainLink: ["Hooked Chain Link", 28], fanRib: ["Painted Fan Rib", 42], halberdSpike: ["Halberd Spike", 42],
     flailBall: ["Spiked Flail Ball", 36], brassGear: ["Brass Gear", 36], oilHose: ["Oil-Soaked Hose", 46], drumSkin: ["Drumskin Scrap", 40], eagleFinial: ["Gold Eagle Finial", 62],
     bronzeGreave: ["Bronze Greave", 46], obsidianMask: ["Obsidian Mask Shard", 58], wardStone: ["Carved Ward Stone", 60], harpoonHead: ["Barbed Harpoon Head", 36], brassCrank: ["Brass Crank", 38],
-    windUpKey: ["Wind-Up Key", 38], strawBundle: ["Rotten Straw Bundle", 18], blackFeather: ["Black Crow Feather", 16], bladeTusk: ["Blade-Tipped Tusk", 24],
+    windUpKey: ["Wind-Up Key", 38], wellMandible: ["Well-Eater Mandible", 90], strawBundle: ["Rotten Straw Bundle", 18], blackFeather: ["Black Crow Feather", 16], bladeTusk: ["Blade-Tipped Tusk", 24],
   });
   Q(D.DROPS, {
     scytheLegionary: [["scytheEdge", 0.4], ["legionCoin", 0.4]], katanaLegionary: [["lacqueredScabbard", 0.5], ["legionCoin", 0.4]], chainSickleSkirmisher: [["chainLink", 0.45]],
     warFanDancer: [["fanRib", 0.45]], gateHalberdier: [["halberdSpike", 0.45], ["legionCoin", 0.4]], bucklerFlailer: [["flailBall", 0.45]], brassArmSapper: [["brassGear", 0.45]],
     bellowsFlamer: [["oilHose", 0.4]], drumCarrier: [["drumSkin", 0.45]], aquilaBearer: [["eagleFinial", 0.7], ["legionCoin", 0.8]], phalanxHoplite: [["bronzeGreave", 0.4], ["legionCoin", 0.4]],
     maskedExecutioner: [["obsidianMask", 0.7]], wardStoneAbjurer: [["wardStone", 0.7]], harpoonMarine: [["harpoonHead", 0.45]], repeaterCrossbowman: [["brassCrank", 0.45]],
-    clockworkWarHound: [["windUpKey", 0.45]], scarecrowReaver: [["strawBundle", 0.5]], scarecrowCrow: [["blackFeather", 0.5]], tuskedWarBoar: [["bladeTusk", 0.45]],
+    clockworkWarHound: [["windUpKey", 0.45]], scarecrowReaver: [["strawBundle", 0.5]], scarecrowCrow: [["blackFeather", 0.5]], tuskedWarBoar: [["bladeTusk", 0.45]], wellEater: [["wellMandible", 1]],
   });
   Q(D.BEST, {
     scytheLegionary: "A legionary with a black scythe over his shoulder. Every third round the blade goes up for the weakest of you, and it is slow.",
@@ -36,6 +36,7 @@
     scarecrowReaver: "Straw, rust and a stolen breastplate. It stands up again while the crow lives. Kill the crow first. Fire.",
     scarecrowCrow: "A black crow on a scarecrow's shoulder. It is small, and it is the reason the scarecrow keeps getting up.",
     tuskedWarBoar: "A boar in bronze with blades on its tusks. Every third round it lowers its head and rushes one of you.",
+    wellEater: "An antlion the size of a wagon, living in the dry well of the old waystation. It drags one of you down into its sand pit. The keeper kept fires round the well, and it stayed down while they burned.",
   });
-  Q(D.BREAKS, { bellowsFlamer: "Water. The oil tank bursts, and the foes standing next to him feel it." });
+  Q(D.BREAKS, { wellEater: "Fire, three rounds in a row. Any fire hit heats the sand. The pit glazes to glass, it cannot dig, and whoever it dragged down climbs out.", bellowsFlamer: "Water. The oil tank bursts, and the foes standing next to him feel it." });
 })();

@@ -1,5 +1,5 @@
 // CH1-EXPAND: The Dry Waystation (east of the Caravan Graveyard): a half-buried builder waystation, courtyard, pillared hall, three side cells, a dry well. Table "cistern" 24 s (builder ruin).
-// Entries: start / from_caravanGraveyard (W). Exit: caravanGraveyard@from_dryWaystation. Chests waystationChest1 waystationChest2, lore waystationLedger (keeper's ledger) + waystationTablet, trigger waystationEnter.
+// Entries: start / from_caravanGraveyard (W). Exit: caravanGraveyard@from_dryWaystation. Chests waystationChest1 waystationChest2, lore waystationLedger (keeper's ledger) + waystationTablet, triggers waystationEnter + wellEater (optional boss in the dry well, ch1x.js).
 (function () {
   const { R, E, P, L } = World.shapes, K = World.kitM2, W = 2400, H = 1600;
   const wall = (x, y, w, h) => ["wall", R(x, y, w, h)];
@@ -20,7 +20,7 @@
     dark: { ambient: 0.42, radius: 300, fireRadius: 160 },
     entries: { start: { x: 160, y: 800, face: "right" }, from_caravanGraveyard: { x: 160, y: 800, face: "right" } },
     exits: [{ rect: [40, 740, 56, 120], to: "caravanGraveyard", entry: "from_dryWaystation", push: [1, 0] }],
-    triggers: [{ id: "waystationEnter", rect: [560, 740, 100, 120] }],
+    triggers: [{ id: "waystationEnter", rect: [560, 740, 100, 120] }, { id: "wellEater", rect: [700, 690, 260, 230] }],
     chests: [{ id: "waystationChest1", x: 1760, y: 420 }, { id: "waystationChest2", x: 1760, y: 1180 }],
     npcs: [
       { id: "waystationLedger", art: "clerkDesk", name: "Keeper's desk", x: 1760, y: 780, hint: "E / Space: read the ledger" },
@@ -30,6 +30,8 @@
       ["amberWell", 830, 800, { solid: [30, 14] }], ["builderPillar", 1240, 400], ["builderPillar", 1460, 400], ["builderPillar", 1240, 700], ["builderPillar", 1460, 700], ["builderPillar", 1240, 1000], ["builderPillar", 1460, 1000], ["builderPillar", 1240, 1250], ["builderPillar", 1460, 1250],
       ["vaultRubble", 700, 420], ["vaultRubble", 980, 1180], ["vaultRubble", 1130, 620, {}], ["vaultRubble", 1550, 640, {}], ["toppledStatue", 680, 1100, { solid: [26, 12] }], ["crateStack", 1700, 1030, {}], ["crateStack", 1790, 1050, {}], ["barrel", 1650, 1260], ["camelBones", 620, 600], ["skull", 940, 1000],
       ["builderConduit", 1800, 330], ["lightStele", 1680, 640], ["lightStele", 1840, 640], ["deadTree", 400, 800], ["cairn", 220, 780],
+      // the keeper's cold fire rings round the dry well (the Well-Eater lives in it; it hates fire), and what it left
+      ["m2_signalFirePit", 735, 715], ["m2_signalFirePit", 935, 725], ["m2_signalFirePit", 840, 905], ["camelBones", 935, 860], ["skull", 760, 875], ["skull", 905, 690],
     ],
     scatter: [{ keys: [["vaultRubble", 2], ["bones", 1], ["skull", 1], ["puddle", 0.4]], n: 30, on: ["paved", "floor"], seed: 1401, scaleRange: [0.7, 1] }, { keys: ["sandBoulder", "rocks", "cactus", "deadTree", "shrub", "grass"], n: 50, on: ["sand"], seed: 1402 }],
     lights: [[1240, 700, 140, 0.35], [1460, 700, 140, 0.35], [1760, 780, 120, 0.4], [830, 800, 120, 0.3]],

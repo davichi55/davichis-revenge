@@ -37,7 +37,7 @@
       exits: [["dunes", "North to the Whisperglass Dunes", yes], ["dryWaystation", "East along the old road", yes]],
       things: [thing("graveChest1", "A chest in the north-east rocks", "chest"), thing("graveChest2", "A chest by a dead cart", "chest"), thing("shardHeap", "A great shell under a wagon", "gather", s => !s.f["g.shardHeap"]), thing("tallyBox", "A strongbox under a wagon", "gather", s => s.f["tally.started"] && !s.f["tally.got"]), thing("duskWhisperer", "A whispering shape between the wagons", "trigger", s => s.f["dunes.dusk"] && !s.f["l1.done"])] },
     dryWaystation: { n: "The Dry Waystation", bg: "bg_ruins", arena: "ruins", music: "ruins", table: "cistern", fields: true, dungeon: true, npcs: [["waystationLedger", "The keeper's desk"], ["waystationTablet", "A builder tablet"]],
-      exits: [["caravanGraveyard", "Back west to the Caravan Graveyard", yes]], things: [thing("waystationChest1", "A chest in the north cell", "chest"), thing("waystationChest2", "A chest in the south cell", "chest")] },
+      exits: [["caravanGraveyard", "Back west to the Caravan Graveyard", yes]], things: [thing("waystationChest1", "A chest in the north cell", "chest"), thing("waystationChest2", "A chest in the south cell", "chest"), thing("wellEater", "The dry well", "trigger", s => !s.f["x.wellEater"])] },
     oasisOutskirts: { n: "Sandpiper Oasis", bg: "bg_desert", arena: "basin", music: "oasis", table: "dunes", fields: true, overland: true, npcs: [["reedKeeper", "The reed keeper"]],
       exits: [["sandpiper", "West to Sandpiper Rest", yes], ["dunes", "South to the Whisperglass Dunes", yes], ["glassRidges", "East along the track to the ridges", yes]],
       things: [thing("oasisChest", "A reed basket by the rocks", "chest"), thing("pearlMussels", "Mussels in the shallows", "gather", s => s.f["adders.started"] && !s.f["g.mussels"]), thing("duskWhisperer", "A whispering shape by the water", "trigger", s => s.f["dunes.dusk"] && !s.f["l1.done"])] },
@@ -98,7 +98,7 @@
   T("caravanGraveyard", { tallyBoard: lore(["A plank nailed to a dead wagon, covered in tally marks: forty-one strokes in five-bar bundles. Under the last bundle someone scratched with a knife:", "\"WAITED FOR THE WELL TO FILL. IT DID NOT.\"", hero("Forty-one wagons. East, the old road goes on. Toward what?")]) });
   T("dryWaystation", {
     waystationTablet: lore(["A tablet by the hall door, the old builders' hand:", "\"We built this house for those who walk. Drink, rest, and leave the well as full as you found it.\""]),
-    waystationLedger: lore(["A keeper's desk, the ledger still open. The last page, in a tired hand:", "\"Day 31. The well is dry. Eleven wagons in the yard, forty-one mouths. I opened the pipe to the Burnt Gate cistern by hand, as the tablet says. Nothing came. Someone has closed it from the other end.\"", "\"Day 33. They have stopped asking. The jackals have not.\"", hero("Closed from the other end. Not a storm. Not luck.")]),
+    waystationLedger: lore(["A keeper's desk, the ledger still open. The last page, in a tired hand:", "\"Day 31. The well is dry. Eleven wagons in the yard, forty-one mouths. I opened the pipe to the Burnt Gate cistern by hand, as the tablet says. Nothing came. Someone has closed it from the other end.\"", "\"Day 32. Something has moved into the dry well. It took Hadi's camel by the leg and pulled it down into the sand. We keep three fires round the well now. It does not come up while they burn.\"", "\"Day 33. They have stopped asking. The jackals have not.\"", hero("Closed from the other end. Not a storm. Not luck.")]),
   });
   T("redMesaSteps", { surveyStone: lore(["A flat stone set into the ledge, cut with a ring of marks and a line of tiny wells:", "\"From this step we measured the basin: eight wells, one sky. The wells belong to whoever keeps them clean.\""]) });
   T("saltpanWorks", { panLedger: lore(["A pan-keeper's desk under a rotted awning, the books weighted with salt. The last entries are in a clerk's neat hand, not the keeper's:", "\"Pan 4: yield nil. Pan 5: yield nil. Works closed by order of the Collection Office. Workers reassigned.\"", hero("Reassigned to where? The page does not say.")]) });
@@ -133,6 +133,47 @@
       F.gold(80); F.give("sunwater", 2); F.questDone("tally");
     },
   });
+  // ---------- the Well-Eater: optional boss in the dry well of the Dry Waystation (rules: src/rules/bosses.js; fire glazes its sand pit) ----------
+  if (window.Cinema && Cinema.bossLooks) Cinema.bossLooks.wellEater = { entrance: "rise", glow: 0x8fe8d8 };
+  const WELL = { x: 830, y: 800 };
+  S.trigger.wellEater = async F => {
+    if (F.f("x.wellEater")) return;
+    await S.stage(async c => {
+      if (!F.f("x.wellSeen")) {
+        F.set("x.wellSeen");
+        await c.pan(WELL.x, WELL.y - 20, 700);
+        await c.say([["narr", "Three fire rings round the well, cold, the wood only half burnt. Bones in the sand between them, picked white."]]);
+      }
+      c.sfx("rumble"); c.shake(2, 700); c.fx("dust", WELL.x, WELL.y - 6, { n: 18, scale: 1.4, color: 0xd8c0a0 });
+      await c.say([["narr", "The sand at the lip of the well starts to slide inward with a long, dry hiss, like water running out of a basin."]]);
+      c.actor("we", { art: "wellEater", x: WELL.x - 28, y: WELL.y + 42, h: 96, face: "left", alpha: 0 });   // in front of the well, crawling out of it
+      c.sfx("roar"); c.shake(5, 600); c.fx("dust", WELL.x, WELL.y - 10, { n: 30, scale: 2, color: 0xd8c0a0 });
+      await c.anim("we", "fadeIn", { ms: 500 }); c.emote("hero", "!");
+      await c.anim("we", "lunge", { dx: -16 });
+      await c.say([["narr", "Two mandibles as long as spears come up out of the well, then a flat head crusted with glass. A small bronze bell hangs from one jaw on a scrap of caravan rope."], hero("Forty-one mouths. Something here ate well.")]);
+      c.remove("we"); c.follow();
+    });
+    await Cinema.boss({ id: "wellEater", name: "The Well-Eater", title: "Queen of the Dry Well", bg: "ruins", music: "boss" });
+    const res = await F.boss([F.mkEnemy("wellEater", 6)], { bg: "ruins", intro: "The Well-Eater opens its sand pit!", music: "boss" });
+    if (res !== "win") return;
+    F.set("x.wellEater");
+    // it sinks back into the well and stays down; the bottom of the pit gives up what the waystation lost
+    await S.stage(async c => {
+      c.actor("we", { art: "wellEater", x: WELL.x - 28, y: WELL.y + 42, h: 96, face: "left" });
+      await c.pan(WELL.x, WELL.y - 20, 600);
+      c.sfx("roar"); await c.anim("we", "shake", { ms: 600 });
+      c.sfx("rockFall"); c.shake(4, 700); c.fx("dust", WELL.x, WELL.y - 8, { n: 26, scale: 1.8, color: 0xd8c0a0 });
+      await c.anim("we", "fadeOut", { ms: 1000 }); c.remove("we");
+      await c.say([["narr", "It drags itself down into the well, and the sand closes over it and stops moving."]]);
+      c.fx("glow", WELL.x, WELL.y - 4, { color: 0xffd36a, ms: 2000 }); c.fx("sparkle", WELL.x, WELL.y - 10, { r: 26, ms: 1800 });
+      F.sfx("coin"); F.gold(150); F.give("sunwater", 3); F.give("curio", 2);
+      await c.say([["narr", "Where the head went down, the sand has given up what it kept: purses, a driver's knife, three flasks still sealed. 150 kakal, three Sunwater Flasks and two odd lucky things."],
+        hero("Eleven wagons. The keeper wrote it all down, and nobody came to read it.")]);
+      c.follow();
+    });
+  };
+  S.done = Q(S.done, { wellEater: F => F.f("x.wellEater") });
+
   S.gather.tallyBox = async F => {
     await S.stage(async c => {
       const h = c.hero;
