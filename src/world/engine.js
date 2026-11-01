@@ -222,6 +222,7 @@
       mk("glowBlue", 96, 96, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(140,210,255,0.9)"); g.addColorStop(0.35, "rgba(80,150,255,0.35)"); g.addColorStop(1, "rgba(60,120,255,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       mk("glowGold", 96, 96, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,230,120,0.95)"); g.addColorStop(0.35, "rgba(255,200,60,0.4)"); g.addColorStop(1, "rgba(255,180,40,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       mk("markRing", 160, 80, (ctx, w, h) => { ctx.lineWidth = 7; ctx.strokeStyle = "rgba(255,226,130,0.95)"; ctx.shadowColor = "rgba(255,200,80,1)"; ctx.shadowBlur = 10; ctx.beginPath(); ctx.ellipse(w / 2, h / 2, w / 2 - 12, h / 2 - 10, 0, 0, Math.PI * 2); ctx.stroke(); ctx.lineWidth = 2; ctx.strokeStyle = "rgba(255,255,230,0.9)"; ctx.shadowBlur = 0; ctx.beginPath(); ctx.ellipse(w / 2, h / 2, w / 2 - 12, h / 2 - 10, 0, 0, Math.PI * 2); ctx.stroke(); });   // marked trigger zones (buildTrigMarks)
+      mk("talkBubble", 22, 18, (ctx, w, h) => { ctx.fillStyle = "rgba(255,248,230,0.95)"; ctx.strokeStyle = "rgba(40,24,12,0.9)"; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(11, 7.5, 9.5, 6.5, 0, 0, Math.PI * 2); ctx.moveTo(6, 12); ctx.lineTo(4, 17); ctx.lineTo(10, 13.5); ctx.fill(); ctx.stroke(); ctx.fillStyle = "rgba(40,24,12,0.9)"; [6.5, 11, 15.5].forEach(x => { ctx.beginPath(); ctx.arc(x, 7.5, 1.3, 0, Math.PI * 2); ctx.fill(); }); });   // updateTalkMarks
       mk("exitArrow", 22, 16, ctx => { ctx.strokeStyle = "rgba(255,236,160,1)"; ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.beginPath(); ctx.moveTo(3, 13); ctx.lineTo(11, 4); ctx.lineTo(19, 13); ctx.stroke(); });
       mk("light", 256, 256, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, 4, w / 2, h / 2, w / 2); g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(0.55, "rgba(255,255,255,0.7)"); g.addColorStop(1, "rgba(255,255,255,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
       mk("vignette", 960, 540, (ctx, w, h) => { const g = ctx.createRadialGradient(w / 2, h / 2, h * 0.38, w / 2, h / 2, w * 0.62); g.addColorStop(0, "rgba(14,6,20,0)"); g.addColorStop(1, "rgba(14,6,20,0.72)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
@@ -412,6 +413,39 @@
         this.conds.push({ cnd: { show: g.show, hide: g.hide }, objs: [glow, star, beacon, bstar], rec });
       }
     }
+    // talkable NPCs out of reach (Danny 2026-11-01: an NPC on unwalkable ground looks talkable but cannot be reached): flood the static walk grid from the main entry
+    // (gates and other switchable solids count as open), and move any talkable NPC with no reachable ground within talking range to the nearest reachable spot
+    fixNpcReach() {
+      const R = this.R, S = CELL, W = Math.ceil(R.w / S), Hh = Math.ceil(R.h / S), seen = new Uint8Array(W * Hh);
+      const st = (cx, cy) => { const x = cx * S + S / 2, y = cy * S + S / 2, hx = this.boat ? 14 : 4, hy = this.boat ? 7 : 3, b = (px, py) => { const gx = Math.floor(px / S), gy = Math.floor(py / S); return gx < 0 || gy < 0 || gx >= this.cw || gy >= this.chh || this.block[gy * this.cw + gx] === 1; }; return !(b(x - hx, y) || b(x + hx, y) || b(x - hx, y - hy) || b(x + hx, y - hy)); };
+      const starts = Object.values(R.entries || {}).map(e => [Math.floor(e.x / S), Math.floor(e.y / S)]), q = [];
+      for (const [cx, cy] of starts) { let best = null, bd = 1e9; for (let dy = -12; dy <= 12; dy++) for (let dx = -12; dx <= 12; dx++) { const x = cx + dx, y = cy + dy; if (x >= 0 && y >= 0 && x < W && y < Hh && st(x, y) && dx * dx + dy * dy < bd) { bd = dx * dx + dy * dy; best = [x, y]; } } if (best && !seen[best[1] * W + best[0]]) { seen[best[1] * W + best[0]] = 1; q.push(best); } }
+      for (let i = 0; i < q.length; i++) { const [x, y] = q[i]; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= W || ny >= Hh || seen[ny * W + nx] || !st(nx, ny)) continue; seen[ny * W + nx] = 1; q.push([nx, ny]); } }
+      if (!q.length) return;
+      const RANGE = 52, moved = [];
+      for (const n of this.npcs) {
+        if (!n.id || n.P || n.noFix) continue;
+        const ncx = Math.floor(n.x / S), ncy = Math.floor(n.y / S), r = Math.ceil(RANGE / S); let near = false;
+        for (let dy = -r; dy <= r && !near; dy++) for (let dx = -r; dx <= r; dx++) { const x = ncx + dx, y = ncy + dy; if (x >= 0 && y >= 0 && x < W && y < Hh && seen[y * W + x] && (dx * dx + dy * dy) * S * S <= RANGE * RANGE) { near = true; break; } }
+        if (near) continue;
+        let best = null, bd = 1e12; for (const [x, y] of q) { const px = x * S + S / 2, py = y * S + S / 2, d = (px - n.x) ** 2 + (py - n.y) ** 2; if (d < bd) { bd = d; best = [px, py]; } }
+        if (!best) continue; moved.push(n.id + " " + Math.round(Math.sqrt(bd)) + "px");
+        n.x = best[0]; n.y = best[1]; if (n.s) n.s.setPosition(n.x, n.y).setDepth(n.y); if (n.sh) n.sh.setPosition(n.x, n.y - 1).setDepth(n.y - 1);
+      }
+      this.npcMoved = moved; if (moved.length) console.info("World: moved unreachable NPCs in " + this.rid + ": " + moved.join(", "));
+    }
+    // a small speech bubble over talkable NPCs you have not spoken to yet, once you are fairly close (flag talked.<region>.<id> is set on the first talk)
+    updateTalkMarks() {
+      if (!this.textures.exists("talkBubble")) return;
+      this.talkMarks = this.talkMarks || new Map();
+      for (const n of this.npcs || []) {
+        if (!n.id || !n.s) continue;
+        let b = this.talkMarks.get(n); const show = n.on && n.s.visible && !this.busy && !this.flags["talked." + this.rid + "." + n.id] && Math.hypot(this.pos.x - n.x, this.pos.y - n.y) < 300;
+        if (!show) { if (b) b.setVisible(false); continue; }
+        if (!b) { b = this.add.image(n.x, n.y, "talkBubble").setOrigin(0.5, 1); this.talkMarks.set(n, b); }
+        b.setVisible(true).setPosition(Math.round(n.x + 10), Math.round(n.y - n.s.displayHeight - 4 + Math.sin(this.time.now * 0.004 + n.x) * 2)).setDepth(9050);
+      }
+    }
     makePeople() {
       const R = this.R; this.npcs = [];
       for (const d of R.npcs || []) {
@@ -426,6 +460,7 @@
         this.npcs.push(n);
         if (d.show !== undefined || d.hide !== undefined) this.conds.push({ cnd: { show: d.show, hide: d.hide }, objs: [n.s, n.sh], rec: n });
       }
+      this.fixNpcReach();
       const en = (R.entries || {})[this.entryName] || (R.entries || {}).start || (R.entries || {}).default || { x: R.w / 2, y: R.h / 2, face: "down" };
       const [sx, sy] = this.nearestFree(en.x, en.y); this.face = en.face === "up" ? "up" : en.face === "down" ? "down" : "side"; this.flipH = en.face === "left";
       this.heroShadow = this.add.image(sx, sy - 1, "shadow").setDepth(sy - 1);
@@ -851,7 +886,7 @@
       if (tr) { this.fireTrigger(tr); return; }
       if (n && dn <= dc && dn <= dg) this.talkTo(n); else if (ch && dc <= dg && !this.flags["chest." + ch.id]) this.openChest(ch); else if (g) this.gatherAt(g);
     }
-    async talkTo(n) { if (n.s && n.sh) { const dx = this.pos.x - n.x; if (Math.abs(dx) > 6 && !n.noTurn) n.s.setFlipX(n.art && /^npc/.test(n.art) ? dx > 0 : n.s.flipX); } await this.runHook("talk", n.id, this.rid); }
+    async talkTo(n) { if (n.id) this.flags["talked." + this.rid + "." + n.id] = true; if (n.s && n.sh) { const dx = this.pos.x - n.x; if (Math.abs(dx) > 6 && !n.noTurn) n.s.setFlipX(n.art && /^npc/.test(n.art) ? dx > 0 : n.s.flipX); } await this.runHook("talk", n.id, this.rid); }
     async openChest(c) { const r = await this.runHook("chest", c.id); if (r !== false) { this.flags["chest." + c.id] = true; this.refresh(); this.spark(c.x, c.y - 14); } }
     async gatherAt(g) { const r = await this.runHook("gather", g.id); if (r !== false) { this.flags["gather." + g.id] = true; this.refresh(); this.spark(g.x, g.y - 10); } }
     pointerDown(p) {
@@ -961,7 +996,7 @@
         n.ps += (n.speed || 22) * dt * n.pd; if (n.ps > n.P.L) { n.ps = n.P.L; n.pd = -1; } if (n.ps < 0) { n.ps = 0; n.pd = 1; }
         const a = pathAt(n.P, n.ps); if (Math.abs(a.hx) > 0.2) n.s.setFlipX(a.hx * n.pd > 0); n.x = a.x; n.y = a.y; n.s.setPosition(Math.round(n.x), Math.round(n.y - Math.abs(Math.sin(time * 0.01)) * 1)).setDepth(n.y); n.sh.setPosition(Math.round(n.x), Math.round(n.y) - 1).setDepth(n.y - 1);
       }
-      this.updateFollowers(time, dt); this.updateArmies(time, dt); this.updateSky(time, dt); this.updateLegends(time, dt); this.updateTrigMarks(time, dt);
+      this.updateFollowers(time, dt); this.updateArmies(time, dt); this.updateSky(time, dt); this.updateLegends(time, dt); this.updateTrigMarks(time, dt); this.updateTalkMarks();
       const v = this.cameras.main.worldView;
       for (const m of this.motes) { m.x += m.vx * dt; m.y += Math.sin(time * 0.001 + m.ph) * 6 * dt; m.s.setPosition(Math.round(v.x + ((m.x - v.x) % 1000 + 1000) % 1000 - 20), Math.round(v.y + ((m.y - v.y) % 600 + 600) % 600 - 20)); }
       if (this.dark) this.updateDark(time);
