@@ -549,7 +549,9 @@
   const costText = (u, id) => { const m = Core.MOVES[id]; const c = Core.mpCost(u, id); return m.hpCost ? `${Math.round(m.hpCost * 100)}% HP` : m.hpCostPct ? `${Math.round(m.hpCostPct * 100)}% HP` : c ? c + " MP" : m.basic ? "+1 MP" : "free"; };
   const powerNote = (u, id) => {
     const m = Core.MOVES[id], bits = [];
-    if (m.p) bits.push(`Power ${Math.round(m.p * 100)}%${m.hits > 1 ? " x" + m.hits : ""}`);
+    // which stat the hit uses (Jeremy 2026-11-02: "Power 90%" read as the Power stat while the move used Attack)
+    const stat = m.kind === "best" ? "higher of Attack/Power" : m.kind === "spell" ? (u.style === "gorgon" ? "Speed" : "Power") : u.style === "colossus" ? "Attack or Defense" : "Attack";
+    if (m.p) bits.push(`${Math.round(m.p * 100)}% strength${m.hits > 1 ? " x" + m.hits : ""}, uses ${stat}`);
     if (id === "maelstrom" || id === "tidalWave") bits.push(`Tide now ${u.tide}: x${(1 + 0.8 * u.tide).toFixed(1)}`);
     if (m.el && m.el !== "self") bits.push(m.el);
     if (m.charge) bits.push("charge");

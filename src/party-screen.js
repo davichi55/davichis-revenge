@@ -2,7 +2,7 @@
 // Built on the shared UI layer (src/ui/ui.js). Keys: Left/Right or 1-9 switch creature, Q/R tabs, Up/Down pick a stat, Enter adds a point, Esc closes.
 "use strict";
 const STAT_INFO = {
-  hp: "How much damage it can take.", atk: "Damage of basic attacks and physical moves.", pow: "Spell damage and how much heals restore.",
+  hp: "How much damage it can take.", atk: "Damage of physical moves.", pow: "Damage of spells and how much heals restore.",
   def: "Less physical damage taken.", res: "Less spell damage taken, and shrugging off status effects.",
   spd: "Who acts first. At 2x the enemy's speed: +1 action per turn.", foc: "Starting MP in a fight: +1 MP per 10 Focus.",
   lck: "Critical hits, and the chance your status effects land.",
