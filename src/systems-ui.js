@@ -91,9 +91,9 @@
       ];
     })(),
     ["swarm", "Swarms", "Some foes are a swarm of many small bodies: area moves hit them 1.6x as hard, single-target moves only 0.75x.", true],
-    ["burn", "Burn", "Fire damage at the end of each of the burning one's turns, for 3 turns (a new stack refreshes the time), up to 8 stacks. Each tick = stacks x (1 + 0.18 x the Power of whoever set it alight). More Power, hotter burn. Water puts it out."],
-    ["bleed", "Bleed", "Damage at the end of each of the bleeding one's turns, for 3 turns, up to 8 stacks. Each tick = stacks x (1 + 0.18 x the Attack of whoever cut it). Skeletons and some others cannot bleed."],
-    ["poison", "Poison", "Poison damage at the end of each of the poisoned one's turns, for 4 turns, up to 8 stacks. Each tick = stacks x (1 + 0.18 x the Power of whoever poisoned it). Slow but long."],
+    ["burn", "Burn", "Fire damage at the end of each of the burning one's turns, for 3 turns (a new stack refreshes the time), up to 8 stacks. Each tick = stacks x (1 + 0.18 x the average of the Power and Focus of whoever set it alight). More Power and Focus, hotter burn. Water puts it out."],
+    ["bleed", "Bleed", "Damage at the end of each of the bleeding one's turns, for 3 turns, up to 8 stacks. Each tick = stacks x (1 + 0.18 x the average of the Speed and Attack of whoever cut it). Fast, sharp creatures bleed their targets hardest. Skeletons and some others cannot bleed."],
+    ["poison", "Poison", "Poison damage at the end of each of the poisoned one's turns, for 4 turns, up to 8 stacks. Each tick = stacks x 1.15 x (1 + 0.18 x the average of the Power and Luck of whoever poisoned it). Slow but long."],
     ["shock", "Shock", "A small tick each turn for 2 turns (up to 3 stacks), and every stack gives a 12% chance to lose an action at the start of a turn. On a wet target, shock does double damage instead (Conductive)."],
     ["wet", "Wet", "Lasts 3 turns. Wet + shock = Conductive (double damage). Wet + chill = Freeze. Wet + burn = Steam (the burn goes out)."],
     ["chill", "Chill", "Each stack lowers Speed by 6% for 3 turns, up to 6 stacks. Chill + wet = Freeze. A heavy physical blow on a chilled or frozen target shatters it (Shatter)."],
@@ -132,8 +132,8 @@
   };
   U.STYLE_TIP = {
     minotaur: "Hits hard and spends little MP: Attack first, HP so it survives in front, a little Speed.",
-    harpy: "Fast, many small hits: Speed (aim for twice the enemy's), Attack, then Luck for critical hits.",
-    hydra: "Wears foes down with statuses: Power for stronger burn and poison, Luck so they land, some HP.",
+    harpy: "Fast, many small hits: Speed (aim for twice the enemy's) and Attack, which also make its bleeds deeper, then Luck for critical hits.",
+    hydra: "Wears foes down with statuses: Power and Luck for stronger poison (Luck also helps them land), Focus for a hotter burn, some HP.",
     colossus: "Stands in front and takes the hits: HP, Defense and Resistance. Attack matters little.",
     phoenix: "Heals and rises again: Power for bigger heals, Focus so the first heal comes early, Resistance.",
     gorgon: "Slows and weakens: Speed to act before the enemy, Power for its spells, Luck to make every weakening bite deeper.",

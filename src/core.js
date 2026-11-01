@@ -564,7 +564,8 @@
   // a buff that lasts until the owner's next turn starts
   const hold = (owner, tgt, type, val, o) => addBuff(tgt, type, val, 99, Object.assign({ owner, until: "turn" }, o || {}));
   const STATUS = {
-    burn: { name: "Burn", dot: 1, max: 8, t: 3, stat: "pow", el: "fire" }, bleed: { name: "Bleed", dot: 1, max: 8, t: 3, stat: "atk" }, poison: { name: "Poison", dot: 1, max: 8, t: 4, stat: "pow", el: "poison" },
+    // damage over time scales on the average of two stats (Danny 2026-11-01): burn Power + Focus, bleed Speed + Attack, poison Power + Luck
+    burn: { name: "Burn", dot: 1, max: 8, t: 3, stat: ["pow", "foc"], el: "fire" }, bleed: { name: "Bleed", dot: 1, max: 8, t: 3, stat: ["spd", "atk"] }, poison: { name: "Poison", dot: 1.15, max: 8, t: 4, stat: ["pow", "lck"], el: "poison" },   // dot 1.15: Hydras lost a little from the Luck half; this gives it back
     shock: { name: "Shock", dot: 0.6, max: 3, t: 2, stat: "pow", el: "shock" }, chill: { name: "Chill", max: 6, t: 3 }, wet: { name: "Wet", max: 1, t: 3 }, slow: { name: "Slow", max: 1, t: 2 },
     stun: { name: "Stun", max: 1, t: 1, ctrl: 1 }, freeze: { name: "Freeze", max: 1, t: 1, ctrl: 1 }, steam: { name: "Steam", max: 1, t: 2 }, petrify: { name: "Petrify", max: 3, t: 3 },
   };
@@ -639,7 +640,7 @@
     let add = n; if (src && src.ablaze && type === "burn" && !o.off) add += 1;
     if (src && src.evo && src.side !== tgt.side) { dur += EVO.statusDur(src, type); add += EVO.statusStack(src, type); }   // evolution traits: longer statuses, extra stacks
     if (type === "poison" && src && src.fx && fxl(src, "virulent")) { const f = fxs(src); if (f.virT !== src.fxTurns) { f.virT = src.fxTurns; if (fxl(src, "virulent") >= 2 || src.fxTurns % 2 === 1) add += 1; } }   // Virulent
-    const pw = src ? eff(src, S.stat || "pow") : 10, ex = tgt.st[type];
+    const pw = !src ? 10 : Array.isArray(S.stat) ? (eff(src, S.stat[0]) + eff(src, S.stat[1])) / 2 : eff(src, S.stat || "pow"), ex = tgt.st[type];
     if (ex) { ex.n = Math.min(S.max, ex.n + add); ex.t = Math.max(ex.t, dur); ex.pw = Math.max(ex.pw, pw); if (src && src.passive === "manyHeads" && !o.off) ex.mh = true; }
     else tgt.st[type] = { n: Math.min(S.max, add), t: dur, pw, mh: !!(src && src.passive === "manyHeads" && !o.off) };
     if (src && src.fx) gearStatus(ctx, src, tgt, type);
