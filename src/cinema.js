@@ -205,6 +205,19 @@
     }
 
     // ----- actors -----
+    // a spot for scene creature a near (x, y) where it does not cover another character (Danny 2026-11-01: "you can barely see him since its underneath someone"):
+    // you, your followers, the area's NPCs and the other scene actors count; props (wagons, altars) do not. Walkable spots only, unless the scene aimed off the walkable ground on purpose.
+    _clearSpot(a, x, y) {
+      const sc = this.sc; if (!sc || !a || a.hero) return [x, y];
+      const W = (a.dispW || 50) * 0.6, H = (a.dispH || 70) * 0.75, boxes = [];
+      const add = s => { if (!s || !s.visible || !s.active || s.alpha < 0.05) return; const w = s.displayWidth * 0.6, h = s.displayHeight * 0.75; boxes.push([s.x - w / 2, s.y - h, s.x + w / 2, s.y]); };
+      add(sc.hero); (sc.followers || []).forEach(f => add(f && f.s)); (sc.npcs || []).forEach(n => add(n.s)); this.actors.forEach(o => { if (o !== a) add(o.s); });
+      const walkable = !sc.free || sc.free(x, y);
+      const ok = (cx, cy) => !boxes.some(b => cx - W / 2 < b[2] && cx + W / 2 > b[0] && cy - H < b[3] && cy > b[1]) && (!walkable || sc.free(cx, cy));
+      if (ok(x, y)) return [x, y];
+      for (let r = 16; r <= 240; r += 16) for (let k = 0; k < 16; k++) { const t = k / 16 * Math.PI * 2, cx = Math.round(x + Math.cos(t) * r), cy = Math.round(y + Math.sin(t) * r * 0.7); if (ok(cx, cy)) return [cx, cy]; }
+      return [x, y];
+    }
     actor(id, o = {}) {
       const sc = this.sc; if (!sc || this.dead) return null;
       try {
@@ -224,7 +237,7 @@
     _loadArt(a, o) {
       const sc = this.sc;
       return new Promise(resolve => {
-        const done = res => { try { if (!this.dead && a.s && a.s.scene) { if (res) this._applyArt(a, res); else this._placeholder(a); } } catch (e) { console.warn("Cinema art", a.id, e); } resolve(); };
+        const done = res => { try { if (!this.dead && a.s && a.s.scene) { if (res) this._applyArt(a, res); else this._placeholder(a); if (!o.exact && !a.lift && !a.moving) { const [nx, ny] = this._clearSpot(a, a.x, a.y); a.x = nx; a.y = ny; } } } catch (e) { console.warn("Cinema art", a.id, e); } resolve(); };   // o.exact: keep the spot even if it covers someone
         const art = a.art;
         if (art === "hero") return done({ key: "hkSideIdle", kind: "hero" });
         if (sc.textures.exists(art) && art !== "__MISSING") return done({ key: art, kind: "region" });
@@ -280,8 +293,9 @@
     }
     remove(id) { const a = this.actors.get(id); if (a) { this._destroyActor(a); this.actors.delete(id); } else if (this.sc) { const n = (this.sc.npcs || []).find(q => q.id === id); if (n) { n.on = false; if (n.s) n.s.setVisible(false); if (n.sh) n.sh.setVisible(false); } } }
     face(id, dir) { const e = this._ent(id); if (!e) return; if (e.kind === "actor") this._face(e.a, dir); else if (e.kind === "hero") { const sc = this.sc; sc.face = dir === "up" ? "up" : dir === "down" ? "down" : "side"; if (dir === "left") sc.flipH = true; if (dir === "right") sc.flipH = false; } else if (e.kind === "npc" && e.n.s && (dir === "left" || dir === "right")) e.n.s.setFlipX(dir === "right"); }
-    async walk(id, x, y, ms) {
+    async walk(id, x, y, ms, o = {}) {
       await this._settle(); const e = this._ent(id); if (!e || this.dead) return;
+      if (e.kind !== "hero" && e.kind !== "npc" && !o.exact) [x, y] = this._clearSpot(e.a, x, y);   // stop beside the others, not on top of them
       const dist = Math.hypot(x - e.x, y - e.y), dur = ms != null ? ms : dist / 90 * 1000;
       if (e.kind === "hero") return this.walkHero(x, y, ms);
       if (e.kind === "npc") { const n = e.n, dx = x - n.x; if (Math.abs(dx) > 2 && n.s) n.s.setFlipX(dx > 0); await new Promise(res => { this.sc.moveNpc(id, x, y, dist / Math.max(0.05, this._dur(dur) / 1000)).then(res, res); setTimeout(res, this._dur(dur) + 1500); }); return; }
@@ -351,7 +365,7 @@
       await this.pan(w.x, w.y - w.h * 0.4, 900); this.light(w.x, w.y - w.h * 0.45, 150, 0.85);
       if (o.before) await this.say(o.before);
       this.sfx("keyTurn"); await this.wait(450);
-      const a = this.actor(id, { art, x: w.x, y: w.y + 12, scale: o.scale, face: w.x < h.x ? "right" : "left" }); if (a) a.lift = Math.round(w.h * 0.3);
+      const a = this.actor(id, { art, x: w.x, y: w.y + 12, scale: o.scale, face: w.x < h.x ? "right" : "left", exact: true }); if (a) a.lift = Math.round(w.h * 0.3);
       await this.anim(id, "fadeIn", { ms: 450 });
       this.sfx("creak"); this.shake(2, 450); await this.anim(id, "shake", { ms: 450 });
       this.sfx("door"); this.fx(o.fx || "sparkle", w.x, w.y - w.h * 0.45, { r: 70, ms: 2200 }); if (o.fx && o.fx !== "sparkle") this.fx("sparkle", w.x, w.y - w.h * 0.5, { r: 50, ms: 1400 });
