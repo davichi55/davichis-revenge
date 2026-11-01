@@ -119,7 +119,7 @@ const Menus = (() => {
         let h = foot + `<div style="margin-bottom:10px">${sub.map((s, i) => `<button class="tab${i === jt ? " on" : ""}" data-jt="${i}">${s}</button>`).join(" ")}</div>`;
         if (jt === 0) {
           const ids = Object.keys(G.quests), act = ids.filter(i => G.quests[i] !== "done"), done = ids.filter(i => G.quests[i] === "done");
-          h += `<h3>Active</h3>` + (act.length ? act.map(i => { const q = Data.QUESTS[i]; return `<div class="row"><div class="g">${esc(q.t)}${q.main ? ` <small style="display:inline;color:#f2c14e">main</small>` : ""}<small>${esc(q.steps[G.quests[i]] || "")}</small></div></div>`; }).join("") : `<div class="row"><div class="g">Nothing active.</div></div>`)
+          h += `<h3>Active</h3>` + (act.length ? act.map(i => { const q = Data.QUESTS[i]; return `<div class="row"><div class="g">${esc(q.t)}${q.main ? ` <small style="display:inline;color:#f2c14e">main</small>` : ""}<small>${esc(Flow.qText(i))}</small></div></div>`; }).join("") : `<div class="row"><div class="g">Nothing active.</div></div>`)
             + `<h3 style="margin-top:12px">Done</h3>` + (done.map(i => `<div class="row"><div class="g" style="color:#b7a58a">${esc(Data.QUESTS[i].t)}</div></div>`).join("") || `<div class="row"><div class="g">None yet.</div></div>`);
         } else if (jt === 1) {
           const towns = Object.keys(G.rumours).filter(t => G.rumours[t].length);

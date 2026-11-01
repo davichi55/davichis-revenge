@@ -157,7 +157,7 @@
       const ids = Object.keys(G.quests).filter(i => Data.QUESTS[i]), grp = i => (Data.QUESTS[i].ch !== undefined ? "Chapter " + Data.QUESTS[i].ch : Data.QUESTS[i].main ? "Main story" : "Side");
       const act = ids.filter(i => G.quests[i] !== "done"), done = ids.filter(i => G.quests[i] === "done");
       const sorted = list => list.slice().sort((a, b) => (Data.QUESTS[b].main ? 1 : 0) - (Data.QUESTS[a].main ? 1 : 0));
-      const q = (i, d) => { const o = Data.QUESTS[i]; return d ? `<div class="row"><div class="g" style="color:#b7a58a">${esc(o.t)}</div></div>` : `<div class="row"><div class="g">${esc(o.t)}${o.main ? ` <small style="display:inline;color:#f2c14e">main</small>` : ""}<small>${esc(o.steps[G.quests[i]] || "")}</small></div></div>`; };
+      const q = (i, d) => { const o = Data.QUESTS[i]; return d ? `<div class="row"><div class="g" style="color:#b7a58a">${esc(o.t)}</div></div>` : `<div class="row"><div class="g">${esc(o.t)}${o.main ? ` <small style="display:inline;color:#f2c14e">main</small>` : ""}<small>${esc(Flow.qText(i))}</small></div></div>`; };
       const groups = list => { const g = {}; list.forEach(i => (g[grp(i)] = g[grp(i)] || []).push(i)); return Object.keys(g).map(k => (Object.keys(g).length > 1 ? `<div style="color:#8a6a3a;margin:6px 0 4px">${esc(k)}</div>` : "") + sorted(g[k]).map(i => q(i, list === done)).join("")).join(""); };
       const total = act.length + done.length, shown = (list) => list; void shown;
       const all = act.concat(done); const pages = Math.ceil(total / (PER * 2)); void pages;

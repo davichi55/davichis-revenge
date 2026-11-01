@@ -133,6 +133,22 @@ const Flow = (() => {
   };
   F.questDone = id => { if (G.quests[id] === "done") return; G.quests[id] = "done"; if (Data.QUESTS[id]) UI.toast("Quest complete: " + Data.QUESTS[id].t, 3000); };
   F.qstep = id => G.quests[id];
+  // live counts for the journal: a quest step that says "(0/3)" shows how far you really are (Danny 2026-11-01: the Quarry Order still said 0/3 after two Knights).
+  // Each entry counts the same way its quest giver does: kills since the quest was taken (base flag), goods in the bag, or story flags.
+  const kSince = (id, base) => () => ((G.kills || {})[id] || 0) - (G.flags[base] || 0), goods = k => () => (G.goods || {})[k] || 0, flags = list => () => list.filter(f => G.flags[f]).length;
+  F.QPROG = {
+    tidy: flags(["tidy1", "tidy2", "tidy3"]), shard: kSince("duneScorpionKnight", "shardBase"), adders: kSince("glassAdder", "addersBase"), pearls: kSince("pearlBackedSnapper", "pearlBase"),
+    lanterns: goods("lanternWick"), m_letters: flags(["ch4.letter.1", "ch4.letter.2", "ch4.letter.3", "ch4.letter.4"]),
+    bounty1: kSince("mesaRoc", "bounty1.base"), bounty3: kSince("sirenEel", "bounty3.base"), bounty4: goods("saltGargoyleShard"), bounty6: kSince("overseersHound", "b6.base"),
+    bounty7: goods("collarTool"), bounty8: kSince("gnawling", "b8.base"), bounty9: () => ((G.kills || {}).prisonGuard || 0) + ((G.kills || {}).warderSpearman || 0) - (G.flags["b9.base"] || 0),
+    bounty10: kSince("siegeBallista", "bounty10.base"), bounty11: kSince("stormRoc", "bounty11.base"), bounty12: kSince("boneChoir", "bounty12.base"),
+  };
+  F.qText = id => {
+    const q = Data.QUESTS[id], t = (q && q.steps[G.quests[id]]) || "", fn = F.QPROG[id];
+    if (!fn || !/\(\d+\/\d+\)/.test(t)) return t;
+    let n = 0; try { n = fn(); } catch (e) { return t; }
+    return t.replace(/\((\d+)\/(\d+)\)/, (m, a, max) => "(" + Math.max(0, Math.min(+max, n)) + "/" + max + ")");
+  };
   F.rumour = town => {
     const list = Data.RUMOURS[town] || []; G.rumours[town] = G.rumours[town] || [];
     const i = list.findIndex((_, k) => !G.rumours[town].includes(k)); if (i < 0) return null;
