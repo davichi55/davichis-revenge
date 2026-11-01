@@ -151,13 +151,13 @@
   mv("rupture", "Rupture", 20, 3, "enemy", { fx: "rupture", desc: "Consumes all bleed for one big burst." });
   mv("regrow", "Regrow a Head", 24, 2, "self", { grp: "support", fx: "regrow", desc: "Heals itself over 3 turns." });
   // --- Colossus ---
-  mv("stoneFist", "Stone Fist", 1, 0, "enemy", { basic: 1, grp: "basic", p: 0.8, el: "self", bonusDef: 0.3, desc: "Heavy punch that hits harder the higher its Defense. +1 MP." });
+  mv("stoneFist", "Stone Fist", 1, 0, "enemy", { basic: 1, grp: "basic", p: 0.8, el: "self", bonusDef: 0.3, desc: "Heavy punch that hits harder the higher this creature's own Defense. +1 MP." });
   mv("challenge", "Challenge", 1, 1, "self", { grp: "support", fx: "challenge", desc: "Single-target attacks must hit it for 2 turns." });
   mv("fortify", "Fortify", 4, 1, "self", { grp: "support", fx: "fortify", desc: "+40% Defense and Resistance for 2 turns." });
   mv("bulwark", "Bulwark", 6, 2, "ally", { grp: "support", fx: "bulwark", desc: "Takes the single-target hits meant for one ally until its next turn." });
   mv("counterSt", "Counter Stance", 8, 2, "self", { grp: "support", fx: "counterSt", desc: "Strikes back after every hit it takes until its next turn." });
   mv("shieldWall", "Shield Wall", 12, 3, "team", { grp: "support", fx: "shieldWall", desc: "The whole team takes 30% less damage until its next turn." });
-  mv("crushWeight", "Crushing Weight", 16, 2, "enemy", { p: 1.0, bonusDef: 0.9, desc: "Damage based on its own Defense." });
+  mv("crushWeight", "Crushing Weight", 16, 2, "enemy", { p: 1.0, bonusDef: 0.9, desc: "Damage based on this creature's own Defense." });
   mv("earthshaker", "Earthshaker", 20, 3, "allEnemies", { p: 1.1, bk: ["impact"], fx: "earthshaker", desc: "Hits all enemies, small stun chance. Counts toward impact breaks." });
   mv("unbreakable", "Unbreakable", 24, 2, "self", { grp: "support", fx: "unbreakable", desc: "Removes its own debuffs, immune to stun for 2 turns." });
   // --- Phoenix ---

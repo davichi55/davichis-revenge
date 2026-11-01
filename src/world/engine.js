@@ -116,6 +116,7 @@
         if (R.gridUrl) this.load.json("grid_" + this.rid, R.gridUrl);
         this.party.forEach(id => { const k = "cr_" + id; if (!this.textures.exists(k) && !this.textures.exists("crx_" + id)) this.load.image(k, "assets/creatures/" + id + ".png"); });
         (R.legends || []).forEach(l => { const art = window.Systems && Systems.legendArt ? Systems.legendArt(l) : null; if (art && !this.textures.exists("lg_" + art)) this.load.image("lg_" + art, "assets/creatures/" + art + ".png"); });   // legend silhouettes (SYSTEMS)
+        (R.figures || []).forEach(d => { const k = "cr_" + d.art; if (!this.textures.exists(k)) this.load.image(k, "assets/creatures/" + d.art + ".png"); });   // still creature figures (the creature vault pens)
         ((R.amb && R.amb.hunters) || []).forEach(d => { const k = "cr_" + d.art; if (!this.textures.exists(k)) this.load.image(k, "assets/creatures/" + d.art + ".png"); });   // bounty hunters walk the map in their battle sprite
       };
       if (this.cache.json.exists("regman")) queue();
@@ -462,6 +463,16 @@
         this.npcs.push(n);
         if (d.show !== undefined || d.hide !== undefined) this.conds.push({ cnd: { show: d.show, hide: d.hide }, objs: [n.s, n.sh], rec: n });
       }
+      // still creature figures (Danny 2026-11-01, the creature vault): a creature standing in place, art from assets/creatures, d.size = height in px, d.id names it for the story (World.scene.figures)
+      this.figures = (R.figures || []).map(d => {
+        const k = "cr_" + d.art; if (!this.textures.exists(k)) return null;
+        const im = this.textures.get(k).getSourceImage(), sc = (d.size || 60) / im.height;
+        const f = { d, sh: this.add.image(d.x, d.y - 1, "shadow").setDepth(d.y - 1).setScale(Math.max(0.6, im.width * sc / 46), 0.9), s: this.add.image(d.x, d.y, k).setOrigin(0.5, 1).setDepth(d.y).setScale(sc) };
+        if (d.flip) f.s.setFlipX(true);
+        this.tweens.add({ targets: f.s, scaleY: { from: sc, to: sc * 0.97 }, duration: 900 + hash(d.x, d.y) * 500, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+        if (d.show !== undefined || d.hide !== undefined) this.conds.push({ cnd: { show: d.show, hide: d.hide }, objs: [f.s, f.sh], rec: f });
+        return f;
+      }).filter(Boolean);
       this.fixNpcReach();
       const en = (R.entries || {})[this.entryName] || (R.entries || {}).start || (R.entries || {}).default || { x: R.w / 2, y: R.h / 2, face: "down" };
       const [sx, sy] = this.nearestFree(en.x, en.y); this.face = en.face === "up" ? "up" : en.face === "down" ? "down" : "side"; this.flipH = en.face === "left";

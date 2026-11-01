@@ -78,7 +78,22 @@
     F.quest("m_lessons", 0);
     UI.toast("Tip: Esc opens the menu.");
   };
-  S.trigger["orun.vaultAuto"] = async F => { if (F.f("pro.lessons") && !F.f("pro.packed")) await S.trigger.vault(F); };
+  // after the lessons: up in the courtyard the horn is already blowing; Dunmar sends you down the stair behind the old lab door (the creature vault, orunvault.js)
+  S.trigger["orun.vaultAuto"] = async F => {
+    if (!F.f("pro.lessons") || F.f("pro.packed") || F.f("pro.vaultCall")) return;
+    F.set("pro.vaultCall");
+    await S.stage(async c => {
+      const h = c.hero;
+      c.tint("#2a1008", 0.2, 600); c.sfx("hornWar"); c.shake(2, 600);
+      await c.say([["narr", "Up in the courtyard the air smells of smoke. Somewhere past the south gate a flat, ugly horn is blowing."]]);
+      await S.rush(c, "oldDunmar", h.x - 60, h.y + 6); c.face("oldDunmar", "right");
+      await c.say([["dunmar", "The pens are under the old lab, next door. I've opened the stair. Down you go, lad, quick!"]]);
+      await c.pan(1800, 480, 800);
+      c.fx("glow", 1800, 486, { color: 0xffd36a, ms: 2200 }); c.fx("sparkle", 1800, 470, { r: 30, ms: 2000 });
+      await c.wait(900);
+      c.follow();
+    });
+  };
 
   const TIDY = [["tidy1", "a villager hands you a scroll: \"This was on the book stall. Looks like the Lab Master's.\" (1/3)"], ["tidy2", "a passer-by gives you a jar of cold lamp-oil: \"Found behind a shelf. The lab smell, I think.\" (2/3)"], ["tidy3", "the scholar returns a leaking ink bottle: \"This is Dunmar's, or the lab's. It stains.\" (3/3)"]];
   const tidyOrRumour = idx => async F => {
@@ -96,7 +111,7 @@
     mentor: async F => {
       if (!F.f("pro.dunmar")) await UI.say([["mentor", "Dunmar keeps the lab at the end of the lamp bridge. Three lessons, then the vault. Off you go."]]);
       else if (!F.f("pro.lessons")) await UI.say([["mentor", "Lessons first. A team you cannot read is a team you cannot lead."]]);
-      else await UI.say([["mentor", "To the vault, apprentice. The pens are waiting."]]);
+      else await UI.say([["mentor", "The stair behind the old lab door, apprentice. The pens are waiting."]]);
     },
     oldDunmar: async F => {
       if (!F.f("pro.dunmar")) {
@@ -129,7 +144,7 @@
         G.party = ["horncinder", "shellmund", "kitsuneva"].map(id => F.mk(id, 1));
         UI.toast("The Vanguard joins you for the lessons.");
       } else if (!F.f("pro.lessons")) await UI.say([["dunmar", "The Undercroft, lad. Down the stair, deeper each time. I'll be talking in your ear."]]);
-      else await UI.say([["dunmar", "The vault. Go on."]]);
+      else await UI.say([["dunmar", "The stair behind the old lab door, lad. Go on."]]);
     },
     labMaster: async F => {
       const st = F.qstep("tidy");
@@ -148,7 +163,7 @@
     lockedLabDoor: async F => { await UI.say([["narr", "A brass plate: CAGE HALL. KEEPER ONLY. The lock is cold and heavy."], ["hero", "(What does Dunmar keep in there?)"]]); },
   };
   S.tidyCheck = () => {};
-  S.trigger.packChoice = async F => { if (F.f("pro.lessons") && !F.f("pro.packed")) await S.trigger.vault(F); };
+  S.trigger.packChoice = async () => {};   // the pens moved under the old lab (orunvault.js)
   S.trigger.raidStart = async () => {};
 
   // ---------- Undercroft: three lessons ----------
@@ -205,7 +220,7 @@
           await c.wait(500);
           await c.say([["dunmar", "...That was not a pipe."]]);
         });
-        F.sfx("encounter"); F.go("orun", "vault");
+        F.sfx("encounter"); F.go("orun", "from_undercroft");
       }
     }
   };
@@ -232,46 +247,56 @@
       click: (e, api) => { const b = e.target.closest("[data-c]"); if (b) api.close(+b.dataset.c === 0); },
       keys: (e, api) => { const k = e.key; if (k === "ArrowLeft" || k === "ArrowRight") { sel = 1 - sel; api.redraw(); } else if (k === "Enter" || k === " ") api.close(sel === 0); else if (k === "Escape" || k === "Backspace") api.close(false); } });
   }
-  S.trigger.vault = async F => {
-    F.music("packChoice");
-    // the pens stand in a row, Dunmar and the Master hurry over, then the first blast shakes the courtyard
+  // ---------- the creature vault under Orun (Danny 2026-11-01: a stair behind the old lab door, an open vault where every team stands behind its bars) ----------
+  // map: src/world/regions/orunvault.js (pens pen0..pen8, figures pen<i>_<k>, World.VAULT). Arrive -> vault.arrive; talk to a pen -> close-up -> S.vaultTake.
+  S.trigger["vault.arrive"] = async F => {
+    if (F.f("pro.packed") || F.f("vault.seen")) return;
     await S.stage(async c => {
-      const h = c.hero, pens = Data.PACKS.map(p => p.ids[0]);
-      c.tint("#101420", 0.2, 800);
-      pens.forEach((id, i) => c.actor("pen" + i, { art: id, x: h.x - 320 + i * 80, y: h.y - 150 + (i % 2) * 14, scale: 0.8, alpha: 0 }));
-      c.sfx("woodDoor");
-      await Promise.all(pens.map((id, i) => c.anim("pen" + i, "fadeIn", { ms: 500 + i * 70 })));
-      await c.say([["narr", "The creature vault. Nine pens in a ring, and three pairs of eyes in each."]]);
-      await S.rush(c, "oldDunmar", h.x - 64, h.y - 12); c.face("oldDunmar", "right");
+      const V = World.VAULT || { penX: i => 150 + i * 187.5 };
+      c.tint("#101420", 0.15, 600);
+      await c.pan(V.penX(1), 330, 1000);
+      await c.say([["narr", "The creature vault. Nine pens along the north wall, and three pairs of eyes behind every set of bars."]]);
+      await c.pan(V.penX(7), 330, 2600);
+      await c.say([["narr", "Straw, water troughs, a name chalked over each gate. Something in the far pen hums."]]);
+      c.follow();
+      const h = c.hero;
+      await S.rush(c, "oldDunmar", h.x - 64, h.y - 14); c.face("oldDunmar", "right");
       await c.say([
         ["dunmar", "Here, lad. Today you choose. Not the strongest, there's no such thing. Choose the ones you can stand beside."],
         ["hero", "How will I know?"],
         ["dunmar", "You won't. Not by looking. That's the joke of it."],
       ]);
-      await S.rush(c, "mentor", h.x + 60, h.y - 22); c.face("mentor", "left"); c.emote("oldDunmar", "!");
+      await S.rush(c, "mentor", h.x + 64, h.y - 20); c.face("mentor", "left"); c.emote("oldDunmar", "!");
       await c.say([
         ["mentor", "Dunmar. It's time."],
         ["dunmar", "Already? The bell hasn't even..."],
       ]);
-      c.sfx("explosion"); c.shake(7, 1000); c.flash("#ffc890", 280); c.tint("#3a0c08", 0.35, 500);
-      c.fx("dust", h.x - 120, h.y - 80, { n: 10, scale: 1.5 }); c.fx("dust", h.x + 120, h.y - 60, { n: 10, scale: 1.5 });
-      pens.forEach((id, i) => { if (i % 3 === 0) c.emote("pen" + i, "!"); });
+      c.sfx("explosion"); c.shake(7, 1000); c.flash("#ffc890", 280); c.tint("#3a0c08", 0.3, 500);
+      c.fx("dust", h.x - 140, h.y - 120, { n: 10, scale: 1.5 }); c.fx("dust", h.x + 160, h.y - 90, { n: 10, scale: 1.5 }); c.fx("dust", h.x, h.y - 200, { n: 8 });
       await c.wait(500); c.sfx("hornWar");
-      await c.say([["narr", "BOOM. The floor jumps. Out in the courtyard a flat, ugly horn begins to blow."]]);
+      await c.say([["narr", "BOOM. Dust pours from the ceiling. Up in the courtyard a flat, ugly horn begins to blow, and every creature in the pens is on its feet."]]);
       c.emote("hero", "!");
       await c.say([
-        ["mentor", "That is the empire. Choose, apprentice. We have a moment. No more."],
+        ["mentor", "That is the empire. Choose, apprentice. Walk the pens and look them in the eye. We have a moment. No more."],
         ["hero", "How can you be so calm?"],
         ["mentor", "Because panic is not a plan."],
       ]);
-      await Promise.all(pens.map((id, i) => c.anim("pen" + i, "fadeOut", { ms: 450 })));
     });
+    F.set("vault.seen"); F.music("raid");
+  };
+  S.talk.orunVault = {
+    oldDunmar: async F => { await UI.say([["dunmar", "Not the strongest. The ones you can stand beside. Walk up to a pen and look."]]); },
+    mentor: async F => { await UI.say([["mentor", "Quickly, apprentice. Any of them will follow you, if you open the gate."]]); },
+  };
+  for (let i = 0; i < 9; i++) S.talk.orunVault["pen" + i] = async F => { if (F.f("pro.packed") || !F.f("vault.seen")) return; if (await packCloseup(Data.PACKS[i])) await S.vaultTake(F, i); };
+  // without the map (hub fallback): the old window picker
+  S.trigger.vault = async F => {
     F.music("raid"); F.sfx("encounter");
-    let pick;
-    for (;;) {
-      pick = await pickPack(); const p = Data.PACKS[pick];
-      if (await packCloseup(p)) break;
-    }
+    let pick; for (;;) { pick = await pickPack(); if (await packCloseup(Data.PACKS[pick])) break; }
+    await S.vaultTake(F, pick);
+  };
+  // the pack is chosen: its gate swings open, the three come out to you, soldiers pour down the main stair, the Master holds it, you run with Dunmar for the back stair
+  S.vaultTake = async (F, pick) => {
     const pk = Data.PACKS[pick];
     const sl = S.assignSlots(pk.id);
     G.pack = pk.id; G.slots = sl.slots; G.unchosen = sl.unchosen; G.mirror = sl.mirror;
@@ -279,48 +304,52 @@
     G.party = pk.ids.map(id => { const u = F.mk(id, 3); try { u.stats = Core.makeCreature(id, 1).stats; u.maxHp = Core.maxHpOf(u.stats, u.level); u.hp = u.maxHp; u.points = (u.points || 0) + 6; } catch (e) {} return u; }); G.collection = [];
     G.items.sunwater = (G.items.sunwater || 0);
     F.set("pro.packed"); F.questDone("m_lessons");
-    // the chosen three spill out, soldiers flood in from the hall, the Master holds them while you run for the south gate
     await S.stage(async c => {
-      const h = c.hero, ids = pk.ids;
-      c.tint("#3a0c08", 0.3, 400);
-      ids.forEach((id, i) => c.actor("pc" + i, { art: id, x: h.x + (i - 1) * 70, y: h.y - 140, scale: 0.95, alpha: 0 }));
-      c.sfx("woodDoor");
-      await Promise.all(ids.map((id, i) => c.anim("pc" + i, "fadeIn", { ms: 250 })));
-      const spots = [[-58, 20], [62, 20], [2, 54]];
-      Promise.all(ids.map((id, i) => c.walk("pc" + i, h.x + spots[i][0], h.y + spots[i][1], 900)));
-      await c.say([
-        ["narr", `You throw the pen gate wide. ${pk.ids.map(id => Data.NAMES[id]).join(", ")} spill out and press against your armour.`],
-      ]);
+      const sc = World.scene, V = World.VAULT, h = c.hero, ids = pk.ids;
+      const figs = sc && sc.figures ? sc.figures.filter(f => f.d.id && f.d.id.indexOf("pen" + pick + "_") === 0) : [];
+      const gate = V && sc ? sc.children.list.find(o => o.texture && o.texture.key === "ironFence" && Math.abs(o.x - V.penX(pick)) < 6) : null;
+      c.tint("#3a0c08", 0.25, 400);
+      c.sfx("woodDoor"); c.shake(1.5, 300);
+      if (gate) await c._tw({ targets: gate, alpha: 0, duration: 450 });
+      ids.forEach((id, i) => { const f = figs[i]; c.actor("pc" + i, { art: id, x: f ? f.d.x : h.x + (i - 1) * 70, y: f ? f.d.y : h.y - 140, scale: 0.95, exact: true, face: i === 2 ? "left" : "right" }); if (f) { f.s.setVisible(false); f.sh.setVisible(false); } });
+      const spots = [[-58, 24], [62, 24], [2, 58]];
+      await Promise.all(ids.map((id, i) => c.walk("pc" + i, h.x + spots[i][0], h.y + spots[i][1], 900)));
+      await c.say([["narr", `You throw the gate wide. ${ids.map(id => Data.NAMES[id]).join(", ")} spill out and press against your armour.`]]);
       await Promise.all(ids.map((id, i) => c.anim("pc" + i, "hop")));
       await F.banter("choose");
+      // the soldiers come down the main stair
+      const st = V ? V.mainStair : { x: h.x, y: h.y + 400 };
       c.sfx("hornWar"); c.shake(4, 700);
       const arts = ["raidShieldbearer", "raidSpearman", "raidTorchbearer", "raidShieldbearer", "raidSpearman"];
-      arts.forEach((art, i) => c.actor("sd" + i, { art, x: h.x - 200 + i * 100, y: h.y - 420 - (i % 2) * 36, light: art === "raidTorchbearer" ? 110 : 0 }));
-      await Promise.all(arts.map((art, i) => c.walk("sd" + i, h.x - 200 + i * 100, h.y - 200 - (i % 2) * 30, 1500)));
+      arts.forEach((art, i) => c.actor("sd" + i, { art, x: st.x - 80 + i * 40, y: st.y + 60 + (i % 2) * 20, light: art === "raidTorchbearer" ? 110 : 0, exact: true }));
+      await c.pan(st.x, st.y - 160, 700);
+      await Promise.all(arts.map((art, i) => c.walk("sd" + i, st.x - 220 + i * 110, st.y - 130 - (i % 2) * 30, 1500, { exact: true })));
       c.emote("sd2", "!"); c.sfx("clang");
+      await S.rush(c, "mentor", st.x, st.y - 230, 280); c.face("mentor", "down");
+      c.sfx("swordClash"); c.shake(3, 400); c.fx("dust", st.x, st.y - 200, { n: 8 });
       await c.say([
-        ["narr", "Soldiers flood the vault behind you. Iron collars, ropes, shields like walls. Eight pens go dark, one after another."],
+        ["narr", "Soldiers pour down the stair. Iron collars, ropes, shields like walls. The Master steps into their path with nothing in his hands."],
         ["hero", "No... the others!"],
-        ["dunmar", "Out, lad! The back stair! Now!"],
       ]);
+      c.follow();
+      await c.say([["dunmar", "Out, lad! The back stair! Now!"]]);
       c.emote("hero", "anger");
       await c.say([["mentor", "Take this. Your Field Journal. Everything you see and fight goes into it. Everything. Do you understand?"]]);
       c.sfx("itemGet"); c.fx("glow", h.x, h.y - 40, { color: 0xffd36a, ms: 1200 });
       await c.say([
         ["hero", "Master, come with us!"],
-        ["mentor", "Someone must slow them. Go west, over the dunes, to Sandpiper Rest. I will send word."],
+        ["mentor", "Someone must hold this stair. Go west, over the dunes, to Sandpiper Rest. I will send word."],
       ]);
-      await S.rush(c, "mentor", h.x + 4, h.y - 110, 260); c.face("mentor", "up");
-      c.sfx("swordClash"); c.shake(3, 400); c.fx("dust", h.x, h.y - 130, { n: 8 });
-      const dm = S.at(c, "oldDunmar");
-      if (dm) c.walk("oldDunmar", Math.max(80, h.x - 520), h.y - 40, 1100);
+      const bs = V ? V.backStair : { x: h.x + 500, y: h.y };
+      const dm = S.at(c, "oldDunmar"); if (dm) c.walk("oldDunmar", bs.x - 10, bs.y, 1400);
       await c.say([
         ["narr", "The satchel is already packed. Your name is stitched on the strap, and the thread looks old."],
         ["dunmar", "I'll save the cages I can. Find me when it's quiet. Amber Wells. Look for a wagon."],
         ["hero", "(I'll come back for all of you. I swear it.)"],
       ]);
-      const gy = Math.min(h.y + 260, 1330);
-      await Promise.all([c.walk("hero", h.x, gy, 1300), ...ids.map((id, i) => c.walk("pc" + i, h.x + spots[i][0], gy - 10 + (i === 2 ? 30 : 0), 1300))]);
+      const ms = Math.max(1200, Math.min(3200, Math.hypot(bs.x - h.x, bs.y - h.y) / 0.45));
+      await Promise.all([c.walk("hero", bs.x - 40, bs.y, ms), ...ids.map((id, i) => c.walk("pc" + i, bs.x - 90 - i * 30, bs.y + spots[i][1] - 20, ms, { exact: true }))]);
+      c.sfx("woodDoor"); await c.wait(300);
     });
     F.give("journal", 1, true); F.give("sunwater", 4, true);
     UI.toast("You received the Field Journal and 4 Sunwater Flasks.");

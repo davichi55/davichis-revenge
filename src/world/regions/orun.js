@@ -24,10 +24,11 @@
       ["water", R(0, 660, 1972, 56)], ["paved", R(560, 652, 110, 72)], ["paved", R(930, 652, 112, 72)], ["paved", R(1290, 652, 110, 72)],
       ["road", L([[986, 1344], [986, 1150]], 120)],
     ],
-    entries: { start: { x: 986, y: 1160, face: "up" }, from_dunes: { x: 986, y: 1230, face: "up" }, from_undercroft: { x: 1560, y: 548, face: "down" } },
+    entries: { start: { x: 986, y: 1160, face: "up" }, from_dunes: { x: 986, y: 1230, face: "up" }, from_undercroft: { x: 1560, y: 548, face: "down" }, from_vault: { x: 1800, y: 540, face: "down" } },
     exits: [
       { rect: [936, 1296, 100, 48], to: "whisperglassDunes", entry: "from_orun", push: [0, -1] },
       { rect: [1528, 486, 64, 28], to: "orunUndercroft", entry: "from_orun", push: [0, 1] },
+      { rect: [1768, 476, 64, 28], to: "orunVault", entry: "from_orun", push: [0, 1], show: "pro.lessons", hide: "pro.packed" },   // the old lab door: the stair down to the creature vault (orunvault.js)
     ],
     triggers: [
       { id: "packChoice", rect: [930, 452, 110, 36] },
@@ -46,7 +47,7 @@
       { id: "r1", art: "npcVillagerF", name: "Villager", x: 355, y: 440 },
       { id: "r2", art: "npcVillagerM", name: "Villager", x: 880, y: 650 },
       { id: "r3", art: "npcRedScholar", name: "Scholar", x: 1700, y: 600 },
-      { id: "lockedLabDoor", art: null, name: "Locked door", x: 1800, y: 500, hint: "E / Space: a locked lab door" },
+      { id: "lockedLabDoor", art: null, name: "Locked door", x: 1800, y: 500, hint: "E / Space: a locked lab door", hide: "pro.lessons" },
       { id: null, art: "npcGuard", x: 850, y: 1250, path: [[850, 1250], [850, 1000]] },
       { id: null, art: "npcVillagerM", x: 400, y: 640, path: [[200, 760], [600, 760], [600, 900], [200, 900]], loop: true, speed: 26 },
       { id: null, art: "npcVillagerF", x: 1300, y: 780, path: [[1100, 780], [1700, 780]], speed: 24 },

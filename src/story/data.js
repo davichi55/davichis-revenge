@@ -378,7 +378,7 @@ const Data = (() => {
 
   // ---------- quests ----------
   const QUESTS = {
-    m_lessons:  { t: "Lessons in the Undercroft", main: true, steps: ["Speak to Old Dunmar at the lab.", "Go down to the Undercroft and finish the three lessons.", "Go to the creature vault and choose your team."] },
+    m_lessons:  { t: "Lessons in the Undercroft", main: true, steps: ["Speak to Old Dunmar at the lab.", "Go down to the Undercroft and finish the three lessons.", "Go down the stair behind the old lab door to the creature vault, and choose your team."] },
     m_escape:   { t: "Out of the Burning City", main: true, steps: ["Reach Sandpiper Rest across the dunes."] },
     m_cistern:  { t: "Through the Burnt Gate", main: true, steps: ["Follow the marked route into the Cistern of the Burnt Gate and come out the other side."] },
     m_research: { t: "Field Research", main: true, steps: ["Find Old Dunmar's wagon in Amber Wells.", "Master Ithiel wants the Hollow of the Sky-Stone recorded. Reach it through Saltgate."] },
@@ -446,6 +446,9 @@ const Data = (() => {
       npcs: [["mentor", "Master Ithiel", s => !s.f["pro.packed"]], ["oldDunmar", "Old Dunmar", s => !s.f["pro.packed"]], ["labMaster", "Lab Master"], ["merchant", "Academy shop"], ["innkeeper", "The Lamp and Quill"], ["r1", "A villager"], ["r2", "A passer-by"], ["r3", "A scholar"], ["lockedLabDoor", "The locked lab door"]],
       exits: [["undercroft", "Down to the Undercroft", s => s.f["pro.dunmar"] && !s.f["pro.lessons"]], ["vault", "The creature vault", s => s.f["pro.lessons"] && !s.f["pro.packed"], "trigger"], ["dunes", "Out through the south gate", s => s.f["pro.packed"]]],
       things: [], autos: ["orun.start", "orun.vaultAuto"] },
+    orunVault: { n: "The Creature Vault", bg: "bg_ruins", arena: "ruins", music: "packChoice", fields: false, autos: ["vault.arrive"],
+      npcs: [["oldDunmar", "Old Dunmar"], ["mentor", "Master Ithiel"]].concat([0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => ["pen" + i, "Pen " + (i + 1), s => s.f["vault.seen"] && !s.f["pro.packed"]])),
+      exits: [["orun", "Back up the stair", s => !s.f["pro.packed"]]], things: [] },
     undercroft:{ n: "Orun Undercroft", bg: "bg_ruins", arena: "ruins", music: "dungeon", table: "undercroft", fields: false,
       exits: [["lesson", "Go deeper (next lesson)", s => !s.f["pro.lessons"], "trigger"], ["orun", "Back up to Orun", s => true]], things: [["undercroftChest", "A dusty chest", s => !s.f["c.under"], "chest"]] },
     dunes:     { n: "Whisperglass Dunes", bg: "bg_desert", arena: "desert", music: "dunes", table: "dunes", fields: true,
