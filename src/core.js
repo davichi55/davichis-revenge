@@ -46,7 +46,8 @@
     hydra: { name: "Hydra", passive: "manyHeads", passiveName: "Many Heads: each different status on a target raises all damage over time on it by 10%", w: { hp: 2, atk: 0.5, pow: 3.2, def: 1, res: 1.3, spd: 0.8, foc: 1, lck: 2.2 } },
     colossus: { name: "Colossus", passive: "stoneskin", passiveName: "Stone Skin: +1 MP when hit (max 2 per turn)", w: { hp: 3, atk: 1, pow: 0.3, def: 3, res: 2, spd: 0.4, foc: 0.8, lck: 0.3 } },
     phoenix: { name: "Phoenix", passive: "ashes", passiveName: "From the Ashes: once per fight, rises at 25% HP", w: { hp: 2, atk: 0.3, pow: 3, def: 1, res: 2, spd: 1, foc: 2, lck: 0.4 } },
-    gorgon: { name: "Gorgon", passive: "exposed", passiveName: "Exposed: each debuff on a target makes it take +8% damage from everyone (at most +40%)", w: { hp: 1.4, atk: 0.4, pow: 2.4, def: 0.9, res: 1.5, spd: 2.6, foc: 1.2, lck: 2.4 } },
+    gorgon: { name: "Gorgon", passive: "exposed", passiveName: "Exposed: each debuff on a target makes it take +8% damage from everyone (at most +40%)", w: { hp: 1.4, atk: 0.4, pow: 1.0, def: 0.9, res: 1.5, spd: 3.3, foc: 1.2, lck: 3.1 },
+      genW: { hp: 1.4, atk: 0.4, pow: 2.4, def: 0.9, res: 1.5, spd: 2.6, foc: 1.2, lck: 2.4 } },   // 2026-11-01 (Danny): your Gorgons hit with Speed (see damage), so their spread moves Power into Speed and Luck; Gorgon generals keep the old spread (genW)
     dragon: { name: "Dragon", passive: "comboMaster", passiveName: "Combo Master: reactions it triggers deal +30%", w: { hp: 1.2, atk: 0.3, pow: 3.8, def: 0.6, res: 1.2, spd: 1.8, foc: 2.4, lck: 0.8 } },
     leviathan: { name: "Leviathan", passive: "highWater", passiveName: "High Water: max MP 15; at 5 Tide its next release also stuns", w: { hp: 3.2, atk: 1.6, pow: 2.2, def: 1.2, res: 1.2, spd: 0.5, foc: 2.2, lck: 0.6 } },
   };
@@ -684,6 +685,7 @@
     ctx.ev.push({ t: "breakPt", tgt, pts: tgt.breakPts, need });
     if (tgt.breakPts >= need) { tgt.broken = 2; tgt.breakPts = 0; ctx.ev.push({ t: "broken", tgt }); if (tgt.hooks) hookRun(tgt, "broken", ctx, tgt); if (tgt.charging && tgt.charging.exec) { tgt.charging = null; dropExec(ctx, tgt); ctx.telegraph = ctx.foes.find(f => f.alive && f.charging) || null; say(ctx, tgt.name + "'s execution is broken off!"); } }
   }
+  const GORGON_SPD = 0.8;   // your Gorgons cast with Speed x0.8 instead of Power (Danny 2026-11-01; boss-swap sim: full Speed made them as strong as the damage styles)
   function damage(ctx, src, tgt, base, kind, tg = {}) {
     if (!tgt.alive) return 0;
     const ev = ctx.ev;
@@ -693,7 +695,7 @@
       ev.push({ t: "reflect", src, tgt }); ev.push({ t: "say", text: tgt.name + " reflects the spell!" });
       return damage(ctx, tgt, src, base * 0.6, kind, { el, refl: 1, off: 1 });
     }
-    const A = eff(src, kind === "phys" ? "atk" : "pow"), D = eff(tgt, kind === "phys" ? "def" : "res") * (src.fx ? 1 - fxv(src, "armourPiercer", 0.15, 0.07) : 1) * (src.evo ? EVO.pierce(src, kind) : 1);
+    const A = src.side === "p" && src.style === "gorgon" && kind === "spell" ? eff(src, "spd") * GORGON_SPD : eff(src, kind === "phys" ? "atk" : "pow"), D = eff(tgt, kind === "phys" ? "def" : "res") * (src.fx ? 1 - fxv(src, "armourPiercer", 0.15, 0.07) : 1) * (src.evo ? EVO.pierce(src, kind) : 1);
     let v = base * A * (A / (A + D)) * (0.9 + 0.2 * rnd());
     // level gap (Danny 2026-10-31): an enemy more than 5 levels below its target hits 4% softer per extra level, never below 35%
     const gap = src.side === "e" && tgt.side === "p" && src.level && tgt.level ? tgt.level - src.level - 5 : 0; if (gap > 0) v *= Math.max(0.35, 1 - 0.04 * gap);
@@ -1408,7 +1410,7 @@
   function makeGeneral(creatureId, level, o) {
     o = o || {}; const c = CREATURES[creatureId]; if (!c) throw new Error("makeGeneral: unknown creature " + creatureId);
     const gid = "gen_" + creatureId, br = GEN_BREAK[c.style];
-    const prof = {}; STATS.forEach(k => (prof[k] = (STYLES[c.style].w[k] || 0.1) * ((c.t && c.t[k]) || 1))); prof.hp = Math.max(prof.hp, 2.4);
+    const prof = {}, sw = STYLES[c.style].genW || STYLES[c.style].w; STATS.forEach(k => (prof[k] = (sw[k] || 0.1) * ((c.t && c.t[k]) || 1))); prof.hp = Math.max(prof.hp, 2.4);
     ENEMY_PROFILES[gid] = prof;
     const ab = GEN_AB[c.style].map(([n, p, k, x]) => Object.assign({ n, k, el: k === "spell" ? c.element : undefined }, p ? { p: +(p * GEN_P).toFixed(3) } : {}, x));
     const pm = MOVES[c.personal];
