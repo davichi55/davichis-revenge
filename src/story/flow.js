@@ -143,12 +143,24 @@ const Flow = (() => {
     bounty7: goods("collarTool"), bounty8: kSince("gnawling", "b8.base"), bounty9: () => ((G.kills || {}).prisonGuard || 0) + ((G.kills || {}).warderSpearman || 0) - (G.flags["b9.base"] || 0),
     bounty10: kSince("siegeBallista", "bounty10.base"), bounty11: kSince("stormRoc", "bounty11.base"), bounty12: kSince("boneChoir", "bounty12.base"),
   };
-  F.qText = id => {
-    const q = Data.QUESTS[id], t = (q && q.steps[G.quests[id]]) || "", fn = F.QPROG[id];
-    if (!fn || !/\(\d+\/\d+\)/.test(t)) return t;
-    let n = 0; try { n = fn(); } catch (e) { return t; }
-    return t.replace(/\((\d+)\/(\d+)\)/, (m, a, max) => "(" + Math.max(0, Math.min(+max, n)) + "/" + max + ")");
+  // a full count shows the quest's next step ("Return to the foreman.") before you have talked to the giver; a one-step quest gets "Done: report back."
+  const qCount = id => {
+    const q = Data.QUESTS[id], t = (q && q.steps[G.quests[id]]) || "", fn = F.QPROG[id], m = t.match(/\((\d+)\/(\d+)\)/);
+    if (!fn || !m) return null;
+    let n = 0; try { n = fn(); } catch (e) { return null; }
+    return { q, t, n: Math.max(0, Math.min(+m[2], n)), max: +m[2] };
   };
+  F.qText = id => {
+    const c = qCount(id); if (!c) { const q = Data.QUESTS[id]; return (q && q.steps[G.quests[id]]) || ""; }
+    if (c.n >= c.max) { const full = c.t.replace(/\((\d+)\/(\d+)\)/, "(" + c.max + "/" + c.max + ")"); return c.q.steps[G.quests[id] + 1] || (/\b(Report|Return|Tell)\b/.test(full) ? full : full + " Done: report back."); }
+    return c.t.replace(/\((\d+)\/(\d+)\)/, "(" + c.n + "/" + c.max + ")");
+  };
+  // after a fight: a toast the first time an active quest's count is full (once per quest, flag qfull.<id>)
+  F.checkQProg = () => Object.keys(F.QPROG).forEach(id => {
+    const st = G.quests[id]; if (st === undefined || st === "done" || G.flags["qfull." + id]) return;
+    const c = qCount(id); if (!c || c.n < c.max) return;
+    G.flags["qfull." + id] = true; UI.toast(c.q.t + ": " + c.max + "/" + c.max + ". " + (c.q.steps[st + 1] || "Report back."), 4200);
+  });
   F.rumour = town => {
     const list = Data.RUMOURS[town] || []; G.rumours[town] = G.rumours[town] || [];
     const i = list.findIndex((_, k) => !G.rumours[town].includes(k)); if (i < 0) return null;
@@ -254,6 +266,7 @@ const Flow = (() => {
       (Data.DROPS[e.id] || []).forEach(([k, p]) => { if (Math.random() < p * (opts.boss ? 1 : 1)) { drops.push(k); } });
     });
     drops.forEach(k => F.give(k, 1, true));
+    F.checkQProg();   // "Quarry Order: 3/3. Return to the foreman."
     const names = {}; drops.forEach(k => { const nm = (Data.MATS[k] || Data.GOODS[k] || [k])[0]; names[nm] = (names[nm] || 0) + 1; });
     await Menus.results({ xp, gold, ups, drops: names, boss: !!opts.boss, titan: foes.some(e => e.titan || (Core.ENEMIES && Core.ENEMIES[e.id] && Core.ENEMIES[e.id].titan) || (Core.BOSS_META && Core.BOSS_META[e.id] && Core.BOSS_META[e.id].kind === "optTitan")) });   // QA-A: the optional Titans (T3+) say it too
   };
