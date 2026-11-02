@@ -729,7 +729,7 @@
   let pathOf = "";   // which rule picked the recipe (for fx-test.html)
   function findRecipe(e) {
     indexNames(); pathOf = "move";
-    if (e.item) return norm(RECIPES[{ potion: "@potion", antidote: "@antidote", "ashen ember": "@ember" }[String(e.move || "").toLowerCase()] || "@potion"]);
+    if (e.item) return norm(RECIPES[{ potion: "@potion", "sunwater flask": "@potion", antidote: "@antidote", "reed antidote": "@antidote", "ashen ember": "@ember" }[String(e.move || "").toLowerCase()] || "@potion"]);
     if (e.moveId && RECIPES[e.moveId]) return norm(RECIPES[e.moveId]);
     const name = String(e.move || "").toLowerCase();
     if (e.enemy || !e.moveId) {

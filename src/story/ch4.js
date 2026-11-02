@@ -38,30 +38,30 @@
   });
   Q(Data.INNS, { plumeRest: { n: "The Soft Nest" }, marigoldHollow: { n: "The Gate and Gourd" } });
   Q(Data.RUMOURS, {
-    plumeRest: ["\"The Coil hates things that creep. Slow it twice and it falls from the sky.\"", "\"Mother Glowmoth comes out on moonless nights.\"", "\"A kind weaver sewed a feather mark on a baby's blanket once. Her husband was gone before dawn.\""],
-    marigoldHollow: ["\"Imela's house still stands. She went to the capital as a bride, they say. Not by choice.\"", "\"The cellar has no lock, but no one opens it.\"", "\"Strangers sometimes leave letters under the stone by the well.\""],
+    plumeRest: ["\"The Coil hates being slowed down. Slow it twice and it falls from the sky.\"", "\"Mother Glowmoth comes out on moonless nights.\"", "\"A kind weaver sewed a feather mark on a baby's blanket once. Her husband was gone before dawn.\""],
+    marigoldHollow: ["\"Imela's house still stands. They say she went to the capital as a bride, though not by choice.\"", "\"The cellar has no lock, but no one opens it.\"", "\"Strangers sometimes leave letters under the stone by the well.\""],
   });
   [[3, 2], [4, 3]].forEach(([i, slot]) => Object.defineProperty(Data.RUMOURS.plumeRest, i, { get: () => { try { return S.styleClue(slot, 0); } catch (e) { return ""; } }, enumerable: true, configurable: true }));
   Data.BREAKS = Data.BREAKS || {};
 
   // ---------- bestiary and drops ----------
   Q(Data.BEST, {
-    featherWyvern: "A lizard with owl wings. It telegraphs its dive; plan around it.",
+    featherWyvern: "A lizard with owl wings. It signals its dive before it strikes, so plan around it.",
     lanternBatKnight: "A bat in tin armour with a lamp on a hook. The light marks you, and the next blow lands harder. Fire melts the tin.",
-    ropeSpiderMaiden: "A woman's head on a spider's body. Her webs slow you down. Fire cuts them.",
+    ropeSpiderMaiden: "A woman's head on a spider's body. Her webs slow you down. Fire burns through them.",
     orchidDryad: "A flower woman who heals her allies. Kill her first.",
-    cloudRam: "A ram on a little cloud. It charges, and the charge is the thing to read. Lightning shakes the cloud loose.",
+    cloudRam: "A ram on a little cloud. It charges, so watch for the charge and plan around it. Lightning knocks the cloud out from under it.",
     skyEel: "A flying eel. Its bite shocks and its tail arcs. Cold slows it right down.",
-    plumedWatcher: "A sentinel statue draped in feathers. It guards its friends, and nothing it hits is gentle.",
-    sporerootCrawler: "Many legs, all of them rootlets. Poison, and a puff of spores. Fire.",
-    gloomMushroomShaman: "A mushroom priest. It mends its friends and poisons you. Finish it first.",
-    caveGargoyle: "Stone, hard to wound, deaf to most spells. It drops on one creature from above, every third turn.",
-    fungusTroll: "A troll grown over with caps. It cannot be poisoned. It is very good at poisoning you.",
-    drippingMimic: "A chest that drips. When it opens, it bites the weakest of you first.",
+    plumedWatcher: "A sentinel statue draped in feathers. It protects its friends and hits hard.",
+    sporerootCrawler: "It has many legs, all of them rootlets. It poisons you and puffs out spores. It is weak to fire.",
+    gloomMushroomShaman: "A mushroom priest. It heals its friends and poisons you. Finish it first.",
+    caveGargoyle: "Made of stone, so it is hard to wound and shrugs off most spells. Every third turn it drops on one creature from above.",
+    fungusTroll: "A troll grown over with caps. It cannot be poisoned, but it is very good at poisoning you.",
+    drippingMimic: "A chest that drips. When it opens, it bites your weakest creature first.",
     windhollowGuardian: "A carved roc of stone and rusted feathers. Slow it twice and the stone bird comes down.",
     plumedCoil: "A feathered sky-serpent. Slow it, and it comes down to earth.",
-    motherGlowmoth: "She lights the way for the lost, and eats the lights of those who lie. Two strong light moves in a row dim her.",
-    dorrinHale: "Huge, cheerful, always chewing. He hits hard, and when he is hurt he eats.",
+    motherGlowmoth: "She lights the way for the lost, and eats the lights of those who lie. Two strong light moves in a row will dim her.",
+    dorrinHale: "Huge, cheerful, always chewing. He hits hard, and he eats when he is hurt.",
   });
   Q(Data.DROPS, {
     featherWyvern: [["wyvernScale", 0.4]], lanternBatKnight: [["lanternWick", 0.5]], ropeSpiderMaiden: [["spiderSilk", 0.4]], orchidDryad: [["orchidPetal", 0.45]], cloudRam: [["cloudWool", 0.45]], skyEel: [["eelGland", 0.4]],
@@ -113,7 +113,7 @@
     ["No ground anywhere. Nowhere to run but up. ...I do not like that.", "Finally, a place for wings. Try to keep up, ground-dwellers.", "How do they weave bridges that high? Who holds the other end? Is it a bird?"],
     ["Ha. Mist, rope and a long way down. Cheerful.", "...The trees are listening.", "Is it safe to walk on? If that's all right to ask? I will go first if it is not."],
     ["Hah! A town in the sky! I could live here, if nobody checked my pockets.", "Can I fly up? Can I? Is that the Spire? Is it as tall as it looks? Can I touch it?!", "Stay on the planks. Stay close. The fall is long."],
-    ["Bridges. Hm. Narrow.", "Of course. A road made of string. Why not.", "What is a bridge that holds no weight? Ask me when we are across."],
+    ["Bridges. Hm. Narrow.", "Of course. A road made of string. Why not.", "What is a bridge worth if it can't hold weight? Ask me when we are across."],
     ["Is there food in the tree-village? There has to be food in the tree-village!", "We are in the clouds, we are in the clouds, I knew it was up here!", "Did you know the weavers hear every secret in the canopy? It comes up through the feathers."],
     ["A delicate road. Thank you, planks, for holding us.", "Walk lightly. A bridge forgives the careful.", "...Slowly... the mist is thick enough to lean on."],
     ["Rope. Dry wood. Lanterns. I am not looking at the lanterns. Nobody ask.", "Hee. A bridge made of string. What happens if I... no. No, I will not.", "Is the mist wet? Does it taste like anything? Is there bread up here?"],
@@ -131,7 +131,7 @@
     ["It held the sky with great patience. May it rest.", "I will glow a little over it while it sleeps.", "...The tide of the air turns now. Thank you, old one."],
   ]);
   B("house", [    // Imela's house in Marigold Hollow
-    ["It smells like bread. Why does it smell like bread, if nobody lives here?", "A house kept clean for nineteen years. That is not dust. That is love, young bull.", "Wipe your boots, dear. Please. She would have wanted that."],
+    ["It smells like bread. Why does it smell like bread, if nobody lives here?", "A house kept clean for nineteen years. There is no dust here. That is love, young bull.", "Wipe your boots, dear. Please. She would have wanted that."],
     ["...Small rooms. A window open. No bars. I like it.", "A cradle. Of course there is a cradle. Why must it be a cradle.", "Whose house is it? Why does the hero stand so still? What is on the table?"],
     ["Ha. A cup still on the table. Cold. Left in the middle of a sentence.", "...A mother lived here. I can tell by the chair.", "Is it all right to touch things? We should not touch things, if that's all right."],
     ["Hah! ...No. No joke. Sit, kid. Sit.", "Can we stay a while? Can we? Is it okay to be quiet?", "A woman waited here. Not for us. We came anyway."],
@@ -164,7 +164,7 @@
     await F.banter("canopy");
     F.quest("m_canopy", 0);
   };
-  S.chest.canopyChest1 = M.loot("c.canopy1", [["sunwater", 3]], 200, "A chest wedged in a fork of the great tree. Three Sunwater Flasks and a bag of coin, dry in spite of the mist.");
+  S.chest.canopyChest1 = M.loot("c.canopy1", [["sunwater", 3]], 200, "A chest wedged in a fork of the great tree. Inside are three Sunwater Flasks and a bag of coin, still dry in spite of the mist.");
   S.chest.canopyChest2 = M.loot("c.canopy2", [["tonic", 2]], 0, "Under the second bridge, lashed to a beam with feather-cord: a small hidden chest with two Clearwater Tonics inside.");
   S.gather.featherMolt1 = M.mat("g.molt1", "galeDown", 5, "A branch where something has moulted. The down floats up out of your hands. Five Gale Down.", "Dampen Wing");
   S.gather.featherMolt2 = M.mat("g.molt2", "galeDown", 5, "A cloud of down caught in a bridge-rope. Five more Gale Down.", "Dampen Wing");
@@ -178,20 +178,20 @@
       [["w1", "npcWeaver", -150, -40], ["w2", "npcWeaver", 160, 10], ["w3", "npcWeaver", 20, 70]].forEach(([id, art, dx, dy]) => c.actor(id, { art, x: h.x + dx, y: h.y + dy, flip: dx > 0 }));
       await c.say([["narr", "Looms hang from every platform, and at each loom a weaver looks up. The dyed feathers on their lines stir, all in the same direction, toward you."]]);
       const y = rel(c, 120, -10); c.actor("yaxa", { art: "npcYaxa", x: y.x, y: y.y, name: "Mother Yaxa", flip: true });
-      await c.say([["yaxa", "Hush. The feathers listen."]]);
+      await c.say([["yaxa", "Hush. The feathers are listening."]]);
       ["w1", "w2", "w3", "yaxa"].forEach(id => c.remove(id));
       const d = rel(c, -170, 30); c.actor("dun", { art: "npcDunmar", x: d.x, y: d.y, name: "Dunmar" });
-      await c.say([["dunmar", "Lad. Quillshade's cage has a lock I do not like the look of. Bring me the key from the Windhollow, whenever you feel like it. The cliff-top ruin with the open cages, at the far east edge of the canopy."]]);
+      await c.say([["dunmar", "Lad, I don't like the look of the lock on Quillshade's cage. Bring me the key from the Windhollow when you get the chance. It's the cliff-top ruin with the open cages, at the far east edge of the canopy."]]);
       c.remove("dun");
     }, { music: "treetopTown" });
     F.quest("m_windhollow", 0); UI.toast("The Menagerie Wagon is here.");
   };
   T(PR).oldDunmar = M.dunmar;
   M.town(PR, {
-    inn: PR, innLine: "The Soft Nest. Beds of down, quiet floors. If you must sneeze, do it into a pillow; the feathers will not forgive you.", shop: "plume", shopLine: "Rope, tea, cloth, and the weaver's good clay. All of it woven or wrapped by a family.",
+    inn: PR, innLine: "Welcome to the Soft Nest. Beds of down and quiet floors. If you have to sneeze, do it into a pillow, or the feathers will never forgive you.", shop: "plume", shopLine: "Rope, tea, cloth and good weaver's clay. Everything here was woven or wrapped by a local family.",
     beforeShop: F => M.backup(F, "bought.gale", "galeDown", 10, 420, "Ten bundles of Gale Down, combed and sorted by the weavers, for a weaver's price."),
     who: ["weaver", "oldman", "kiteChild"],
-    small: [["Nothing leaves this village that the feathers did not already say. Mind your tongue.", "A feather's colour is its voice. Red is for warning. White is for 'come'. Brown is for 'be quiet'."], ["I have lived on this platform for sixty years. I have never touched the ground. I do not intend to.", "The Spire eats the sky at night. Do not stand under it."], ["Look! It goes up when I run. It goes up when I run!", "Do you have a kite? Everybody has a kite. Why do you not have a kite?"]],
+    small: [["The feathers hear everything and repeat it. Mind your tongue.", "A feather's colour is its voice. Red means warning, white means 'come here', and brown means 'be quiet'."], ["I have lived on this platform for sixty years. I have never touched the ground. I do not intend to.", "At night the Spire seems to swallow the sky. Don't stand under it."], ["Look! It goes up when I run. It goes up when I run!", "Do you have a kite? Everybody has a kite. Why do you not have a kite?"]],
   });
   // the third and fourth rumour (style clues) are told by the child with the kite-string once the first has been heard
   T(PR).r3 = async F => {
@@ -202,23 +202,23 @@
   T(PR).yaxa = async F => {
     if (!F.f("ch4.yaxa")) {
       F.set("ch4.yaxa");
-      await UI.say([["yaxa", "Hold still. Hold still, child. That strap."], ["narr", "She turns the satchel strap in her old hands, tracing the stitching with a thumb."],
-        ["yaxa", "Who sewed that? That is the Marigold feather stitch. Only three families still do it, in the Hollow, down the long stair."], ["hero", "(The strap was packed before I woke. The thread looked old.)"]]);
+      await UI.say([["yaxa", "Hold still. Hold still, child. Let me see that strap."], ["narr", "She turns the satchel strap in her old hands, tracing the stitching with a thumb."],
+        ["yaxa", "Who sewed that? That's the Marigold feather stitch. Only three families still use it, and they live in the Hollow, down the long stair."], ["hero", "(The strap was packed before I woke. The thread looked old.)"]]);
       await S.rumourIdx(F, PR, 2, "yaxa");
       F.quest("m_letters", 0); return;
     }
-    if (F.f("ch4.coil")) { await UI.say([["yaxa", "The feathers have been quiet since the Spire. A good quiet. They are not afraid, only listening to something very far."]]); return; }
-    await UI.say([["yaxa", M.cycle("yx.n", ["The Hollow is down the long stair. The stair is long. The path is shorter than it looks.", "Hush. Walk softly on our bridges. Quiet people are heard farthest.", "A weaver knows a thread by the hand that made it. Yours was made by a careful hand."])]]);
+    if (F.f("ch4.coil")) { await UI.say([["yaxa", "The feathers have been quiet since you went up the Spire. It's a good kind of quiet. They aren't afraid; they're listening to something very far away."]]); return; }
+    await UI.say([["yaxa", M.cycle("yx.n", ["The Hollow is down the long stair. It's a long way, but the path is shorter than it looks.", "Hush. Walk softly on our bridges. People who speak quietly are the ones who get listened to.", "A weaver can tell who made a thread just by looking at it. The stitching on your strap was made by a careful hand."])]]);
   };
   T(PR).weaver = async F => {
     const st = F.qstep("lanterns"), wicks = () => G.goods.lanternWick || 0;
     if (st === "done") { await UI.say([["weaver", "The lamps burn gold at night, all along the bridge. You can see them from the Spire."]]); return; }
-    if (st === undefined) { await UI.say([["weaver", "The lanterns on the west bridge have gone out, every one. Bat knights stole the wicks; they like the taste of the lamp-oil. Four wicks, from the knights out on the canopy bridges beyond the village gate, and I will pay you."]]); F.quest("lanterns", 0); return; }
+    if (st === undefined) { await UI.say([["weaver", "Every lantern on the west bridge has gone out. Bat knights stole the wicks, because they like the taste of the lamp-oil. Bring me four wicks from the knights out on the canopy bridges beyond the village gate, and I'll pay you."]]); F.quest("lanterns", 0); return; }
     if (wicks() >= 4) {
       G.goods.lanternWick -= 4;
-      await UI.say([["weaver", "Four good wicks. Singed at the ends, the way a knight chews them. Thank you. The bridge will be gold again tonight."]]);
+      await UI.say([["weaver", "Four good wicks, singed at the ends the way a knight chews them. Thank you. The bridge will glow gold again tonight."]]);
       F.gold(200); F.give("tonic", 2); F.questDone("lanterns"); F.sfx("coin");
-    } else await UI.say([["weaver", `${wicks()} of 4 wicks. Lantern Bat Knights, on the canopy bridges. They glow before you see them.`]]);
+    } else await UI.say([["weaver", `You have ${wicks()} of 4 wicks. Look for Lantern Bat Knights on the canopy bridges. You will see their glow before you see them.`]]);
   };
   S.trigger.plumeLetter = async F => {
     if (!F.f("ch4.coil") || F.f("ch4.done")) return;
@@ -229,18 +229,18 @@
       await c.say([["narr", "A courier in a grey hood stands at the end of the weavers' bridge. He puts a letter and a small object in your hand, and is gone down the rope lift before you can ask."]]);
       c.sfx("whoosh"); await c.walk("co", p.x + 80, p.y + 40, 700); c.remove("co");
     }, { music: "letters" });
-    await F.letter("the green seal", ["\"The Plumed Coil. Exactly as I hoped.\"", "\"You have done more than I asked. Now there is something I must explain, and I will not do it by letter. Return to Sehkarem. Captain Brisk will meet you at Tamar's Landing at the next tide. Do not delay. The pass enclosed will take you through any door in Orun. - I.\""]);
+    await F.letter("the green seal", ["\"You have dealt with the Plumed Coil, just as I hoped.\"", "\"You have done more than I asked. Now there is something I must explain, and I won't do it by letter. Return to Sehkarem. Captain Brisk will meet you at Tamar's Landing at the next tide. Do not delay. The pass enclosed will take you through any door in Orun. - I.\""]);
     F.give("ithielPass", 1); F.set("ch4.done"); F.set("wagon.at", PR);
-    await UI.say([["hero", "(Orun is held by the empire. And a pass from Ithiel opens every door.)"], ["hero", "(Mother. Alive. The capital. First, Orun. Then her.)"]]);
+    await UI.say([["hero", "(Orun is held by the empire. And a pass from Ithiel opens every door.)"], ["hero", "(My mother is alive, and she's in the capital. First Orun, then her.)"]]);
     UI.toast("The barge at Plume Rest's lower dock will take you back down the river.", 3600); F.save(true);
   };
   S.trigger.riverBarge = async F => {
     if (!F.f("ch4.done")) return;
-    await M.talkPanels("assets/cinema/m2_barge.png", [["narr", "Down the river on a feather-weavers' barge. Lamp-moths lean out over the water, and Plume Rest shrinks into the canopy until it is only a lantern in a tree."]], { music: "voyage" });
+    await M.talkPanels("assets/cinema/m2_barge.png", [["narr", "You ride down the river on a feather-weavers' barge. Lamp-moths lean out over the water, and Plume Rest shrinks into the canopy until it is only a lantern in a tree."]], { music: "voyage" });
     F.go("tamarsLanding", "from_shore");
   };
   S.trigger.boatToSehkarem = async F => {
-    if (!F.f("ch4.done")) { await UI.say([["captain", "Not yet, friend. The tide is for someone else."]]); return; }
+    if (!F.f("ch4.done")) { await UI.say([["captain", "Not yet, friend. It isn't our tide yet."]]); return; }
     await UI.say([["captain", "Back to Sehkarem, friend? Same price, same silence."]]);
     const i = await F.ask("Board Brisk's boat back across the Weeping Sea? The jungle will be days behind you.", [{ label: "Board now" }, { label: "Not yet, I have things to finish" }]);
     if (i !== 0) return;
@@ -276,7 +276,7 @@
         [["mk1", 190, -40], ["mk2", 230, 30]].forEach(([id, dx, dy]) => c.actor(id, { art: "npcMarksman", x: h.x + dx, y: h.y + dy, flip: true }));
         c.actor("op", { art: "npcOptio", x: h.x + 270, y: h.y - 4, flip: true });
         await c.pan(h.x + 120, h.y - 10, 700); c.emote("mk1", "!");
-        await c.say([["narr", ["The first watch post: a stone platform on a chain of rope bridges, a signal fire laid and not lit, and two marksmen in feather cloaks who have already drawn.", "The second post. Arrows come before the bridge does.", "The last post. The marksmen have lashed their bows to the rail and they do not look afraid. They look like men who have decided something."][n - 1]]]);
+        await c.say([["narr", ["The first watch post: a stone platform on a chain of rope bridges, a signal fire laid and not lit, and two marksmen in feather cloaks who have already drawn.", "At the second post, arrows reach you before the bridge does.", "The last post. The marksmen have lashed their bows to the rail and they do not look afraid. They look like men who have made up their minds."][n - 1]]]);
         c.sfx("arrowShot"); c.fx("dust", h.x + 40, h.y + 6, { ms: 600, r: 20 }); c.shake(2, 300); await c.anim("hero", "shake"); c.follow(); c.tint("#183024", 0, 300);
         ["mk1", "mk2", "op"].forEach(id => c.remove(id));
       }, { music: "tension" });
@@ -286,7 +286,7 @@
       await M.stage(async c => {
         const p = M.rel(c, 90, -10); c.fx("fire", p.x, p.y, { ms: 3200, r: 40 }); c.fx("smoke", p.x, p.y - 30, { ms: 4200, r: 40 }); c.light(p.x, p.y - 20, 150, 0.9);
         await c.pan(p.x, p.y - 60, 700); await c.wait(500);
-        await c.say([["narr", n < 3 ? "You light the signal fire with the marksmen's own flint. The smoke goes up straight, and the next post goes quiet." : "You light the last signal fire. The smoke goes up in a straight line, and the whole chain of posts is yours. At the end of the bridge, a chest."]]);
+        await c.say([["narr", n < 3 ? "You light the signal fire with the marksmen's own flint. The smoke goes up straight, and the next post goes quiet." : "You light the last signal fire. The smoke goes up in a straight line, and the whole chain of posts is yours. At the end of the bridge there is a chest."]]);
         c.follow();
       });
     };
@@ -311,7 +311,7 @@
   S.done.aviaryGuardian = F => F.f("k2.done");
   S.trigger.aviaryGuardian = async F => {
     if (F.f("k2.done")) return;
-    if (!F.f("av.wheel3")) { await UI.say([["narr", "The cage stair is folded flat against the wall. Whatever sleeps at its foot can wait for the wheels."]]); return; }
+    if (!F.f("av.wheel3")) { await UI.say([["narr", "The cage stair is folded flat against the wall. Whatever sleeps at its foot will have to wait until you have turned the wheels."]]); return; }
     F.music("aviary");
     await Cinema.boss({ id: "windhollowGuardian", name: "The Windhollow Guardian", title: "Keeper of the Aviary", bg: "aviary", music: "guardian", lines: [["narr", "A carved roc of stone and rusted feathers unfolds from the roof."]] });
     const res = await F.boss([F.mkEnemy("windhollowGuardian", 19)], { bg: "aviary", music: "guardian", intro: "The stone bird spreads its wings!" });
@@ -330,7 +330,7 @@
       level: 18, soldiers: [["legionMarksman", 17, " B"]], bg: "canopy", title: "General of the Legions", place: "the first altar platform", where: "It crossed a rope bridge, and the mist took it.", fx: 120, fy: -10,
       setup: async c => {
         const h = c.hero; c.tint("#183024", 0.2, 400); await c.pan(h.x + 160, h.y - 20, 900);
-        await c.say([["narr", "A platform of lashed beams hung in the mist. An altar of black stone with an obsidian ring and a chain. Soldiers kneel along the rope bridges around it, bows across their knees, and none of them looks up. At the end of the chain, something stands."]]);
+        await c.say([["narr", "A platform of lashed beams hung in the mist. In the middle is an altar of black stone with an obsidian ring and a chain. Soldiers kneel along the rope bridges around it, bows across their knees, and none of them looks up. At the end of the chain, something stands."]]);
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(400); c.follow(); c.tint("#183024", 0, 500);
       },
       after: ["(Another altar. How many are there?)"],
@@ -344,7 +344,7 @@
       level: 20, soldiers: [["legionMarksman", 18, " B"], ["legionMarksman", 18, " C"]], bg: "canopy", title: "General of the Legions", place: "the second altar platform", where: "It went north along the last bridge, into the Spire's shadow.", fx: 120, fy: -10,
       setup: async c => {
         const h = c.hero; c.tint("#10201c", 0.25, 400); await c.pan(h.x + 160, h.y - 20, 900);
-        await c.say([["narr", "The last bridge before the Spire. Its altar is older than the others: the black stone has a groove worn in it by a chain that has been tightened and loosened many times. Above, the Spire climbs into the cloud, and something up there is watching."]]);
+        await c.say([["narr", "This is the last bridge before the Spire. Its altar is older than the others: the black stone has a groove worn in it by a chain that has been tightened and loosened many times. Above, the Spire climbs into the cloud, and something up there is watching."]]);
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(400); c.follow(); c.tint("#10201c", 0, 500);
       },
       after: ["(Two altars, two creatures. The road to the Spire is clear. It does not feel clear.)"],
@@ -361,30 +361,30 @@
       const h = c.hero; c.tint("#e0a050", 0.1, 500);
       c.actor("neeli", { art: "npcNeeli", x: h.x + 150, y: h.y + 20, name: "Neeli", flip: true });
       c.actor("tamoc", { art: "npcTamoc", x: h.x + 260, y: h.y - 40, name: "Old Tamoc", flip: true });
-      await c.say([["narr", "Down the long stair, into a valley the colour of honey. Marigolds grow in orange rows to the edge of the hills, and the wind lifts the smell of them to meet you. Whitewashed houses. A stone well with a flat stone beside it. Hens."]]);
+      await c.say([["narr", "Down the long stair, into a valley the colour of honey. Marigolds grow in orange rows to the edge of the hills, and the wind lifts the smell of them to meet you. There are whitewashed houses, and a stone well with a flat stone beside it. Hens wander everywhere."]]);
       await c.walk("neeli", h.x + 90, h.y + 10, 700);
-      await c.say([["neeli", "The Hollow does not get strangers."], ["hero", "(I have seen this stitching on a strap. I have never seen this valley.)"]]);
+      await c.say([["neeli", "We don't get strangers in the Hollow."], ["hero", "(I have seen this stitching on a strap. I have never seen this valley.)"]]);
       await c.walk("tamoc", h.x + 130, h.y - 20, 1200);
-      await c.say([["tamoc", "Imela's house still stands. We keep it dry. She went to the capital as a bride, they say. Not by choice."]]);
+      await c.say([["tamoc", "Imela's house still stands. We keep it dry. They say she went to the capital as a bride, though not by choice."]]);
       c.emote("tamoc", "..."); await c.wait(900);
       c.remove("neeli"); c.remove("tamoc"); c.tint("#e0a050", 0, 700);
     }, { music: "marigold" });
-    await UI.say([["narr", "You stand very still. A hen walks past your boots and does not care."]]);
+    await UI.say([["narr", "You stand very still. A hen walks past your boots, completely unbothered."]]);
   };
   M.town(MH, {
-    inn: MH, innLine: "The Gate and Gourd. Gourd soup, a clean bed, and a gate that does not lock. We have nothing to lock it against.", shop: "marigold", shopLine: "Basics. Nothing fancy. A valley does not need fancy.",
+    inn: MH, innLine: "Welcome to the Gate and Gourd. Gourd soup, a clean bed, and a gate that doesn't lock. We have nothing to keep out.", shop: "marigold", shopLine: "Just the basics. Nothing fancy, because a valley doesn't need fancy things.",
     who: ["farmer", "oldwoman", "child"],
-    small: [["Marigolds do not mind the shade. They mind being ignored.", "The stair is long on purpose. It keeps the road away."], ["I do not talk about the house. I leave a lamp in the window on the day she left. That is not talking.", "The strangers come. The strangers go. The stone remains."], ["Do you want to see a very small frog? He is under the bucket.", "Neeli says you are not allowed in the well. I was in the well once."]],
+    small: [["Marigolds do not mind the shade. They mind being ignored.", "The stair is long on purpose. It keeps the outside world away."], ["I don't talk about the house. But every year, on the day she left, I put a lamp in the window. That isn't talking.", "Strangers come and go, but the stone stays."], ["Do you want to see a very small frog? He is under the bucket.", "Neeli says you are not allowed in the well. I was in the well once."]],
   });
   T(MH).tamoc = async F => {
     if (F.f("ch4.cellar")) { await UI.say([["tamoc", "I buried nothing in that cellar. I only kept the door shut. Do you understand? ...Good."]]); return; }
-    await UI.say([["tamoc", M.cycle("tm.n", ["Imela's house still stands. We keep it dry. A door is not a grave.", "The marigolds were her mother's. Or her mother's mother's. Nobody counts. It is rude to count.", "You walk like someone who is listening for a second pair of boots. Do not. It is only us."])]]);
+    await UI.say([["tamoc", M.cycle("tm.n", ["Imela's house still stands. We keep it dry. A door is not a grave.", "The marigolds were her mother's. Or her mother's mother's. Nobody counts. It is rude to count.", "You walk like someone who is listening for a second pair of boots. Don't. It's only us."])]]);
   };
   T(MH).neeli = async F => {
     const n = G.flags["well.n"] || 0;
     if (n >= 3) { await UI.say([["neeli", "There is nothing under the stone now. I check every morning. Old habit."]]); return; }
-    if (n === 0 && !F.qstep("wellStone")) { await UI.say([["neeli", "I keep the well. I keep what is under the stone, too, when it is dry enough to keep. Look at the flat stone, if you like. Strangers have always left things there."]]); return; }
-    await UI.say([["neeli", "The stone is yours to lift. I only keep it dry. Letters come when they come."]]);
+    if (n === 0 && !F.qstep("wellStone")) { await UI.say([["neeli", "I look after the well. I also look after whatever is left under the stone, as long as it's dry enough to keep. Take a look at the flat stone if you like. Strangers have always left things there."]]); return; }
+    await UI.say([["neeli", "Go ahead and lift the stone. I only keep it dry. Letters arrive when they arrive."]]);
   };
   const WELL = [["wellLetter1", "\"I passed the Hollow at dusk. The house is dark. If you live, Imela, this stone is where I leave word. The sky is not what they told us.\""],
     ["wellLetter2", "\"Ten years. I keep a count. The count is short. I am sorry for everything but the leaving.\""], ["wellLetter3", "\"I asked after the boy at Orun. They say he is well and does not ask about his father. That is the kindest lie anyone has told me.\""]];
@@ -394,16 +394,16 @@
     if (F.visit.well) { await UI.say([["narr", "You lift the flat stone again. Nothing new has come since you looked."]]); return; }
     F.visit.well = true; G.flags["well.n"] = n + 1; F.quest("wellStone", 0);
     const [item, text] = WELL[n]; F.give(item, 1, true); F.sfx("menuOk");
-    await UI.say([["narr", "Under the flat stone, wrapped in oilcloth and dry as bread, a folded paper in a careful hand. You read it where you stand."], ["narr", text], ["narr", "It is signed with a drawn feather inside a star."]]);
+    await UI.say([["narr", "Under the flat stone, wrapped in oilcloth and dry as bread, is a folded paper written in a careful hand. You read it where you stand."], ["narr", text], ["narr", "It is signed with a drawn feather inside a star."]]);
     if (n === 2) {
       F.questDone("wellStone");
-      await UI.say([["hero", "(Orun. Someone at Orun told him I was well. Who answers a stranger's letter at Orun?)"]]);
+      await UI.say([["hero", "(Someone at Orun told him I was well. Who would answer a stranger's letter in Orun?)"]]);
     } else await UI.say([["hero", ["(A feather inside a star. The stitch on my strap is the same bird, sewn slower.)", "(A count. Ten years of it. A short count.)"][n]]]);
   };
   S.trigger.houseFirst = async F => {
     if (!M.once(F, "hs.seen")) return;
     F.music("letters"); F.quest("m_letters", 1);
-    await Cinema.panels([{ img: "assets/cinema/m2_house_memory.png", text: "A cup still on the table. A cradle by the window. Somebody was here, a long time ago, and put the lamp on to wait.", pan: "inleft" }], { music: "letters" });
+    await Cinema.panels([{ img: "assets/cinema/m2_house_memory.png", text: "There is a cup still on the table, and a cradle by the window. Somebody lived here a long time ago, and lit the lamp to wait.", pan: "inleft" }], { music: "letters" });
     await UI.say([["hero", "(Nineteen years.)"]]);
     await F.banter("house");
   };
@@ -413,7 +413,7 @@
     "\"TZAKAL HARVESTING COMPANY, Marigold Hollow, Lot 1. By the authority of the Founder: the woman Imela, herb-wife, is summoned to the Company's service at the capital. The household is not to be disturbed. The ledger will be balanced.\"",
     "\"To whoever carries him: he is eight months and eats everything. Take him far. The Company counts houses, not cradles. Do not let anyone see his face until he is old enough to hide it himself. I will pay whatever it costs. I am not going to be able to.\"",
   ];
-  const WHERE = ["On the kitchen table, under a cold cup, a letter to a sister. It was never folded.", "In the loom basket, under half-wound wool: a letter with no name on the outside.", "Nailed to the door with a Company stamp, grown soft with nineteen years of weather.", "In the cradle, under a folded blanket, a note written fast, in pencil."];
+  const WHERE = ["On the kitchen table, under a cold cup, is a letter to a sister. It was never folded.", "In the loom basket, under half-wound wool, is a letter with no name on the outside.", "Nailed to the door is a notice with a Company stamp, grown soft with nineteen years of weather.", "In the cradle, under a folded blanket, is a note written fast, in pencil."];
   [1, 2, 3, 4].forEach(n => {
     T("imelasHouse")["letter" + n] = async F => {
       await UI.say([["narr", WHERE[n - 1]], ["narr", LETTER[n - 1]]]);
@@ -446,8 +446,8 @@
       const h = c.hero;
       KB2.forEach(([id, art, dx, dy]) => c.actor(id, { art, x: h.x + dx, y: h.y + dy, name: UI.PEOPLE[id] ? UI.PEOPLE[id].name : id, flip: true }));
       await c.pan(h.x + 130, h.y, 900); c.emote("kessa", "!");
-      await c.say([["narr", "Daylight. A stone well. Three figures round it and a small flame-maned cub on the flat stone."], ["kessa", "Found you again. The Corps has had a standing order on this house for nineteen years: if a boy ever comes home, bring him in."],
-        ["mayle", "Page forty. It does not add up. Why would the Company wait nineteen years?"], ["kessa", "Because the Founder said so. Duel."]]);
+      await c.say([["narr", "It is daylight at the stone well. Three figures stand round it, and a small flame-maned cub sits on the flat stone."], ["kessa", "Found you again. The Corps has had a standing order on this house for nineteen years: if a boy ever comes home, bring him in."],
+        ["mayle", "Page forty doesn't add up. Why would the Company wait nineteen years?"], ["kessa", "Because the Founder said so. Duel."]]);
       c.follow(); c.emote("emberwick", "?");
       await c.say([["kessa", "Not today, Emberwick. Go and sit."]]); await c.walk("emberwick", h.x + 460, h.y - 40, 1200); c.remove("emberwick");
     }, { music: "tension" });
@@ -456,7 +456,7 @@
     if (res !== "win") return;
     await M.stage(async c => {
       const h = c.hero; KB2.slice(0, 3).forEach(([id, art, dx, dy]) => c.actor(id, { art, x: h.x + dx - 100, y: h.y + dy, name: UI.PEOPLE[id].name, flip: true }));
-      await c.say([["kessa", "I am not supposed to know why they watch it. I do now."]]);
+      await c.say([["kessa", "I'm not supposed to know why they watch that house. Now I do."]]);
       c.emote("kessa", "..."); await c.walk("kessa", h.x + 560, h.y - 30, 2400);
       await Promise.all([c.walk("dorrin", h.x + 560, h.y + 10, 2500), c.walk("mayle", h.x + 560, h.y + 40, 2800)]);
       c.remove("kessa"); c.remove("dorrin"); c.remove("mayle");
@@ -466,7 +466,7 @@
 
   // 4.G Legend L3 and the waterfall cave
   S.legend.L3 = M.legend("L3", { enemy: "motherGlowmoth", fx: "glow", end: "fade", tint: "#0a0c18", level: 21, bg: "canopy", title: "Mother of the Lamps", fightIntro: "Mother Glowmoth spreads her lamps!",
-    intro: [["narr", "A lamp swings out of the dark, then a second, then ten. They are wings. Mother Glowmoth drifts towards you, kind and hungry."], ["narr", "She lights the way for the lost, and eats the lights of those who lie."]],
+    intro: [["narr", "A lamp swings out of the dark, then a second, then ten. They turn out to be wings. Mother Glowmoth drifts towards you, kind and hungry."], ["narr", "She lights the way for the lost, and eats the lights of those who lie."]],
     lines: [["narr", "The moonless canopy goes still. Every lantern on the bridges leans toward her."], ["hero", "(She is not going to ask me anything. She is going to look, and know.)"]],
     after: [["narr", "The lamps go out one by one. Where Mother Glowmoth hung, two small flasks hang for a breath, glowing, and fall softly into your hands."]] });
   T("waterfallCave").firstHarvestTablet = async F => {
@@ -518,7 +518,7 @@
     riverEastBlocked: async F => { await UI.say([["hero", "(No ferry runs east from here. Not while there are soldiers on the far bank.)"]]); },
     ninefoldDockBlocked: async F => { await UI.say([["hero", "(The ferry to the north shore is chained for the night. Something in the market has not finished with me.)"]]); },
     jungleSouthBlocked: async F => { await UI.say([["hero", "(The southern track is a wall of vines. Nobody has come through it in a long while.)"]]); },
-    coilHillBlocked: async F => { await UI.say([["hero", "(A legion checkpoint across the hill road. They look at papers there, and I have none.)"]]); },
+    coilHillBlocked: async F => { await UI.say([["hero", "(A legion checkpoint across the hill road. They check papers there, and I don't have any.)"]]); },
     canopyBlocked: async F => { await UI.say([["hero", "(Sheer cliff. If there is a path north, it is not one I can see.)"]]); },
     spireBlocked: async F => { await UI.say([["hero", "(Two altar platforms watch the way to the Spire. Neither is quiet.)"]]); },
     imelaHouseLocked: async F => { await UI.say([["hero", "(The west house has its shutters latched and its door shut. Nobody answers my knock.)"]]); },

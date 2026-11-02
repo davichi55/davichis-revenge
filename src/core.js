@@ -346,8 +346,8 @@
   Object.keys(SKILLBOOK).forEach(k => (SKILLBOOK[k].move = k));
 
   const ITEMS = {
-    potion: { name: "Potion", target: "ally", desc: "Heals 25% of max HP." },
-    antidote: { name: "Antidote", target: "ally", desc: "Clears poison and bleed from one ally." },   // Danny 2026-11-01: the full cleanse made cleansing moves pointless; that is the Clearwater Tonic's job
+    potion: { name: "Sunwater Flask", target: "ally", desc: "Heals 25% of max HP." },   // named like the bag item (Danny 2026-11-02: it read "Potion" in fights)
+    antidote: { name: "Reed Antidote", target: "ally", desc: "Clears poison and bleed from one ally." },   // Danny 2026-11-01: the full cleanse made cleansing moves pointless; that is the Clearwater Tonic's job
     ashenEmber: { name: "Ashen Ember", target: "allyDown", desc: "Revives a fallen ally at 30% HP." },
     tonic: { name: "Clearwater Tonic", target: "ally", desc: "Cures every status, Wet included, and every lowered stat on one ally." },
     soulDew: { name: "Soul Dew", target: "allyDown", desc: "Revives a fallen ally at full HP. Works once per fight." },

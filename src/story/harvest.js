@@ -22,23 +22,23 @@
   // ---------- the warnings ----------
   S.talk.starhaven = S.talk.starhaven || {};
   S.talk.starhaven.hwEngineer = async F => {
-    if (done(F)) { await UI.say([["tamsin", "It's quiet? Truly? Then I can stop listening for it at night. Forty years I've listened."]]); return; }
+    if (done(F)) { await UI.say([["tamsin", "It's quiet? Really? Then I can stop listening for it at night. I've been listening for forty years."]]); return; }
     if (F.f("hw.tamsin")) { await UI.say([["tamsin", "Leave the hatch shut. Please. Go and look at the sea instead."]]); return; }
     F.set("hw.tamsin");
     await UI.say([["narr", "An old woman with burn-scarred hands sits apart from the scholars, filing a brass gear she will never use."],
       ["tamsin", "You came over the south islet? Then you've seen the hatch. Leave it shut."],
       ["tamsin", "I cut the gearing for what's under it, when I was younger than you. Harvest Engine Number One. The Company's first."],
-      ["tamsin", "It doesn't stop when the people stop. It just waits for more stock. And the stock walks down the stair by itself, sooner or later."],
-      hero("She is not telling a story. She is telling me where not to go.")]);
+      ["tamsin", "It doesn't stop when the workers leave. It just waits for more stock. And sooner or later, the stock walks down the stairs by itself."],
+      hero("She isn't telling a story. She's telling me where not to go.")]);
   };
   S.talk.starfallIsles = S.talk.starfallIsles || {};
   S.talk.starfallIsles.hwLookout = async F => {
     if (done(F)) { await UI.say([["sela", "The humming stopped. I slept the whole night through. I didn't know I could still do that."]]); return; }
-    if (F.f("hw.sela")) { await UI.say([["sela", "Still here? Go back to Starhaven. The tea is better and nothing down there wants you alive."]]); return; }
+    if (F.f("hw.sela")) { await UI.say([["sela", "Still here? Go back to Starhaven. The tea is better there, and nothing there is trying to kill you."]]); return; }
     F.set("hw.sela");
     await UI.say([["sela", "Stop. Stop right there. That hatch is the reason I'm standing on this rock."],
-      ["sela", "Every night, round the third bell, the ground hums. The fish leave the shallows. Three diggers went down in the spring. We heard them for a while."],
-      ["sela", "There's nothing down there you need. Nothing. No road, no key, no answer. Only the thing that ate them."], hero("Her hands are shaking. She keeps them in her sleeves.")]);
+      ["sela", "Every night around the third bell, the ground hums and the fish leave the shallows. Three diggers went down in the spring. We could hear them for a while."],
+      ["sela", "There's nothing down there that you need. Nothing. No road, no key, no answer. There's only the thing that ate them."], hero("Her hands are shaking. She's hiding them in her sleeves.")]);
   };
   S.talk.starfallIsles.hwPost = async F => {
     await UI.say([["narr", "Company iron, red paint gone brown: HARVEST WORKS NO. 1. SEALED BY ORDER OF THE HARVEST OFFICE."], ["narr", "Under it, scratched with a knife, fresher: THREE WENT DOWN. DON'T."]]);
@@ -49,16 +49,16 @@
     if (F.f("hw.entered")) return; F.set("hw.entered");
     await S.stage(async c => {
       c.shake(1, 900);
-      await c.say([["narr", "Cold air comes up the stair to meet you. The hatch is still open above. Nothing is stopping you from climbing back out."],
-        ["narr", "A hum lives in the floor, too low to hear. You feel it in your teeth."], hero("Nobody has been down here for a long time. Nobody alive.")]);
+      await c.say([["narr", "Cold air comes up the stairs to meet you. The hatch is still open above. Nothing is stopping you from climbing back out."],
+        ["narr", "A hum runs through the floor, too low to hear properly. You feel it in your teeth."], hero("Nobody has been down here for a long time. Nobody alive.")]);
       c.follow();
     });
   };
   S.talk.harvestWorks = S.talk.harvestWorks || {};
   S.talk.harvestWorks.hwNotice = async F => { await UI.say([["narr", "A Company notice. The paper has gone brown: HARVEST WORKS NO. 1. INTAKE TODAY: 41 HEAD. YIELD TARGET: MET."], ["narr", "WORKERS ARE REMINDED NOT TO STAND IN FRONT OF THE HORNS WHILE THE ENGINE IS SINGING."]]); };
   S.talk.harvestWorks.hwLog = async F => {
-    await UI.say([["narr", "The last shift's log, in a careful hand."], ["narr", "Day 1. Engine running. Yield good."], ["narr", "Day 9. Engine running. It will not shut down. Foreman says leave it."],
-      ["narr", "Day 10. Engine running. We are short of stock."], ["narr", "Day 11. Engine running. It has started taking from the workers. We are sealing the hatch from the outside. Sun forgive us, we are leaving it running."],
+    await UI.say([["narr", "The last shift's log, in a careful hand."], ["narr", "Day 1. Engine running. Yield good."], ["narr", "Day 9. Engine running. It will not shut down. Foreman says to leave it."],
+      ["narr", "Day 10. Engine running. We are short of stock."], ["narr", "Day 11. Engine running. It has started taking the workers. We are sealing the hatch from the outside. Sun forgive us, we are leaving it running."],
       hero("They left it running. And then they went home.")]);
   };
   S.talk.harvestWorks.hwTally = async F => { await UI.say([["narr", "A tally painted on the wall in red, five strokes to a group. It covers the whole wall, floor to ceiling."], ["narr", "At the bottom, smaller: WE STOPPED COUNTING."]]); };
@@ -66,7 +66,7 @@
     if (F.f("hw.hum") || done(F)) return; F.set("hw.hum");
     await S.stage(async c => {
       c.sfx("rumble"); c.shake(3, 1400);
-      await c.say([["narr", "The hum climbs a step. Dust sifts down from the roof."], ["narr", "Somewhere ahead, something very large breathes in, and does not breathe out."], hero("It knows I'm here.")]);
+      await c.say([["narr", "The hum grows louder. Dust sifts down from the roof."], ["narr", "Somewhere ahead, something very large breathes in, and does not breathe out."], hero("It knows I'm here.")]);
       c.follow();
     });
   };
@@ -74,7 +74,7 @@
     if (F.f("hw.sort") || done(F)) return; F.set("hw.sort");
     await S.stage(async c => {
       await c.say([["narr", "Glass tanks line the floor. In each one something floats: a creature, curled up small, all its colour gone. Thin tubes run from every tank to the north."],
-        hero("They are not dead. They are not alive either."), ["narr", "The tubes pulse, very slowly, all at once. Toward the pit."]]);
+        hero("They aren't dead, but they aren't alive either."), ["narr", "The tubes all pulse together, very slowly, pushing toward the pit."]]);
       c.follow();
     });
   };
@@ -83,7 +83,7 @@
   // ---------- the pit: the engine wakes ----------
   S.trigger.hwPit = async F => {
     if (done(F)) return;
-    const go = await F.ask("The causeway runs on into the dark pit. Every warning you were given says turn back.", [{ label: "Go on into the pit" }, { label: "Turn back" }], { top: "38%" });
+    const go = await F.ask("The causeway runs on into the dark pit. Every warning you were given says to turn back.", [{ label: "Go on into the pit" }, { label: "Turn back" }], { top: "38%" });
     if (go !== 0) { await UI.say([hero("Not today. Maybe not ever.")]); return; }
     await S.stage(async c => {
       c.actor("eng", { art: "harvestEngine", x: ENG.x, y: ENG.y + 70, h: 150, face: "left", alpha: 0 });
@@ -91,10 +91,10 @@
       await c.say([["narr", "The pit is round and deep. On the black glass floor, something the size of a house squats on four iron legs, hung with chains and pipes and horns."], ["narr", "It is not moving. Its furnace is dark."]]);
       const ring = [[880, 330], [1000, 190], [1480, 190], [1600, 330], [1480, 480], [1000, 480]];
       for (const [x, y] of ring) { c.sfx("door"); c.fx("glow", x, y - 20, { color: 0x9fd8ff, ms: 2400 }); await UI.sleep(320); }
-      await c.say([["narr", "One by one the dead lamps round the pit light themselves. Cold blue."]]);
+      await c.say([["narr", "One by one, the dead lamps around the pit light up by themselves, glowing a cold blue."]]);
       c.sfx("rumble"); c.shake(4, 1600); c.fx("dust", ENG.x, ENG.y + 60, { n: 30, scale: 2, color: 0x8090a0 });
       await c.anim("eng", "fadeIn", { ms: 1200 }); c.fx("glow", ENG.x, ENG.y + 20, { color: 0x9fd8ff, ms: 2600 });
-      await c.say([["narr", "The furnace in its chest catches. The hum becomes a roar you feel in your ribs, and every pipe on its back draws breath."]]);
+      await c.say([["narr", "The furnace in its chest catches fire. The hum becomes a roar you feel in your ribs, and every pipe on its back draws breath."]]);
       c.emote("hero", "!"); c.shake(6, 900); c.sfx("roarQuake");
       await c.say([["engine", "MOTION DETECTED."], ["engine", "INTAKE SUSPENDED 14,600 DAYS AGO. STOCK: 0."], ["engine", "NEW STOCK DETECTED: 4."], ["engine", "RESUMING HARVEST."]]);
       await c.anim("eng", "lunge", { dx: -20 });
@@ -110,10 +110,10 @@
       c.sfx("deathCollapse"); c.sfx("rockFall"); await c.anim("eng", "shake", { ms: 1400 }); c.shake(5, 1400);
       await c.say([["engine", "YIELD... INSUFFICIENT."], ["engine", "CYCLE... ENDED."]]);
       await c.anim("eng", "fadeOut", { ms: 2200 }); c.remove("eng");
-      await c.say([["narr", "The furnace goes dark. Up on the sorting floor, one tank after another goes dark too, and in each a small light rises and drifts away up the causeway, toward the hatch and the open sky."]]);
+      await c.say([["narr", "The furnace goes dark. Up on the sorting floor the tanks go dark one after another, and from each of them a small light rises and drifts away up the causeway, toward the hatch and the open sky."]]);
       c.fx("sparkle", ENG.x, ENG.y + 40, { r: 60, ms: 3200 }); c.fx("glow", ENG.x, ENG.y + 40, { color: 0xffe0a0, ms: 3200 });
       F.sfx("coin"); F.gold(6000); F.give("soulDew", 3); F.give("respecStone", 1); F.give("engineCore", 1);
-      await c.say([["narr", "In the cold furnace, among the ash, a core of blue glass still warm. 6000 kakal in the foreman's strongbox, three Soul Dews, and a Respec Stone."],
+      await c.say([["narr", "In the cold furnace, among the ash, you find a core of blue glass, still warm. The foreman's strongbox holds 6000 kakal, three Soul Dews and a Respec Stone."],
         hero("Go home. All of you.")]);
       c.follow();
     });
@@ -139,8 +139,8 @@
   Q(D.BEST, {
     harvestEngine: "Harvest Engine No. 1, the Company's first. It harvested creatures for their power until the stock ran out, then it harvested the workers, and then it waited forty years. It sings with every horn on its back, and it heals itself on souls.",
     bellowsHorn: "A horn as tall as a man on the Harvest Engine's back. While one still stands, the engine hardly feels a thing.",
-    soulLoom: "A loom of light on the Harvest Engine's arm. It spins what the engine harvested back into the engine, and threads one of you to it.",
+    soulLoom: "A loom of light on the Harvest Engine's arm. It spins what the engine harvested back into the engine, and ties one of you to it.",
     collarDrone: "A small iron beetle with an open collar in its claws. It fits collars for transport. Kill it and its collars fall open.",
   });
-  Q(D.BREAKS, { harvestEngine: "In its last cycle only: impact, three rounds in a row. Something inside snaps and the scream drops back to nothing." });
+  Q(D.BREAKS, { harvestEngine: "In its last cycle only: hit it with Impact three rounds in a row. Something inside snaps and the scream dies away." });
 })();

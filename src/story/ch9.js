@@ -29,20 +29,20 @@
 
   // ---------- bestiary, drops, breaks ----------
   Q(D.BEST, {
-    prisonGuard: "Black helm, tower shield, an iron club. Sturdy. Lightning finds the gaps.", warderSpearman: "A warder with a long spear that reaches the second row. Impact breaks his stance.",
-    collarSmith: "An artisan soldier with a hammer and a satchel of collars. He powers up the one beside him every turn. Take him first.", prisonHound: "A pale hound that bites to slow. Fire makes it let go.",
-    rootWorm: "A worm that lives inside a root. Fire dries the root and the worm with it.", rootboundTroll: "A troll woven through with roots. Tanky, slow. Fire cuts the roots.",
-    gnawling: "A young kin of the Gnawer, mostly mouth. It chews the buffs off your creatures. Fire.", blackMirrorWraith: "A prisoner's ghost in a shard of black glass. The first spell you cast at it is thrown back. After that it is only a ghost.",
-    thornbackDragonet: "A small dragon with a back of thorns. Do not hit it with your bare hands. Water.", ashwingOwl: "An ash-grey owl that dives from the dark. Shock, and it falls.",
-    cinderMothSwarm: "Moths that burn whatever they touch. Water, and they go out.", smokePhoenixChick: "A grey chick on a puff of smoke. It rises from its ashes once; stop it first.",
-    hollowNestGuardian: "The tree's heart is hollow, and the hollow is full of legs. Fire, twice.", rootGnawer: "A worm of bark and teeth. It hides inside the root it has dug. Fire.",
-    vaulthorn: "The arena's silver champion. Beautiful, and collared.",
+    prisonGuard: "A guard in a black helm with a tower shield and an iron club. Sturdy, but lightning finds the gaps.", warderSpearman: "A warder with a long spear that reaches the second row. Impact breaks his stance.",
+    collarSmith: "An artisan soldier with a hammer and a satchel of collars. He powers up the one beside him every turn. Take him first.", prisonHound: "A pale hound whose bite slows you down. Fire makes it let go.",
+    rootWorm: "A worm that lives inside a root. Fire dries the root and the worm with it.", rootboundTroll: "A troll woven through with roots. Tanky and slow. Fire cuts the roots.",
+    gnawling: "A young kin of the Gnawer, mostly mouth. It chews the buffs off your creatures. Weak to fire.", blackMirrorWraith: "A prisoner's ghost in a shard of black glass. The first spell you cast at it is thrown back. After that it is only a ghost.",
+    thornbackDragonet: "A small dragon with a back of thorns. Don't touch it with your bare hands. Weak to water.", ashwingOwl: "An ash-grey owl that dives from the dark. Hit it with shock and it falls.",
+    cinderMothSwarm: "Moths that burn whatever they touch. Water puts them out.", smokePhoenixChick: "A grey chick on a puff of smoke. It rises from its ashes once, so stop it first.",
+    hollowNestGuardian: "The tree's heart is hollow, and the hollow is full of legs. Hit it with fire twice.", rootGnawer: "A worm of bark and teeth. It hides inside the root it has dug. Weak to fire.",
+    vaulthorn: "The arena's silver champion. Beautiful, and wearing a collar.",
   });
   Q(D.DROPS, {
     prisonGuard: [["blackGlass", 0.35], ["legionCoin", 0.5]], warderSpearman: [["legionCoin", 0.5]], collarSmith: [["collarTool", 0.7]], prisonHound: [["paleFang", 0.45]], rootWorm: [["rootMarrow", 0.45]], rootboundTroll: [["rootMarrow", 0.5]],
     gnawling: [["gnawTooth", 0.5]], blackMirrorWraith: [["blackGlass", 0.5]], thornbackDragonet: [["thornScale", 0.45]], ashwingOwl: [["ashPinion", 0.45]], cinderMothSwarm: [["mothWing", 0.5]],
   });
-  Q(D.BREAKS, { hollowNestGuardian: "Fire, twice in a row. The nest is only ash waiting for a spark.", rootGnawer: "Burn the roots it hides in. Hit it with fire while it is hiding, until the roots are gone." });
+  Q(D.BREAKS, { hollowNestGuardian: "Hit it with fire twice in a row. The nest is only ash waiting for a spark.", rootGnawer: "Burn the roots it hides in. Hit it with fire while it is hiding, until the roots are gone." });
 
   // ---------- regions ----------
   const yes = () => true, RG = M3.region;
@@ -59,7 +59,7 @@
   RG("prisonCellNine", { n: "Cell nine", bg: "bg_ruins", arena: "prison", music: "hope", exits: [["blackMirrorPrison", "Back along the glass corridor", s => s.f["ch9.cell9"]]], things: [["cellNine", "The glass cell at the end of the corridor", s => !s.f["ch9.cell9"], "trigger"]] });
   RG("hollowNest", { n: "The Hollow Nest", bg: "bg_ruins", arena: "hollowTree", music: "roots", table: "nest", fields: true, dungeon: true, autos: ["nestEnter"],
     exits: [["rootdeepApproach", "Back out of the tree", yes]],
-    things: [["fire1", "A cold brazier by the first drift", s => !s.f["nest.f1"], "trigger"], ["fire2", "A cold brazier under the burnt bough", s => !s.f["nest.f2"], "trigger"], ["fire3", "A cold brazier at the stair", s => !s.f["nest.f3"], "trigger"],
+    things: [["fire1", "A cold brazier by the first drift", s => !s.f["nest.f1"], "trigger"], ["fire2", "A cold brazier under the burnt bough", s => !s.f["nest.f2"], "trigger"], ["fire3", "A cold brazier at the stairs", s => !s.f["nest.f3"], "trigger"],
       ["vent1", "A wind vent in the trunk wall", s => !s.f["nest.open"], "trigger"], ["vent2", "A second wind vent", s => !s.f["nest.open"], "trigger"], ["vent3", "A third wind vent", s => !s.f["nest.open"], "trigger"],
       ["nestGuardian", "The heart of the hollow tree", s => s.f["nest.open"] && !s.f["k7.done"], "trigger"], ["g24_shieldbearerAviary", "A chest in the ash", s => s.f["k7.done"], "chest"]] });
   RG("rootdeep", { n: "Rootdeep", bg: "bg_ruins", arena: "roots", music: "roots", table: "rootdeep", fields: true, dungeon: true,
@@ -90,7 +90,7 @@
       M3.actors(c, [["dh", "npcOldGuard", 110, -10, { name: "Captain Dahl", flip: true }], ["im", "npcImela", 190, 18, { name: "Imela", flip: true }]]);
       await c.say([["narr", "A camp under giant roots: rope walkways high in the dark, canvas hung between the buttresses, fires in clay pots, a long table beneath a root that arches like a cathedral door. The ground gives a faint, regular shudder, as if something very large were turning over in its sleep."]]);
       await c.walk("dh", c.hero.x + 50, c.hero.y, 600);
-      await c.say([["captainDahl", "Tired. We are all tired. We are also here, which is the main thing."]]);
+      await c.say([["captainDahl", "We're all tired. But we're here, and that's the main thing."]]);
       c.remove("dh"); await c.pan(c.hero.x + 150, c.hero.y + 10, 700);
       await c.say([["imela", "You came back with the same number of limbs. Good. Eat."]]);
       c.remove("im"); c.tint("#10241c", 0, 400); c.follow();
@@ -119,21 +119,21 @@
   S.done.ashfeatherReturn = F => true;
 
   M3.talkTown("ashfeatherCamp", { innLine: "The Cracked Mirror, named for a shard of black glass the cook found in the mud and refuses to throw out. A bunk, a bowl, and the ground humming under it.", inn: "ashfeatherCamp",
-    shopLine: "Camp stores. Not much, but all of it is clean. Do not ask what happened to the dirty stock.", shop: "ashfeather", who: ["fighter", "oldwoman", "child"],
-    small: [["It shakes at dawn. It shakes at dusk. I have given up asking it to stop.", "My feet know the ground is thinking. I do not like it."], ["The roots above us are older than the empire. They are kinder than the empire."], ["Mama says do not go near the edge. The edge is where the man stands.", "I saw the man once. He did not look at me. He looked at the hole."]] });
+    shopLine: "Camp stores. Not much, but all of it is clean. Don't ask what happened to the dirty stock.", shop: "ashfeather", who: ["fighter", "oldwoman", "child"],
+    small: [["It shakes at dawn and it shakes at dusk. I've given up asking it to stop.", "My feet can tell the ground is thinking, and I don't like it."], ["The roots above us are older than the empire. They are kinder than the empire."], ["Mama says not to go near the edge. That's where the man stands.", "I saw the man once. He didn't look at me. He just looked at the hole."]] });
   T("ashfeatherCamp").captainDahl = async F => {
-    await say("captainDahl", cycle("dh", ["We lost the bridge twice this month. We built it back three times. The arithmetic does not matter. It is the habit.", "The Corps wanted to garrison us. I said we are a camp, not a barracks. They said what is the difference. I said, the singing.", "If the emperor stands at the edge, he is not at the palace. If he is not at the palace, he is not looking at the roads. That is the whole of my plan. It is not much of a plan.", "Eat. I do not give orders. I only suggest, with feeling."]));
+    await say("captainDahl", cycle("dh", ["We lost the bridge twice this month, and we rebuilt it three times. The arithmetic doesn't matter. It's the habit that counts.", "The Corps wanted to garrison us. I told them we're a camp, not a barracks. They asked what the difference was. I said, the singing.", "If the emperor is standing at the edge, he isn't at the palace. If he isn't at the palace, he isn't watching the roads. That's my whole plan, and it's not much of a plan.", "Eat. I don't give orders. I only make suggestions, with feeling."]));
   };
   T("ashfeatherCamp").imela = async F => {
-    if (F.f("ch9.done")) { await say("imela", "Whenever you are ready. I will be here with the tea."); await M.sailToSaltmere(F); return; }
-    if (F.f("ch9.t6")) { await say("imela", "Go. Rest. Then go again."); return; }
-    if (F.f("ch9.dawn")) { await say("imela", cycle("imd", ["He offered you a gift. I know the voice he did it in. Keep your hands in your pockets for a week.", "Fire, the rumour said. Take plenty of it."])); return; }
-    if (F.f("ch9.cell9")) { await say("imela", cycle("imc", ["You are tired. Sleep. The thing in the roots will not move before the morning. I have never known it to.", "She is eating? Good. Watch that she eats."])); return; }
-    await say("imela", cycle("ima", ["Cell nine is in the Black Mirror. Rest, and then go. You know how that goes, don't you? I do.", "I am not going to tell you what to say to her. You will know. Sparrow, you always know. You just do not say it for a day.", "The key for the glass doors hangs on the Warden's belt. I have that from a laundress. Of course I have it from a laundress."]));
+    if (F.f("ch9.done")) { await say("imela", "Whenever you're ready. I'll be here with the tea."); await M.sailToSaltmere(F); return; }
+    if (F.f("ch9.t6")) { await say("imela", "Go and rest. Then go out again."); return; }
+    if (F.f("ch9.dawn")) { await say("imela", cycle("imd", ["He offered you a gift, didn't he? I know the voice he uses for that. Keep your hands in your pockets for a week.", "The rumour says fire is what works against it. Take plenty."])); return; }
+    if (F.f("ch9.cell9")) { await say("imela", cycle("imc", ["You're tired. Go to sleep. The thing in the roots won't move before morning. It never has.", "Is she eating? Good. Make sure she keeps eating."])); return; }
+    await say("imela", cycle("ima", ["Cell nine is in the Black Mirror. Rest first, then go. You know how this goes, don't you? I do.", "I'm not going to tell you what to say to her. You'll know. Sparrow, you always do. You just don't say it until a day later.", "The key for the glass doors hangs on the Warden's belt. I heard that from a laundress. Of course I did."]));
   };
-  T("ashfeatherCamp").kessa = async F => { await say("kessa", cycle("ks9", ["I am not going to say it was nothing. I am going to say you are still annoying.", "Emberwick likes it here. The fires are the right size.", "Go. I will watch the rope bridge. Somebody ought to."])); };
-  T("ashfeatherCamp").dorrin = async F => { await say("dorrin", cycle("dr9", ["Boss says no pie. The pie is in my pocket. The pocket is a long story.", "There is a mushroom in the roots that tastes of cheese. I am not telling Mayle."])); };
-  T("ashfeatherCamp").mayle = async F => { await say("mayle", cycle("my9", ["The Gnawer has dug a spiral. Down, always down. Page sixty. It is not wandering; it is being led.", "The ground shakes every four hours. Not randomly. On a schedule."])); };
+  T("ashfeatherCamp").kessa = async F => { await say("kessa", cycle("ks9", ["I won't say it was nothing. I'll say you're still annoying.", "Emberwick likes it here. The fires are the right size.", "Go on. I'll watch the rope bridge. Somebody should."])); };
+  T("ashfeatherCamp").dorrin = async F => { await say("dorrin", cycle("dr9", ["Boss says no pie. The pie is in my pocket. The pocket is a long story.", "There is a mushroom in the roots that tastes of cheese. I'm not telling Mayle."])); };
+  T("ashfeatherCamp").mayle = async F => { await say("mayle", cycle("my9", ["The Gnawer has dug a spiral, always downward. It's on page sixty. It isn't wandering, it's being led.", "The ground shakes every four hours. Not randomly, but on a schedule."])); };
   M.sailToSaltmere = async F => {
     const i = await F.ask("Sail for Saltmere?", [{ label: "Sail" }, { label: "Not yet" }], { top: "40%" });
     if (i !== 0) return;
@@ -144,12 +144,12 @@
   // ---------- the bounty board at the camp ----------
   const base = k => (G.kills[k] || 0);
   const BQ = {
-    bounty7: { give: "Three of the Collar-Smith's tools, from the Black Mirror forge. Hammer-heads, tongs, anything with a collar's blue on it. I will have them melted for horseshoes.", ready: F => (G.goods.collarTool || 0) >= 3, take: F => { G.goods.collarTool -= 3; },
-      left: F => `Tools: ${Math.min(3, G.goods.collarTool || 0)} of 3. The Black Mirror forge.`, gold: 4, pay: "Three tools, and still warm from the forge. They will pull a plough for years. Here is your coin." },
-    bounty8: { give: "Five Gnawlings off the Rootdeep roads. They chew the buffs off your creatures; fire stops them. The scouts are tired of losing their lunches.", start: F => { G.flags["b8.base"] = base("gnawling"); },
-      ready: F => base("gnawling") - (G.flags["b8.base"] || 0) >= 5, left: F => `Gnawlings: ${Math.max(0, base("gnawling") - (G.flags["b8.base"] || 0))} of 5.`, gold: 4, pay: "Five fewer. The scouts will eat their lunches in peace. Here." },
-    bounty9: { give: "Clear the cliff road to the Black Mirror: six of the prison's patrol. Guards, warders, whatever walks it in a helm. The road is the only way up.", start: F => { G.flags["b9.base"] = base("prisonGuard") + base("warderSpearman"); },
-      ready: F => base("prisonGuard") + base("warderSpearman") - (G.flags["b9.base"] || 0) >= 6, left: F => `Patrol: ${Math.max(0, base("prisonGuard") + base("warderSpearman") - (G.flags["b9.base"] || 0))} of 6.`, gold: 4, pay: "The cliff road is quiet. A wind is the only thing on it. That is worth a purse." },
+    bounty7: { give: "I want three of the Collar-Smith's tools from the Black Mirror forge. Hammer-heads, tongs, anything with a collar's blue on it. I'll have them melted down for horseshoes.", ready: F => (G.goods.collarTool || 0) >= 3, take: F => { G.goods.collarTool -= 3; },
+      left: F => `Tools: ${Math.min(3, G.goods.collarTool || 0)} of 3. The Black Mirror forge.`, gold: 4, pay: "Three tools, still warm from the forge. As horseshoes, they'll last for years behind a plough. Here's your coin." },
+    bounty8: { give: "I need five Gnawlings gone from the Rootdeep roads. They chew the buffs off your creatures, and fire stops them. The scouts are tired of losing their lunches.", start: F => { G.flags["b8.base"] = base("gnawling"); },
+      ready: F => base("gnawling") - (G.flags["b8.base"] || 0) >= 5, left: F => `Gnawlings: ${Math.max(0, base("gnawling") - (G.flags["b8.base"] || 0))} of 5.`, gold: 4, pay: "Five fewer. The scouts can eat their lunches in peace now. Here you go." },
+    bounty9: { give: "I need the cliff road to the Black Mirror cleared: six of the prison's patrol. Guards, warders, anything that walks it in a helm. It's the only way up.", start: F => { G.flags["b9.base"] = base("prisonGuard") + base("warderSpearman"); },
+      ready: F => base("prisonGuard") + base("warderSpearman") - (G.flags["b9.base"] || 0) >= 6, left: F => `Patrol: ${Math.max(0, base("prisonGuard") + base("warderSpearman") - (G.flags["b9.base"] || 0))} of 6.`, gold: 4, pay: "The cliff road is quiet. Nothing's on it now but the wind. That's worth a purse." },
   };
   T("ashfeatherCamp").scout = async F => { await M.board(F, "scout", ["bounty7", "bounty8", "bounty9"], BQ, "The bounty rope at Ashfeather Camp"); };
 
@@ -159,7 +159,7 @@
     F.music("roots"); F.quest("m_k7", 0);
     await stage(async c => {
       c.tint("#2a1a10", 0.3, 400);
-      await c.say([["narr", "A giant hollow tree, as wide as a hall, drifted with grey ash to the knee. Burnt branches make walkways over empty nests the size of cart-beds. Embers glow in the walls like eyes. A cold updraught roars up the middle of the trunk and pulls at your cloak."], ["hero", "(It burned once. It never got over it.)"]]);
+      await c.say([["narr", "A giant hollow tree, as wide as a hall, with grey ash drifted knee-deep across the floor. Burnt branches make walkways over empty nests the size of cart-beds. Embers glow in the walls like eyes. A cold updraught roars up the middle of the trunk and pulls at your cloak."], ["hero", "(It burned once. It never got over it.)"]]);
       c.tint("#2a1a10", 0.1, 600); c.follow();
     }, { music: "roots" });
   };
@@ -169,8 +169,8 @@
     S.done["fire" + n] = F => F.f("nest.f" + n);
     S.trigger["fire" + n] = async F => {
       if (F.f("nest.f" + n)) return; F.set("nest.f" + n); F.sfx("fire");
-      await S.m2.gate([["narr", ["You strike a spark into the first brazier. It catches slowly, then roars; the ash-drift across the corridor lifts on the heat and blows away in flakes.", "The second brazier smokes, then lights. A drift of old nest-material, three feet deep, burns away like paper.", "The third brazier takes at once. A whole wall of ash falls in on itself and the stair beyond it is clear."][n - 1]]], { dx: 90 + n * 30, dy: -20, sfx: "fire", fx: "fire", fx2: "embers", shake: 1 });
-      if ([1, 2, 3].every(k => F.f("nest.f" + k))) { F.set("nest.open"); await S.m2.gate([["narr", "The last drift burns away. At the top of the stair the trunk opens into a great hollow, and in the hollow something shifts, with a sound like a hundred slow wings."]], { dx: 200, dy: -60, sfx: "wingFlutter", fx: "embers", fx2: "smoke", shake: 2, tint: "#2a1a10" }); }
+      await S.m2.gate([["narr", ["You strike a spark into the first brazier. It catches slowly, then roars; the ash-drift across the corridor lifts on the heat and blows away in flakes.", "The second brazier smokes, then lights. A drift of old nest-material, three feet deep, burns away like paper.", "The third brazier takes at once. A whole wall of ash falls in on itself and the stairs beyond it are clear."][n - 1]]], { dx: 90 + n * 30, dy: -20, sfx: "fire", fx: "fire", fx2: "embers", shake: 1 });
+      if ([1, 2, 3].every(k => F.f("nest.f" + k))) { F.set("nest.open"); await S.m2.gate([["narr", "The last drift burns away. At the top of the stairs the trunk opens into a great hollow, and in the hollow something shifts, with a sound like a hundred slow wings."]], { dx: 200, dy: -60, sfx: "wingFlutter", fx: "embers", fx2: "smoke", shake: 2, tint: "#2a1a10" }); }
     };
     S.done["vent" + n] = F => F.f("nest.open");
     S.trigger["vent" + n] = async F => {
@@ -181,12 +181,12 @@
   S.done.nestGuardian = F => F.f("k7.done");
   S.trigger.nestGuardian = async F => {
     if (F.f("k7.done")) return;
-    if (!hub() && !F.f("nest.open") && !F.f("nest.f1")) { await UI.say([["narr", "Ash blocks the corridor to the heart of the tree. It would burn."]]); return; }
+    if (!hub() && !F.f("nest.open") && !F.f("nest.f1")) { await UI.say([["narr", "Ash blocks the corridor to the heart of the tree. Fire would clear it."]]); return; }
     const ok = await M3.keyBoss(F, { id: "hollowNestGuardian", level: 54, k: "k7", key: "keyK7", name: "The Nest Guardian", title: "Keeper of the Ash", bg: "hollowTree", fx: "embers", end: "fade",
       lines: [["narr", "The hollow is full of legs. The Nest Guardian unfolds from the wall of the tree: a body of grey chitin and ash, a hundred small wings folded on its back, and eyes the colour of banked coals."], ["hero", "(It has been alone in here since the fire.)"]],
       stage: async c => { c.tint("#2a1a10", 0.3, 500); c.sfx("encounter"); c.fx("embers", c.hero.x + 100, c.hero.y - 20, { ms: 2200 }); await c.say([["narr", "The updraught drops to a whisper. Every ember in the wall of the tree goes dark at once."]]); },
-      after: [["narr", "The wings fold. The ash falls from its back in a long grey sheet and the thing lies quiet at last. On a branch above it, a key of grey ash-wood, still warm in the middle."], ["hero", "(Whatever it kept, it kept to the end.)"]] });
-    if (ok) await UI.say([["narr", "In a hollow of the ash, a chest the burn never reached."]]);
+      after: [["narr", "The wings fold. The ash falls from its back in a long grey sheet and the thing lies quiet at last. On a branch above it hangs a key of grey ash-wood, still warm in the middle."], ["hero", "(Whatever it was guarding, it guarded to the very end.)"]] });
+    if (ok) await UI.say([["narr", "In a hollow in the ash, you find a chest the fire never reached."]]);
   };
   S.chest.g24_shieldbearerAviary = M.gearChest("g24_shieldbearerAviary", "G24", "k7.done", "The chest is in the hollow of the heart-tree, behind the Guardian.");
 
@@ -209,19 +209,19 @@
   S.trigger.hearthkinFreed = async F => { if (F.item("keyK7") > 0 && !F.f("k7.freed")) await M.hearthkinScene(F); };
   const w8 = M3.wagon;
   M3.wagon = async F => {
-    if (F.item("keyK7") > 0) { if (G.region === "ashfeatherCamp") { await M.hearthkinScene(F); return true; } await say("dunmar", "The wagon is at Ashfeather Camp now, lad. The front needs medicine and cages. Take it there."); return false; }
+    if (F.item("keyK7") > 0) { if (G.region === "ashfeatherCamp") { await M.hearthkinScene(F); return true; } await say("dunmar", "The wagon is at Ashfeather Camp now, lad. The front needs medicine and cages. Bring the key there."); return false; }
     return w8(F);
   };
   T("ashfeatherCamp").oldDunmar = async F => {
     if (F.item("keyK7") > 0 || F.item("keyK6") > 0) { await M3.wagon(F); return; }
-    await say("dunmar", cycle("dm9", ["The front needs medicine and cages, lad. So the wagon came. A cage of ash-wood, grey, warm in the middle. It wants a nest key. The old burnt tree at the south-west edge of the Rootdeep Approach, past the thorn bushes. The ash there is knee-deep.", "Nineteen years of crates going east, and I never asked. I am asking now. Everyone I ask says 'as agreed'.", "Mind the roots. They are older than the cages and they never forget the way home."]));
+    await say("dunmar", cycle("dm9", ["The front needs medicine and cages, lad, so the wagon came. There's a cage of grey ash-wood, warm in the middle, and it needs a nest key. You'll find the key in the old burnt tree at the south-west edge of the Rootdeep Approach, past the thorn bushes. The ash there is knee-deep.", "For nineteen years crates went east and I never asked why. I'm asking now. Everyone I ask just says 'as agreed'.", "Mind the roots. They're older than the cages, and they remember everything."]));
   };
 
   // ---------- 8.0 the Silver Cup (Tzavan) ----------
   Q(D.CUPS.silver, { n: "Silver Cup", ch: 9, gear: "G3", note: "Three fights, then Vaulthorn.",
     fights: [{ n: "Jaguar guard", foes: ["jaguarCohortElite", "jaguarCohortElite", "courtPriest"], lv: 52 }, { n: "Palace shields", foes: ["palaceGuard", "palaceGuard", "eagleCohortArcher"], lv: 53 }, { n: "Knives and a crest", foes: ["sunmawCultist", "sunmawCultist", "legionCenturion"], lv: 54 }],
     champion: { n: "Vaulthorn", foes: ["vaulthorn"], lv: 55, intro: "The south gate lifts on its chains, and the arena's silver champion walks out into the light.",
-      cinema: () => Cinema.boss({ id: "vaulthorn", name: "Vaulthorn", title: "Champion of the Silver Cup", bg: "colosseum", music: "arenaChampion", lines: [["narr", "Something comes out of the dark on four legs and walks into the light on two: a bull's body in silver plate, an eagle's head under a gold crest, and at its throat a collar of gold wire, worn like a necklace at a feast."], ["hero", "(It is beautiful. That is what they want you to see first.)"]] }) } });
+      cinema: () => Cinema.boss({ id: "vaulthorn", name: "Vaulthorn", title: "Champion of the Silver Cup", bg: "colosseum", music: "arenaChampion", lines: [["narr", "Something comes out of the dark on four legs and walks into the light on two: a bull's body in silver plate, an eagle's head under a gold crest, and at its throat a collar of gold wire, worn like a necklace at a feast."], ["hero", "(It's beautiful. That's what they want you to notice first.)"]] }) } });
 })();
 
 // ---------- part 3: the Black Mirror (S16, the prisoners, the forge S17) and cell nine ----------
@@ -234,7 +234,7 @@
     F.music("prison");
     await stage(async c => {
       c.tint("#10241c", 0.2, 400);
-      await c.say([["narr", "The cliff road. A fortress of black glass stands on the edge, mirror-bright, every wall reflecting the green sky and the long fall under it. Wind whistles in the cracks with a thin high note like a held breath. A crow sits on an empty gibbet and looks at you the way a clerk looks at a late arrival."], ["hero", "(Cell nine. The ledger said: to be kept alive.)"]]);
+      await c.say([["narr", "At the end of the cliff road, a fortress of black glass stands on the edge, mirror-bright, every wall reflecting the green sky and the long fall under it. Wind whistles in the cracks with a thin high note like a held breath. A crow sits on an empty gibbet and looks at you the way a clerk looks at a late arrival."], ["hero", "(Cell nine. The ledger said it's to be kept alive.)"]]);
       c.tint("#10241c", 0, 500); c.follow();
     }, { music: "prison" });
   };
@@ -249,14 +249,14 @@
         const h = c.hero; c.tint("#10241c", 0.25, 400);
         M3.actors(c, [["wd", "npcWarden", 170, -30, { name: "The Warden", flip: true }]]);
         await c.pan(h.x + 120, h.y - 10, 900);
-        await c.say([["narr", "The courtyard: black glass underfoot, black glass overhead, and your own reflection walking beside you, one step behind. At the gate a collar altar of black stone, and a creature in an iron harness, standing very still. A woman in a glass-black cloak with a ring of glass keys at her belt watches from the step."], ["wardenPrison", "The Black Mirror holds what the Throne cannot decide about. It is entered in the ledger that the courtyard is closed."]]);
+        await c.say([["narr", "The courtyard: black glass underfoot, black glass overhead, and your own reflection walking beside you, one step behind. At the gate a collar altar of black stone, and a creature in an iron harness, standing very still. A woman in a glass-black cloak with a ring of glass keys at her belt watches from the step."], ["wardenPrison", "The Black Mirror holds whatever the Throne can't make up its mind about. It is entered in the ledger that the courtyard is closed."]]);
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(300); c.follow();
       }, after: ["(Cell nine is behind a glass door. The Warden has the key.)"] });
     if (!ok) return;
     F.set("ch9.s16");
     await stage(async c => {
       M3.actors(c, [["wd", "npcWarden", 70, -6, { name: "The Warden" }]]);
-      await c.say([["wardenPrison", "...The key. Take it. I was not paid to be brave."], ["hero", "Where are the others?"], ["wardenPrison", "Eight cells, one for each of the Throne's indecisions. The cell block is behind me. The forge is behind that."]]);
+      await c.say([["wardenPrison", "...The key. Take it. I wasn't paid to be brave."], ["hero", "Where are the others?"], ["wardenPrison", "There are eight cells, one for each thing the Throne couldn't decide. The cell block is behind me, and the forge is behind that."]]);
       c.sfx("coin"); c.remove("wd"); c.follow();
     });
     F.give("cellKey", 1, true); UI.toast("Warden's cell key received.", 3000);
@@ -264,14 +264,14 @@
 
   // the eight cells: [speaker, what you see, through the glass, when freed]
   const CELLS = [
-    ["deserter", "A legionary sits against the glass with his helm in his lap and his hands between his knees.", "I said no once. Once. They put me where I could hear the sea.", "(he salutes with the wrong hand) I will tell the Weir you came."],
-    ["flockman", "A man in the grey of the Ember Flock, a candle stub in his fist.", "Archdeacon Morvane signed my warrant himself. 'Peace is made by those who can bear the price.' I could not.", "The Flock will ask who opened the door. Tell them a man in dark armour. They will not believe it."],
-    ["tamer", "A tamer's cord at her wrist, the knot half-undone. There is a long scratch on the glass at eye level, as if a creature had stood there.", "The empire has a place for tamers: black glass and cliff-wind. Cell nine is for what it cannot decide about.", "My creature is in the lower cells. You will have to open those too. ...I will wait. I have had practice."],
+    ["deserter", "A legionary sits against the glass with his helm in his lap and his hands between his knees.", "I said no once. Just once. And they put me where I could hear the sea.", "(he salutes with the wrong hand) I'll tell the Weir you came."],
+    ["flockman", "A man in the grey of the Ember Flock, a candle stub in his fist.", "Archdeacon Morvane signed my warrant himself. 'Peace is made by those who can bear the price.' I couldn't.", "The Flock will ask who opened the door. I'll tell them it was a man in dark armour. They won't believe me."],
+    ["tamer", "A tamer's cord at her wrist, the knot half-undone. There is a long scratch on the glass at eye level, as if a creature had stood there.", "The empire has a place for tamers: black glass and cliff-wind. Cell nine is for whatever it can't decide about.", "My creature is in the lower cells. You'll have to open those too. ...I'll wait. I've had practice."],
     ["laundress", "A woman with blue-stained hands, folding a blanket over and over into thirds.", "I hung the wrong cloth on the wrong day. ...Is Ranna still folding corner to corner?", "Tell the cloth I said hello."],
-    ["miner", "A big man, salt-white to the elbows, sits bolt upright and listens.", "Tell the Weir we heard the barges. All the way up here, in the dark. We heard them burn.", "Hush. Not a word. The glass listens."],
+    ["miner", "A big man, salt-white to the elbows, sits bolt upright and listens.", "Tell the Weir we heard the barges. We heard them burn, all the way up here in the dark.", "Hush. Don't say a word. The glass listens."],
     ["narr", "A stag-thing with antlers of black glass lies with its head on its forelegs. Its breath fogs the glass in a slow rhythm. It looks at you without fear.", null, "It rises and bows its head to your creatures, one at a time. Then it goes, without a sound, down the long corridor towards the wind."],
-    ["scholar", "A thin man in a clerk's coat, a pen behind his ear and no paper in the cell.", "I wrote the reports. Not the ones you think. The ones where the numbers did not add up. They called me an accountant of treason.", "There is a girl at the camp with a little book? Tell her page forty is right. Tell her I checked."],
-    ["boy", "A boy of perhaps twelve, in a coat much too big for him, sitting on the floor with his chin on his knees.", "My father did not come back with the grain. Then they came for the rest of us. Is that how it works?", "Where is the road to Tuk? ...Thank you. I will walk it very fast."],
+    ["scholar", "A thin man in a clerk's coat, a pen behind his ear and no paper in the cell.", "I wrote the reports. Not the ones you think: the ones where the numbers didn't add up. They called me an accountant of treason.", "There's a girl at the camp with a little book? Tell her page forty is right. Tell her I checked."],
+    ["boy", "A boy of perhaps twelve, in a coat much too big for him, sitting on the floor with his chin on his knees.", "My father didn't come back with the grain. Then they came for the rest of us. Is that how it works?", "Where's the road to Tuk? ...Thank you. I'll walk it very fast."],
   ];
   CELLS.forEach(([who, look, glass, free], i) => {
     const n = i + 1;
@@ -292,7 +292,7 @@
   // ---------- the forge (S17) ----------
   S.done.forgeS17 = F => F.f("ch9.s17");
   S.trigger.descentSealed = async F => { await UI.say([["hero", "(A shaft going down between the roots, sealed with a stone lid. Something under it knocks, slowly.)"]]); };
-  S.trigger.cellNineDoorShut = async F => { await UI.say([["hero", "(The glass door to cell nine is shut, and cold as a pond in winter. No keyhole.)"]]); };
+  S.trigger.cellNineDoorShut = async F => { await UI.say([["hero", "(The glass door to cell nine is shut, and cold as a pond in winter. It has no keyhole.)"]]); };
   S.trigger.forgeS17 = async F => {
     if (F.f("ch9.s17")) return;
     F.music("tension");
@@ -317,38 +317,38 @@
     F.music("hope");
     await stage(async c => {
       c.tint("#10241c", 0.28, 400);
-      await c.say([["narr", "A glass corridor, very long. Cells on both sides, empty now, the doors open and the wind going through. And from far down at the end, through the glass, a faint voice. Not words. A tune, going round and round."],
+      await c.say([["narr", "A glass corridor, very long. Cells on both sides, empty now, the doors open and the wind going through. And from far down at the end, through the glass, a faint voice. Not words, but a tune going round and round."],
         ["narr", "Beside the last door someone has scratched into the wall with a claw, over and over, the same two lines."], ["narr", "Eleven stars through the iron, / one for each of us, and one for the keeper's lamp."],
         ["hero", "(The lab lullaby. Every pen sang it. It was the one thing they all had.)"]]);
       c.tint("#10241c", 0, 400);
     }, { music: "hope" });
     // prompt for cinema/m4_cell_nine.png (panel.mjs): "a small glass cell at the end of a long corridor, a thin tired creature sitting on a stone bench under a high window, pale green light through the glass, claw scratches of a lullaby on the wall, style B"
-    await Cinema.panels([{ img: "assets/cinema/m4_cell_nine.png", text: "Cell nine. A bench, a high window, light through black glass. On the bench, thin, collar-marks on its neck, a creature sits singing under its breath.", pan: "inup" }], { music: "hope" });
+    await Cinema.panels([{ img: "assets/cinema/m4_cell_nine.png", text: "Cell nine. A bench, a high window, light through black glass. On the bench sits a thin creature with collar marks on its neck, singing under its breath.", pan: "inup" }], { music: "hope" });
     if (!id) { await UI.say([["narr", "The bench is empty. The scratches on the wall are the only voice in the cell."]]); }
     else {
       await stage(async c => {
         const h = c.hero; M3.actors(c, [["cr", id, 70, 0, { name: nm }]]); c.face("cr", "left");
         await c.say([["hero", nm + "."]]);
-        await c.say([["narr", "Nothing else comes out. The singing stops in the middle of a line."]]);
+        await c.say([["narr", "No answer comes. The singing stops in the middle of a line."]]);
         c.face("cr", "right"); c.emote("cr", "!"); await c.wait(900);
         await c.say([[id, (D.RETURN_LINES && D.RETURN_LINES[id]) || D.RETURN_FALLBACK || "...You came back."]]);
-        await c.say([["hero", "(I did not turn round. I came back.)"]]);
+        await c.say([["hero", "(I didn't turn round. I came back.)"]]);
         c.remove("cr");
       }, { music: "hope" });
       const u = Systems.returnCaptive();
       if (u) UI.toast(u.name + " rejoins the team.", 3600);
       const mates = G.party.filter(x => x.id !== id && !x.guest);
-      await UI.say(mates.map(m => [m.id, (D.GLAD && D.GLAD[m.id]) || "...You are back."]));
+      await UI.say(mates.map(m => [m.id, (D.GLAD && D.GLAD[m.id]) || "...You're back."]));
     }
     F.set("ch9.cell9"); F.questDone("m_prison"); F.sfx("break");
     await stage(async c => {
       const h = c.hero; c.tint("#2a1010", 0.25, 300); c.shake(3, 700); c.sfx("encounter");
-      await c.say([["narr", "Far above, a bell. Then another. Then all the black glass of the fortress rings together, a long cold chord, and boots begin on the stairs."]]);
+      await c.say([["narr", "Far above, a bell rings. Then another. Then all the black glass of the fortress rings together in a long, cold chord, and boots start pounding on the stairs."]]);
       await c.walkHero(h.x - 220, h.y + 30, 1500); c.fx("dust", h.x - 100, h.y + 20); c.shake(2, 500);
-      await c.say([["narr", "Down the long corridor, across the courtyard in the first grey light, out the gate and along the cliff road with the wind pushing at your back. Behind you the Black Mirror lights, window by window, the green sky running out of every pane."]]);
+      await c.say([["narr", "You run down the long corridor, across the courtyard in the first grey light, out the gate and along the cliff road, with the wind pushing at your back. Behind you the Black Mirror lights up, window by window, the green sky running out of every pane."]]);
       c.tint("#2a1010", 0, 600);
       M3.actors(c, [["ke", "npcKessa", 120, 0, { name: "Kessa", flip: true }], ["em", "emberwick", 90, 14, { name: "Emberwick", flip: true }]]);
-      await c.say([["narr", "At the foot of the cliff, a red scarf and a small flame, waiting where the road meets the trees."], ["emberwick", "Kessa says be useful. So. I was."], ["kessa", "Keep it warm. I mean the creature. And you."]]);
+      await c.say([["narr", "At the foot of the cliff, a red scarf and a small flame are waiting where the road meets the trees."], ["emberwick", "Kessa told me to be useful. So I was."], ["kessa", "Keep the creature warm. And yourself."]]);
       c.remove("ke"); c.remove("em"); c.follow();
     }, { music: "hope" });
     if (window.Systems && Systems.guest()) { Systems.guestLeave(); }
@@ -372,12 +372,12 @@
     await stage(async c => {
       const h = c.hero; c.tint("#2a5a3a", 0.3, 800);
       M3.actors(c, [["dv", "npcDavichi", 330, -20, { name: "", flip: true }], ["g1", "npcLegionGuard", 620, -10, { flip: true }], ["g2", "npcLegionGuard", 640, 30, { flip: true }], ["g3", "npcLegionGuard", 660, -30, { flip: true }], ["g4", "npcLegionGuard", 680, 10, { flip: true }]]);
-      await c.say([["narr", "Dawn, with the mist running green through the roots. A rope bridge over a chasm so deep that the light never reaches the bottom. Forty paces along it, at the rail, a man in plain dark robes stands with a small lantern in one hand. Four guards wait a long way behind him. He does not turn."]]);
+      await c.say([["narr", "It is dawn, and the mist runs green through the roots. You stand at a rope bridge over a chasm so deep that the light never reaches the bottom. Forty paces along it, at the rail, a man in plain dark robes stands with a small lantern in one hand. Four guards wait a long way behind him. He does not turn."]]);
       await c.walkHero(h.x + 140, h.y - 10, 1800);
       await c.say([["davichi", "You are earlier than I expected. Sit. You have walked a long way. It is entered in the ledger."], ["hero", "I will stand."], ["davichi", "Then stand. I will not ask you to kneel. It is a waste of a knee."]]);
       await c.say([["davichi", "You took her from me. I want you to know I am not angry. Anger is a bill I stopped paying in my thirties."], ["davichi", "I have your name in my ledger. Would you like to hear it?"], ["hero", "No."], ["davichi", "Good. A man should keep one thing the Throne has not priced."]]);
       c.shake(1, 500); c.emote("dv", "..."); await c.wait(500);
-      await c.say([["davichi", "Your master drives a fair bargain. I have never once regretted it."], ["narr", "You flinch. The lantern does not."]]);
+      await c.say([["davichi", "Your master made a fair bargain with me, and I have never once regretted it."], ["narr", "You flinch. The lantern does not."]]);
       await c.say([["davichi", "Every Titan you kill is a yield lost to me. Every Titan I bind is a yield gained. You have the gift. I have the throne. Your mother is free, as a sign of good faith. Come home."], ["hero", "No."], ["davichi", "Then I will watch. It is entered in the ledger that I offered."]]);
       c.face("dv", "right"); await c.wait(700);
       c.remove("g1"); c.remove("g2"); c.remove("g3"); c.remove("g4"); c.tint("#2a5a3a", 0.1, 600);
@@ -407,8 +407,8 @@
   };
   M3.spot("rootdeep", "gnawerTablet", async F => {
     F.set("lore.gnawer");
-    await UI.say([["narr", "A builder tablet leans against the mouth of the den, cut in the terse hand of the old people. The letters are worn smooth where the roots have moved against them."], ["narr", "We set the last chewer under the roots, to bite the sun if the sun falls."],
-      ["hero", "(Chewing toward the Great Pyramid. It was set to guard it, or to break it.)"]]);
+    await UI.say([["narr", "A builder tablet leans against the mouth of the den, cut in the blunt style of the old people. The letters are worn smooth where the roots have moved against them."], ["narr", "We set the last chewer under the roots, to bite the sun if the sun falls."],
+      ["hero", "(It's chewing toward the Great Pyramid. It was set here to guard it, or to break it.)"]]);
   }, "tg");
   S.chest.rootdeepChest = M2.loot("c.rootdeep", [["ember", 3]], 0, "A chest wedged among chewed roots, its lid scored by teeth the width of a man's arm. Three Ashen Embers inside, wrapped in dry moss.");
   S.done.gnawerFight = F => F.f("ch9.t6");
@@ -423,7 +423,7 @@
     G.best.rootGnawer = Object.assign(G.best.rootGnawer || { seen: 1, beaten: 1 }, { breakKnown: true });
     await stage(async c => {
       const h = c.hero; c.tint("#08180e", 0.3, 300); c.sfx("break"); c.shake(4, 900); c.fx("embers", h.x + 120, h.y - 10, { ms: 2800 });
-      await c.say([["narr", "The roots burn from the root up. The Gnawer screams, once, a sound with the whole forest in it, and sinks back into its den, slowly, as a tide goes out. The chewing stops. The ground stops shaking. You can hear water dripping somewhere, and nothing else."]]);
+      await c.say([["narr", "The roots burn from the bottom up. The Gnawer screams, once, a sound with the whole forest in it, and sinks back into its den, slowly, as a tide goes out. The chewing stops. The ground stops shaking. You can hear water dripping somewhere, and nothing else."]]);
       c.tint("#08180e", 0, 800); c.follow();
     }, { music: "hope" });
     F.giveGear("G29", 3); F.set("lore.gnawer");
@@ -431,7 +431,7 @@
     await stage(async c => {
       const h = c.hero; c.tint("#2a5a3a", 0.18, 300);
       M3.actors(c, [["dv", "npcDavichi", 360, -40, { name: "", flip: true }], ["g1", "npcLegionGuard", 520, -20, { flip: true }], ["g2", "npcLegionGuard", 540, 20, { flip: true }]]);
-      await c.say([["narr", "At the top of the long stair, back in the green morning, a man in plain dark robes stands at the rail of the bridge with a lantern, watching the smoke rise from the roots. He has not moved since you went down."], ["davichi", "Fire. How elegant. Ithiel taught you well."]]);
+      await c.say([["narr", "At the top of the long stairs, back in the green morning, a man in plain dark robes stands at the rail of the bridge with a lantern, watching the smoke rise from the roots. He has not moved since you went down."], ["davichi", "Fire. How elegant. Ithiel taught you well."]]);
       c.face("dv", "left"); await c.walk("dv", h.x + 700, h.y - 60, 4200);
       await c.say([["davichi", "Come again."]]);
       c.remove("dv"); c.remove("g1"); c.remove("g2"); c.tint("#2a5a3a", 0, 500); c.follow();
@@ -451,7 +451,7 @@
       c.remove("co");
     }, { music: "letters" });
     await F.letter("the green seal", ["\"You have done what I could not. I am proud, and I hope you will not mind that I am also afraid.\"", "\"The war comes to Sehkarem. The Concord, the Flock, and the Throne will meet at Saltmere. Come. I owe you an answer, and I will give it to you in person. - I.\""]);
-    await UI.say([["hero", "(He wants to explain. He sends a letter to say so.)"], ["imela", "That old fox."]]);
+    await UI.say([["hero", "(He says he wants to explain, but he sends a letter instead.)"], ["imela", "That old fox."]]);
     F.save(true);
     await M.sailToSaltmere(F);
   };

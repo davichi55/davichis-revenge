@@ -22,7 +22,7 @@
       await c.wait(500);
       await Promise.all(row.map(([id, , dx, dy], i) => c.walk(id, c.hero.x + 30 + (i % 4) * 60 + (dx > -330 ? 0 : 40), c.hero.y - 40 + Math.floor(i / 4) * 52, 2200 + i * 80)));
       await Promise.all(freed.map((id, i) => c.walk("fr" + i, c.hero.x - 160 - i * 34, c.hero.y + 90 + i * 12, 2400)));
-      await c.say([["narr", "They climb up behind you in a procession that nobody organised, one after another, blinking: the Concord, the Flock, the resistance in their patched cloaks, your mother, a grey cloak, the creatures at your heel. On the steps far below, three shapes that are not collared stand together and watch."]]);
+      await c.say([["narr", "They climb up behind you in a procession that nobody organised, one after another, blinking: the Concord, the Flock, the resistance in their patched cloaks, your mother, a grey cloak, the creatures at your heel. On the steps far below, three shapes that are no longer collared stand together and watch."]]);
     }, { music: "epilogue" });
     await F.banter("roof");
     await stage(async c => {
@@ -31,16 +31,16 @@
       await c.walk("ith", p.x + 60, p.y + 10, 1000); c.emote("ith", "...");
       await c.say([["narr", "Ithiel kneels at the carved calendar, slowly, one knee and then the other, and runs his thumb along the ring of days. He counts under his breath. He counts twice."], ["mentor", "Three hundred and sixty-four. There is a day missing."]]);
       c.sfx("bell"); await c.wait(500);
-      await c.say([["narr", "He stands, with a hand on the altar rim. Behind him, over the sea, the sky is turning to pink and gold. And the stars do not fade."], ["mentor", "It is today."]]);
+      await c.say([["narr", "He stands, with a hand on the altar rim. Behind him, over the sea, the sky is turning to pink and gold. And the stars do not fade."], ["mentor", "It is happening today."]]);
       c.tint("#101830", 0.22, 1200); c.music("tension"); await c.wait(800);
       for (let i = 0; i < 3; i++) { c.flash("#cfe8ff", 260); c.fx("sparkle", c.hero.x + 180 + i * 60, c.hero.y - 220 + i * 18, { ms: 1800, r: 30 }); c.sfx("chime"); await c.wait(900); }
-      await c.say([["narr", "One star falls. Then two. A line of light across the dawn, and another beside it, and another, as if a hand were dealing cards."], ["imela", "Those are not falling by chance."], ["mentor", "No."]]);
-      await c.say([["mentor", "I was wrong about who, not about what."]]);
+      await c.say([["narr", "One star falls. Then two. A line of light across the dawn, and another beside it, and another, as if a hand were dealing cards."], ["imela", "Those aren't falling by chance."], ["mentor", "No."]]);
+      await c.say([["mentor", "I was wrong about who was behind it, but not about what is coming."]]);
       c.fx("glow", c.hero.x, c.hero.y - 20, { ms: 2600, r: 40 });
-      await c.say([["narr", "On the back of your gauntlet, where the satchel strap has rubbed the steel bright for years, a faint light wakes. A feather inside a star, in the colour of the falling stars, and in time with them."], ["hero", "(Father.)"]]);
+      await c.say([["narr", "On the back of your gauntlet, where the satchel strap has rubbed the steel bright for years, a faint light wakes: a feather inside a star, the same colour as the falling stars and pulsing in time with them."], ["hero", "(Father.)"]]);
       c.tint("#101830", 0, 1000); c.music("epilogue");
       const q = rel(c, 40, 10); c.actor("imela2", { art: "npcImela", x: q.x + 40, y: q.y });
-      await c.say([["narr", "A hand settles on your shoulder."], ["imela", "Hm."], ["imela", "Come. Eat first. Questions keep."]]);
+      await c.say([["narr", "A hand settles on your shoulder."], ["imela", "Hm."], ["imela", "Come. Eat first. Questions can wait."]]);
     }, { music: "epilogue" });
     // the credits sequence: four painted panels, then the last card. No "to be continued".
     await Cinema.panels([
@@ -69,7 +69,7 @@
     await stage(async c => {
       M3.actors(c, [["brisk", "npcBrisk", 120, -10, { flip: true }]]);
       c.tint("#f0c0a0", 0.1, 400);
-      await c.say([["narr", "Morning at Dawnwatch. The banners on the wall are the same banners, and nobody quite knows what to do with them. From the cove comes a smell of tar and bread."], ["captain", "Friend, the storm belt is quiet. The scholars at Starhaven have been sending kites. Sail west from the cove, a little south, past the storm belt. Their island is the one behind the weather."]]);
+      await c.say([["narr", "Morning at Dawnwatch. The banners on the wall are the same banners, and nobody quite knows what to do with them. From the cove comes a smell of tar and bread."], ["captain", "Friend, the storm belt is quiet. The scholars at Starhaven have been sending kites. Sail west from the cove, a little south, past the storm belt. Their island lies just beyond the weather."]]);
       c.tint("#f0c0a0", 0, 400); c.follow();
     }, { music: "bastion" });
   };
@@ -191,7 +191,7 @@
       c.tint("#101838", 0.14, 400); await c.pan(c.hero.x + 120, c.hero.y - 40, 900);
       await c.say([["narr", "A research camp on a crater island: tents and prefab huts on glassy black sand, brass telescopes on every roof, notebooks pinned to ropes and clacking in the wind like a hundred small flags. The sky is so clear it looks recently cleaned."]]);
       await c.walk("vael", c.hero.x + 60, c.hero.y - 10, 900);
-      await c.say([["vael", "The old Academy staff who left before the raid. We took the data that was ours and left the rest. Welcome."], ["vael", "Do you know how many of our notes were stolen by your own journal? Do not answer. I am delighted."]]);
+      await c.say([["vael", "We are the old Academy staff who left before the raid. We took the data that was ours and left the rest. Welcome."], ["vael", "Do you know how many of our notes your own journal has stolen? Don't answer. I'm delighted."]]);
       c.emote("ith", "..."); await c.wait(400);
       await c.say([["narr", "At the far end of the camp, at the foot of the biggest telescope, a man in a grey cloak sits with a cold cup of tea. He raises it to you, a quarter inch. Near the wagon, Dunmar is shouting at a scholar for putting a notebook on the roof."]]);
       c.tint("#101838", 0, 500); c.follow();
@@ -204,31 +204,31 @@
     afterInn: async F => { if (F.f("k9.freed") && F.allCreatures().some(u => u.id === "bakuroth")) await say("bakuroth", cycle("bk.dream", ["I dreamed of a very long road, and something walking down it. It was not in a hurry.", "I ate a bad dream last night. It had stars in it. It was good, a little. Mostly sad.", "Someone was singing under the water, very far down. I did not know the song. I have been humming it anyway."])); } });
   Object.assign(T(SH), {
     vael: async F => {
-      if (G.items.starMetalShard && !F.f("sh.shard")) { F.set("sh.shard"); await UI.say([["vael", "You have the shard. May I? ...No. Do not hand it over. I want to hold it exactly as long as you will let me."], ["vael", "It hums at the note of the glass. The note of the telescope lens. The note, I confess, of my back teeth. The builders did not build this. Something older than the builders did."]]); return; }
-      await say("vael", cycle("vl", ["The glass here hums at four hundred and forty cycles. That is not a coincidence, and I have a notebook for it.", "I was a cartographer. I drew coasts. Now I draw skies, and the coasts have started to move. I am enchanted.", "Your journal is cited in three of our papers. I have written to it twice. It has not replied. A very rude journal.", "Do not thank me. Thank the data. It does the work, and it never asks for lunch."]));
+      if (G.items.starMetalShard && !F.f("sh.shard")) { F.set("sh.shard"); await UI.say([["vael", "You have the shard. May I? ...No, don't give it to me to keep. I only want to hold it for as long as you'll let me."], ["vael", "It hums at the same note as the glass, and as the telescope lens, and, I confess, as my back teeth. The builders did not make this. Something older than the builders did."]]); return; }
+      await say("vael", cycle("vl", ["The glass here hums at four hundred and forty cycles. That is no coincidence, and I have a notebook for it.", "I was a cartographer. I used to draw coasts. Now I draw skies, and the coasts have started to move. I'm enchanted.", "Your journal is cited in three of our papers. I've written to it twice, and it hasn't replied. A very rude journal.", "Don't thank me. Thank the data. It does the work, and it never asks for lunch."]));
     },
     oldDunmar: async F => {
       if (["keyK1", "keyK2", "keyK3", "keyK4", "keyK5", "keyK6", "keyK7", "keyK8", "keyK9"].some(k => F.item(k) > 0)) { await M3.wagon(F); return; }
-      await say("dunmar", cycle("dm12", ["There is a cage in this wagon I have been keeping open for the one the sea has under it. Bring me the key, lad. It will fit. I measured.", "I have a notebook, now. A scholar gave it to me. I write the creatures' names in it. All of them. I have run out of pages once already.", "Eat, lad. There are still cages. There will always be cages. That is why I eat."]));
+      await say("dunmar", cycle("dm12", ["I've been keeping a cage open in this wagon for the one that's down under the sea. Bring me the key, lad. It'll fit. I measured.", "I've got a notebook now. A scholar gave it to me. I write all the creatures' names in it, and I've already run out of pages once.", "Eat, lad. There are still cages. There'll always be cages. That's why I eat."]));
     },
     mentor: async F => {
-      if (!F.f("post.imelaHome")) return say("mentor", cycle("mn12", ["I read the sky for a living. For nineteen years I read it wrong. Now I read it right, and it is worse.", "Your mother and I have an understanding. She does not speak to me, and I make tea. It is going rather well.", "Look at the sky when you can, my boy. Not for what it says. For what it is doing."]));
-      await say("mentor", cycle("mn12b", ["Imela has gone home. She sent word that I am not to follow. I am not following. I am looking in the general direction, from a polite distance.", "I was wrong about who, not about what. I hope it is a comfort to someone, someday. It is not to me.", "Do not stay at the telescope too long. It will tell you things you cannot do anything about."]));
+      if (!F.f("post.imelaHome")) return say("mentor", cycle("mn12", ["I read the sky for a living. For nineteen years I read it wrong. Now I read it right, and it is worse.", "Your mother and I have an understanding. She does not speak to me, and I make tea. It is going rather well.", "Look at the sky when you can, my boy. Not for what it says, but for what it's doing."]));
+      await say("mentor", cycle("mn12b", ["Imela has gone home. She sent word that I am not to follow. I am not following. I am looking in the general direction, from a polite distance.", "I was wrong about who was behind it, not about what was coming. I hope that is a comfort to someone, someday. It is not to me.", "Don't stay at the telescope too long. It will tell you things you cannot do anything about."]));
     },
     calendarScholar: async F => say("calendarScholar", cycle("cs12", ["The missing day is entered in my notebook, in red. I do not know what to do with a red day. I keep looking at it.", "The count has started. I do not know what it is counting. I would like to be around when it reaches something.", "I used to read other people's calendars. Now I am asked to write one. I have started with: today."])),
     quartermaster: async F => say("quartermaster", cycle("qm12", ["Stores are by the crate, and the crate is in the shed. If it is not in the shed, it is on the roof. If it is not on the roof, a scholar has it.", "We trade with the sea. The sea does not always want what we make. It takes everything, in the end."])),
-    imela: async F => say("imela", cycle("im12", ["Eat. This is a camp full of people who forget to. I have started a rota.", "I am told the telescope shows a light that is not a star. I have not looked. I know what I would see, and I would rather eat.", "Sparrow. I have a well in Marigold Hollow that needs seeing to. It has been nineteen years. It can wait a little longer. Not much longer."])),
+    imela: async F => say("imela", cycle("im12", ["Eat. This is a camp full of people who forget to. I've started a rota.", "I'm told the telescope shows a light that is not a star. I haven't looked. I know what I'd see, and I'd rather eat.", "Sparrow. I have a well in Marigold Hollow that needs seeing to. It's been nineteen years, so it can wait a little longer. Not much longer."])),
   });
   S.gather.telescope = async F => {
     await UI.say([["narr", "The great brass telescope is trained on a patch of sky between two bright stars. A scholar's note is pinned to the tube: \"Not a star. Not a comet. It moves against the fixed stars, slowly, and every night it is a little larger.\""]]);
     const i = await F.ask("The telescope.", [{ label: "Look" }, { label: "Leave it" }], { top: "38%" });
     if (i !== 0) return;
-    await UI.say([["narr", "A great deal of black. Then, very small, a point of light that is not like the others. It does not twinkle. It is moving, and it is moving this way, patiently, like someone who knows the road."], ["hero", "(It is not falling. It is coming down the way you come down a stair you have walked before.)"]]);
+    await UI.say([["narr", "A great deal of black. Then, very small, a point of light that is not like the others. It does not twinkle. It is moving, and it is moving this way, patiently, like someone who knows the road."], ["hero", "(It isn't falling. It's coming down the way you come down a stair you've walked many times.)"]]);
     F.set("telescope.seen");
   };
   S.gather.postcard = async F => {
     F.set("post.postcard");
-    await UI.say([["narr", "A postcard pinned to the notice-rope, a little curled, the ink brown. On the front, drawn in pencil by a hand that was not used to drawing: a stone well, a bucket, thyme on the lip of it, and a small door open on a dark hall."], ["imela", "Sparrow. The well still works. The thyme has taken the porch. Come when you can. Eat first. - Mother"]]);
+    await UI.say([["narr", "A postcard pinned to the notice-rope, a little curled, the ink brown. On the front, drawn in pencil by a hand that was not used to drawing, are a stone well, a bucket, thyme on the lip of it, and a small door open on a dark hall."], ["imela", "Sparrow. The well still works. The thyme has taken the porch. Come when you can. Eat first. - Mother"]]);
   };
 })();
 
@@ -242,7 +242,7 @@
     if (!F.f("post.start")) return;
     if (!once(F, "sf.seen")) return;
     F.music("starfall"); F.quest("m_crater", 0);
-    await UI.say([["narr", "Islands cratered with dark metal, bowls of it, wide as ponds. The glass sand hums under your boots, a thin high note. Curved ribs of something older than the builders rise out of the dunes and bend over, like the ribs of a whale the size of a hill. The grass between is scorched in lines."]]);
+    await UI.say([["narr", "These islands are cratered with dark metal, in bowls as wide as ponds. The glass sand hums under your boots, a thin high note. Curved ribs of something older than the builders rise out of the dunes and bend over, like the ribs of a whale the size of a hill. The grass between is scorched in lines."]]);
     await F.banter("starfall");
   };
   S.done.starfallEnter = F => F.f("sf.seen");
@@ -288,7 +288,7 @@
   // ---------- 9.4 the diving bell and the Drowned Capital ----------
   R.drownedCapital.autos = ["drownedEnter"];
   S.trigger.divingBell = async F => {
-    if (!F.f("post.start")) { await UI.say([["narr", "A brass bell on a buoy, rocking on the swell, with a ladder down to the hatch. It is not yet the time for it."]]); return; }
+    if (!F.f("post.start")) { await UI.say([["narr", "A brass bell on a buoy, rocking on the swell, with a ladder down to the hatch. It isn't time to go down yet."]]); return; }
     F.quest("m_drowned", 0); F.music("drowned");
     await stage(async c => {
       c.tint("#08202c", 0.3, 500);
@@ -301,13 +301,13 @@
   S.trigger.drownedEnter = async F => {
     if (!F.f("post.start") || !once(F, "dc.seen")) return;
     F.quest("m_drowned", 0); F.music("drowned");
-    await UI.say([["narr", "The builders' sunken capital. Streets of black-and-gold stone under dark water, domes and bridges, coral colossi standing in the avenues like statues someone forgot to take down. The light-lines in the road still glow. Nothing has switched them off."]]);
+    await UI.say([["narr", "This is the builders' sunken capital: streets of black-and-gold stone under dark water, with domes and bridges and coral colossi standing in the avenues like statues someone forgot to take down. The light-lines in the road still glow. Nothing has switched them off."]]);
     await F.banter("drowned");
   };
   S.done.drownedEnter = F => F.f("dc.seen");
   S.chest.builderLogChest1 = async F => {
     if (F.f("c.log1")) return false; F.set("c.log1"); F.sfx("door"); F.give("soulDew", 1, true); F.gold(2400, true); F.set("lore.builderLogs");
-    await UI.say([["narr", "A builders' chest inside a dome, the lid thick with coral. Inside, a Soul Dew, a purse, and a slate tablet in the short hand: \"We set the locks. We did not tell the sleepers' names.\""]]);
+    await UI.say([["narr", "A builders' chest inside a dome, the lid thick with coral. Inside, a Soul Dew, a purse, and a slate tablet in builders' shorthand: \"We set the locks. We did not tell the sleepers' names.\""]]);
     UI.toast("Journal: the builder logs.", 2800);
   };
   S.chest.builderLogChest2 = async F => {
@@ -320,8 +320,8 @@
     await stage(async c => {
       const p = rel(c, 160, 0); c.actor("lw", { art: "lastWarden", x: p.x, y: p.y, scale: 1.4 });
       c.tint("#08202c", 0.28, 400); c.fx("glow", p.x, p.y - 30, { ms: 2400, r: 50 });
-      await c.say([["narr", "On the great avenue, at the foot of a dome, a figure of builder-bronze kneels with one hand flat on the road. It does not turn its head. The light-lines run under its palm and away, and it is the only thing in the city that has not been switched off."],
-        ["lastWarden", "We keep. We were set to keep. The keeping is not finished."], ["hero", "(It does not know the builders are gone.)"], ["lastWarden", "The island is closed. It has always been closed. Do you carry the mark?"]]);
+      await c.say([["narr", "On the great avenue, at the foot of a dome, a figure of builder-bronze kneels with one hand flat on the road. It does not turn its head. The light-lines run under its palm and away, and it is the only thing in the city that is still awake."],
+        ["lastWarden", "We keep. We were set to keep. The keeping is not finished."], ["hero", "(It does not know the builders are gone.)"], ["lastWarden", "The city is closed. It has always been closed. Do you carry the mark?"]]);
       c.tint("#08202c", 0, 400);
     }, { music: "legend" });
     const i = await F.ask("The Last Warden", [{ label: "Show the mark" }, { label: "Leave it on watch" }], { top: "38%" });
@@ -388,7 +388,7 @@
     await stage(async c => {
       c.tint("#08183a", 0.2, 400);
       await c.cageOut("bk", "bakuroth", { scale: 1.3, fx: "splash", before: [["dunmar", "That key has a light in it. Hold the lantern, lad. ...No. Hold two."]], desc: [["narr", "The cage door swings out over the sea and the wagon tips, alarmingly, towards it. A great soft shape comes down the wagon boards one slow coil at a time: a leviathan the size of a house, pale as a lantern, with eyes like deep wells, and a gentleness in the way it moves that makes the boards feel smaller than they are."]] });
-      await c.say([["bakuroth", "I ate a bad dream last night. It had stars in it."], ["dunmar", "That is a lot of creature for a wagon, lad."], ["bakuroth", "Sleep. I will keep the nightmares. They taste of salt."]]);
+      await c.say([["bakuroth", "I ate a bad dream last night. It had stars in it."], ["dunmar", "That's a lot of creature for one wagon, lad."], ["bakuroth", "Sleep now. I'll keep the nightmares. They taste of salt."]]);
       await c.cageBack("bk"); c.tint("#08183a", 0, 500);
     });
     UI.toast("Bakuroth joins the collection.", 3200);
@@ -443,9 +443,9 @@
   (function () {
     const tz = T("tzavan");
     const wrap = (id, who, lines) => { const base = tz[id]; tz[id] = async F => { if (F.f("league.free")) return say(who, cycle("lf." + id, lines)); return base ? base(F) : say(who, "..."); }; };
-    wrap("gladiator", "gladiator", ["The sand is only sand now. I cried the first week. Do not tell anyone.", "They call it the Free League. There is a white banner. I have not looked up at it yet.", "The champion trains in the mornings. He is terrible at losing. It is a pleasure to watch."]);
-    wrap("r1", "spectator", ["I came for the blood, I will admit it. I stayed for the white banner. I did not expect that.", "My son wants to fight now. For the sport. I said yes. It is the first time I have said yes."]);
-    wrap("bookmaker", "bookmaker", ["Odds are the same. The stakes are better. I am told that is called progress.", "There is no more kakal in a dead man. That is bad for business and good for the world, and I cannot decide."]);
+    wrap("gladiator", "gladiator", ["The sand is only sand now. I cried the first week. Don't tell anyone.", "They call it the Free League. There's a white banner, and I haven't looked up at it yet.", "The champion trains in the mornings. He's terrible at losing, and it's a pleasure to watch."]);
+    wrap("r1", "spectator", ["I'll admit it, I came for the blood. I stayed for the white banner. I didn't expect that.", "My son wants to fight now. For the sport. I said yes. It's the first time I've said yes."]);
+    wrap("bookmaker", "bookmaker", ["Odds are the same. The stakes are better. I'm told that's called progress.", "There's no more kakal in a dead man. That's bad for business and good for the world, and I can't decide which matters more."]);
   })();
 
   // ---------- 10.E after everything: Vael's plain brass compass ----------
@@ -456,8 +456,8 @@
     await stage(async c => {
       M3.actors(c, [["vael", "npcVael", 120, -10, { flip: true }]]);
       c.tint("#101838", 0.1, 400);
-      await c.say([["vael", "I have been keeping this in a drawer for the day someone finished everything. I did not think anyone would. I wanted to be wrong."], ["narr", "He puts something into your hand: a plain brass compass, a little dented, with a needle as thin as a hair."],
-        ["vael", "It points at nothing. I have spun it in every direction for three weeks. It points, I am almost certain, at the horizon the others do not."], ["vael", "No, I will not tell you what is on it. I will tell you I am delighted. I will write it down."]]);
+      await c.say([["vael", "I've been keeping this in a drawer for the day someone finished everything. I didn't think anyone would, but I wanted to be wrong."], ["narr", "He puts something into your hand: a plain brass compass, a little dented, with a needle as thin as a hair."],
+        ["vael", "It doesn't point at anything. I've spun it in every direction for three weeks. I am almost certain it points at a horizon that other compasses do not."], ["vael", "No, I won't tell you what is on that horizon. I will tell you I am delighted. I will write it down."]]);
       c.tint("#101838", 0, 400);
     }, { music: "starfall" });
     F.give("starCompass", 1, true); UI.toast("The Plain Brass Compass.", 3200);
@@ -479,5 +479,5 @@
   Object.assign(D.BOOK, { lanternVigil: { n: "Lantern Vigil", mat: "lanternGlass", need: 5, d: "2 MP. For 2 turns, one blow that would defeat the ally leaves it on 1 HP instead.", move: "lanternVigil" } });
   add("lanternEel", ["lanternGlass", 0.3]); add("lanternJelly", ["lanternGlass", 0.2]);
   M2.bookSpot("drownedCapital", "lanternGlass1", "Lantern beads on a coral post", "g.lantern1", "lanternGlass", 5, "A lantern-eel's shed skin hangs from a coral post, strung with beads of cold light. You take five. They stay lit in your fist and the water around your wrist goes quiet.", "Lantern Vigil");
-  M2.bookSpot("drownedCapital", "lanternGlass2", "Cold light in the jelly", "g.lantern2", "lanternGlass", 5, "On the far plaza the drowned lamps have grown a skin of clear jelly, and the light inside has outlasted the city. Five more beads.", "Lantern Vigil");
+  M2.bookSpot("drownedCapital", "lanternGlass2", "Cold light in the jelly", "g.lantern2", "lanternGlass", 5, "On the far plaza the drowned lamps have grown a skin of clear jelly, and the light inside has outlasted the city. You take five more beads.", "Lantern Vigil");
 })();

@@ -16,7 +16,7 @@
   Q(D.QUESTS, {
     m_gates: { t: "The Three Gates", main: true, ch: 11, steps: ["The Great Pyramid has three gates: Dawn, Zenith, Dusk. Each disc is held by a collar. Free what holds the disc."] },
     m_emperor: { t: "The Emperor", main: true, ch: 11, steps: ["The three discs open the way down. The emperor is at the bottom, with his ledger."] },
-    m_eater: { t: "The Sun Eater", main: true, ch: 11, steps: ["Under the emperor's hall, the last lock of the builders. Three suns, three ways."] },
+    m_eater: { t: "The Sun Eater", main: true, ch: 11, steps: ["Under the emperor's hall lies the last lock of the builders. It has three suns, and each is beaten in a different way."] },
     m_roof: { t: "The Roof", main: true, ch: 11, steps: ["A shaft of light has opened upward from the chamber. Climb it."] },
   });
 
@@ -115,7 +115,7 @@
     await stage(async c => {
       M3.actors(c, [["s1", "npcResistFighter", -150, -20], ["s2", "npcFlockGuard", 140, 30], ["s3", "npcRecruit", 70, -60]]);
       c.tint("#2a2030", 0.2, 400); await c.pan(c.hero.x + 120, c.hero.y - 40, 1000);
-      await c.say([["narr", "A captured stone fort on a headland, grey walls hung with new banners that do not quite fit the poles. Lanterns in the yard. Far to the east, black against a sky the colour of a bruise, the Great Pyramid stands on the horizon like a tooth."],
+      await c.say([["narr", "A captured stone fort on a headland, grey walls hung with new banners that don't quite fit the poles. There are lanterns in the yard. Far to the east, black against a sky the colour of a bruise, the Great Pyramid stands on the horizon like a tooth."],
         ["narr", "Nobody here is laughing. Nobody here is crying. They are eating, in a long line, standing up."]]);
       c.sfx("bell"); c.follow(); c.tint("#2a2030", 0, 500);
     }, { music: "bastion" });
@@ -128,11 +128,11 @@
     F.music("farewell");
     await M2.talkPanels("assets/cinema/m5_supper.png", [
       ["narr", "Dusk at Dawnwatch. In the fort yard someone has set a table the length of the wall and hung lanterns over it, and everyone who has walked this far sits down at it without being asked."],
-      ["dunmar", "Eat, lad. There are cages to open after."], ["dorrin", "There is stew. There is more stew. There is a pie nobody has admitted to."],
-      ["mayle", "I stopped writing the numbers down this week. I write the names instead."], ["corvin", "To lunch."], ["saffa", "To the stair."], ["hadiya", "Everything costs. Tonight it is free. Eat."],
+      ["dunmar", "Eat, lad. There are cages to open afterwards."], ["dorrin", "There's stew. There's more stew. And there's a pie nobody will admit to."],
+      ["mayle", "I've stopped writing the numbers down this week. I'm writing the names instead."], ["corvin", "To lunch."], ["saffa", "To the stair."], ["hadiya", "Everything costs. Tonight it's free. Eat."],
       ["narr", "At the far end of the table, in a grey cloak, sits Master Ithiel. He arrived at dusk. Nobody asked how."],
       ["narr", "Your creatures lie at your feet in a row, shoulder to shoulder, and one of them has put its head on your boot."],
-      ["narr", "Across forty feet of table, Ithiel meets your eye and does not look away and does not speak. After a while you nod. It is a small nod. He takes it as if it were a letter."],
+      ["narr", "Across forty feet of table, Ithiel meets your eye and doesn't look away or speak. After a while you nod, a small nod, and he takes it as if it were a letter."],
       ["imela", "Hm."], ["narr", "Everyone laughs a little, the way people do at a table before a morning like tomorrow's."],
     ], { music: "farewell" });
     F.set("ch11.supper"); F.quest("m_gates", 0);
@@ -143,42 +143,42 @@
 
   M3.talkTown(BB, { inn: BB, shop: "dawnwatch", who: ["scout", "stallkeeper", "scout"], opts: {},
     innLine: "The Dawn Bed. A cot by the wall, a blanket, and all the sleep the night will give you. Nobody is charging for the quiet.",
-    shopLine: "The last stores. Everything the camp has left, at the camp's price. There is no restock after this, so choose like it matters." });
+    shopLine: "The last stores. Everything the camp has left, at the camp's price. There is no restock after this, so choose as if it matters." });
   const before = F => !F.f("ch11.stair"), after = F => F.f("ch11.emperor");
   Object.assign(T(BB), {
-    saffa: async F => say("saffa", after(F) ? "The stair is ours. I do not know what to do with a stair that is ours. Show me what comes next." : F.f("ch11.stair") ? "Go. We hold the stair. I do not say that twice." : "Tomorrow, the stair. Tonight, you eat. That is an order, and I do not give many."),
-    hadiya: async F => say("hadiya", cycle("hd11", ["Everything costs. I have stopped adding it up. I would rather see the sum at the end.", "I booked passage for the creatures on the first ship home. Booked it twice. The second is for you.", "Count the exits before you count the enemy. Then count them again. Then stop counting, and walk."])),
-    imela: async F => say("imela", cycle("im11", ["Eat. Whatever is at the bottom of that stair will keep until you have eaten.", "Hm.", "I counted every wall in that palace for nineteen years. I will not count a single one tomorrow. I will be at the foot of the stair with a lamp.", "Sparrow. Come home after. That is all I want. The rest is detail."])),
+    saffa: async F => say("saffa", after(F) ? "The stair is ours. I don't know what to do with a stair that's ours. Show me what comes next." : F.f("ch11.stair") ? "Go. We'll hold the stair. I won't say that twice." : "Tomorrow, the stair. Tonight, you eat. That's an order, and I don't give many."),
+    hadiya: async F => say("hadiya", cycle("hd11", ["Everything costs. I've stopped adding it up. I'd rather see the total at the end.", "I booked passage for the creatures on the first ship home. I booked it twice, and the second booking is for you.", "Count the exits before you count the enemy. Then count them again. Then stop counting, and walk."])),
+    imela: async F => say("imela", cycle("im11", ["Eat. Whatever is at the bottom of that stair will wait until you've eaten.", "Hm.", "I counted every wall in that palace for nineteen years. Tomorrow I won't count a single one. I'll be at the foot of the stair with a lamp.", "Sparrow. Come home afterwards. That's all I want. The rest is detail."])),
     oldDunmar: async F => {
       if (["keyK1", "keyK2", "keyK3", "keyK4", "keyK5", "keyK6", "keyK7", "keyK8", "keyK9"].some(k => F.item(k) > 0)) { await M3.wagon(F); return; }
-      await say("dunmar", cycle("dm11", ["Eat, lad. There are cages to open after. I have a list. It is a long one.", "I carried his coffee thirty years. Tomorrow I carry nothing and I am afraid I will not know what to do with my hands.", "Bring me every key you find, lad. Every one."]));
+      await say("dunmar", cycle("dm11", ["Eat, lad. There are cages to open afterwards. I've got a list, and it's a long one.", "I carried his coffee for thirty years. Tomorrow I'll carry nothing, and I'm afraid I won't know what to do with my hands.", "Bring me every key you find, lad. Every one."]));
     },
-    mentor: async F => say("mentor", cycle("mn11", ["I did not tell anyone I was coming. I find that people come in the end, if one is quiet about it.", "I built the gates. I could not tell you how many times I have walked them in my head. They are shorter in my head.", "Do not forgive me tonight. Tomorrow, if there is a tomorrow, we can discuss the matter over tea. Cold tea. It is the only kind I seem to make."])),
-    captain: async F => say("captain", cycle("br11", ["Friend! The Heron is at the cove with her sails furled, and her captain is here, and her captain is not at all nervous. Not at all.", "I lie about many things. I do not lie about the price of a ship. That was a bargain, and tomorrow I intend to be at the dock for the return.", "You do not outsail a war, friend. You outwait it. We have outwaited this one as far as we can."])),
-    rhaz: async F => say("rhaz", cycle("rh11", ["Show me the creatures. Then go and do what the creatures are for.", "The Dune Wardens hold the east barricade. We are not many. We are loud."])),
-    peya: async F => say("peya", cycle("py11", ["And what will you be, when it is over?", "Everyone is asking what is at the bottom. I am asking what is at the top. Someone built a roof on that thing."])),
-    corvin: async F => say("corvin", cycle("cv11", ["We have three rules and one of them is lunch. We have kept it. I would like it noted.", "Saltwater Compact is holding the quay. If you come back down that stair with a boat to catch, we will have it warm."])),
+    mentor: async F => say("mentor", cycle("mn11", ["I did not tell anyone I was coming. I find that people will usually make room for you in the end, if you are quiet about it.", "I built the gates. I could not tell you how many times I have walked them in my head. They are shorter in my head.", "Do not forgive me tonight. Tomorrow, if there is a tomorrow, we can discuss the matter over tea. Cold tea. It is the only kind I seem to make."])),
+    captain: async F => say("captain", cycle("br11", ["Friend! The Heron is at the cove with her sails furled, and her captain is here, and her captain is not at all nervous. Not at all.", "I lie about many things. I do not lie about the price of a ship. She was a bargain, and tomorrow I intend to be at the dock when you return.", "You can't outsail a war, friend. You outwait it. We've outwaited this one as long as we can."])),
+    rhaz: async F => say("rhaz", cycle("rh11", ["Show me your creatures first. Then go and do what they're for.", "The Dune Wardens hold the east barricade. We're not many, but we're loud."])),
+    peya: async F => say("peya", cycle("py11", ["And what will you be when it's over?", "Everyone is asking what's at the bottom. I'm asking what's at the top. Someone built a roof on that thing."])),
+    corvin: async F => say("corvin", cycle("cv11", ["We have three rules and one of them is lunch. We have kept it. I would like it noted.", "Saltwater Compact is holding the quay. If you come back down that stair and need a boat, we'll have one ready."])),
     kessa: async F => say("kessa", cycle("ks11", ["Don't look at me like that. I'll be on the stair. Not bad, for a tin can. ...Be careful.", "Emberwick wants to come. I said no. It said it was useful. I said no again. It is sulking, in a warm way."])),
-    dorrin: async F => say("dorrin", cycle("dr11", ["Boss says it is the last stew. I say it is the last stew before the next stew.", "I packed you a pie. Do not ask which one. Also, hello."])),
+    dorrin: async F => say("dorrin", cycle("dr11", ["Boss says it's the last stew. I say it's the last stew before the next stew.", "I packed you a pie. Don't ask which one. Also, hello."])),
     mayle: async F => say("mayle", cycle("my11", ["Page three hundred and ninety. 'As agreed.' I have crossed it out.", "I wrote the names down. All of them. If it goes wrong, I want to know that somebody has them."])),
     calendarScholar: async F => {
       const have = [1, 2, 3, 4, 5, 6].filter(n => F.f("lore.sunPiece" + n));
-      if (!have.length) { await say("calendarScholar", "I have your Journal open at the Sun Eater's page. It is empty. The builders wrote it down in places where the sleepers are watched. I cannot say more than that, and I am sorry."); return; }
+      if (!have.length) { await say("calendarScholar", "I have your Journal open at the Sun Eater's page. It's empty. The builders wrote the answer down in places where the sleepers are watched, but I can't say more than that, and I'm sorry."); return; }
       await UI.say([["calendarScholar", "Your Journal, at the Sun Eater's page. Let me read you what is there."]].concat(have.map(n => ["calendarScholar", "Tablet " + n + ": \"" + M.PIECE[n][1] + "\""])));
-      await say("calendarScholar", have.length === 6 ? "All six. I have nothing to add. It is unusual to be out of work." : "The rest are in the places where the sleepers are watched. I cannot say where. I wish I could.");
+      await say("calendarScholar", have.length === 6 ? "All six. I've nothing to add. It's unusual to be out of work." : "The rest are in the places where the sleepers are watched. I can't say where. I wish I could.");
     },
     r1: M3.rum(BB, 0, "scout", {}), r2: M3.rum(BB, 1, "stallkeeper", {}), r3: M3.rum(BB, 2, "scout", {}),
   });
   // after the Emperor (ch11.emperor) and into the post-game, the Bastion cast stops talking about tomorrow (2026-11-01 audit: only Saffa had an after-line)
   const POST = {
     hadiya: ["hadiya", ["The sum came in at the end, like I said it would. It was smaller than I feared. Go and spend the rest somewhere with a view.", "I cancelled the second passage. You are staying for a while, I think."]],
-    imela: ["imela", ["You came home after. That was all I wanted, and I got it. Now go and look at the sea, Sparrow. I am going to sleep for a week.", "Hm. Sit. No, sit. There. Now I can see you properly."]],
-    oldDunmar: ["dunmar", ["The cages are open, lad. All of them. I still check the latches every morning. Old hands.", "The scholars out at Starhaven want the wagon. The wagon wants me. I suppose we are going."]],
+    imela: ["imela", ["You came home. That was all I wanted, and I got it. Now go and look at the sea, Sparrow. I am going to sleep for a week.", "Hm. Sit. No, sit. There. Now I can see you properly."]],
+    oldDunmar: ["dunmar", ["The cages are open, lad. All of them. I still check the latches every morning. Old habit.", "The scholars out at Starhaven want the wagon. The wagon wants me. I suppose we're going."]],
     mentor: ["mentor", ["It is over. I keep waiting to feel that it is. They tell me the scholars at Starhaven have a telescope I could sit under for a year.", "You do not have to forgive me. You only have to go on. You are doing that very well."]],
     captain: ["captain", ["Friend! The Heron goes wherever you point her now. North-east is full of islands nobody has charted. Nobody but me, soon.", "I said I would be at the dock for the return. I was. I was early. I did not cry. Salt in the eye."]],
     rhaz: ["rhaz", ["The east barricade is firewood now. The Wardens are going home to the dunes. Loudly.", "Show me the creatures again. Slower, this time. There is time."]],
-    peya: ["peya", ["There was a roof on it. I went up and looked. Now: what will you be, when it is over? It is over.", "Everyone is asking what comes next. I am asking what came before. Nobody likes my questions. I like them very much."]],
-    corvin: ["corvin", ["We kept all three rules to the end, including lunch. The Saltwater Compact is buying. Come down to the quay.", "If you ever need a boat warm and waiting, you know where the quay is. Lunch is included. It is a rule."]],
+    peya: ["peya", ["There was a roof on it. I went up and looked. Now: what will you be, now that it's over? Because it is over.", "Everyone is asking what comes next. I am asking what came before. Nobody likes my questions. I like them very much."]],
+    corvin: ["corvin", ["We kept all three rules to the end, including lunch. The Saltwater Compact is buying. Come down to the quay.", "If you ever need a boat ready and waiting, you know where the quay is. Lunch is included. It's a rule."]],
     kessa: ["kessa", ["Not bad. For a tin can. ...Fine. Very good. Don't make it weird. Emberwick says thank you, in a warm way.", "I'm going back to the Corps to burn the list my village was on. Then I'm going to find out what I'm for."]],
     dorrin: ["dorrin", ["Boss says there is no more last stew. Only stew. Best news all year. Also, hello.", "I made you a pie for the road. It is the good one this time. Probably."]],
     mayle: ["mayle", ["Page four hundred. I left it blank. I think that is where the rest of it goes.", "I kept the list of names. Nobody needs it now. I am keeping it anyway."]],
@@ -203,7 +203,7 @@
       await c.wait(600); c.fx("explosion", c.hero.x + 250, c.hero.y + 40, { scale: 0.6, shake: 2 }); c.sfx("hit"); c.shake(3, 500);
       await c.walkHero(c.hero.x + 120, c.hero.y - 10, 1400);
       c.fx("embers", c.hero.x + 60, c.hero.y - 60); c.sfx("fire"); await c.wait(500);
-      await c.say([["saffa", "Go. We hold the stair."], ["hero", "Saffa..."], ["saffa", "I said go. Show me the other side of it."]]);
+      await c.say([["saffa", "Go. We'll hold the stair."], ["hero", "Saffa..."], ["saffa", "I said go. Show me what's on the other side of all this."]]);
       c.tint("#2a1a1a", 0, 500); c.follow();
     }, { music: "warfront" });
     F.set("ch11.stair");
@@ -224,7 +224,7 @@
     horncinder: ["I stood here, waiting for the door to open from your side! Loudly! I have been loud for days!", "Look at me! I'm the loudest thing on the whole stair! Hit me, see if I mind!", "...I'm not loud now. Isn't that strange. I can't find the loud."],
     shellmund: ["I stood here, waiting for the door to open from your side. I am patient. I did not know I was this patient.", "A wall does not apologise for being a wall, little one. Neither will I.", "The sand ran out of my hourglass some days ago. I stood anyway."],
     kitsuneva: ["Dear. I stood here, waiting for the door to open from your side. I kept the lamp lit, as best I could.", "Look at my tails, dear. All nine, and every one of them proud. Mind you do not look away.", "Come closer, dear. No. Stay back. I am so very tired."],
-    skarnwolf: ["I waited at the door. From the inside. Do not say I did not wait.", "I did not choose this post. I will hold it as if I did.", "Chain again. This one, not mine. ...Hit me."],
+    skarnwolf: ["I waited at the door. From the inside. Do not say I did not wait.", "I did not choose this post. I will hold it as if I did.", "Another chain. This one isn't mine. ...Hit me."],
     vespera: ["About time. I stood here the whole night. Do not apologise, it ruins the effect.", "I am the fastest thing in this pyramid, and I am standing still. Admire the restraint.", "Don't. Don't be kind, I can't bear it now. Fight."],
     glimmerkoi: ["Is it you? It's you! I stood here, waiting for the door to open from your side. Why was it so long?", "Why do I stand so straight? Is it the collar? Is it pride? I cannot tell them apart.", "Why is it so dark here? Did someone put out the lamps? Is it me?"],
     mossmaw: ["Grumble. I stood here, waiting for the door to open from your side. Took your time.", "Grumble. They put me on the white landing. White. I hate white. I will stand on it anyway.", "Grumble. ...No. No grumble. I am just so tired of this stair."],
@@ -257,7 +257,7 @@
 
   // ---------- the glyph-plate corridors: step on the plates in the order of the sun; the wrong order shuts a shutter and wakes the gate's creatures ----------
   const PLATES = {
-    dawn: { id: 22, order: [2, 1, 0], carve: "On the lintel, in a builder's short hand: \"The sun rises in the east and sets in the west. Walk it the way the day goes.\"", table: "dawnGate", gate: "Dawn",
+    dawn: { id: 22, order: [2, 1, 0], carve: "On the lintel, in a builder's shorthand: \"The sun rises in the east and sets in the west. Walk it the way the day goes.\"", table: "dawnGate", gate: "Dawn",
       done: "The last plate sinks, and the light-lines in the floor all turn the same colour, a rose that deepens as they run toward the far wall. The shutter at the end of the corridor lifts." },
     zenith: { id: 23, order: [1, 2, 0], carve: "On the lintel: \"At noon the sun stands in the middle of the sky. The shadows run out from under it: first to the east, then to the west.\"", table: "zenithGate", gate: "Zenith",
       done: "Three plates, three notes, and the third one rings so long that you feel it in your teeth. The shutter at the end of the corridor rises into the roof without a sound." },
@@ -293,14 +293,14 @@
     if (F.f("ch11.s22")) return;
     F.music("greatPyramid");
     if (once(F, "gate.seen")) {
-      await Cinema.panels([{ img: "assets/cinema/m5_gate.png", text: "A gate-hall of black-and-gold stone. In the east wall a disc as tall as a house, rose-gold, with a morning caught in it. A collar altar chained to its rim, and the light-lines in the floor running toward it like rivers to a sea." }], { music: "greatPyramid" });
+      await Cinema.panels([{ img: "assets/cinema/m5_gate.png", text: "A gate-hall of black-and-gold stone. In the east wall a disc as tall as a house, rose-gold, with a morning caught in it. A collar altar is chained to its rim, and the light-lines in the floor run toward it like rivers to the sea." }], { music: "greatPyramid" });
       await F.banter("gates");
     }
     const freed = await M.gateScene(F, 22, 0, { level: 65, soldiers: [["jaguarCohortElite", 64, " B"], ["jaguarCohortElite", 64, " C"]], title: "Keeper of the Dawn Gate", place: "the Dawn Gate", fx: 120, fy: -6,
       setup: async c => {
         M3.actors(c, [["j1", "npcJaguarElite", 130, -50], ["j2", "npcJaguarElite", 150, 40]]);
         c.tint("#a04860", 0.25, 400); c.fx("sparkle", c.hero.x + 120, c.hero.y - 40, { ms: 1800, r: 60 });
-        await c.say([["narr", "The rose disc turns very slowly in the wall. Under it, on the altar steps, stands the first guardian, with a collar of light at its neck and the chain run up to the disc. It has been standing here a long time. The dust on its shoulders says so."]]);
+        await c.say([["narr", "The rose disc turns very slowly in the wall. Under it, on the altar steps, stands the first guardian, with a collar of light at its neck and a chain running up to the disc. It has been standing here a long time. The dust on its shoulders says so."]]);
         c.sfx("chain"); c.tint("#a04860", 0, 500);
       } });
     if (!freed) return;
@@ -362,7 +362,7 @@
     await stage(async c => {
       ids.forEach((id, i) => c.actor("m" + i, { art: id, x: c.hero.x - 150 - i * 40, y: c.hero.y - 30 + i * 30, flip: false, scale: 1.1 }));
       c.tint("#10080a", 0.4, 500);
-      await c.say([["narr", "Behind you, at the head of the stair, in the last of the copper light, three shapes stand together. They are not collared. They do not speak. They stand the way people stand at a harbour."]]);
+      await c.say([["narr", "Behind you, at the head of the stair, in the last of the copper light, three shapes stand together. They are no longer collared, and they do not speak. They stand the way people stand at a harbour."]]);
       c.emote("m0", "heart"); await c.wait(900);
       await c.walkHero(c.hero.x + 90, c.hero.y + 10, 1400);
       await c.say([["narr", "The Descent runs down inside the pyramid in a long spiral of stair and ramp. Murals follow the wall: the sun calendar, a ring of days, each day a small carved sun with its own face. Offering gutters run along the foot of the wall with dark water in them, moving, though nothing moves it. Chains hang in loops from the roof, all the way down. Nobody makes a joke."]]);
@@ -375,7 +375,7 @@
   S.gather.calendarWall = async F => {
     if (F.f("ch11.wall")) return false;
     F.set("ch11.wall");
-    await UI.say([["narr", "The ring of carved suns closes on itself, nearly. One sun is missing. The stone where it should be has been chiselled smooth, so carefully that the surface is a little brighter than the rest."], ["hero", "(Three hundred and sixty-four. Who erased the last?)"]]);
+    await UI.say([["narr", "The ring of carved suns almost closes on itself, but one sun is missing. The stone where it should be has been chiselled smooth, so carefully that the surface is a little brighter than the rest."], ["hero", "(Three hundred and sixty-four. Who erased the last?)"]]);
   };
   S.chest.descentChest = M.loot("c.descent", [["soulDew", 1]], 1500, "A chest in the offering gutter, sunk to its lid in dark water that does not wet your hand. One Soul Dew in a vial, and a purse of kakal tied with a priest's cord.");
 
@@ -386,9 +386,9 @@
     await stage(async c => {
       M3.actors(c, [["davichi", "npcDavichi", 130, -10, { flip: true }]]);
       c.tint("#2a1c08", 0.3, 500);
-      await c.say([["narr", "A round gold hall at the pyramid's heart. A desk with a ledger on it, a single lamp, and a floor of gold that glows from beneath, as if something under it were breathing out. In the middle of the ceiling, a great round grate, and through it a light that is not the sun. A man at the desk is reading. He does not look up."]]);
+      await c.say([["narr", "This is a round gold hall at the pyramid's heart. It holds a desk with a ledger on it and a single lamp, and the gold floor glows from beneath, as if something under it were breathing out. In the middle of the ceiling is a great round grate, and through it shines a light that is not the sun. A man at the desk is reading, and he does not look up."]]);
       await c.walkHero(c.hero.x + 60, c.hero.y, 1100);
-      await c.say([["davichi", "Sit. You have walked a long way. It is entered in the ledger."], ["hero", "I will stand."], ["davichi", "You will. You have your mother's way of refusing a chair."]]);
+      await c.say([["davichi", "Sit. You have walked a long way. It is entered in the ledger."], ["hero", "I'll stand."], ["davichi", "You will. You have your mother's way of refusing a chair."]]);
       c.emote("davichi", "..."); await c.wait(500);
       await c.say([["davichi", "Imela's son. You have her hands. I noticed that first, in the Corps' report from Marigold."],
         ["davichi", "Ithiel told you of the locks. He is right, and he is wrong. The locks hold what is inside. I have only ever wanted to know what is inside. Is that a crime? Everyone who ever built a door has wondered."],
@@ -421,13 +421,13 @@
   // ---------- 6.E the Sun Eater (T8) ----------
   S.trigger.eaterFight = async F => {
     if (F.f("ch11.t8")) return;
-    if (!F.f("ch11.emperor")) { await UI.say([["narr", "The way down is shut. Whatever is under the floor is waiting for its keeper to be dealt with."]]); return; }
+    if (!F.f("ch11.emperor")) { await UI.say([["narr", "The way down is shut. Whatever is under the floor is waiting until its keeper has been dealt with."]]); return; }
     F.music("tension");
     const known = [1, 2, 3, 4].filter(n => F.f("lore.sunPiece" + n)).length;
     await stage(async c => {
       c.tint("#050408", 0.45, 500);
-      await c.say([["narr", "A vast domed chamber with a black sun set into the floor, ringed with gold and chains. Dark roots run into it from every wall. Pillars of old offerings stand around it, like men holding their breath."],
-        known ? ["hero", "(The tablets spoke of three suns. Dawn, Zenith, Dusk. I know " + (known >= 4 ? "all of it" : "some of it") + ".)"] : ["hero", "(Three suns. Dawn, Zenith, Dusk. I do not know what to do with that.)"]]);
+      await c.say([["narr", "This is a vast domed chamber with a black sun set into the floor, ringed with gold and chains. Dark roots run into it from every wall. Pillars of old offerings stand around it, like men holding their breath."],
+        known ? ["hero", "(The tablets spoke of three suns. Dawn, Zenith, Dusk. I know " + (known >= 4 ? "all of it" : "some of it") + ".)"] : ["hero", "(Three suns. Dawn, Zenith, Dusk. I don't know what to do with that.)"]]);
       c.tint("#050408", 0, 400);
     }, { music: "tension" });
     const res = await M3.boss(F, { id: "sunEater", level: 70, name: "The Sun Eater", title: "Last Lock of the Builders", bg: "sunCore", music: "sunEater",
@@ -464,5 +464,5 @@
   Object.assign(D.BOOK, { bannerDecoy: { n: "Banner Decoy", mat: "bannerThread", need: 5, d: "2 MP. Draws single-target attacks onto the user and it takes 25% less damage, until its next turn.", move: "bannerDecoy" } });
   add("sunPriestGolem", ["bannerThread", 0.3]); add("bloodAltarWraith", ["bannerThread", 0.2]);
   M2.bookSpot("ahuacanGreatStair", "bannerThread1", "A burnt standard", "g.thread1", "bannerThread", 5, "A burnt standard lies across the stair, its silk scorched but still red and gold. You unpick the border threads, five hanks of Dawn Thread, while the fighting goes on somewhere else.", "Banner Decoy");
-  M2.bookSpot("ahuacanGreatStair", "bannerThread2", "A banner in the ash", "g.thread2", "bannerThread", 5, "A banner has been trodden into the ash by both sides in turn. The silk is the only thing on the stair that is still beautiful. Five more hanks.", "Banner Decoy");
+  M2.bookSpot("ahuacanGreatStair", "bannerThread2", "A banner in the ash", "g.thread2", "bannerThread", 5, "A banner has been trodden into the ash by both sides in turn. The silk is the only thing on the stair that is still beautiful. You take five more hanks.", "Banner Decoy");
 })();

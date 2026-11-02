@@ -20,7 +20,7 @@
   // one piece of a set; already owned -> kakal (one piece's worth at the shop is not known here, so a flat amount by chapter)
   S.givePiece = (F, set, slot) => {
     const pid = D.pieceId(set, slot), nm = D.pieceName(pid), sn = D.SETS[set].n;
-    if (F.owned(pid)) { const g = 40 + 30 * (G.ch || 1); F.gold(g, true); UI.toast(`${nm} (${sn}): you have one already. Sold for ${g} kakal.`, 3600); return false; }
+    if (F.owned(pid)) { const g = 40 + 30 * (G.ch || 1); F.gold(g, true); UI.toast(`${nm} (${sn}): you already have one. Sold for ${g} kakal.`, 3600); return false; }
     G.owned[pid] = 1; UI.toast(`Gear: ${nm} (${sn})`, 3600); return true;
   };
   S.pieceFrom = (F, src) => { (BY_SRC[src] || []).forEach(([set, slot]) => { const k = "piece." + set + "." + slot; if (G.flags[k]) return; G.flags[k] = true; S.givePiece(F, set, slot); }); };
@@ -49,7 +49,7 @@
       meet: [["narr", "In the ruins a woman sits on a fallen head of stone, stirring a skull cup with one finger. The jungle is very quiet around her. Nothing is buzzing."]], thought: "Everything here is dead. Even the flies.",
       after: [["narr", "She drops the skull cup. What spills out eats a little hole in the stone."]] },
     rootWitch: { die: "deathCry", lv: 19, title: "Mother of the Blood Lilies", gold: 520,
-      meet: [["narr", "Deep in the caves the roots grow up the walls into the shape of a woman. Red lilies open in her hair when she turns her head toward you."]], thought: "Do not breathe the flowers. Do not breathe the flowers.",
+      meet: [["narr", "Deep in the caves the roots grow up the walls into the shape of a woman. Red lilies open in her hair when she turns her head toward you."]], thought: "I mustn't breathe in those flowers. Whatever happens, I mustn't breathe them in.",
       after: [["narr", "The roots pull back into the walls. The lilies close, one by one, and drop."]] },
     condorKeeper: { lv: 20, title: "Master of the High Towers", gold: 540,
       meet: [["narr", "An old man in a cloak of black feathers watches you from the rocks. He lifts a bone whistle to his lips. High above, a shadow wider than a wagon turns once."]], thought: "He was waiting for something to walk up here. I walked up here.",
@@ -58,17 +58,17 @@
       meet: [["narr", "Among the shelves an old woman with a cloth over her eyes holds up a smoking bowl. A hundred little mirrors turn on their cords toward you."], ["narr", "\"You will strike with what you trust most,\" she says. \"They always do.\""]], thought: "She cannot see. So why is every mirror looking at me?",
       after: [["narr", "The bowl tips and the smoke runs out along the floor. The mirrors stop turning."]] },
     ironKnuckle: { lv: 31, title: "Champion of the Pit, Retired", gold: 820,
-      meet: [["narr", "A huge bald man is punching a block of quarry stone. Chips fly. He stops, wipes his hands on his belt, and taps the gold buckle."], ["ironknuckle", "Nobody has taken this belt in twelve years. Come on, then. Three punches. That's all it ever takes."]], thought: "Three punches. I will count.",
+      meet: [["narr", "A huge bald man is punching a block of quarry stone. Chips fly. He stops, wipes his hands on his belt, and taps the gold buckle."], ["ironknuckle", "Nobody has taken this belt in twelve years. Come on, then. It only ever takes three punches."]], thought: "Three punches. I'll count them.",
       after: [["ironknuckle", "Ha! Good. Good! My knees are too old for this anyway."]] },
     mirrorChamberlain: { lv: 40, title: "Keeper of the Court's Faces", gold: 1100,
-      meet: [["narr", "A tall man in gold and jade stands by the sundial. His face is a mirror. When he bows, his reflection in the pond bows a moment later, and so does a second one beside him."]], thought: "Which one of them is breathing?",
+      meet: [["narr", "A tall man in gold and jade stands by the sundial. His face is a mirror. When he bows, his reflection in the pond bows a moment later, and so does a second one beside him."]], thought: "Which of them is the real one? Which one is actually breathing?",
       after: [["narr", "The mirror mask cracks. Behind it there is only a tired, ordinary face, and then not even that."]] },
     nightDrinker: { die: "deathCry", lv: 47, title: "Priest of the Black Sun", gold: 1300,
-      meet: [["narr", "Behind the altar something pale unfolds from the shadow. Its cloak is made of red feathers. Its teeth are not."]], thought: "Light. I need light.",
+      meet: [["narr", "Behind the altar something pale unfolds from the shadow. Its cloak is made of red feathers. Its teeth are not feathers."]], thought: "I need light to fight this thing.",
       after: [["narr", "It shrieks and falls apart into a cloud of red feathers that blow out through the pyramid's mouth."]] },
     stormcaller: { lv: 61, title: "Who Brings the Rain Indoors", gold: 1700,
       meet: [["narr", "Rain is falling inside the archive. In the middle of it a woman in dark blue holds her hands apart, and lightning walks between her fingers."]], thought: "Stay close to her. The storm hits whoever hangs back.",
-      after: [["narr", "The rain stops in the middle of a drop. Water runs off the shelves and out under the doors."]] },
+      after: [["narr", "The rain stops with the last drops hanging in the air. Water runs off the shelves and out under the doors."]] },
     deepAngler: { die: "deathCry", lv: 80, title: "The Light in the Deep", gold: 2400,
       meet: [["narr", "A small light bobs in the black water, warm and gold, like a lamp in a window at home. Behind it, very slowly, a mouth opens."]], thought: "Do not reach for the light.",
       after: [["narr", "The great jaw sinks back into the dark. The little gold light goes out last."]] },
@@ -96,13 +96,13 @@
     bloodLily: "A red lily the size of a barrel. It opens two rounds after it is planted.",
     condorKeeper: "An old falconer on the lookout towers. He marks one of you, and his Red Condor dives on whoever is marked. Kill the bird and he whistles for another.",
     redCondor: "The Condor Keeper's bird. It dives on the creature its master has marked.",
-    blindOracle: "A blind woman among a hundred mirrors. Every second round she says the element you have used most, and turns it back on you. Change what you use.",
+    blindOracle: "A blind woman among a hundred mirrors. Every second round she names the element you have used most, and turns it back on you. Change what you use.",
     ironKnuckle: "Toma, pit champion for twelve years. His punches stack up on one creature; the third is a knockout. Crack his guard with heavy blows and he loses count.",
     mirrorChamberlain: "The palace chamberlain with a mirror for a face. His mirror images catch blows meant for him. Hit them all at once.",
     mirrorImage: "One of the Mirror Chamberlain's reflections.",
-    nightDrinker: "A priest of the black sun who drinks. Every bite makes him stronger. Fire and light burn the blood away, and a blaze of light burns it all.",
+    nightDrinker: "A priest of the black sun who drinks blood. Every bite makes him stronger. Fire and light burn the blood away, and Light used twice in a row burns all of it.",
     stormcaller: "A woman who brings the rain indoors. Every third round the storm strikes everyone who held back from hitting her.",
-    deepAngler: "A thing in the deep with a pretty light. When the lure is out, a plain attack on it bites the hook.",
+    deepAngler: "A monster in the deep with a pretty light. While its lure is out, a plain attack on it means you bite the hook.",
   });
-  Q(D.BREAKS, { ironKnuckle: "Impact, twice in a row. He stumbles and the combo count on all of you resets.", nightDrinker: "Light, twice in a row. Every stack of blood he drank burns out." });
+  Q(D.BREAKS, { ironKnuckle: "Hit him with Impact twice in a row. He stumbles and the combo count on all of you resets.", nightDrinker: "Hit him with Light twice in a row. Every stack of blood he drank burns out." });
 })();

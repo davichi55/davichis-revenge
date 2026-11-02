@@ -8,7 +8,7 @@
   // ----- Sandpiper Rest -----
   T.sandpiper.merchant = T.sandpiper.clerk;
   T.sandpiper.r1 = rum("sandpiper", 0, "traveller"); T.sandpiper.r2 = rum("sandpiper", 1, "wellwoman");
-  T.sandpiper.r3 = async F => { await S.rumourIdx(F, "sandpiper", 2, "caravaner"); await UI.say([["caravaner", F.f("ci.karvan") ? "The soldiers pulled off the main road this morning. Somebody beat their optio down in the Burnt Gate, they say. Was that you? You look like it was you." : "Soldiers on the main road since last night. If you must go east, go under it. The Burnt Gate cistern is old but dry enough."]]); };   // the caravaner's second line changes after Karvan (2026-11-01 audit)
+  T.sandpiper.r3 = async F => { await S.rumourIdx(F, "sandpiper", 2, "caravaner"); await UI.say([["caravaner", F.f("ci.karvan") ? "The soldiers pulled off the main road this morning. They say somebody beat their optio down in the Burnt Gate. Was that you? You look like it was you." : "There have been soldiers on the main road since last night. If you must go east, go under it. The Burnt Gate cistern is old, but it's dry enough."]]); };   // the caravaner's second line changes after Karvan (2026-11-01 audit)
   // ----- Cistern -----
   T.cistern = { burntGateSign: async F => { await UI.say([["narr", "A carved sign: THE BURNT GATE. Under it, scratched with a knife: \"The Optio sits beyond. Bring shields.\""]]); } };
   Tr.karvanAmbush = Tr.karvan; S.chest.g5_bullringBronze = S.chest["cistern.chest"];
@@ -17,12 +17,12 @@
   Tr.duskWhisperer = async F => {
     if (F.f("l1.done")) return;
     F.music("sad");
-    await UI.say([["narr", "On the ridge at dusk, a hound of sand and wind stands very still. Its mouth is full of voices. They are saying what you said yesterday."], ["hero", "(The Dune Whisperer. The traders say it brings luck.)"]]);
+    await UI.say([["narr", "On the ridge at dusk, a hound of sand and wind stands very still. Its mouth is full of voices, and they are repeating what you said yesterday."], ["hero", "(The Dune Whisperer. The traders say it brings luck.)"]]);
     const res = await F.fight([F.mkEnemy("duneWhisperer", 6)], { intro: "The Dune Whisperer speaks in your own voice!", xpBonus: 1.4 });
     F.music("dunes");
     if (res !== "win") return;
     F.set("l1.done"); F.set("wardstone"); F.give("wardstone", 1, true);
-    await UI.say([["narr", "The hound lies down and fades into the sand. On the ground, a smooth grey stone, warm and humming: a Wardstone. (Fights come half as often now.)"]]);
+    await UI.say([["narr", "The hound lies down and fades into the sand. On the ground lies a smooth grey stone, warm and humming: a Wardstone. (Fights come half as often now.)"]]);
   };
   // ----- Undercroft -----
   S.chest.undercroftChest = async F => { if (F.f("c.under")) return false; F.set("c.under"); F.give("sunwater", 2); F.gold(15); await UI.say([["narr", "A lab-keeper's lunch box: two flasks and a few coins."]]); };
@@ -38,14 +38,14 @@
   // ----- Cinderglass Flats -----
   S.chest.g12_cinderSerpentPit = S.chest["flats.chest"];
   const emb = n => async F => { F.set("g.ember" + n); F.give("cinderglassEmber", 4); F.sfx("fire"); await UI.say([["narr", "You rake the fire-pit with a bone ladle. Four Cinderglass Embers glow in the cold sand."]]); if (F.matCount("cinderglassEmber") >= 5) UI.toast("New in the Skill Book: Kindle."); };
-  const plm = n => async F => { F.set("g.plume" + n); F.give("cinderPlume", 4); await UI.say([["narr", "A warm feather in the glass. Then another. Four Cinder Plumes."]]); };
+  const plm = n => async F => { F.set("g.plume" + n); F.give("cinderPlume", 4); await UI.say([["narr", "You find a warm feather in the glass, and then another. In the end you have four Cinder Plumes."]]); };
   S.gather.cinderglassEmber1 = emb(1); S.gather.cinderglassEmber2 = emb(2); S.gather.cinderPlume1 = plm(1); S.gather.cinderPlume2 = plm(2);
-  Tr.flatsPool = async F => { await UI.say([["narr", "A hidden pool, warm as milk. At the bottom, curled in its own tails, a fox of red fire sleeps."], ["hero", "(Not mine to take. Not mine to wake.)"]]); if (!F.f("pool.seen")) { F.set("pool.seen"); G.best.fireFox = { seen: 1, beaten: 0 }; await UI.say([["narr", "You note the fox in the Journal and leave quietly."]]); } };
+  Tr.flatsPool = async F => { await UI.say([["narr", "A hidden pool, as warm as milk. At the bottom, a fox made of red fire sleeps, curled up in its own tails."], ["hero", "(It's not mine to take, and I shouldn't wake it.)"]]); if (!F.f("pool.seen")) { F.set("pool.seen"); G.best.fireFox = { seen: 1, beaten: 0 }; await UI.say([["narr", "You note the fox in the Journal and leave quietly."]]); } };
   // ----- the Bone Maze: Mazeheart waits inside; the cage is the end of the walk -----
   T.maze = {
     oldMazeheart: async F => {
-      if (!F.f("mazeheart.talked")) { F.set("mazeheart.talked"); F.quest("bellow", 0); await UI.say([["mazeheart", "Old bones hear old bones. A bull bellows in these walls when the wind is right. A cage waits where the bellow ends."], ["mazeheart", "Follow the bellowing. The louder side leads on."]]); }
-      else await UI.say([["mazeheart", F.f("k1.done") ? "The bull is quiet. You did well. Take the chest, and the key." : "Louder is closer. Follow the bellowing."]]);
+      if (!F.f("mazeheart.talked")) { F.set("mazeheart.talked"); F.quest("bellow", 0); await UI.say([["mazeheart", "Old bones hear old bones. A bull bellows in these walls when the wind is right, and there's a cage waiting where the bellowing is loudest."], ["mazeheart", "Follow the bellowing. Whichever way it's louder is the right way."]]); }
+      else await UI.say([["mazeheart", F.f("k1.done") ? "The bull's quiet now. You did well. Take the chest and the key." : "The louder it gets, the closer you are. Follow the bellowing."]]);
     },
   };
   Tr.k1Cage = async F => {
@@ -56,7 +56,7 @@
       const sp = S.mazeBullSpot(c.hero), x = sp.x, y = sp.y;
       c.sfx("rumble"); c.shake(2, 900); c.fx("dust", x, y + 30, { n: 14, scale: 1.4, color: 0xd8d0b8 });
       await c.pan(x, y + 20, 800);
-      await c.say([["narr", "The deepest cell. A ring of bone, and in the middle a pile of horns, rattling by itself."]]);
+      await c.say([["narr", "The deepest cell is a ring of bone, and in the middle lies a pile of horns, rattling by itself."]]);
       c.actor("mg", { art: "boneBullCalf", x, y, h: 120, alpha: 0 });
       await c.anim("mg", "fall", { dir: "left", ms: 1 });
       c.light(x, y - 20, 140, 0.6); c.fx("glow", x, y - 20, { color: 0xe8e0c8, n: 2 });
@@ -77,7 +77,7 @@
     if (S.mazeGuardianFalls) await S.mazeGuardianFalls(F, fall); else await UI.say(fall);   // staged in ch2.js (Danny 2026-10-31: scenes, not only text)
   };
   Tr.mazeDeep = async F => {    // hub version: the three junctions, then the cage
-    const J = [["Three passages of pale bone. A bellow rolls out of the LEFT one, loud, shaking dust from the roof.", "left"], ["A fork. The bellowing is behind the RIGHT wall now, so close you feel it in your teeth.", "right"], ["A last hall of ribs. The bellow comes from straight AHEAD, down the middle aisle.", "mid"]];
+    const J = [["There are three passages of pale bone. A loud bellow rolls out of the LEFT one, shaking dust from the roof.", "left"], ["A fork. The bellowing is behind the RIGHT wall now, so close you feel it in your teeth.", "right"], ["A last hall of ribs. The bellow comes from straight AHEAD, down the middle aisle.", "mid"]];
     for (let i = 0; i < J.length; i++) {
       await UI.say([["narr", J[i][0]]]);
       const pick = await F.ask("Which way?", [{ label: "Left" }, { label: "Middle" }, { label: "Right" }]);
@@ -95,16 +95,16 @@
   // ----- Saltgate -----
   const SG = T.saltgate;
   SG.r1 = rum("saltgate", 0, "gossip"); SG.r2 = rum("saltgate", 1, "kitemaker"); SG.r3 = rum("saltgate", 2, "gossip");
-  SG.customsOfficer = async F => { await UI.say([["captain", "Customs. I stamp what I'm paid to stamp. Papers? ...No? Excellent, nor does anyone."]]); };
+  SG.customsOfficer = async F => { await UI.say([["captain", "Customs. I stamp what I'm paid to stamp. Papers? ...No? Excellent, nobody has any."]]); };
   SG.smuggler = SG.captain;
   Tr.boatToIxcalo = async F => {
-    if (!F.f("bear.done")) { await UI.say([["hero", "(A smuggler dock. The boat can wait. Ithiel's work first: the Hollow of the Sky-Stone.)"]]); return; }
+    if (!F.f("bear.done")) { await UI.say([["hero", "(A smuggler's dock. The boat can wait. Ithiel's work comes first: the Hollow of the Sky-Stone.)"]]); return; }
     await SG.captain(F);
   };
   // ----- Hollow of the Sky-Stone -----
   Tr.hollowDoor = Tr["hollow.enter"]; Tr.duneBearer = Tr.bearer;
   T.hollow = {
-    campKeeper: async F => { await UI.say([["innkeeper", "Field tent. Same price as the inn in town. No questions, no draughts."]]); await F.inn("tent"); },
+    campKeeper: async F => { await UI.say([["innkeeper", "Field tent. Same price as the inn in town. No questions asked, and no draughts."]]); await F.inn("tent"); },
     skyShardLore: async F => { await Tr["hollow.tablet"](F); },
   };
   S.chest.hollowLoreChest = async F => { if (F.f("c.hollow")) return false; F.set("c.hollow"); F.give("sunwater", 3); F.gold(60); await UI.say([["narr", "A builder chest with a rune on the lid. Inside: three flasks and a handful of old coins."]]); };

@@ -300,7 +300,7 @@ async function play(id) {
       if (e.big) { shotLow(e.src); await wait(500); }
       else if (!e.basic && e.src.side === "p") { /* close-ups only for your creatures' special moves */ const tgt = e.tgt && e.tgt.view ? e.tgt : (e.src.side === "p" ? ctx.foes[0] : null); shotOn(e.src, tgt, e.src.boss ? 1.6 : 1); await wait(350); }
       const tgt = e.tgt && e.tgt.view && e.tgt.side !== e.src.side ? e.tgt : (e.src.side === "e" ? null : ctx.foes[0]);
-      if (tgt && e.move !== "Potion" && !["Warm Light", "Rejuvenate", "Flame Ward", "Healing Wave", "Rebirth", "Challenge", "Fortify", "Counter Stance", "Shield Wall", "Labyrinth Roar", "Bloodrage"].includes(e.move)) lunge(e.src, tgt, e.src.boss ? 0.25 : 0.5);
+      if (tgt && e.move !== "Potion" && e.move !== "Sunwater Flask" && !["Warm Light", "Rejuvenate", "Flame Ward", "Healing Wave", "Rebirth", "Challenge", "Fortify", "Counter Stance", "Shield Wall", "Labyrinth Roar", "Bloodrage"].includes(e.move)) lunge(e.src, tgt, e.src.boss ? 0.25 : 0.5);
       if (e.src.boss && !e.big) lunge(e.src, ctx.party[1], 0.18);
       await wait(e.basic ? 300 : 420);
     } else if (e.t === "dmg") {

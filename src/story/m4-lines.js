@@ -9,21 +9,21 @@
   const D = window.Data;
   D.SACRIFICE = {
     // ---- pack 1, the Vanguard ----
-    horncinder: { hero: "Go! GO! I'll hold it! I'm the loudest thing in this whole palace, they will all look at me and not at you!", mates: "Look after him, both of you. Loudly, if you have to. I mean it. Loudly.", grief: "No! Not— No. Fine. I will be loud for all of us. I can do that. Somebody has to." },
-    shellmund: { hero: "A wall is only a wall if it stays. Go, little one. Do not look back. Looking back is heavier than I am.", mates: "Sand is patient. I will be. Walk on, both of you. Slowly, now. Slowly.", grief: "...Then I will carry what I can. I carried one of you out of a fire once. I can do it again." },
+    horncinder: { hero: "Go! GO! I'll hold it! I'm the loudest thing in this whole palace, so they will all look at me and not at you!", mates: "Look after him, both of you. Loudly, if you have to. I mean it. Loudly.", grief: "No! Not— No. Fine. I will be loud for all of us. I can do that. Somebody has to." },
+    shellmund: { hero: "A wall is only a wall if it stays. Go, little one, and do not look back. Looking back is heavier than I am.", mates: "Sand is patient. I will be. Walk on, both of you. Slowly, now. Slowly.", grief: "...Then I will carry what I can. I carried one of you out of a fire once. I can do it again." },
     kitsuneva: { hero: "Straighten your strap, dear. There. Now go. Eat something. Sleep. I will be right here.", mates: "Mind him, both of you. He forgets to eat when he is frightened. And so do you.", grief: "Oh, my dears. Oh, no. ...Come here. Come close. We keep moving, and we keep each other." },
     // ---- pack 2, Blood Sprint ----
-    skarnwolf: { hero: "Chain again. This one I choose. Go.", mates: "Run. You know how. Run faster than they do.", grief: "...No. ...Yes. Move. Do not let it be for nothing." },
+    skarnwolf: { hero: "Another chain. But this time I chose it myself. Go.", mates: "Run. You know how. Run faster than they do.", grief: "...No. ...Yes. Move. Do not let it be for nothing." },
     vespera: { hero: "Don't stand there gaping. Go. Honestly, you are the slowest creature I have ever had the misfortune to like.", mates: "Don't you dare get sentimental. I will be perfectly fine. Idiots. Both of you.", grief: "Of course. Of course it was the one with taste. ...Don't look at me. I have something in my eye." },
     glimmerkoi: { hero: "Will you tell me how it ends? Someone should know. ...Please go? Please?", mates: "Who will remember the names of things now? You will. Won't you? You will.", grief: "Why does it have to be one of us? Is there a reason? ...Is there a reason?" },
     // ---- pack 3, Slow Venom ----
     mossmaw: { hero: "Grumble. Fine. Somebody has to be the cork. Go, boy.", mates: "Grumble. Don't make a speech. Move.", grief: "Grumble. ...No. No grumble. Just go." },
-    nightveil: { hero: "...You will not walk in the dark alone. I will be in it.", mates: "...Look after the light.", grief: "...It was always going to be someone." },
+    nightveil: { hero: "...You will not walk through the dark alone. I will be in it with you.", mates: "...Look after the light.", grief: "...It was always going to be someone." },
     emberlamb: { hero: "If it's all right... I would like to be the one. I'm brave when it counts. It counts. Please go?", mates: "Stay warm. Please. If that's all right.", grief: "Oh. Oh, no. I— I'll be brave for it. I'll try. I'm sorry. I'll try." },
     // ---- pack 4, Tempest ----
     skyrend: { hero: "Hah. Not funny this time. Go, kid. I'll find the way out. I always do.", mates: "Hah— no. No joke. Take care of him. Go on. Go on.", grief: "Hah— no. No. Not him. ...Hah. ...No." },
     volthorn: { hero: "Can I? Can I stay, I'm the fastest, I'm the fastest of all of us, they will never catch me, I will slip out the other side and find you, I will, I promise, go!", mates: "Don't wait. Don't wait for me. Is it far? It's not far. Go!", grief: "Is it time? It can't be time. What do we do? What do we do now? Somebody say what we do." },
-    brinegrave: { hero: "I promised to protect you. This is how. Go.", mates: "Stay behind each other. All of it. All the way.", grief: "...I promised. I am sorry. I will carry it." },
+    brinegrave: { hero: "I promised to protect you. This is how. Go.", mates: "Stay close behind each other. All the way out.", grief: "...I promised. I am sorry. I will carry it." },
     // ---- pack 5, the Iron Ward ----
     bulwyrm: { hero: "Walls stay.", mates: "Hm.", grief: "...Hm." },
     rotfang: { hero: "Of course it's me. Why not. ...Go. Before I say something kind and ruin it.", mates: "Fine. Go. I trusted you once. Don't make that a mistake.", grief: "Of course. Why not. Of course. ...Fine." },

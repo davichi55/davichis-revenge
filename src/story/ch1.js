@@ -17,13 +17,13 @@
     F.music("story");
     await UI.card({ image: "assets/pano_desert.png", big: "Chapter 1", text: "The Attack" });
     F.music("dunes");
-    await UI.say([["narr", "Night in the Whisperglass Dunes. Behind you Orun burns gold against the stars. The glass sand hums under your boots, a thin high note, like a wet finger on a cup."]]);
+    await UI.say([["narr", "Night in the Whisperglass Dunes. Behind you Orun burns gold against the stars. The glass sand hums under your boots with a thin, high note, like a wet finger on the rim of a cup."]]);
     await F.banter("flee");
     F.music("raid");
     await S.stage(async c => {
       const h = c.hero; c.tint("#301810", 0.25, 600);
       [["r1", "raidShieldbearer", 300, -30], ["r2", "raidSlinger", 340, 25], ["r3", "raidTorchbearer", 380, -5]].forEach(([id, art, dx, dy], i) => c.actor(id, { art, x: h.x + dx + 160, y: h.y + dy, light: id === "r3" ? 110 : 0 }));
-      await c.say([["narr", "Torchlight on the ridge. Imperial raiders, spread out in a line, hunting for runaways."]]);
+      await c.say([["narr", "There's torchlight on the ridge. Imperial raiders are spread out in a line, hunting for runaways."]]);
       c.sfx("encounter"); c.fx("fire", h.x + 540, h.y - 5);
       await Promise.all([c.walk("r1", h.x + 130, h.y - 30, 1300), c.walk("r2", h.x + 175, h.y + 25, 1400), c.walk("r3", h.x + 215, h.y - 5, 1500)]);
       c.emote("r1", "!"); c.shake(2, 250);
@@ -32,42 +32,42 @@
     });
     const res = await F.fight([F.mkEnemy("raidShieldbearer", 3, " A"), F.mkEnemy("raidSlinger", 3, " B")], { intro: "Imperial raiders cut you off!" });
     F.music("dunes");
-    if (res === "win") await UI.say([["hero", "(Tower shields. The blows slide off them. Spells would bite deeper.)"], ["narr", "You note it in the Field Journal: Raid Shieldbearer, Raid Slinger."]]);
+    if (res === "win") await UI.say([["hero", "(Tower shields. Our blows just slide off them. Spells would hurt them more.)"], ["narr", "You note it in the Field Journal: Raid Shieldbearer, Raid Slinger."]]);
     
   };
   S.chest["dunes.chest1"] = async F => {
     if (F.f("c.dunes1")) return; F.set("c.dunes1"); F.give("sunwater", 2); F.gold(25);
-    await UI.say([["narr", "Under the humming ridge, half buried: a traveller's cache. Two flasks and a little kakal."]]);
+    await UI.say([["narr", "Half buried under the humming ridge, you find a traveller's cache: two flasks and a little kakal."]]);
   };
 
   // ---------- Sandpiper Rest ----------
   S.trigger["sandpiper.arrive"] = async F => {
     if (F.f("sp.seen")) return; F.set("sp.seen");
     F.music("oasis");
-    await UI.say([["narr", "Dawn. Sandpiper Rest: a ring of reed huts around a well, a shaded caravanserai, camels asleep in rows. Nobody has heard about Orun yet."]]);
+    await UI.say([["narr", "Dawn. Sandpiper Rest is a ring of reed huts around a well, with a shaded caravanserai and rows of sleeping camels. Nobody here has heard about Orun yet."]]);
     F.set("pro.sawTown");
   };
   S.talk.sandpiper = {
     innkeeper: async F => {
       if (!F.f("sp.letter")) {
-        await UI.say([["innkeeper", "You look like you ran through a fire. Sit. ...Oh. A letter came for you on the evening caravan. Your name, nobody else's."]]);
-        await F.letter("the Academy's green seal", ["\"Alive. Thank the lamps. Do not return to Orun.\"", "\"The main road east is watched. Go under it: the Cistern of the Burnt Gate. The route is marked on the last page of your Journal.\"", "\"Record everything. Every creature, every blow, every break. Rest where you can. I will know when you have rested. - I.\""]);
+        await UI.say([["innkeeper", "You look like you ran through a fire. Sit down. ...Oh, a letter came for you on the evening caravan. It was addressed to you, and only you."]]);
+        await F.letter("the Academy's green seal", ["\"You're alive. Thank the lamps. Do not go back to Orun.\"", "\"The main road east is watched, so go under it, through the Cistern of the Burnt Gate. The route is marked on the last page of your Journal.\"", "\"Record everything: every creature, every blow, every break. Rest when you can. I will know when you have rested. - I.\""]);
         await UI.say([["hero", "(The last page already has a map. The ink looks days old.)"]]);
         F.set("sp.letter"); F.questDone("m_escape"); F.quest("m_cistern", 0);
       } else await UI.say([["innkeeper", "A bed and a bowl for the road?"]]);
       const slept = await F.inn("sandpiper");
-      if (slept && !F.f("sp.rested")) { F.set("sp.rested"); await F.banter("rest"); await UI.say([["narr", "Somewhere far off a courier takes your notes east. You never see them go."]]); }
+      if (slept && !F.f("sp.rested")) { F.set("sp.rested"); await F.banter("rest"); await UI.say([["narr", "Somewhere far off, a courier carries your notes east, though you never see them leave."]]); }
     },
-    clerk: async F => { await UI.say([["clerk", "Road goods and a few things off the imperial wagons. I even have a travelling set, if you can pay."]]); await F.shop("sandpiper"); },
+    clerk: async F => { await UI.say([["clerk", "I sell road goods and a few things off the imperial wagons. I even have a travelling set, if you can pay."]]); await F.shop("sandpiper"); },
     traveller: async F => S.rumourTalk(F, "sandpiper", "traveller"),
-    wellwoman: async F => S.rumourTalk(F, "sandpiper", "wellwoman", "The well is deep, the gossip is shallow. Come back later."),
-    caravaner: async F => { await UI.say([["caravaner", "Soldiers on the main road since last night. Tower shields in a wall. If you must go east, go under it. The Burnt Gate cistern is old but dry enough."]]); if (Math.random() < 0.5) await F.idleBanter(); },
+    wellwoman: async F => S.rumourTalk(F, "sandpiper", "wellwoman", "The well is deep, but the gossip is shallow. Come back later."),
+    caravaner: async F => { await UI.say([["caravaner", "There have been soldiers on the main road since last night, standing in a wall of tower shields. If you must go east, go under it. The Burnt Gate cistern is old, but it's dry enough."]]); if (Math.random() < 0.5) await F.idleBanter(); },
   };
 
   // ---------- the cistern ----------
   // dunes exits that stay shut until Karvan is beaten (the cistern is entered from the south door, the road east opens after him)
-  S.trigger["ch1.gateShut"] = async F => { F.sfx("clang"); await UI.say([["hero", "(Green bronze, barred from the other side. Behind it, shields knock against each other, and someone laughs.)"]]); };
-  S.trigger["ch1.roadShut"] = async F => { await UI.say([["hero", "(A wall of tower shields across the road, and a second wall behind it. They are waiting for someone. For me.)"]]); };
+  S.trigger["ch1.gateShut"] = async F => { F.sfx("clang"); await UI.say([["hero", "(The green bronze gate is barred from the other side. Behind it, shields knock against each other and someone laughs.)"]]); };
+  S.trigger["ch1.roadShut"] = async F => { await UI.say([["hero", "(There's a wall of tower shields across the road, and a second wall behind it. They're waiting for someone. For me.)"]]); };
   S.chest["cistern.chest"] = async F => S.gearChest(F, "cistern.chest", "G5");
   S.trigger.karvan = async F => {
     if (F.f("ci.karvan")) return;
@@ -76,15 +76,15 @@
       const h = c.hero;
       c.actor("k", { art: "raidOptioKarvan", x: h.x + 330, y: h.y, h: 84 });
       c.actor("s1", { art: "raidShieldbearer", x: h.x + 300, y: h.y - 34 }); c.actor("s2", { art: "raidShieldbearer", x: h.x + 300, y: h.y + 34 });
-      await c.say([["narr", "The far end of the cistern: a gate of green bronze, and in front of it a line of shields."]]);
+      await c.say([["narr", "At the far end of the cistern is a gate of green bronze, with a line of shields in front of it."]]);
       await Promise.all([c.walk("k", h.x + 200, h.y, 900), c.walk("s1", h.x + 180, h.y - 34, 900), c.walk("s2", h.x + 180, h.y + 34, 900)]);
       await c.say([
-        ["karvan", "Halt. Optio Karvan, Ninth Cohort. You are Ithiel's apprentice. And that is his satchel."],
+        ["karvan", "Halt. I am Optio Karvan of the Ninth Cohort. You're Ithiel's apprentice, and that is his satchel."],
         ["hero", "..."],
-        ["karvan", "No answer? There is a boy under that helm, is there not? Hand over the satchel and your beasts keep their teeth."],
+        ["karvan", "No answer? There's a boy under that helm, isn't there? Hand over the satchel and your beasts keep their teeth."],
         ["hero", "No."],
         ["karvan", "Shields up, then. We were told you would come this way."],
-        ["hero", "Told by whom?"],
+        ["hero", "Who told you?"],
       ]);
       c.emote("hero", "anger"); c.shake(3, 300); c.sfx("hitHeavy");
       await c.say([["karvan", "The road tells everyone everything. Shields!"]]);
@@ -103,7 +103,7 @@
       c.actor("s1", { art: "raidShieldbearer", x: h.x + 20, y: h.y + 78 }); c.actor("s2", { art: "raidShieldbearer", x: h.x + 120, y: h.y + 84 });
       await c.anim("k", "fall", { dir: "right", ms: 300 }); await c.anim("k", "rise", { ms: 500 });
       await c.say([
-        ["karvan", "Hah... Strange. I was told you would be slower. And that you would keep writing."],
+        ["karvan", "Hah... Strange. I was told you'd be slower. And that you'd be busy writing things down."],
         ["hero", "Who told you that?"],
         ["karvan", "..."],
       ]);
@@ -115,7 +115,7 @@
       await c.wait(1500);
       await Promise.all(["k", "s1", "s2"].map(id => c.anim(id, "fadeOut", { ms: 600 })));
       c.follow();
-      await c.say([["narr", "Karvan's shield crew left their kit behind: helm, shield and sword. It is a full Tower Shield Phalanx set."]]);
+      await c.say([["narr", "Karvan's shield crew left their kit behind: a helm, a shield and a sword. Together they make a full Tower Shield Phalanx set."]]);
     });
     F.save(true);
     F.go("dunes", "from_cistern_gate");

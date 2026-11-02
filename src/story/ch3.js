@@ -151,8 +151,8 @@
   });
   Q(Data.INNS, { tamarsLanding: { n: "The Net and Lantern" }, ninefoldFerry: { n: "The Ninth Ferry" }, redrootCamp: { n: "The Hollow Log", mult: 0.5 } });
   Q(Data.RUMOURS, {
-    tamarsLanding: ["\"The empire takes our tamers first. If you have a creature, hide it.\"", "\"A lone bird rules the western jungle, they say. It cuts anything flying below it.\"", "\"The ferrymen sing it: float a river pearl in a bowl of storm water, and you can learn to soak a foe.\""],
-    ninefoldFerry: ["\"The Plumed Coil above the canopy hates slow things. The old riverfolk say it cannot stand a heavy wind pulled the wrong way.\"", "\"A fort stands where the road bends, full of shields.\"", "\"They cut a new pyramid at Coil Hill. On windy days the noise carries.\""],
+    tamarsLanding: ["\"The empire takes our tamers first. If you have a creature, hide it.\"", "\"A lone bird rules the western jungle, they say, and it cuts down anything that flies below it.\"", "\"The ferrymen sing it: float a river pearl in a bowl of storm water, and you can learn to soak a foe.\""],
+    ninefoldFerry: ["\"The Plumed Coil above the canopy hates slow things. The old riverfolk say it can't stand a heavy wind pulling against it.\"", "\"A fort stands where the road bends, full of shields.\"", "\"They cut a new pyramid at Coil Hill. On windy days the noise carries.\""],
     redrootCamp: ["\"They put collars on the creatures. Each collar is tied to an altar. The general is only the legion's face.\"", "\"The boiling pools hold stones that sink in water. Hot-spring stone teaches you to douse a fire.\"", "\"At night the lights in the cave go slow.\""],
   });
   RUM_FX.ninefoldFerry0 = () => {};   // the Coil's break is only half given here (the clue is vague on purpose); the Plume Rest rumour sets breakKnown
@@ -163,10 +163,10 @@
     riverSiren: "Half fish, half heron, all voice. Her song lowers Resistance, and she is brittle. Lightning drops her fast.",
     reedmoth: "A pale moth the size of a door. Its dust lowers everyone's Attack. Fire eats the wings.",
     bogTrollPup: "A stone-faced pup with moss for fur. Slow and tanky, warm to the touch. Cold makes it sluggish.",
-    heronWraith: "A thin ghost bird in grey mist. Everyone is drawn to look at it, and blows slide off it. Lightning goes through.",
+    heronWraith: "A thin ghost bird in grey mist. Everyone is drawn to look at it, and blows slide off it. Lightning passes straight through.",
     pearlBackedSnapper: "A turtle with a pearl set in its shell. It bites, then pulls in its head. The pearls are worth the patience.",
     tideHag: "Seaweed, silt and a long cold hand. She drinks your Focus. Fire dries her out.",
-    glowCrab: "A crab with a lantern for a shell. The flash slows you down; the claws are plain.",
+    glowCrab: "A crab with a lantern for a shell. The flash slows you down, but the claws are nothing special.",
     mangroveImp: "A small imp in a cage of roots. Fast, and its scratches bleed.",
     whisperfish: "A fish that whispers. Hear enough of it and your spells go quiet, or you stand there listening.",
     gildedTapirSprite: "A tapir with sphinx paws and gold dust on its flanks. Its stomps loosen your guard. Cold slows it.",
@@ -176,12 +176,12 @@
     emberToucan: "A toucan whose beak is a torch. It burns what it pecks. Water ends it.",
     stranglerNaga: "A snake wrapped in roots. Its coil holds one creature helpless for a turn. Fire frightens it.",
     kapokTroll: "A hairy tree-troll with a branch for a club. Slow and tanky. It burns.",
-    legionShieldbearer: "Tower shield, short sword. Physical blows slide off. Spells do not.",
-    legionSpearman: "A spear held low. It hits the creature in front, and it braces when you charge.",
-    legionArcher: "Shoots from behind the line, at whoever it likes.",
+    legionShieldbearer: "Carries a tower shield and a short sword. Physical blows slide off, but spells don't.",
+    legionSpearman: "Holds a spear low. It hits the creature in front, and it braces when you charge.",
+    legionArcher: "Shoots from behind the line, at whoever they like.",
     legionOptio: "An officer. Every soldier near him hits harder. Take him first.",
     legionMarksman: "An archer in a feather cloak. He fires at the weakest creature, every time.",
-    jaguarCohortElite: "Obsidian blade, spotted cloak, no fear. Fast and rare. They hit twice.",
+    jaguarCohortElite: "Armed with an obsidian blade and a spotted cloak, and afraid of nothing. Fast and rare. They hit twice.",
     pyramidAcolyte: "A priest of the Harvest Office with an obsidian knife. His cuts bleed, and his rites weaken your Resistance.",
     steamSprite: "A wisp of steam in a tea-cup. It scalds. Cold shuts it up.",
     hotspringToad: "A plump toad that sits in the warm pools and mends itself. Shock hurts it.",
@@ -305,7 +305,7 @@
     ["Same pen block. Different cage. It knows us.", "Don't just stand there looking noble. We have seen you eat.", "It is one of ours! Why won't it look at us? What did they do?"],
     ["Ha. Of all the places. Hello, you. Ha.", "...I know the eyes behind that collar. They know me.", "We have to help. Is that all right? We have to."],
     ["Hey! I owe you a joke! You hear me?", "Is it going to fight us? It doesn't want to fight! Does it?!", "We shared a sky once, you and I. Do not make me do this."],
-    ["...Know you.", "Oh wonderful. We left them behind, and now this. Of course.", "What is a wall that remembers? A friend, under glass."],
+    ["...I know you.", "Oh wonderful. We left them behind, and now this. Of course.", "What is a wall that remembers? A friend, under glass."],
     ["Hey! You still owe me half a loaf!", "It's you, it's you! I knew you'd turn up somewhere!", "I know a secret about that one. I'll never tell. Not now."],
     ["I know that gait. We took turns watching the door.", "The old guard knows its own. Hold steady, friend.", "...Hello. Still here. Still waiting. Still... awake."],
     ["Nope. Nope nope. I'm not making a joke about this.", "Hee... that one liked my tricks.", "That one shared my bread. ...We cannot eat it. I mean fight it."],
@@ -389,16 +389,16 @@
       await M.stage(async c => {
         await c.cageOut("qs", "quillshade", { fx: "feathers", desc: [["narr", "A small cage swings open. A grey squirrel with a harpy's wing-folds shakes out its tail and looks around the wagon like someone checking for eavesdroppers."]] });
         await c.say([["quillshade", "Between us? The cook at the palace sleeps through the second bell."], ["dunmar", "Quillshade carried messages between the factions. The academy treated her as furniture. Mind what you say near her, lad. She remembers everything and tells it to anyone who asks nicely."],
-          ["quillshade", "Between us, the Hollow has a house nobody opens. Down the long stair. You did not hear that from me."]]);
+          ["quillshade", "Between us, the Hollow has a house nobody opens. It's down the long stairs. You didn't hear that from me."]]);
         await c.cageBack("qs");
       });
       return;
     }
     const L = [];
-    if (F.f("ch4.done")) L.push("Back to the sand, lad? I do not like it. I like it less that I keep not saying so.");
-    if (F.f("ch4.start") && !F.f("k2.freed")) L.push("Quillshade's cage has a lock I do not like the look of. The Windhollow key, lad. It is the cliff-top ruin with the open cages, at the far east edge of the canopy. Whenever you feel like it.");
-    if (F.f("ch3.s1")) L.push("I heard about the pyramid. One of ours, in a collar. ...Do not tell me what it looked like, lad.");
-    if (F.f("ch3.fort")) L.push("Fort Ocelan, was it? Shields all the way down, I hear. Shields have a seam.");
+    if (F.f("ch4.done")) L.push("Back to the sand, lad? I don't like it. I like it even less that I never say so.");
+    if (F.f("ch4.start") && !F.f("k2.freed")) L.push("Quillshade's cage has a lock I don't like the look of. We need the Windhollow key, lad. The Windhollow is the cliff-top ruin with the open cages, at the far east edge of the canopy. Whenever you feel like it.");
+    if (F.f("ch3.s1")) L.push("I heard about the pyramid. One of ours, in a collar. ...Don't tell me what it looked like, lad.");
+    if (F.f("ch3.fort")) L.push("Fort Ocelan, was it? Nothing but shields, I hear. Well, even shields have a seam.");
     L.push("No keys yet, lad. Bring one when you find it. And wipe your boots, this wagon has been through enough.");
     await UI.say([["dunmar", M.cycle("dm.n", L.length > 2 ? L.slice(0, 2).concat(L.slice(-1)) : L)]]);
   };
@@ -409,14 +409,14 @@
     G.ch = 3; F.set("ch3.start"); F.music("voyage");
     await Cinema.voyage({ from: "saltgate", to: "creepingShore", text: "Three nights east on the Weeping Sea.", mood: "night" });
     await M.talkPanels("assets/cinema/m2_deck.png", [
-      ["narr", "Night on the Weeping Sea. Far off to starboard, a ship with no flag lanterns slides along the horizon. The lights on her stern do not flicker."],
-      ["captain", "That's a tax ship. Never unloads anything. Don't wave."],
+      ["narr", "Night on the Weeping Sea. Far off to starboard, a ship with no flag lanterns slides along the horizon. The lights on her stern don't flicker."],
+      ["captain", "That's a tax ship. It never unloads anything. Don't wave."],
       ["hero", "What does it carry?"],
-      ["captain", "Ask me when I'm drunk and I'll say gold. Ask me sober and I'll say nothing. Either way, you do not outsail a war, friend. You outwait it."],
+      ["captain", "Ask me when I'm drunk and I'll say gold. Ask me sober and I'll say nothing. Either way, you can't outsail a war, friend. You can only wait it out."],
     ], { music: "voyage" });
     await F.banter("voyage");
     await M.talkPanels("assets/cinema/m2_deck.png", [
-      ["narr", "Dawn. A green wall rises out of the water: a coast with no beaches, only roots, and mist standing in them like breath."],
+      ["narr", "Dawn. A green wall rises out of the water. It's a coast with no beaches, only roots, with mist hanging in them like breath."],
       ["captain", "Ixcalo. Smells like wet money, doesn't it?"],
     ], { music: "shore" });
     await Cinema.title("Chapter 3", "Into the Jungle");
@@ -433,7 +433,7 @@
       const p = rel(c, -140, 20); c.tint("#3a2a30", 0.22, 300);
       c.actor("brisk", { art: "npcBrisk", x: p.x, y: p.y, name: "Brisk" });
       c.fx("splash", p.x - 30, p.y + 20); await c.wait(500);
-      await c.say([["captain", "This is as far as the price goes. West along the mud there is a lamp that stays lit. They do not like questions, so bring none."]]);
+      await c.say([["captain", "This is as far as I go for that price. West along the mud, there's a lamp that stays lit. The people there don't like questions, so don't bring any."]]);
       await c.walk("brisk", p.x - 360, p.y + 40, 2600); c.face("brisk", "left");
       await c.say([["captain", "And keep that helmet on!"]]);
       c.remove("brisk"); c.tint("#3a2a30", 0, 600);
@@ -441,7 +441,7 @@
     await F.banter("shore");
     F.quest("m_landing", 0);
   };
-  S.chest.shoreChest = M.loot("c.shore", [["sunwater", 2]], 80, "A crate wedged between two ribs of the wreck, tarred shut. Inside: two Sunwater Flasks and a few coins somebody forgot to count.");
+  S.chest.shoreChest = M.loot("c.shore", [["sunwater", 2]], 80, "A crate wedged between two ribs of the wreck, tarred shut. Inside are two Sunwater Flasks and a few coins somebody forgot to count.");
   S.gather.lostKite = async F => {
     if (!F.f("kite.started") || F.f("g.kite")) return false;
     F.set("g.kite"); F.give("lostKite", 1, true); F.quest("kite", 1); F.sfx("coin");
@@ -457,55 +457,55 @@
       const h = c.hero, v = [["w1", "npcNetMender", -160, -40], ["w2", "npcFerryBoy", 150, -20], ["w3", "npcPip", 60, 50]];
       c.tint("#2a1c28", 0.2, 400);
       v.forEach(([id, art, dx, dy]) => c.actor(id, { art, x: h.x + dx, y: h.y + dy }));
-      await c.say([["narr", "A pier at dusk. As you walk in, cloths go over the cages. A woman drags a child indoors by the shoulder. Lantern after lantern is shuttered."]]);
+      await c.say([["narr", "It's dusk on the pier. As you walk in, cloths are thrown over the cages. A woman drags a child indoors by the shoulder, and lantern after lantern is shuttered."]]);
       c.sfx("door"); c.tint("#0a0610", 0.5, 900); c.remove("w1"); c.remove("w2"); c.remove("w3"); await c.wait(700);
       const p = rel(c, 170, 0); c.actor("oma", { art: "npcOma", x: p.x, y: p.y, name: "Oma Wren", flip: true }); c.emote("oma", "!");
       await c.walk("oma", h.x + 80, h.y, 1000);
       await c.say([["oma", "Keep your voice down and your creature closer. The empire takes our tamers first."]]);
       c.emote("oma", "?"); await c.wait(400);
-      await c.say([["oma", "Ah. You are one of those."]]);
+      await c.say([["oma", "Ah. You're one of those."]]);
       c.tint("#0a0610", 0.1, 700);
       const d = rel(c, -190, 20); c.actor("dun", { art: "npcDunmar", x: d.x, y: d.y, name: "Dunmar" });
-      await c.say([["dunmar", "Lad! Do not ask how the wagon crossed. I did not like the answer either."]]);
+      await c.say([["dunmar", "Lad! Don't ask how the wagon got across. I didn't like the answer either."]]);
       c.remove("oma"); c.remove("dun"); c.tint("#0a0610", 0, 600);
     }, { music: "shore" });
     F.set("ch3.landed"); F.quest("m_landing", 1); UI.toast("The Menagerie Wagon is here.");
     await F.idleBanter();
   };
   M.town(TL, {
-    inn: TL, innLine: "The Net and Lantern. Dry beds, hot soup, and nobody saw you arrive.", shop: "tamar", shopLine: "Nothing here has a receipt. Everything has a price.",
+    inn: TL, innLine: "Welcome to the Net and Lantern. Dry beds, hot soup, and nobody saw you arrive.", shop: "tamar", shopLine: "We don't do receipts here, but everything has a price.",
     who: ["fisher", "netmender", "ferryboy"],
-    small: [["Nets do not care who is sinking. They only care about the knots.", "I mend what I can. Mostly I mend my back."], ["Never mind the boy with the kite. He thinks the wind is a person.", "The soldiers pay in coin, and the coin is clean. That is the worst part."], ["I can row you anywhere you like. There is nowhere the legion does not look.", "Ferries run on rope and rumours. Both fray."]],
+    small: [["Nets don't care who's sinking. They only care about the knots.", "I mend what I can. Mostly I mend my back."], ["Never mind the boy with the kite. He thinks the wind is a person.", "The soldiers pay in coin, and the coin is clean. That's the worst part."], ["I can row you anywhere you like, but there's nowhere the legion doesn't look.", "Ferries run on rope and rumours, and both fray."]],
   });
   T(TL).oldDunmar = M.dunmar;
   T(TL).oma = async F => {
-    if (F.f("ch3.s1")) { await UI.say([["oma", "A pyramid on Coil Hill fell quiet last night. The wind carries other things now. I do not know what. I like it better."]]); return; }
-    await UI.say([["oma", M.cycle("oma.n", ["The ferrymen of Ninefold will not turn you away. They were all runaways once.", "The river is the only road the legion has not paved. They are working on it.", "Eat. You are all elbows under that tin.", "If a soldier asks, you were never here. If a soldier does not ask, you were never here either."])]]);
+    if (F.f("ch3.s1")) { await UI.say([["oma", "The pyramid on Coil Hill went quiet last night. The wind carries different sounds now. I don't know what, but I like it better."]]); return; }
+    await UI.say([["oma", M.cycle("oma.n", ["The ferrymen of Ninefold won't turn you away. They were all runaways once.", "The river is the only road the legion hasn't paved. They're working on it.", "Eat something. You're all elbows under that tin.", "If a soldier asks, you were never here. If a soldier doesn't ask, you still were never here."])]]);
   };
   T(TL).child = async F => {
     const st = F.qstep("kite");
-    if (st === "done") { await UI.say([["pip", "It flies! Grandmother says only on days the soldiers are not looking."]]); return; }
+    if (st === "done") { await UI.say([["pip", "It flies! Grandmother says I can only fly it on days when the soldiers aren't looking."]]); return; }
     if (st === undefined) {
-      await UI.say([["pip", "My kite went up into a dead tree on the south shore, east of the wreck, and the tide came. Grandmother will skin me."], ["hero", "(He is looking at the helmet, not at me.)"], ["pip", "Are you real? Is there a face in there?"]]);
+      await UI.say([["pip", "My kite got stuck in a dead tree on the south shore, east of the wreck, and then the tide came in. Grandmother will skin me."], ["hero", "(He is looking at the helmet, not at me.)"], ["pip", "Are you real? Is there a face in there?"]]);
       F.quest("kite", 0); F.set("kite.started"); return;
     }
-    if (st === 0) { await UI.say([["pip", "The dead tree, east of the wreck, on the south shore. You will see the red paper from far off. It is mine. Please."]]); return; }
+    if (st === 0) { await UI.say([["pip", "It's in the dead tree on the south shore, east of the wreck. You'll see the red paper from far off. It's mine. Please."]]); return; }
     if (F.item("lostKite")) {
       F.take("lostKite", 1);
-      await UI.say([["pip", "You got it. You got it! There is a tear. ...It is fine. It is a good tear."], ["oma", "He will fly it in the first wind. Mind you, so will I."]]);
-      await UI.say([["oma", "Here. My husband's coat, and his father's before him. It does not fit anyone now. It might fit you."]]);
+      await UI.say([["pip", "You got it. You got it! There's a tear. ...It's fine. It's a good tear."], ["oma", "He'll fly it in the first wind. Mind you, so will I."]]);
+      await UI.say([["oma", "Here. My husband's coat, and his father's before him. It doesn't fit anyone now, but it might fit you."]]);
       F.giveGear("G6", 3); F.questDone("kite"); F.set("kite.done"); F.sfx("coin");
     } else await UI.say([["pip", "Did you lose it? Did you lose it in the water?"]]);
   };
 
   // ---------- Silt River: the pearl shallows, the hollow ----------
   S.gather.riverPearl1 = M.mat("g.rp1", "riverPearl", 5, "A pearl-bed in the shallows. You wade out and feel for them with your toes, and bring up five River Pearls, round and faintly warm.", "Soak");
-  S.gather.riverPearl2 = M.mat("g.rp2", "riverPearl", 5, "Under the reeds, another bed. The pearls come up in your fist like warm hail. Five River Pearls.", "Soak");
-  S.gather.riverPearlBed = M.mat("g.pearlbed", "riverPearl", 10, "The moss glows where the bed is. You fill both hands, then your cap: ten River Pearls from a bed the tide has not emptied in a hundred years.", "Soak");
-  S.chest.hollowPearlChest = M.loot("c.hollowpearl", [["curio", 1]], 120, "A chest grown into the roots. The lid has a pearl set in it for a handle. Inside: a curio, and coins gone green.");
+  S.gather.riverPearl2 = M.mat("g.rp2", "riverPearl", 5, "There's another bed under the reeds. The pearls come up in your fist like warm hail. You collect five River Pearls.", "Soak");
+  S.gather.riverPearlBed = M.mat("g.pearlbed", "riverPearl", 10, "The moss glows where the bed is. You fill both hands, then your cap: ten River Pearls from a bed the tide hasn't emptied in a hundred years.", "Soak");
+  S.chest.hollowPearlChest = M.loot("c.hollowpearl", [["curio", 1]], 120, "A chest grown into the roots, with a pearl set in the lid for a handle. Inside are a curio and some coins gone green.");
   T("siltRiverHollow").drownedStatue = async F => {
-    await UI.say([["narr", "A builder statue stands in the tidewater up to its chest, holding a bowl. The bowl is empty. Cut into the rim: \"We took the first harvest from the river with grace, and gave the shells back.\""]]);
-    if (M.once(F, "lore.statue")) await UI.say([["hero", "(Gave back. Nobody here gives anything back.)"]]);
+    await UI.say([["narr", "A builder statue stands chest-deep in the tidewater, holding a bowl. The bowl is empty. Cut into the rim are the words: \"We took the first harvest from the river with grace, and gave the shells back.\""]]);
+    if (M.once(F, "lore.statue")) await UI.say([["hero", "(They gave something back. Nobody here does that anymore.)"]]);
   };
 
   // ---------- 3.D the patrol run (Silt River) ----------
@@ -519,7 +519,7 @@
       [[0, 30], [50, -20], [90, 40], [30, 90]].forEach(([dx, dy], i) => c.actor("sd" + i, { art: "npcMarksman", x: h.x + 500 + dx, y: h.y + dy, flip: true }));
       await c.pan(h.x + 230, h.y, 900);
       c.emote("op", "!");
-      await c.say([["optio", "There. The boy in the red armour. Exactly as described."], ["hero", "(Described. By who?)"]]);
+      await c.say([["optio", "There. The boy in the red armour. Exactly as described."], ["hero", "(Described? Who described me?)"]]);
       await c.say([["optio", "Take him. The river will do half the work."]]);
       c.sfx("encounter"); c.follow();
       await Promise.all([0, 1, 2, 3].map(i => c.walk("sd" + i, h.x + 150 + i * 28, h.y + (i - 1.5) * 34, 1500 + i * 120)));
@@ -551,13 +551,13 @@
       [[0, 20], [40, -30], [70, 30], [100, -10]].forEach(([dx, dy], i) => c.actor("sd" + i, { art: "npcMarksman", x: h.x + 480 + dx, y: h.y + dy, flip: true }));
       await c.say([["narr", "A hand like a mooring rope closes on your arm and hauls you behind a fish stall. Hanging eels slap your helmet."]]);
       await c.walk("op", h.x + 200, h.y - 10, 1600); c.emote("op", "?");
-      await c.say([["optio", "Search every boat. Red armour. Tall. A closed helm."]]);
+      await c.say([["optio", "Search every boat. We're looking for someone in red armour, tall, with a closed helm."]]);
       c.walk("tahlen", h.x + 150, h.y + 5, 700); await c.wait(700);
       await c.say([["tahlen", "Eels, officer? Fresh this morning. Fresher than your orders."], ["optio", "...How much?"], ["tahlen", "For the cohort? Free. For the cohort's wives, a discount."]]);
       c.sfx("coin"); await c.wait(900);
       await Promise.all([c.walk("op", h.x + 520, h.y - 20, 1800), ...[0, 1, 2, 3].map(i => c.walk("sd" + i, h.x + 640, h.y + (i - 1.5) * 24, 2000))]);
       c.remove("op"); [0, 1, 2, 3].forEach(i => c.remove("sd" + i));
-      await c.say([["tahlen", "Eat first. Fear later. That is how Ninefold works."]]);
+      await c.say([["tahlen", "Eat first, fear later. That's how Ninefold works."]]);
       c.remove("tahlen");
     }, { music: "river" });
     await F.idleBanter();
@@ -571,17 +571,17 @@
       const h = c.hero;
       KB.forEach(([id, art, dx, dy, fl]) => c.actor(id, { art, x: h.x + dx, y: h.y + dy, name: UI.PEOPLE[id] ? UI.PEOPLE[id].name : id, flip: fl }));
       await c.pan(h.x + 200, h.y - 60, 1100); c.emote("kessa", "!");
-      await c.say([["kessa", "Found you. Ithiel's apprentice, hiding behind a fish."], ["hero", "Who are you?"],
-        ["kessa", "Tamer Corps. We lend ourselves to the Legion when there is a bounty. The description came from someone who knows you well. Very well."]]);
+      await c.say([["kessa", "Found you. Ithiel's apprentice, hiding behind a fish stall."], ["hero", "Who are you?"],
+        ["kessa", "We're the Tamer Corps. We hire ourselves out to the Legion when there's a bounty. The description came from someone who knows you well. Very well."]]);
       c.follow();
-      await c.say([["dorrin", "Boss says duel. Duel it is. Also, hello."], ["mayle", "Page twelve. He does not look like a bounty."]]);
+      await c.say([["dorrin", "Boss says duel. Duel it is. Also, hello."], ["mayle", "Page twelve. He doesn't look like a bounty."]]);
     }, { music: "tension" });
     await Cinema.boss({ id: "kessaVorn", name: "Kessa Vorn", title: "Tamer Corps", bg: "river", music: "general", lines: [["kessa", "Do try to keep up, tin can."]] });
     const res = await F.boss([F.mkEnemy("kessaVorn", 12), F.mkEnemy("emberwick", 11, " B")], { bg: "river", music: "general", intro: "Kessa Vorn steps forward!" });
     if (res !== "win") return;
     await M.stage(async c => {
       const h = c.hero; KB.forEach(([id, art, dx, dy, fl]) => c.actor(id, { art, x: h.x + dx - 160, y: h.y + dy, flip: fl }));
-      await c.say([["kessa", "Not bad. For a tin can."], ["emberwick", "Warm. We lost. That is allowed."], ["kessa", "That was a loan, not a gift. I will collect."]]);
+      await c.say([["kessa", "Not bad. For a tin can."], ["emberwick", "Warm. We lost. That's allowed."], ["kessa", "That was a loan, not a gift. I'll be back to collect."]]);
       await Promise.all(KB.map(([id], i) => c.walk(id, h.x + 640, h.y - 80 + i * 40, 2200 + i * 150)));
       c.emote("mayle", "..."); KB.forEach(([id]) => c.remove(id));
       c.actor("tahlen", { art: "npcTahlen", x: h.x + 80, y: h.y, name: "Tahlen", flip: true });
@@ -596,24 +596,24 @@
     if (i === 0) { G.gold -= price; F.set(flag); F.give(key, n); F.sfx("coin"); UI.toast("New in the Skill Book: " + Data.BOOK[Object.keys(Data.BOOK).find(k => Data.BOOK[k].mat === key)].n + ".", 3000); }
   };
   M.town(NF, {
-    inn: NF, innLine: "The Ninth Ferry. Eight rivers go past the door. The ninth goes through the cellar, but we do not discuss it.", shop: "ninefold", shopLine: "Rope, tea, clay, cloth. Soldiers pay double. They do not know that.",
-    beforeShop: F => M.backup(F, "bought.pearl", "riverPearl", 10, 330, "Ten river pearls, strung and ready, for a ferryman's price."),
+    inn: NF, innLine: "Welcome to the Ninth Ferry. Eight rivers go past the door. The ninth goes through the cellar, but we don't talk about it.", shop: "ninefold", shopLine: "We sell rope, tea, clay and cloth. Soldiers pay double, but they don't know that.",
+    beforeShop: F => M.backup(F, "bought.pearl", "riverPearl", 10, 330, "Ten river pearls, strung and ready, at a ferryman's price. Interested?"),
     who: ["ferryman", "stallwoman", "ferryboy"],
-    small: [["Nine rivers, nine ways to drown. The tenth way is to ask the soldiers for directions.", "I have rowed this stretch since before the road was paved. The road will drown first."], ["Eels today, eels tomorrow. The soldiers love them. Ha.", "Tahlen feeds half the dock. The other half feeds Tahlen."], ["I saw a bird with a collar once, flying over, crying. Is that a story or a thing?", "Do not go near the fort. Everyone says that. Nobody says why."]],
+    small: [["Nine rivers, nine ways to drown. The tenth way is to ask the soldiers for directions.", "I've rowed this stretch since before the road was paved. The road will drown first."], ["Eels today, eels tomorrow. The soldiers love them. Ha.", "Tahlen feeds half the dock. The other half feeds Tahlen."], ["I once saw a bird with a collar flying over, crying. Is that just a story, or did I really see it?", "Don't go near the fort. Everyone says that, but nobody says why."]],
   });
   T(NF).tahlen = async F => {
     const st = F.qstep("pearls");
-    if (st === "done") { await UI.say([["tahlen", M.cycle("tl.n", ["Eat. You are thin under all that tin.", "The lines are quiet, and the eels are fat. You have done Ninefold a kindness.", "Keep your head down on the road, friend. Keep it up when it matters."])]]); return; }
+    if (st === "done") { await UI.say([["tahlen", M.cycle("tl.n", ["Eat something. You're thin under all that tin.", "The lines are quiet, and the eels are fat. You've done Ninefold a kindness.", "Keep your head down on the road, friend, but hold it high when it matters."])]]); return; }
     if (st === undefined) {
-      await UI.say([["tahlen", "You look like a man who can hit things. Good. Snappers bite the ferry lines, three of them in the shallows this week. Clear them out and I will pay you in pearls."], ["tahlen", "Pearl-Backed Snappers. Hard shells, soft tempers. The shallows west of the dock, out the town's west gate onto the Silt River."]]);
+      await UI.say([["tahlen", "You look like you can hit things. Good. Three snappers have been biting the ferry lines in the shallows this week. Clear them out and I'll pay you in pearls."], ["tahlen", "They're Pearl-Backed Snappers: hard shells, soft tempers. Look in the shallows west of the dock, through the town's west gate onto the Silt River."]]);
       F.quest("pearls", 0); G.flags.pearlBase = G.kills.pearlBackedSnapper || 0; return;
     }
     const n = (G.kills.pearlBackedSnapper || 0) - (G.flags.pearlBase || 0);
     if (n >= 3) {
-      await UI.say([["tahlen", "Three Snappers! The ferrymen are calling you a saint. Do not let it go to your head. Here: pearls, and coin for the boots."]]);
+      await UI.say([["tahlen", "Three Snappers! The ferrymen are calling you a saint. Don't let it go to your head. Here are your pearls, and some coin for new boots."]]);
       F.give("riverPearl", 5); F.gold(120); F.questDone("pearls"); F.sfx("coin");
       if (F.matCount("riverPearl") >= 5) UI.toast("New in the Skill Book: Soak.", 3000);
-    } else await UI.say([["tahlen", `${Math.max(0, n)} of 3 Snappers so far. West of the dock, in the shallows. Mind the pearls on their backs; they bite harder when you stare.`]]);
+    } else await UI.say([["tahlen", `${Math.max(0, n)} of 3 Snappers so far. West of the dock, in the shallows. Don't stare at the pearls on their backs, or the snappers bite harder.`]]);
   };
 
   // ---------- 3.F Greenmaw Jungle ----------
@@ -625,7 +625,7 @@
       c.actor("w0", { art: "npcMarksman", x: h.x - 520, y: h.y - 200, flip: false });
       c.actor("w1", { art: "npcOptio", x: h.x - 600, y: h.y - 200, flip: false });
       [0, 1, 2, 3].forEach(i => c.actor("cp" + i, { art: "npcCaptive", x: h.x - 680 - i * 46, y: h.y - 196 + (i % 2) * 8, flip: false }));
-      await c.say([["narr", "You stop at the edge of the road. Stone, wide enough for six, with milestones. Far along it a column is marching: shields, spears, and behind them a cage-wagon with a dozen people in it."]]);
+      await c.say([["narr", "You stop at the edge of the road. It is made of stone, wide enough for six people, with milestones. Far along it a column is marching: soldiers with shields and spears, and behind them a cage-wagon with a dozen people in it."]]);
       c.fx("feathers", h.x + 40, h.y - 120); c.sfx("door");
       await Promise.all([c.walk("w0", h.x + 560, h.y - 200, 5200), c.walk("w1", h.x + 480, h.y - 200, 5200), ...[0, 1, 2, 3].map(i => c.walk("cp" + i, h.x + 400 - i * 46, h.y - 196, 5200))]);
       ["w0", "w1", "cp0", "cp1", "cp2", "cp3"].forEach(id => c.remove(id));
@@ -634,13 +634,13 @@
     await F.banter("jungle");
   };
   S.trigger.fortHiddenPath = async F => {
-    if (M.once(F, "fort.ladder")) await UI.say([["narr", "A rope ladder, grey with moss, hangs down the back of the fort wall. Somebody climbed it once and did not take it in. At the top: a wall walk, a hatch, and a chest nobody has counted."]]);
+    if (M.once(F, "fort.ladder")) await UI.say([["narr", "A rope ladder, grey with moss, hangs down the back of the fort wall. Somebody climbed it once and never pulled it up again. At the top are a wall walk, a hatch, and a chest nobody has counted."]]);
     else await UI.say([["narr", "The old ladder creaks. The wall walk above is empty."]]);
   };
   S.done.fortHiddenPath = F => F.f("fort.ladder");
-  S.chest.jungleRuinChest = M.loot("c.jruin", [["sunwater", 3]], 150, "A mossy ruin, a collapsed arch, and under a root a chest with a builder's sun on the lid. Three Sunwater Flasks and a purse of green-stained coin.");
-  S.gather.galeDown1 = M.mat("g.gale1", "galeDown", 5, "A glade where something big has been moulting. The feathers are as light as a held breath, and the air bends round them. Five Gale Down.", "Dampen Wing");
-  S.gather.galeDown2 = M.mat("g.gale2", "galeDown", 5, "More molted plumage under the roots. You gather five more Gale Down, and do not look up.", "Dampen Wing");
+  S.chest.jungleRuinChest = M.loot("c.jruin", [["sunwater", 3]], 150, "In a mossy ruin with a collapsed arch, you find a chest under a root, with a builder's sun on the lid. Inside are three Sunwater Flasks and a purse of green-stained coin.");
+  S.gather.galeDown1 = M.mat("g.gale1", "galeDown", 5, "A glade where something big has been moulting. The feathers are as light as a held breath, and the air bends round them. You gather five Gale Down.", "Dampen Wing");
+  S.gather.galeDown2 = M.mat("g.gale2", "galeDown", 5, "More molted plumage under the roots. You gather five more Gale Down, and try not to look up.", "Dampen Wing");
 
   // ---------- Redroot Camp ----------
   const RR = "redrootCamp";
@@ -649,7 +649,7 @@
     F.music("resistance");
     await M.stage(async c => {
       const h = c.hero; c.actor("itzel", { art: "npcItzel", x: h.x + 120, y: h.y, name: "Itzel Coyo", flip: true });
-      await c.say([["narr", "A fallen temple, green to the rafters. A woman in a faded overseer's wife's shawl stands in the gate with a spear held low, and does not lift it."]]);
+      await c.say([["narr", "A fallen temple, green to the rafters. A woman in a faded shawl, the kind an overseer's wife would wear, stands in the gate with a spear held low, and does not lift it."]]);
       c.emote("itzel", "?"); await c.say([["itzel", "Rule one: no names. Rule two: no names."]]);
       await c.walk("itzel", h.x + 220, h.y - 30, 900); c.remove("itzel");
     }, { music: "resistance" });
@@ -657,22 +657,22 @@
     F.quest("m_pass", 1);
   };
   M.town(RR, {
-    inn: RR, innLine: "The Hollow Log. Straw is free and the soup is not. Half price for those who hit the legion; I do not ask which half.", shop: "redroot", shopLine: "What the camp can spare. Tonics, bombs, and the ember we made ourselves.",
+    inn: RR, innLine: "Welcome to the Hollow Log. Straw is free, but the soup isn't. Half price for anyone who has fought the legion, and I don't ask for proof.", shop: "redroot", shopLine: "Only what the camp can spare: tonics, bombs, and the ember we made ourselves.",
     who: ["runaway", "healer", "oldguard"],
-    small: [["I ran in the rain. It is the only way. Nobody follows through mud.", "Do not ask me where I came from. I do not ask you what is under the helmet."], [], ["I stood on the wall at Fort Ocelan for eleven years. It is a good wall. That is the worst thing I can say about it.", "The centurion is not a bad man. He is a frightened one. Those are worse."]],
+    small: [["I ran in the rain. It's the only way, because nobody follows through mud.", "Don't ask me where I came from, and I won't ask what's under your helmet."], [], ["I stood on the wall at Fort Ocelan for eleven years. It's a good wall. That's the worst thing I can say about it.", "The centurion isn't a bad man. He's a frightened one, and those are worse."]],
   });
   T(RR).r2 = async F => {
     const st = F.qstep("steam");
     if (st === undefined) {
       await S.rum(F, RR, 1, "healer");
-      await UI.say([["healer", "While you are here: burns. Everyone in this camp has one. I make a salve from steamstone, and the Boiling Pools are south-east of the road. Show me six good stones and I will pay for the trouble."]]);
+      await UI.say([["healer", "While you're here: burns. Everyone in this camp has one. I make a salve from steamstone, and the Boiling Pools are south-east of the road. Show me six good stones and I'll pay for your trouble."]]);
       F.quest("steam", 0); return;
     }
     if (st === 0) {
       if (F.matCount("steamstone") >= 6) {
-        await UI.say([["healer", "Let me see. ...Hold that one under the pot. Hear it hiss? Real. Keep them, I only needed to know they were real. The salve is cheaper than the worry."], ["healer", "Here. Clearwater tonics, and coin. Your hands are shaking, you know."]]);
+        await UI.say([["healer", "Let me see. ...Hold that one under the pot. Hear it hiss? It's real. Keep them, I only needed to know they were real. Making the salve is cheaper than worrying about it."], ["healer", "Here. Clearwater tonics, and coin. Your hands are shaking, you know."]]);
         F.give("tonic", 3); F.gold(100); F.questDone("steam"); F.sfx("coin");
-      } else await UI.say([["healer", F.matCount("steamstone") ? `${F.matCount("steamstone")} stones. Six, I said. The pools are south-east of the road, and the water is hotter than it looks.` : "Steamstone sinks in water and hisses. The Boiling Pools, south-east of the road. Six stones."]]);
+      } else await UI.say([["healer", F.matCount("steamstone") ? `${F.matCount("steamstone")} stones. Six, I said. The pools are south-east of the road, and the water is hotter than it looks.` : "Steamstone sinks in water and hisses. You'll find it at the Boiling Pools, south-east of the road. I need six stones."]]);
       return;
     }
     await UI.say([["healer", "The salve is working. The camp smells of herbs and not of burnt skin. Thank you."]]);
@@ -680,34 +680,34 @@
   T(RR).r3 = async F => {
     const seen = (G.rumours[RR] = G.rumours[RR] || []);
     if (F.f("ch3.fort") && seen.includes(2) && !seen.includes(3)) { await S.rumourIdx(F, RR, 3, "oldguard"); return; }
-    return S.rum(F, RR, 2, "oldguard", ["I stood on the wall at Fort Ocelan for eleven years. It is a good wall. That is the worst thing I can say about it.", "The centurion is not a bad man. He is a frightened one. Those are worse."]);
+    return S.rum(F, RR, 2, "oldguard", ["I stood on the wall at Fort Ocelan for eleven years. It's a good wall. That's the worst thing I can say about it.", "The centurion isn't a bad man. He's a frightened one, and those are worse."]);
   };
   { const r = Data.RUMOURS.redrootCamp; Object.defineProperty(r, 3, { get: () => { try { return S.styleClue(1, 0); } catch (e) { return ""; } }, enumerable: true, configurable: true }); }
-  T(RR).r1 = F => S.rum(F, RR, 0, "runaway", F.f("fort.cells") ? ["Three of ours walked in from the fort at dawn. One of them kissed the ground and then apologised to it.", "Mara is alive. Mara is eating her third bowl. Nobody is stopping her."] : ["I ran in the rain. It is the only way. Nobody follows through mud.", "Do not ask me where I came from. I do not ask you what is under the helmet."]);
+  T(RR).r1 = F => S.rum(F, RR, 0, "runaway", F.f("fort.cells") ? ["Three of ours walked in from the fort at dawn. One of them kissed the ground and then apologised to it.", "Mara is alive. Mara is eating her third bowl. Nobody is stopping her."] : ["I ran in the rain. It's the only way, because nobody follows through mud.", "Don't ask me where I came from, and I won't ask what's under your helmet."]);
   T(RR).shrineKeeper = async F => {
-    await UI.say([["shrinekeeper", M.cycle("sk.n", ["Each statue is a creature they freed from a collar. We carve it the day it is gone. Gone, not dead. We carve it the same way.", "The empty plinth is not for a stone. It is for the day we are not needed.", "Do not touch the broken collars. They are not sacred. They are only heavy."])]]);
+    await UI.say([["shrinekeeper", M.cycle("sk.n", ["Each statue is a creature that was freed from its collar. We carve it the day it leaves us. It is gone, not dead, but we carve it the same way.", "The empty plinth isn't for a statue. It's for the day we're no longer needed.", "Don't touch the broken collars. They aren't sacred, just heavy."])]]);
   };
   T(RR).itzel = async F => {
     if (F.f("ch3.s1") && !F.f("ch3.done")) {
-      await UI.say([["itzel", "A courier in a grey hood was here before you. He left this, and did not wait to be fed. Nobody does that."]]);
+      await UI.say([["itzel", "A courier in a grey hood came by before you. He left this and didn't even wait to be fed. Nobody does that."]]);
       await F.letter("the green seal", ["\"Well done at the pyramid. I knew you would not shrink from it.\"", "\"North of the road, above the cliff, there is a canopy village of feather-weavers. A Titan nests above them. Record how it flies. - I.\""]);
       await UI.say([["hero", "(He knew. Of course he knew. He always knows where I am.)"]]);
       F.set("ch3.done"); F.set("ch4.start"); F.questDone("m_coil"); F.quest("m_canopy", 0); F.save(true);
       UI.toast("A cliff path leads north from the jungle road.", 3200);
       return;
     }
-    if (F.f("ch3.done")) { await UI.say([["itzel", "North, then. Feather-weavers do not like loud people. Be quiet on their bridges."]]); return; }
-    if (F.f("ch3.fort")) { await UI.say([["itzel", "Past the fort the road climbs to Coil Hill. They cut a new pyramid there. Do not look at the pens too long. It is how they learn your face."]]); F.quest("m_coil", 0); return; }
-    await UI.say([["itzel", "The fort holds the pass. They also hold three of ours. Rumour says the centurion fears his tribune more than the jungle. Make of that what you will."]]);
+    if (F.f("ch3.done")) { await UI.say([["itzel", "North, then. Feather-weavers don't like loud people. Be quiet on their bridges."]]); return; }
+    if (F.f("ch3.fort")) { await UI.say([["itzel", "Past the fort the road climbs to Coil Hill. They're cutting a new pyramid there. Don't look at the pens for too long, or they'll learn your face."]]); F.quest("m_coil", 0); return; }
+    await UI.say([["itzel", "The fort holds the pass, and it also holds three of our people. Rumour says the centurion fears his tribune more than the jungle. Make of that what you will."]]);
   };
 
   // ---------- 3.G Fort Ocelan ----------
   const FO = "fortOcelan";
-  S.chest.fortStrongbox = M.loot("c.fortbox", [], 180, "The paymaster's strongbox. The lock was signed for. The coin inside was not: one hundred and eighty kakal in legion silver.");
-  S.chest.fortWallChest = M.loot("c.fortwall", [["rimeFlask", 2], ["cinderBomb", 2]], 200, "A watch-chest on the wall walk, left by someone who expected to be relieved. Two Rime Flasks, two Cinder Bombs, a purse of kakal.");
+  S.chest.fortStrongbox = M.loot("c.fortbox", [], 180, "The paymaster's strongbox. The lock was signed for, but the coin inside was not: one hundred and eighty kakal in legion silver.");
+  S.chest.fortWallChest = M.loot("c.fortwall", [["rimeFlask", 2], ["cinderBomb", 2]], 200, "A watch-chest on the wall walk, left by someone who expected to be relieved. Inside are two Rime Flasks, two Cinder Bombs and a purse of kakal.");
   T(FO).optio = async F => {
-    if (F.f("fort.cellKey")) { await UI.say([["optio", "The ring is gone. That is a form. There will be a form for that."]]); return; }
-    await UI.say([["optio", "Cell block. No visitors. Keys are signed for."], ["hero", "(A ring of iron keys at his belt. Three cells at his back.)"], ["optio", "Name and cohort. ...No? Then you are not on the list, and I am required to be unpleasant."]]);
+    if (F.f("fort.cellKey")) { await UI.say([["optio", "The ring of keys is gone. There will be a form for that."]]); return; }
+    await UI.say([["optio", "This is the cell block. No visitors. The keys are signed for."], ["hero", "(A ring of iron keys at his belt. Three cells at his back.)"], ["optio", "Name and cohort. ...No? Then you're not on the list, and I'm required to be unpleasant."]]);
     const res = await F.fight([F.mkEnemy("legionOptio", 13), F.mkEnemy("legionSpearman", 13, " B"), F.mkEnemy("legionArcher", 13, " C")], { bg: "fort", intro: "The optio draws his blade!", music: "battleSoldiers" });
     if (res !== "win") return;
     F.set("fort.cellKey"); F.sfx("door");
@@ -715,22 +715,22 @@
   };
   const CAP = [
     ["captive1", "prisoner", "Quietly. Quietly. They look in at every bell. ...They are not looking in. Why are they not looking? Oh. Oh, thank you."],
-    ["captive2", "prisoner", "Tell Redroot that Mara is alive. Tell them I did not say a name. I did not say a single name."],
-    ["captive3", "prisoner", "Nineteen days. Not so long. I have been in worse places. Not many. Not many."],
+    ["captive2", "prisoner", "Tell Redroot that Mara is alive. Tell them I didn't say a name. Not a single one."],
+    ["captive3", "prisoner", "Nineteen days. That's not so long. I've been in worse places. Not many, though."],
   ];
   CAP.forEach(([id, who, line], n) => {
     T(FO)[id] = async F => {
       if (F.f("fort.freed" + (n + 1))) return;
-      if (!F.f("fort.cellKey")) { await UI.say([[who, ["Please. The guard has the keys. The one with the ledger.", "Do not stand there. They count who stands there.", "Is it day outside? We have a window, but it faces a wall."][n]]]); return; }
+      if (!F.f("fort.cellKey")) { await UI.say([[who, ["Please. The guard has the keys. The one with the ledger.", "Don't stand there. They count who stands there.", "Is it day outside? We have a window, but it faces a wall."][n]]]); return; }
       F.set("fort.freed" + (n + 1));
       await M.freeNpc(id, [["narr", "The key turns. The door gives with a sound like a held breath leaving."], [who, line]], { dx: 260, dy: 40 });
-      if ([1, 2, 3].every(k => F.f("fort.freed" + k))) { F.set("fort.cells"); await UI.say([["narr", "The cell block is empty. At the far end, the stair to the tower stands unwatched."]]); }
+      if ([1, 2, 3].every(k => F.f("fort.freed" + k))) { F.set("fort.cells"); await UI.say([["narr", "The cell block is empty. At the far end, the stairs to the tower stand unwatched."]]); }
     };
   });
   S.done.centurionFight = F => F.f("ch3.fort");
   S.trigger.centurionFight = async F => {
     if (F.f("ch3.fort")) return;
-    if (!F.f("fort.cellKey")) { await UI.say([["narr", "An iron-banded door at the foot of the tower. Locked, and the lock is a good one. Somewhere below, in the cell block, a man is guarding a ring of keys."]]); return; }
+    if (!F.f("fort.cellKey")) { await UI.say([["narr", "There's an iron-banded door at the foot of the tower. It's locked, and the lock is a good one. Somewhere below, in the cell block, a man is guarding a ring of keys."]]); return; }
     F.music("fort");
     await F.banter("fort");
     await Cinema.boss({ id: "fortCenturion", name: "Centurion Varro Toric", title: "Fort Ocelan", bg: "fort", music: "general", lines: [["centurion", "Orders are orders. They were here before me."], ["centurion", "The tribune will ask how you passed the wall."], ["hero", "Through the front."], ["centurion", "Of course you did."]] });
@@ -743,7 +743,7 @@
       c.sfx("coin"); c.tint("#10100c", 0, 700); c.remove("cen");
     }, { music: "fort" });
     F.giveGear("G42", 3); F.give("ocelanSeal"); F.set("ch3.fort"); F.questDone("m_pass"); F.quest("m_coil", 0);
-    await UI.say([["hero", "(Seen from the wall, the road east is only a road.)"]]);
+    await UI.say([["hero", "(With the fort beaten, the road east is just a road again.)"]]);
     UI.toast("The east gate of Fort Ocelan is open.", 3000);
   };
 
@@ -752,7 +752,7 @@
   S.trigger.coilArrive = async F => {
     if (!M.once(F, "coil.seen")) return;
     F.music("tension");
-    await Cinema.panels([{ img: "assets/cinema/m2_pyramid.png", text: "A new pyramid on a bare hill. Wind carries the noise of mallets, and under it another noise.", pan: "inup" }], { music: "tension" });
+    await Cinema.panels([{ img: "assets/cinema/m2_pyramid.png", text: "A new pyramid stands on a bare hill. The wind carries the noise of mallets, and under it another noise.", pan: "inup" }], { music: "tension" });
     F.music("pyramid"); F.quest("m_coil", 0);
   };
   const pen = async (F, n) => {
@@ -772,22 +772,22 @@
     });
   };
   [1, 2, 3].forEach(n => {
-    T(CH)["slave" + n] = async F => { await UI.say([["slave", ["Please do not make me look.", "I did not see you. I did not see anything. It is better.", "The overseer is on the left. I am looking at the floor. The floor is good."][n - 1]]]); };
+    T(CH)["slave" + n] = async F => { await UI.say([["slave", ["Please don't make me look.", "I didn't see you. I didn't see anything. It's better that way.", "The overseer is on the left. I'm looking at the floor. The floor is good."][n - 1]]]); };
     T(CH)["overseer" + n] = F => pen(F, n);
     S.trigger["pen" + n] = F => pen(F, n); S.done["pen" + n] = F => F.f("pyr.gate" + n);
   });
-  T(CH).collarsmith = async F => { await UI.say([["collarsmith", F.f("ch3.s1") ? "The altar is dark. It is entered in the ledger as a fault of the stone." : "The sun sees it. Go up if you must. The stone is not impressed by visitors."]]); };
+  T(CH).collarsmith = async F => { await UI.say([["collarsmith", F.f("ch3.s1") ? "The altar is dark. It is entered in the ledger as a fault of the stone." : "The sun sees it. Go up if you must. The stone isn't impressed by visitors."]]); };
   T(CH).priest = async F => {
-    await UI.say([["priest", M.cycle("pr.n", ["The Harvest Office thanks you for your visit. Please do not touch the ledgers; they are warm.", "We are soft-spoken here. The stone does the loud work.", "The sun sees all work. It is a comfort, I find."])]]);
+    await UI.say([["priest", M.cycle("pr.n", ["The Harvest Office thanks you for your visit. Please don't touch the ledgers. They're warm.", "We're soft-spoken here. The stone does the loud work.", "The sun sees all our work. I find that a comfort."])]]);
   };
   S.gather.ledgerPage = async F => {
     if (F.f("g.ledger")) return false; F.set("g.ledger"); F.set("lore.ledger"); F.give("ledgerPage", 1, true); F.sfx("coin");
-    await UI.say([["narr", "On the priests' table a ledger lies open under a paperweight of black glass. You copy the last page into your Field Journal: \"Lot 7 (Academy stock). Received complete, as agreed. Signed, the Harvest Office.\""], ["hero", "(That is the lab's numbering. As agreed...)"]]);
+    await UI.say([["narr", "On the priests' table a ledger lies open under a paperweight of black glass. You copy the last page into your Field Journal: \"Lot 7 (Academy stock). Received complete, as agreed. Signed, the Harvest Office.\""], ["hero", "(That's the lab's numbering. As agreed...)"]]);
   };
   S.done.s1Fight = F => F.f("ch3.s1");
   S.trigger.s1Fight = async F => {
     if (F.f("ch3.s1")) return;
-    if (![1, 2, 3].every(n => F.f("pyr.gate" + n))) { await UI.say([["narr", "The summit stair ends at a crank-gate, chained and warm to the touch. The three pens below keep the cranks."]]); return; }
+    if (![1, 2, 3].every(n => F.f("pyr.gate" + n))) { await UI.say([["narr", "The stairs to the summit end at a crank-gate, chained and warm to the touch. The three pens below operate the cranks."]]); return; }
     F.music("pyramid"); await F.banter("collar");
     const ok = await S.generalScene(F, 1, {
       level: 15, soldiers: [["legionOptio", 13, " B"]], bg: "pyramid", title: "General of the Legions", place: "the Coil Hill altar", where: "It ran east, toward the river.", fx: 120, fy: -6, banter: "s1",
@@ -795,10 +795,10 @@
         const h = c.hero; c.tint("#241008", 0.25, 400);
         c.actor("cs", { art: "npcCollarsmith", x: h.x + 110, y: h.y - 20, name: "Collarsmith", flip: true });
         await c.pan(h.x + 160, h.y - 30, 900);
-        await c.say([["narr", "The summit: a stone platform, a ring of obsidian, a chain as thick as an arm bolted to the altar. Soldiers kneel in a ring. At the end of the chain, something large stands very still."], ["collarsmith", "The sun sees it."]]);
+        await c.say([["narr", "The summit has a stone platform with a ring of obsidian, and a chain as thick as an arm bolted to the altar. Soldiers kneel in a ring. At the end of the chain, something large stands very still."], ["collarsmith", "The sun sees it."]]);
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(400); c.follow(); c.remove("cs");
       },
-      after: ["(East, toward the river. Wherever that is, it is not here.)"],
+      after: ["(It ran east, toward the river. Wherever it's headed, at least it's away from here.)"],
     });
     if (!ok) return;
     F.set("ch3.s1");
@@ -807,12 +807,12 @@
   S.chest.g11_venomfangLegion = async F => { if (!F.f("ch3.s1")) { await UI.say([["narr", "The chest is wrapped in the altar chain. Something still guards the altar."]]); return false; } return S.gearChest2(F, "g11_venomfangLegion", "G11"); };
 
   // ---------- Boiling Pools ----------
-  S.gather.steamstone1 = M.mat("g.steam1", "steamstone", 4, "A white pool the colour of milk. The stones at the bottom sink in your fingers and hiss, and you pull out four, wrapped in your sleeve.", "Steamstone Douse", "fire");
-  S.gather.steamstone2 = M.mat("g.steam2", "steamstone", 4, "An orange pool, hotter than it looks. Four steamstones, steaming in your gauntlet.", "Steamstone Douse", "fire");
+  S.gather.steamstone1 = M.mat("g.steam1", "steamstone", 4, "A white pool the colour of milk. The stones at the bottom sink in your fingers and hiss, and you pull out four and wrap them in your sleeve.", "Steamstone Douse", "fire");
+  S.gather.steamstone2 = M.mat("g.steam2", "steamstone", 4, "An orange pool, hotter than it looks. You fish out four steamstones, still steaming in your gauntlet.", "Steamstone Douse", "fire");
   S.gather.steamstone3 = M.mat("g.steam3", "steamstone", 4, "Under the pink rock a small pool simmers. You work four stones free with a knife.", "Steamstone Douse", "fire");
   S.chest.poolsChest = M.loot("c.pools", [["ember", 1]], 120, "A chest on the boardwalk, warm from the rock below. One Ashen Ember glows inside, and a purse of kakal.");
   T("boilingPools").bather = async F => {
-    await UI.say([["bather", M.cycle("bt.n", ["Hot-spring stone teaches you to douse a fire, they say. I only know it teaches my knees to forgive me.", "Do not stare at the pink rock. It stares back, a little.", "I have sat in this pool since the old emperor. The old emperor was better. No, he was not. But I miss his hat."])]]);
+    await UI.say([["bather", M.cycle("bt.n", ["They say hot-spring stone can teach you to douse a fire. All I know is that it teaches my knees to forgive me.", "Don't stare at the pink rock. It stares back, a little.", "I've sat in this pool since the old emperor's day. The old emperor was better. No, he wasn't. But I miss his hat."])]]);
   };
 
   // ---------- legends of chapter 3 and 4: a reveal scene, then the same fight and reward as the generic legend ----------
@@ -830,8 +830,8 @@
   };
   Data.LEGENDS.L2.level = 15; Data.LEGENDS.L3.level = 21;
   S.legend.L2 = M.legend("L2", { enemy: "shearwing", fx: "feathers", end: "bow", level: 15, bg: "jungle", title: "The Razor Sunbird", fightIntro: "Shearwing screams down out of the canopy!",
-    intro: [["narr", "A shape crosses the canopy light: a bird of beaten gold, every feather an edge. It circles once, as if it had been waiting for you."]],
-    lines: [["narr", "A sunbird as long as a wagon folds its wings and drops. The leaves it passes fall in two halves."], ["hero", "(It cut a banner in half in one pass. I have no banner.)"]],
+    intro: [["narr", "A shape crosses the canopy light. It's a bird of beaten gold, every feather an edge. It circles once, as if it had been waiting for you."]],
+    lines: [["narr", "A sunbird as long as a wagon folds its wings and drops. The leaves it passes fall in two halves."], ["hero", "(It cut a banner in half in one pass. I don't have a banner. Just me.)"]],
     after: [["narr", "Shearwing lands, quite gently, and bows its head to you before the light goes out of its feathers. On the ground lie the pieces of a very old armour."]] });
 
   // ---------- Story.finish[3] / the end of chapter 3 for dbg.jump ----------

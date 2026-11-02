@@ -16,14 +16,14 @@
 
   // ---------- quests and rumours ----------
   Q(D.QUESTS, {
-    bell: { t: "The Tuning Bell", steps: ["Hassa in Sandpiper Rest lost her husband's lead bell somewhere on the Humming Ridges, north of the dunes. Find it: west of the ring of singing stones, by a lone cairn.", "Bring the bell back to Hassa in Sandpiper Rest."] },
-    tally: { t: "The Dead Man's Tally", steps: ["Old Ossan wants his dead partner's strongbox from the Caravan Graveyard, south-west of the dunes. Jackals keep the place. Brem's wagon had a red cover with a sun on it.", "Bring the strongbox back to Ossan in Sandpiper Rest."] },
+    bell: { t: "The Tuning Bell", steps: ["Hassa in Sandpiper Rest lost her husband's lead bell somewhere on the Humming Ridges, north of the dunes. Find it: it lies west of the ring of singing stones, by a lone cairn.", "Bring the bell back to Hassa in Sandpiper Rest."] },
+    tally: { t: "The Dead Man's Tally", steps: ["Old Ossan wants his dead partner's strongbox from the Caravan Graveyard, south-west of the dunes. Jackals have taken over the place. Brem's wagon had a red cover with a sun painted on it.", "Bring the strongbox back to Ossan in Sandpiper Rest."] },
     adders: { t: "Adders in the Reeds", steps: ["The reed keeper at the Sandpiper Oasis wants three Glass Adders out of the reed beds (0/3).", "Go back to the reed keeper."] },
   });
   D.RUMOURS.sandpiper.push(
-    "\"North of the dunes the glass hums a different note on every ridge. Walk it at noon and you can hear which way the wind will turn.\"",
-    "\"The wagons that went into the white bed south-west of here never came out. The jackals keep the rent.\"",
-    "\"A reed keeper out at the oasis says the mud is full of pearls, if you do not mind the adders.\"");
+    "\"North of the dunes the glass hums a different note on every ridge. If you walk it at noon, you can hear which way the wind is about to turn.\"",
+    "\"The wagons that went into the white bed south-west of here never came out, and the jackals have claimed everything they left behind.\"",
+    "\"A reed keeper out at the oasis says the mud is full of pearls, if you don't mind the adders.\"");
 
   // ---------- region metadata (arena, music, table; npcs / exits / things feed the fallback hub) ----------
   const thing = (id, label, kind, cond) => [id, label, cond || yes, kind];
@@ -56,35 +56,35 @@
   const arrive = (key, lines, then) => async F => { if (F.f(key)) return; F.set(key); await UI.say(lines.map(t => ["narr", t])); if (then) await then(F); };
   Q(S.trigger, {
     ridgesArrive: arrive("x.ridges", ["North of the dunes the sand turns to glass in long bright rows. The hum is louder here, a chord of a dozen notes that never settle."]),
-    graveyardArrive: arrive("x.grave", ["A dry white bed, and on it wagons: dozens, spokes in the air, covers long gone. Nothing here has moved in a very long time. Something has been eating well."]),
-    waystationEnter: arrive("x.waystation", ["A courtyard half under the sand. The well in the middle is dry to the bottom, and the stone around it is worn smooth by hands."]),
-    mesaArrive: arrive("x.mesa", ["Red steps, one on top of the next, climbing away in terraces. Nothing on them casts a shadow longer than a spear."]),
-    saltpanArrive: arrive("x.saltpan", ["Rows of white pans under a white sky. The dike crunches like old bread. Whatever was salted here is long gone."]),
+    graveyardArrive: arrive("x.grave", ["Dozens of wagons stand on a dry white bed, their spokes in the air and their covers long gone. Nothing here has moved in a very long time, but something has been eating well."]),
+    waystationEnter: arrive("x.waystation", ["This is a courtyard half buried in sand. The well in the middle is dry to the bottom, and the stone around it has been worn smooth by hands."]),
+    mesaArrive: arrive("x.mesa", ["Red steps climb away in terraces, one above the next. Nothing on them casts a shadow longer than a spear."]),
+    saltpanArrive: arrive("x.saltpan", ["There are rows of white pans under a white sky. The dike crunches like old bread underfoot. Whatever was salted here is long gone."]),
   });
   S.done = Q(S.done || {}, { ridgesArrive: F => F.f("x.ridges"), graveyardArrive: F => F.f("x.grave"), waystationEnter: F => F.f("x.waystation"), mesaArrive: F => F.f("x.mesa"), saltpanArrive: F => F.f("x.saltpan") });
 
   // ---------- chests ----------
   const chest = (id, flag, text, gold, items) => { S.chest[id] = async F => { if (F.f(flag)) return false; F.set(flag); F.sfx("door"); if (gold) F.gold(gold); (items || []).forEach(([k, n]) => F.give(k, n)); await UI.say([["narr", text]]); }; };
-  chest("ridgeChest1", "c.ridge1", "A traveller's cache wedged under a rock and wrapped in oilcloth. Two flasks and a few kakal, still dry.", 30, [["sunwater", 2]]);
-  chest("ridgeChest2", "c.ridge2", "A bundle in a hollow of the south-west rocks: three flasks and two vials of humming sand, stoppered with wax.", 0, [["sunwater", 3], ["sandGlass", 2]]);
-  chest("hollowGlassChest", "c.hollowglass", "A chest set into the glass floor, the lid fused shut and cracked open by the heat of your hands. Kakal, flasks, and sand that still hums.", 35, [["sunwater", 2], ["sandGlass", 3]]);
-  chest("graveChest1", "c.grave1", "A driver's chest under a dead axle. Inside, wrapped in a shirt: kakal, and two small odd things he must have thought were lucky.", 45, [["curio", 2]]);
-  chest("graveChest2", "c.grave2", "A medicine box on a dead cart. Two flasks, and a pair of adder fangs the carter kept as a charm.", 20, [["sunwater", 2], ["adderFang", 2]]);
-  chest("waystationChest1", "c.way1", "The keeper's strongbox in the north cell. Three flasks and a purse that was never sent anywhere.", 60, [["sunwater", 3]]);
-  chest("waystationChest2", "c.way2", "A store-chest in the south cell. Damp moss from the dry well, two flasks, and a few coins at the bottom.", 25, [["sunwater", 2], ["mossClump", 2]]);
-  chest("oasisChest", "c.oasis", "A reed basket under the rocks by the pond. Someone saved kakal in it and flasks, and never came back for them.", 35, [["sunwater", 2]]);
-  chest("mesaChest1", "c.mesa1", "A chest on the east terrace, red with dust. Kakal and two flasks.", 55, [["sunwater", 2]]);
-  chest("mesaChest2", "c.mesa2", "A surveyor's chest on the west terrace: kakal and two big scorpion plates, the kind a mason pays well for.", 40, [["scorpPlate", 2]]);
-  chest("saltChest1", "c.salt1", "A pan-keeper's chest in the far pans, crusted white. Kakal, and two lumps of salt crust.", 60, [["saltCrust", 2]]);
-  chest("saltChest2", "c.salt2", "A chest by the huts. Three flasks and a little kakal, all stiff with salt.", 30, [["sunwater", 3]]);
+  chest("ridgeChest1", "c.ridge1", "You find a traveller's cache wedged under a rock and wrapped in oilcloth: two flasks and a few kakal, still dry.", 30, [["sunwater", 2]]);
+  chest("ridgeChest2", "c.ridge2", "In a hollow among the south-west rocks you find a bundle: three flasks and two vials of humming sand, sealed with wax.", 0, [["sunwater", 3], ["sandGlass", 2]]);
+  chest("hollowGlassChest", "c.hollowglass", "The chest is set into the glass floor with its lid fused shut, but the heat of your hands cracks it open. Inside are kakal, flasks, and sand that still hums.", 35, [["sunwater", 2], ["sandGlass", 3]]);
+  chest("graveChest1", "c.grave1", "A driver's chest under an old axle. Inside, wrapped in a shirt, are some kakal and two small odd things he must have thought were lucky.", 45, [["curio", 2]]);
+  chest("graveChest2", "c.grave2", "You find a medicine box on an abandoned cart: two flasks and a pair of adder fangs the carter kept as a charm.", 20, [["sunwater", 2], ["adderFang", 2]]);
+  chest("waystationChest1", "c.way1", "The keeper's strongbox in the north cell holds three flasks and a purse that was never sent anywhere.", 60, [["sunwater", 3]]);
+  chest("waystationChest2", "c.way2", "The store-chest in the south cell holds damp moss from the dry well, two flasks, and a few coins at the bottom.", 25, [["sunwater", 2], ["mossClump", 2]]);
+  chest("oasisChest", "c.oasis", "Under the rocks by the pond you find a reed basket. Someone stored kakal and flasks in it and never came back for them.", 35, [["sunwater", 2]]);
+  chest("mesaChest1", "c.mesa1", "The chest on the east terrace is red with dust. Inside are some kakal and two flasks.", 55, [["sunwater", 2]]);
+  chest("mesaChest2", "c.mesa2", "A surveyor's chest on the west terrace: kakal and two big scorpion plates, the kind a mason would pay well for.", 40, [["scorpPlate", 2]]);
+  chest("saltChest1", "c.salt1", "The pan-keeper's chest in the far pans is crusted white. Inside are some kakal and two lumps of salt crust.", 60, [["saltCrust", 2]]);
+  chest("saltChest2", "c.salt2", "The chest by the huts holds three flasks and a little kakal, all stiff with salt.", 30, [["sunwater", 3]]);
 
   // ---------- gathering (skill-book materials first: Ram Strike, Kindle and Soak each get a head start here; the full ten still come from the quarry, the flats and the Silt River) ----------
   const gather = (id, flag, sfx, mat, n, text, toast) => { S.gather[id] = async F => { F.set(flag); F.give(mat, n); F.sfx(sfx); await UI.say([["narr", text]]); if (toast && F.matCount(mat) >= toast[0]) UI.toast(toast[1]); }; };
   gather("emberVein", "g.emberVein", "fire", "cinderglassEmber", 3, "A seam of glass with a coal sealed inside it, still orange after who knows how many years. You chip out three embers and they sit warm in your palm.", [5, "New in the Skill Book: Kindle."]);
-  gather("shardHeap", "g.shardHeap", "coin", "duneclawShard", 4, "Under a wagon bed lies the shell of a scorpion the size of a door, picked clean. Its plates break off in clean, hard shards. You take four.", [5, "New in the Skill Book: Ram Strike."]);
+  gather("shardHeap", "g.shardHeap", "coin", "duneclawShard", 4, "Under a wagon bed lies the shell of a scorpion the size of a door, picked clean. Its plates break off in hard, sharp shards. You take four.", [5, "New in the Skill Book: Ram Strike."]);
   gather("ridgeVials", "g.vials", "coin", "sandGlass", 4, "You kneel on the ridge and fill four little vials from the humming sand. Held to the ear, each one keeps a note.");
-  gather("scorpShed", "g.scorpShed", "coin", "scorpPlate", 2, "A scorpion's shed shell, whole, on a warm ledge: two plates as long as your forearm.");
-  gather("saltRake", "g.saltRake", "coin", "saltCrust", 4, "You rake a fresh grey crust off the pan with the flat of a spade. Four good lumps.");
+  gather("scorpShed", "g.scorpShed", "coin", "scorpPlate", 2, "You find a scorpion's shed shell, whole, on a warm ledge. You take two plates as long as your forearm.");
+  gather("saltRake", "g.saltRake", "coin", "saltCrust", 4, "You rake a fresh grey crust off the pan with the flat of a spade and end up with four good lumps.");
   S.gather.pearlMussels = async F => {
     F.set("g.mussels"); F.give("riverPearl", 3); F.sfx("coin");
     await UI.say([["narr", "The mussels in the shallows are shut tight and heavy. Three of them hold a pearl, small and a little warm."]]);
@@ -93,15 +93,15 @@
 
   // ---------- lore spots ----------
   const lore = (lines) => async F => { await UI.say(lines.map(l => (Array.isArray(l) ? l : ["narr", l]))); };
-  T("glassRidges", { singingStone: lore(["A standing stone, warm in the sun, humming under your palm. Words are cut into it, worn almost smooth:", "\"We set the stones to sing so that no one would walk the glass in silence. The wind sings. The stone remembers.\"", hero("It is the same note as the sand. Only slower.")]) });
-  T("hummingHollow", { humTablet: lore(["A tablet in the north chamber, the letters filled with pale glass:", "\"Here the fire went into the sand and the sand kept it. Take what the glass has kept. Leave the rest warm.\""]) });
-  T("caravanGraveyard", { tallyBoard: lore(["A plank nailed to a dead wagon, covered in tally marks: forty-one strokes in five-bar bundles. Under the last bundle someone scratched with a knife:", "\"WAITED FOR THE WELL TO FILL. IT DID NOT.\"", hero("Forty-one wagons. East, the old road goes on. Toward what?")]) });
+  T("glassRidges", { singingStone: lore(["A standing stone, warm in the sun, hums under your palm. Words are cut into it, worn almost smooth:", "\"We set these stones to sing so that no one would have to walk the glass in silence. The wind makes the song, and the stone remembers it.\"", hero("It's the same note as the sand, only slower.")]) });
+  T("hummingHollow", { humTablet: lore(["A tablet in the north chamber, the letters filled with pale glass:", "\"Here the fire went into the sand and the sand kept it. Take what the glass has kept, and leave the rest as warm as you found it.\""]) });
+  T("caravanGraveyard", { tallyBoard: lore(["A plank nailed to a dead wagon, covered in tally marks: forty-one strokes in five-bar bundles. Under the last bundle someone scratched with a knife:", "\"WAITED FOR THE WELL TO FILL. IT DID NOT.\"", hero("Forty-one wagons. The old road goes on to the east. Where does it lead?")]) });
   T("dryWaystation", {
     waystationTablet: lore(["A tablet by the hall door, the old builders' hand:", "\"We built this house for those who walk. Drink, rest, and leave the well as full as you found it.\""]),
-    waystationLedger: lore(["A keeper's desk, the ledger still open. The last page, in a tired hand:", "\"Day 31. The well is dry. Eleven wagons in the yard, forty-one mouths. I opened the pipe to the Burnt Gate cistern by hand, as the tablet says. Nothing came. Someone has closed it from the other end.\"", "\"Day 32. Something has moved into the dry well. It took Hadi's camel by the leg and pulled it down into the sand. We keep three fires round the well now. It does not come up while they burn.\"", "\"Day 33. They have stopped asking. The jackals have not.\"", hero("Closed from the other end. Not a storm. Not luck.")]),
+    waystationLedger: lore(["A keeper's desk, the ledger still open. The last page, in a tired hand:", "\"Day 31. The well is dry. There are eleven wagons in the yard and forty-one mouths to feed. I opened the pipe to the Burnt Gate cistern by hand, as the tablet says, but no water came. Someone has closed it from the other end.\"", "\"Day 32. Something has moved into the dry well. It took Hadi's camel by the leg and pulled it down into the sand. We keep three fires burning round the well now. It doesn't come up while they burn.\"", "\"Day 33. The others have stopped asking what to do. The jackals have not stopped circling.\"", hero("Closed from the other end. That was no storm and no bad luck.")]),
   });
-  T("redMesaSteps", { surveyStone: lore(["A flat stone set into the ledge, cut with a ring of marks and a line of tiny wells:", "\"From this step we measured the basin: eight wells, one sky. The wells belong to whoever keeps them clean.\""]) });
-  T("saltpanWorks", { panLedger: lore(["A pan-keeper's desk under a rotted awning, the books weighted with salt. The last entries are in a clerk's neat hand, not the keeper's:", "\"Pan 4: yield nil. Pan 5: yield nil. Works closed by order of the Collection Office. Workers reassigned.\"", hero("Reassigned to where? The page does not say.")]) });
+  T("redMesaSteps", { surveyStone: lore(["A flat stone set into the ledge, cut with a ring of marks and a line of tiny wells:", "\"From this step we measured the basin: eight wells under one sky. The wells belong to whoever keeps them clean.\""]) });
+  T("saltpanWorks", { panLedger: lore(["A pan-keeper's desk under a rotted awning, the books weighted with salt. The last entries are in a clerk's neat hand, not the keeper's:", "\"Pan 4: yield nil. Pan 5: yield nil. Works closed by order of the Collection Office. Workers reassigned.\"", hero("Reassigned to where? The page doesn't say.")]) });
 
   // ---------- side quests ----------
   // The Tuning Bell: Hassa (Sandpiper Rest) -> the bell lies in the glass of the Humming Ridges
@@ -110,12 +110,12 @@
       const st = F.qstep("bell");
       if (st === "done") { G.flags.hassaTurn = ((G.flags.hassaTurn || 0) + 1) % 2; await S.rumourIdx(F, "sandpiper", G.flags.hassaTurn ? 3 : 5, "hassa"); return; }
       if (st === undefined) {
-        await UI.say([["hassa", "Forgive me. You walk like someone who has gone a long way and means to go further. Do you pass the north ridges?"], ["hero", "Maybe. Why?"],
-          ["hassa", "My Dumar walked the lead camel. He tuned a bell to the ridge hum, so the whole string kept step, forty beasts in one stride. The storm took him, and the bell with him."], ["hassa", "The ridges can keep him. I would like the bell. A drover swore he heard it ring once, west of the ring of singing stones, out by the lone cairn."], ["hero", "I'll look."]]);
+        await UI.say([["hassa", "Forgive me. You look like someone who has come a long way and means to go further. Will you be passing the north ridges?"], ["hero", "Maybe. Why?"],
+          ["hassa", "My Dumar used to walk the lead camel. He tuned a bell to the ridge hum, so the whole string kept step, forty beasts in one stride. The storm took him, and the bell with him."], ["hassa", "The ridges can keep him, but I'd like the bell back. A drover swore he once heard it ring, west of the ring of singing stones, out by the lone cairn."], ["hero", "I'll look."]]);
         F.set("bell.started"); F.quest("bell", 0); return;
       }
       if (!F.f("bell.got")) { await UI.say([["hassa", "Glass hides things. Go to the ring of singing stones and walk west to the lone cairn. Listen for the note."]]); return; }
-      await UI.say([["hero", "(The bell rings once in the satchel, all by itself.)"], ["hassa", "...That is his note. Hm."], ["hassa", "Take this. He would say it is too much. He said that about everything I ever gave anyone."]]);
+      await UI.say([["hero", "(The bell rings once in the satchel, all by itself.)"], ["hassa", "...That's his note. Hm."], ["hassa", "Take this. He'd say it's too much. He said that about everything I ever gave anyone."]]);
       F.gold(60); F.give("sunwater", 2); F.questDone("bell");
     },
     // The Dead Man's Tally: Ossan wants his partner's strongbox from the Caravan Graveyard (jackals guard it)
@@ -123,13 +123,13 @@
       const st = F.qstep("tally");
       if (st === "done") { await S.rumourIdx(F, "sandpiper", 4, "ossan"); return; }
       if (st === undefined) {
-        await UI.say([["ossan", "Sit down, you make my back hurt standing like that. Ossan. I ran salt north with a man named Brem for thirty years."], ["ossan", "Three years gone he took the last wagon out through the white bed, south-west of here. They say the waystation well went dry and nobody walked out."],
-          ["ossan", "His strongbox has the tally. Every wagon, every debt, mine and his. I cannot walk that far, and the jackals keep the place."], ["hero", "What do I get?"], ["ossan", "The truth about thirty years of salt prices. And some kakal. I am not sentimental."],
-          ["ossan", "His wagon had a red cover with a sun on it. He painted that sun on everything he owned, even me once, when I fell asleep. And he hid things under things."]]);
+        await UI.say([["ossan", "Sit down, you're making my back hurt just standing there. I'm Ossan. I ran salt north with a man named Brem for thirty years."], ["ossan", "Three years ago he took the last wagon out through the white bed, south-west of here. They say the waystation well went dry and nobody walked out."],
+          ["ossan", "His strongbox holds the tally: every wagon, every debt, mine and his. I can't walk that far, and the jackals have taken over the place."], ["hero", "What do I get?"], ["ossan", "The truth about thirty years of salt prices, and some kakal. I'm not sentimental."],
+          ["ossan", "His wagon had a red cover with a sun on it. He painted that sun on everything he owned, even me once, when I fell asleep. And he always hid things under other things."]]);
         F.set("tally.started"); F.quest("tally", 0); return;
       }
-      if (!F.f("tally.got")) { await UI.say([["ossan", "The red cover with the sun. The sand eats the rest, but that red stays. Under it, he would have said. Brem put everything under something."]]); return; }
-      await UI.say([["ossan", "Huh. The box. ...He lied about the price of salt, you know. For thirty years, by exactly one kakal a sack. The old thief."], ["ossan", "Here. Spend it on something that is not a flask. ...Spend it on a flask, then."]]);
+      if (!F.f("tally.got")) { await UI.say([["ossan", "Look for the red cover with the sun. The sand eats the rest, but that red stays. Look underneath it. Brem put everything under something."]]); return; }
+      await UI.say([["ossan", "Huh. The box. ...He lied about the price of salt, you know. For thirty years, by exactly one kakal a sack. The old thief."], ["ossan", "Here. Spend it on something that isn't a flask. ...Spend it on a flask, then."]]);
       F.gold(80); F.give("sunwater", 2); F.questDone("tally");
     },
   });
@@ -143,7 +143,7 @@
       if (!F.f("x.wellSeen")) {
         F.set("x.wellSeen");
         await c.pan(WELL.x, WELL.y - 20, 700);
-        await c.say([["narr", "Three fire rings round the well, cold, the wood only half burnt. Bones in the sand between them, picked white."]]);
+        await c.say([["narr", "There are three cold fire rings round the well, the wood only half burnt, and bones in the sand between them, picked white."]]);
       }
       c.sfx("rumble"); c.shake(2, 700); c.fx("dust", WELL.x, WELL.y - 6, { n: 18, scale: 1.4, color: 0xd8c0a0 });
       await c.say([["narr", "The sand at the lip of the well starts to slide inward with a long, dry hiss, like water running out of a basin."]]);
@@ -151,7 +151,7 @@
       c.sfx("roarInsect"); c.shake(5, 600); c.fx("dust", WELL.x, WELL.y - 10, { n: 30, scale: 2, color: 0xd8c0a0 });
       await c.anim("we", "fadeIn", { ms: 500 }); c.emote("hero", "!");
       await c.anim("we", "lunge", { dx: -16 });
-      await c.say([["narr", "Two mandibles as long as spears come up out of the well, then a flat head crusted with glass. A small bronze bell hangs from one jaw on a scrap of caravan rope."], hero("Forty-one mouths. Something here ate well.")]);
+      await c.say([["narr", "Two mandibles as long as spears come up out of the well, then a flat head crusted with glass. A small bronze bell hangs from one jaw on a scrap of caravan rope."], hero("Forty-one people stuck here, and something ate well.")]);
       c.remove("we"); c.follow();
     });
     await Cinema.boss({ id: "wellEater", name: "The Well-Eater", title: "Queen of the Dry Well", bg: "ruins", music: "boss" });
@@ -168,8 +168,8 @@
       await c.say([["narr", "It drags itself down into the well, and the sand closes over it and stops moving."]]);
       c.fx("glow", WELL.x, WELL.y - 4, { color: 0xffd36a, ms: 2000 }); c.fx("sparkle", WELL.x, WELL.y - 10, { r: 26, ms: 1800 });
       F.sfx("coin"); F.gold(150); F.give("sunwater", 3); F.give("curio", 2);
-      await c.say([["narr", "Where the head went down, the sand has given up what it kept: purses, a driver's knife, three flasks still sealed. 150 kakal, three Sunwater Flasks and two odd lucky things."],
-        hero("Eleven wagons. The keeper wrote it all down, and nobody came to read it.")]);
+      await c.say([["narr", "Where its head went down, the sand has given up what it kept: purses, a driver's knife and three sealed flasks. You collect 150 kakal, three Sunwater Flasks and two odd lucky things."],
+        hero("Eleven wagons. The keeper wrote it all down, and nobody ever came to read it.")]);
       c.follow();
     });
   };
@@ -178,7 +178,7 @@
   S.gather.tallyBox = async F => {
     await S.stage(async c => {
       const h = c.hero;
-      await c.say([["narr", "Under the wagon bed, a strongbox wedged in the sand. Something growls in the shade. Then something else."]]);
+      await c.say([["narr", "A strongbox is wedged in the sand under the wagon bed. Something growls in the shade, and then something else growls back."]]);
       c.sfx("growl");
       c.actor("j1", { art: "sandstitchJackal", x: h.x + 44, y: h.y - 22, alpha: 0 }); c.actor("j2", { art: "sandstitchJackal", x: h.x + 76, y: h.y + 4, alpha: 0, flip: true });
       await Promise.all([c.anim("j1", "fadeIn", { ms: 200 }), c.anim("j2", "fadeIn", { ms: 350 })]);
@@ -189,17 +189,17 @@
     const res = await F.fight([F.mkEnemy("sandstitchJackal", 4, " A"), F.mkEnemy("sandstitchJackal", 4, " B")], { intro: "Jackals have made a den under the wagon!" });
     if (res !== "win") return false;
     F.set("tally.got"); F.quest("tally", 1); F.sfx("door");
-    await UI.say([["narr", "The strongbox is lighter than it looks. Inside: a tally book tied in string, and one very old kakal coin, bent double."]]);
+    await UI.say([["narr", "The strongbox is lighter than it looks. Inside are a tally book tied with string and one very old kakal coin, bent double."]]);
   };
   S.gather.lostBell = async F => {
     F.set("bell.got"); F.quest("bell", 1); F.sfx("coin");
     await S.stage(async c => {
       const h = c.hero;
       c.sfx("chime"); c.fx("glow", h.x, h.y - 30, { color: 0x9fe8ff, n: 3 });
-      await c.say([["narr", "Under a skin of glass, a small brass bell gone green. When you lift it, the whole ridge answers on one thin note."]]);
+      await c.say([["narr", "A small brass bell, gone green, lies under a skin of glass. When you lift it, the whole ridge answers with one thin note."]]);
       c.sfx("bell"); c.shake(1.5, 900); c.fx("sparkle", h.x, h.y - 20, { r: 130, ms: 2200, color: 0xbfffee }); c.tint("#bfffee", 0.12, 400);
       await c.wait(1300);
-      await c.say([["hero", "(He tuned it to this. Of course he did.)"]]);
+      await c.say([["hero", "(He tuned it to the ridge. Of course he did.)"]]);
     });
   };
   // Adders in the Reeds: the reed keeper of the oasis opens the pearl shallows
@@ -208,13 +208,13 @@
       const st = F.qstep("adders");
       if (st === "done") { await UI.say([["reedkeeper", "The shallows are quiet. The goats are fat. Go on, you know the way."]]); return; }
       if (st === undefined) {
-        await UI.say([["reedkeeper", "Quiet. Walk softly, they sleep in the reeds. Glass Adders, three of them this month, and my goats will not go to the water."], ["reedkeeper", "Kill three and the shallows are yours. There are mussels in there that are not only mussels, if you take my meaning."],
+        await UI.say([["reedkeeper", "Shh. Walk softly, they sleep in the reeds. There are Glass Adders in there, three of them this month, and my goats won't go near the water."], ["reedkeeper", "Kill three and the shallows are yours. Some of the mussels in there aren't just mussels, if you take my meaning."],
           ["hero", "Pearls."], ["reedkeeper", "I said nothing about pearls."]]);
         F.set("adders.started"); F.quest("adders", 0); G.flags.addersBase = G.kills.glassAdder || 0; return;
       }
       const n = (G.kills.glassAdder || 0) - (G.flags.addersBase || 0);
-      if (n < 3) { await UI.say([["reedkeeper", `${Math.max(0, n)} of 3. Look low, where the reeds are thickest. They do not hiss; that is the trouble.`]]); return; }
-      await UI.say([["reedkeeper", "Three. Good. ...The goats are not clapping, but they would."]]);
+      if (n < 3) { await UI.say([["reedkeeper", `${Math.max(0, n)} of 3. Look low, where the reeds are thickest. They don't hiss, and that's the trouble.`]]); return; }
+      await UI.say([["reedkeeper", "Three. Good. ...The goats aren't clapping, but they would if they could."]]);
       F.gold(45); F.give("sunwater", 1); F.questDone("adders");
     },
   });

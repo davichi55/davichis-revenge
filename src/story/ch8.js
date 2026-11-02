@@ -35,9 +35,9 @@
     weir: { n: "Red Salt Weir stalls", who: "merchant", stock: IMP, disc: disc(IMP, 1.2), buys: 0.8 },
     tuk: { n: "Tuk Orchard press-shop", who: "merchant", stock: IMP, disc: disc(IMP, 1.2), buys: 0.8 },
   });
-  M3.rumours("paleGate", ["Supply carts run the Royal Road every third day with an escort of six. The sixth is always asleep.", "A pyramid that loses its altar stops harvesting for a season. The cultists at Sunmaw have heard the rumour and do not like it.",
-    "Someone has been singing in the Black Mirror since the night of the palace. The guards say it is a prisoner. The prisoners say it is not."], [M3.clue(13, 0)]);
-  M3.rumours("redSaltWeir", ["The Root Gnawer chews through the deep roots. Wherever it passes, the ground shakes. It hides inside the roots, and fire is the only thing it fears.", "The Ninth Legion was lost in the salt marsh. A flag still walks there.",
+  M3.rumours("paleGate", ["Supply carts run the Royal Road every third day with an escort of six. The sixth is always asleep.", "A pyramid that loses its altar stops harvesting for a season. The cultists at Sunmaw have heard the rumour and don't like it.",
+    "Someone has been singing in the Black Mirror since the night of the palace. The guards say it's a prisoner. The prisoners say it isn't."], [M3.clue(13, 0)]);
+  M3.rumours("redSaltWeir", ["The Root Gnawer chews through the deep roots. Wherever it passes, the ground shakes. It hides inside the roots, and fire is the only thing it fears.", "The Ninth Legion was lost in the salt marsh. A banner still walks around there on its own.",
     "Ember slag from the desert burns the roots. Take some with you."]);
   M3.rumours("tukOrchard", ["The governor keeps a regalia he never wears.", "The pyramid at Sunmaw has a back door the cultists use.", "The collar on the general there is cracked."], [M3.clue(14, 0), M3.clue(15, 0)]);
   M3.onRumour["tukOrchard:1"] = async F => { F.set("tuk.rumour2"); };
@@ -45,16 +45,16 @@
 
   // ---------- bestiary, drops, breaks ----------
   Q(D.BEST, {
-    legionCenturion: "A crested officer. He orders one turn at a time: shields up, or charge. Take him down early and the line goes slack.",
-    supplyConvoyGuard: "Loaded with crates and slow because of it. Fire gets into the cargo. What falls off the wagon is worth taking.",
-    sunmawCultist: "A priest with an obsidian knife. His cuts bleed, and he feeds on the fallen. Cold slows the knife-hand.",
-    saltGargoyle: "A salt-crusted stone gargoyle on wings that do not fly. Blows slide off. Water eats the crust.",
+    legionCenturion: "A crested officer. Each turn he orders either shields up or a charge. Take him down early and the line goes slack.",
+    supplyConvoyGuard: "A guard loaded down with crates, which slows him. Fire gets into the cargo, and whatever falls off the wagon is worth taking.",
+    sunmawCultist: "A priest with an obsidian knife. His cuts make you bleed, and he feeds on the fallen. Cold slows his knife hand.",
+    saltGargoyle: "A salt-crusted stone gargoyle with wings that don't fly. Blows slide off it. Water eats away the crust.",
     orchardSatyr: "A cacao-stained satyr with pipes. The tune sends one of you to sleep. Fire frightens it.",
-    overseersHound: "A lean hound on a chain that ended somewhere. Fast, and it drags the weakest down. Cold slows it.",
-    gazeStatue: "A person turned to stone mid-step, who wakes when you stand in front of it. It slams. Impact breaks it.",
-    mirrorShade: "A reflection that has stopped following. It throws your last move back at you. Light hurts it; nothing else does much.",
+    overseersHound: "A lean hound with a broken chain trailing behind it. Fast, and it drags the weakest down. Cold slows it.",
+    gazeStatue: "A person turned to stone mid-step, who wakes when you stand in front of it. It slams into you. Impact breaks it.",
+    mirrorShade: "A reflection that has stopped copying you. It throws your last move back at you. Light hurts it; nothing else does much.",
     glassSerpent: "A serpent of green glass, thin as a ribbon in the shaft of light. Impact shatters it.",
-    veiledCisternGuardian: "A veil hangs in the cistern's middle. Behind it, a head turns. Two reactions in a row make the glass shiver.",
+    veiledCisternGuardian: "A veil hangs in the middle of the cistern, and behind it a head turns. Two reactions in a row make the glass shiver.",
     ghostOfTheNinthLegion: "A legion of mist with no faces, under a banner nobody carries. Light does what steel cannot.",
     spearTwinA: "One of the Spear Twins. When Ahiq lunges, so does Bahiq. Heavy blows in a row break the pair.", spearTwinB: "One of the Spear Twins. When Bahiq lunges, so does Ahiq. Heavy blows in a row break the pair.",
   });
@@ -63,8 +63,8 @@
     overseersHound: [["houndChain", 0.45]], gazeStatue: [["statueEye", 0.4]], mirrorShade: [["mirrorSliver", 0.45]], glassSerpent: [["glassShard", 0.45]], saltHarpy: [["harpyBrine", 0.4], ["saltCrust", 0.4]],
   });
   Q(D.BREAKS, {
-    veiledCisternGuardian: "Two different elements on it in a row. The glass shivers when the lights argue.", ghostOfTheNinthLegion: "Two strong light moves in a row. A dead legion cannot hold its line in the sun.",
-    spearTwinA: "Two heavy impact blows in a row break the pair.", spearTwinB: "Two heavy impact blows in a row break the pair.", vaulthorn: "Two heavy impact blows in a row. The silver plate is only as strong as the bull under it.",
+    veiledCisternGuardian: "Hit it with two different elements in a row. The glass shivers when the lights clash.", ghostOfTheNinthLegion: "Use two strong Light moves in a row. A dead legion can't hold its line in the sun.",
+    spearTwinA: "Two heavy impact blows in a row break the pair.", spearTwinB: "Two heavy impact blows in a row break the pair.", vaulthorn: "Land two heavy impact blows in a row. The silver plate is only as strong as the bull under it.",
   });
   Q(D.LEGENDS.L6, { level: 46 });
 
@@ -149,18 +149,18 @@
     await stage(async c => {
       c.tint("#30203a", 0.18, 300);
       M3.actors(c, [["im", "npcImela", 140, -6, { name: "Imela" }], ["f1", "npcResistFighter", 40, -70, {}], ["f2", "npcResistFighter", 250, -60, { flip: true }]]);
-      await c.say([["narr", "Pale Gate at dusk: limewashed walls the colour of bone, a lantern over the gate, young fighters on the wall with their feet dangling. Tents inside. A war table under an awning, and a woman in a plain dark shawl standing at it with a cup of tea, as if she had always stood there."]]);
+      await c.say([["narr", "Pale Gate at dusk: limewashed walls the colour of bone, a lantern over the gate, young fighters on the wall with their feet dangling. Inside there are tents, and a war table under an awning, with a woman in a plain dark shawl standing at it holding a cup of tea, as if she had always stood there."]]);
       await c.walk("im", c.hero.x + 60, c.hero.y - 4, 600);
-      await c.say([["imela", "You hit three kinds of thing. Supply roads, because armies eat. Altars, because the Throne spends its strength on collars. And the places the governors keep their ledgers, because the Throne does not like to be read."],
-        ["hero", "You know the empire."], ["imela", "I know its kitchens. They are the same thing."]]);
+      await c.say([["imela", "You hit three kinds of target. Supply roads, because armies eat. Altars, because the Throne spends its strength on collars. And the places where the governors keep their ledgers, because the Throne doesn't like to be read."],
+        ["hero", "You know the empire."], ["imela", "I know its kitchens. That's the same thing."]]);
       c.remove("im"); c.remove("f1"); c.remove("f2"); c.tint("#30203a", 0, 400); c.follow();
     }, { music: "rebelCamp" });
     F.questDone("m_pale"); F.quest("m_ops", 0);
   };
   S.done.paleArrive = F => F.f("ch8.arrived");
-  S.trigger.paleRoadShut = async F => { await UI.say([["hero", "(The cliff road runs off north into the dark. The sentries on the wall are watching it, and so I find I am too.)"]]); };
+  S.trigger.paleRoadShut = async F => { await UI.say([["hero", "(The cliff road runs off north into the dark. The sentries on the wall are watching it, and I find I'm watching it too.)"]]); };
   S.trigger.paleDockShut = async F => { await UI.say([["hero", "(The small dock is chained and the lamp over it is dark. Nobody here is sailing tonight.)"]]); };
-  S.trigger.seaPaleGateShut = async F => { await UI.say([["hero", "(White limewashed walls on the cliff and not one light on them. I know nobody up there who would ask me ashore.)"]]); };
+  S.trigger.seaPaleGateShut = async F => { await UI.say([["hero", "(There are white limewashed walls on the cliff and not one light on them. I don't know anyone up there who would invite me ashore.)"]]); };
 
   S.trigger.emberwickJoins = async F => {
     if (!F.f("ch8.arrived") || F.f("ch8.guest")) return;
@@ -170,12 +170,12 @@
       await c.say([["narr", "Four figures come up the cliff road at lantern-time: a girl with a red scarf, a huge young man eating an apple, a thin one with a little book, and, a step behind them, a lion cub with a mane of candle-flame."]]);
       c.walk("ke", h.x + 70, h.y, 1300); c.walk("dor", h.x + 120, h.y - 30, 1400); c.walk("may", h.x + 100, h.y + 40, 1400); await c.walk("em", h.x + 40, h.y + 22, 1300);
       await c.say([["kessa", "Don't. I know what I look like."], ["hero", "(Kessa Vorn. Last I saw her she was reading a list with her own village on it.)"],
-        ["kessa", "Saffa sent me. I am a scout. This one is a loan."], ["emberwick", "Warm. I am warm. That is my whole trick."], ["kessa", "It is a good trick. You have a hole in your team. It will do."]]);
+        ["kessa", "Saffa sent me. I'm a scout. This one is on loan."], ["emberwick", "Warm. I'm warm. That's my whole trick."], ["kessa", "It's a good trick. You've got a hole in your team. It'll do."]]);
       c.emote("ke", "anger"); await c.wait(300);
-      await c.say([["hero", "Kessa-"], ["kessa", "Not now. Say it when it is over and I will pretend I did not hear."], ["dorrin", "Boss says I am not allowed to give you the apple. So, no. Also, hello."],
-        ["mayle", "I counted nine sentries on the cliff road. One of them is a goat. It is on page forty."]]);
+      await c.say([["hero", "Kessa-"], ["kessa", "Not now. Say it when this is over, and I'll pretend I didn't hear."], ["dorrin", "The boss says I'm not allowed to give you the apple. So, no. Also, hello."],
+        ["mayle", "I counted nine sentries on the cliff road. One of them is a goat. It's on page forty."]]);
       c.remove("ke"); c.remove("dor"); c.remove("may");
-      await c.say([["emberwick", "I will try not to be in the way. I will try to be in the middle. Is the middle good?"]]);
+      await c.say([["emberwick", "I'll try not to be in the way. I'll try to be in the middle. Is the middle good?"]]);
       c.remove("em"); c.tint("#2a1c2c", 0, 400); c.follow();
     }, { music: "rebelCamp" });
     Systems.guestJoin("emberwick", { level: F.avgLevel(), name: "Emberwick" }); F.set("ch8.guest");
@@ -186,16 +186,16 @@
 
   // ---------- the return scenes after each operation, Imela's night talk, the end of the chapter ----------
   const marks = {
-    salt: ["rm.salt", "Imela pins a red thread across the coast road on the map and pulls it tight.", "They will move the guard to the coast. Good. A guard on the coast is a guard not at an altar.", "The clerk in Tzavan says the granaries are an audit."],
-    sun: ["rm.sun", "Imela moves a black pin from the Sunmaw ridge to the edge of the map.", "A pyramid that loses its altar stops harvesting for a season. They will say it was the weather. They always say it was the weather.", null],
-    villa: ["rm.villa", "Imela turns the Governor's ledgers over one page at a time, with one finger.", "Thirty years of lots in a clerk's neat hand. They always write it down. It is the one thing about them I have never understood, and the one I rely on.", null],
+    salt: ["rm.salt", "Imela pins a red thread across the coast road on the map and pulls it tight.", "They'll move their guard to the coast. Good. A guard on the coast isn't at an altar.", "The clerk in Tzavan says the granaries are an audit."],
+    sun: ["rm.sun", "Imela moves a black pin from the Sunmaw ridge to the edge of the map.", "A pyramid that loses its altar stops harvesting for a season. They'll say it was the weather. They always do.", null],
+    villa: ["rm.villa", "Imela turns the Governor's ledgers over one page at a time, with one finger.", "Thirty years of lots in a clerk's neat hand. They always write it down. It's the one thing about them I've never understood, and the one thing I rely on.", null],
   };
   M.returnScene = async (F, k) => {
     const [flag, narr, line, extra] = marks[k]; F.set(flag);
     await stage(async c => {
       M3.actors(c, [["im", "npcImela", 60, -6, { name: "Imela" }]]);
       await c.say([["narr", narr], ["imela", line]]);
-      if (extra) await c.say([["scout", "Tzavan's granaries are emptying. The clerk calls it an audit."], ["imela", "It is not an audit."]]);
+      if (extra) await c.say([["scout", "Tzavan's granaries are emptying. The clerk calls it an audit."], ["imela", "It isn't an audit."]]);
       c.remove("im"); c.follow();
     }, { music: "rebelCamp" });
     if (k === "salt") F.questDone("salt");
@@ -205,10 +205,10 @@
     await M.nightfall(F);
     await stage(async c => {
       M3.actors(c, [["im", "npcImela", 60, 6, { name: "Imela" }]]); c.tint("#201028", 0.3, 400);
-      await c.say([["narr", "A fire on the sea wall. The tide coming in under it with a sound like someone folding sheets. Imela sits with her back against the stone and her shawl over her knees, and does not look up."],
-        ["imela", "Your father had a mark on his wrist, a feather inside a star."], ["hero", "I have seen it. On the strap. On a blanket."]]);
-      if (F.f("ch7.shrine")) await c.say([["hero", "And in the garden. Cut into a wall, with some words. Backwards."], ["imela", "...Backwards. Of course it was."], ["narr", "She is quiet a while. The fire shifts."]]);
-      await c.say([["imela", "He said his order kept the star-watch from a tower that fell a hundred years ago. He said the count was short. I thought it was a lover's talk."], ["hero", "Is he alive?"], ["imela", "I stopped counting at nine years. Then I started again."]]);
+      await c.say([["narr", "A fire burns on the sea wall, and the tide comes in under it with a sound like someone folding sheets. Imela sits with her back against the stone and her shawl over her knees, and does not look up."],
+        ["imela", "Your father had a mark on his wrist, a feather inside a star."], ["hero", "I've seen it. On my satchel strap, and on a blanket."]]);
+      if (F.f("ch7.shrine")) await c.say([["hero", "And in the garden, cut into a wall with some words. Written backwards."], ["imela", "...Backwards. Of course it was."], ["narr", "She is quiet a while. The fire shifts."]]);
+      await c.say([["imela", "He said his order had kept the star-watch from a tower that fell a hundred years ago, and that the count was short. I thought it was just lovers' talk."], ["hero", "Is he alive?"], ["imela", "I stopped counting after nine years. Then I started again."]]);
       c.remove("im"); c.tint("#201028", 0, 700); c.follow();
     }, { music: "hope" });
     if (!F.item("starwardenMark")) F.give("starwardenMark", 1, true); F.set("lore.starwarden");
@@ -220,10 +220,10 @@
       M3.actors(c, [["sc", "npcScout", 120, 0, { name: "Scout", flip: true }], ["im", "npcImela", -30, 6, { name: "Imela" }]]);
       c.tint("#241a30", 0.2, 300);
       await c.walk("sc", c.hero.x + 60, c.hero.y, 900); c.emote("sc", "!");
-      await c.say([["scout", "From Ranna, by three hands and a fishing boat. The emperor has not come back. He stands at the edge of Rootdeep every dawn. Nobody has seen him eat."],
-        ["imela", "Then the Gnawer has his whole attention. Good. Go and get her back."], ["hero", "Her?"], ["imela", "The one who stayed. I am not stupid, sparrow. I counted the gate."]]);
+      await c.say([["scout", "A message from Ranna, passed along by three people and a fishing boat. The emperor hasn't gone back to the palace. He stands at the edge of Rootdeep every dawn, and nobody has seen him eat."],
+        ["imela", "Then the Gnawer has his whole attention. Good. Go and get her back."], ["hero", "Her?"], ["imela", "The one who stayed. I'm not stupid, sparrow. I counted who came through the gate."]]);
       c.remove("sc"); c.emote("im", "..."); await c.wait(600);
-      await c.say([["imela", "I will not pretend I am comfortable with you walking into the Black Mirror. I will tell you I am proud, and you will not like it."], ["hero", "I don't."], ["imela", "Good. That is how I know it is true."]]);
+      await c.say([["imela", "I won't pretend I'm comfortable with you walking into the Black Mirror. I'll tell you I'm proud of you, and you won't like it."], ["hero", "I don't."], ["imela", "Good. That's how I know it's true."]]);
       c.remove("im"); c.tint("#241a30", 0, 400); c.follow();
     }, { music: "hope" });
     F.save(true);
@@ -231,7 +231,7 @@
   };
   M.sailOffer = async F => {
     const i = await F.ask("The harbour at Pale Gate is open. Sail north to the Rootdeep coast?", [{ label: "Sail" }, { label: "Not yet" }], { top: "40%" });
-    if (i !== 0) { await say("imela", "The wagon, the arena, the cistern. Everything that is still here will still be here. Eat first."); return; }
+    if (i !== 0) { await say("imela", "The wagon, the arena, the cistern: everything that's here now will still be here later. Eat first."); return; }
     await S.begin[9](F);
   };
   S.trigger.paleReturn = async F => {
@@ -247,30 +247,30 @@
 
   S.trigger.opsBoard = async F => {
     if (!F.f("ch8.arrived")) return;
-    if (F.f("ch8.done")) { await say("imela", cycle("ob8", ["The table is clean. Whenever you are ready."])); await M.sailOffer(F); return; }
+    if (F.f("ch8.done")) { await say("imela", cycle("ob8", ["The table is clear. Whenever you're ready."])); await M.sailOffer(F); return; }
     const o = M.ops(F), n = M.supply();
     await UI.say([["narr", "The war table: a map of the Royal Road drawn on four tablecloths, with pins, red thread, and a cup of tea set on the Tzavan coast to keep the corner down."],
       ["imela", `Roads: the tollbooth ${F.f("ch8.s13") ? "is broken" : "still stands"}, ${n} of 3 convoys cut, the mines ${F.f("ch8.mines") ? "are ours" : "are still theirs"}. The altar at Sunmaw ${F.f("ch8.s14") ? "is cold" : "is still warm"}. The Governor's ledgers ${F.f("ch8.s15") ? "are on this table" : "are still in his library"}.`],
-      ["imela", cycle("ob8.b", ["Do them in any order. The Throne reads in one.", "Hit the road first and they will thin their guard everywhere else. That is what an army does when it is hungry.", "Do not look at the map so long. It does not change when you do."])]]);
+      ["imela", cycle("ob8.b", ["Do them in whatever order you like. The Throne will hear about all of them at once anyway.", "Hit the road first and they'll thin their guard everywhere else. That's what an army does when it's hungry.", "Don't stare at the map for so long. It doesn't change when you do."])]]);
   };
 
   // ---------- Pale Gate: the town's talkers ----------
-  M3.talkTown("paleGate", { innLine: "The Gate Bunk. Wooden bunks, hot barley, and a sentry who will wake you before the bell.", inn: "paleGate", shopLine: "Whatever the road delivers. Today the road delivered wards. Do not ask where.", shop: "pale", who: ["fighter", "fighter", "fighter"],
-    small: [["Do not stand under the awning at noon. The old women of the quarter throw bones at it.", "I was a baker. Now I carry a spear on the wall. The spear is easier."], ["The Throne's soldiers sleep on the coast road with their boots on. I do not understand boots. Mine are in the tent."], ["Imela makes the tea. She does not drink it. She holds the cup.", "My brother is in Tzavan. He fights in the arena. He does not know I am here."]] });
+  M3.talkTown("paleGate", { innLine: "The Gate Bunk. Wooden bunks, hot barley, and a sentry who will wake you before the bell.", inn: "paleGate", shopLine: "Whatever the road delivers. Today the road delivered wards. Don't ask where.", shop: "pale", who: ["fighter", "fighter", "fighter"],
+    small: [["Don't stand under the awning at noon. The old women of the quarter throw bones at it.", "I was a baker. Now I carry a spear on the wall. The spear is easier."], ["The Throne's soldiers sleep on the coast road with their boots on. I'll never understand sleeping in boots. Mine are in the tent."], ["Imela makes the tea. She doesn't drink it. She just holds the cup.", "My brother is in Tzavan. He fights in the arena. He doesn't know I'm here."]] });
   T("paleGate").imela = async F => {
     const o = M.ops(F);
-    if (F.f("ch8.done")) { await say("imela", cycle("im8d", ["Go. I will be here when you come back. I have been here for nineteen years; I do not mind a few more days.", "Eat something first."])); await M.sailOffer(F); return; }
-    if (!F.f("ch8.guest")) { await say("imela", "You have a visitor coming up the road. I recognise the walk. She has her mother's chin and none of her patience."); return; }
-    await say("imela", cycle("im8", ["The road first, if you want to see the army change its shape.", "The ledgers are the sharpest knife and the slowest. The Governor has been writing for thirty years. He will not have stopped.", "Eat. You are not thin; you are bored. There is a difference.", "Sit with me a moment. I need to watch someone's hands doing nothing."]));
+    if (F.f("ch8.done")) { await say("imela", cycle("im8d", ["Go. I'll be here when you come back. I've been here for nineteen years, so I don't mind a few more days.", "Eat something first."])); await M.sailOffer(F); return; }
+    if (!F.f("ch8.guest")) { await say("imela", "You've got a visitor coming up the road. I recognise the walk. She has her mother's chin and none of her patience."); return; }
+    await say("imela", cycle("im8", ["Start with the road, if you want to see the army change its shape.", "The ledgers are the sharpest knife, but the slowest. The Governor has been writing for thirty years, and he won't have stopped.", "Eat. You're not thin, you're bored. There's a difference.", "Sit with me a moment. I need to watch someone's hands doing nothing."]));
     if (o.salt && o.sun && o.villa) return;
   };
   T("paleGate").kessa = async F => {
-    await say("kessa", cycle("ks8", ["Don't thank me. I will lose my place in the argument.", "It is a loan. A loan has a return date.", "Say the thing you want to say. No? Then do not look like that.", "Emberwick likes you. It is annoying."]));
+    await say("kessa", cycle("ks8", ["Don't thank me. I'll lose my place in the argument.", "It's a loan. A loan has a return date.", "Say the thing you want to say. No? Then don't look like that.", "Emberwick likes you. It's annoying."]));
   };
-  T("paleGate").dorrin = async F => { await say("dorrin", cycle("dr8", ["Boss says no apple. I say the apple is a metaphor. Boss says metaphors have seeds.", "I have eaten every kind of bread on this coast. The pale ones are the best. Do not tell the dark ones.", "Hello. Still hello."])); };
-  T("paleGate").mayle = async F => { await say("mayle", cycle("my8", ["Page forty-one. Nine hundred crates went north. Eight hundred and ninety arrived. Where do the ten go?", "I have drawn your route twice. The second time I added the goat.", "The tollbooth has a weak beam. Impact, and a second impact, and it comes down. I did not ask the beam."])); };
+  T("paleGate").dorrin = async F => { await say("dorrin", cycle("dr8", ["The boss says no apple. I said the apple is a metaphor. The boss said metaphors have seeds.", "I've eaten every kind of bread on this coast. The pale ones are the best. Don't tell the dark ones.", "Hello. Still hello."])); };
+  T("paleGate").mayle = async F => { await say("mayle", cycle("my8", ["It's on page forty-one: nine hundred crates went north and eight hundred and ninety arrived. Where do the other ten go?", "I've drawn your route twice. The second time I added the goat.", "The tollbooth has a weak beam. Hit it with Impact twice and it comes down. I didn't ask the beam."])); };
   T("paleGate").scout = async F => {
-    await say("scout", cycle("sc8", ["Ranna sends her regards and a message that says: eat. I think it is for your mother.", "The red cloth is down in Lowstep. Nobody has hung it since you left.", "Tzavan is loud this week. Somebody is winning in the arena. Somebody always is."]));
+    await say("scout", cycle("sc8", ["Ranna sends her regards, and a message that just says: eat. I think it's meant for your mother.", "The red cloth is down in Lowstep. Nobody has hung it since you left.", "Tzavan is loud this week. Somebody is winning in the arena. Somebody always is."]));
   };
 
   // ---------- the bounty board (shared with chapter 9) ----------
@@ -291,11 +291,11 @@
     if (i >= 0 && i < open.length) { const id = open[i]; await say(who, spec[id].give); spec[id].start && spec[id].start(F); F.quest(id, 0); }
   };
   const BQ = {
-    bounty4: { give: "Five Salt Gargoyle shards. The gargoyles on the flats shed them when you break the crust. The Weir assayer pays by the shard and so do I.", ready: F => (G.goods.saltGargoyleShard || 0) >= 5, left: F => `Shards: ${Math.min(5, G.goods.saltGargoyleShard || 0)} of 5. The flats are full of them.`,
-      take: F => { G.goods.saltGargoyleShard -= 5; }, gold: 3, pay: "Five clean shards. The assayer will cry. Here is your coin." },
-    bounty5: { give: "A chained gang in the Red Salt Mines. Free any one and tell me. The overseers keep a count, and I like it when the count is wrong.", ready: F => F.f("salt.gang1") || F.f("salt.gang2") || F.f("salt.gang3"), left: F => "The mines. A chained gang, one of three. Free it and come back.", gold: 3, pay: "A gang loose, and their overseer's tally-stick broken. That is worth a purse." },
-    bounty6: { give: "Three Overseer's Hounds off the Royal Road. They are thin and fast and they drag the slowest down. Cold slows them.", start: F => { G.flags["b6.base"] = G.kills.overseersHound || 0; },
-      ready: F => (G.kills.overseersHound || 0) - (G.flags["b6.base"] || 0) >= 3, left: F => `Hounds: ${Math.max(0, (G.kills.overseersHound || 0) - (G.flags["b6.base"] || 0))} of 3.`, gold: 3, pay: "Three hounds fewer. The road breathes easier. Here." },
+    bounty4: { give: "Bring me five Salt Gargoyle shards. The gargoyles on the flats shed them when you break their crust. The Weir assayer pays by the shard, and so do I.", ready: F => (G.goods.saltGargoyleShard || 0) >= 5, left: F => `Shards: ${Math.min(5, G.goods.saltGargoyleShard || 0)} of 5. The flats are full of them.`,
+      take: F => { G.goods.saltGargoyleShard -= 5; }, gold: 3, pay: "Five clean shards. The assayer will weep. Here's your coin." },
+    bounty5: { give: "Free any one of the chained gangs in the Red Salt Mines and tell me. The overseers keep a count, and I like it when the count is wrong.", ready: F => F.f("salt.gang1") || F.f("salt.gang2") || F.f("salt.gang3"), left: F => "Free one of the three chained gangs in the mines and come back.", gold: 3, pay: "A gang set free and the overseer's tally-stick broken. That's worth a purse." },
+    bounty6: { give: "I need three Overseer's Hounds gone from the Royal Road. They're thin and fast, and they drag the slowest down. Cold slows them.", start: F => { G.flags["b6.base"] = G.kills.overseersHound || 0; },
+      ready: F => (G.kills.overseersHound || 0) - (G.flags["b6.base"] || 0) >= 3, left: F => `Hounds: ${Math.max(0, (G.kills.overseersHound || 0) - (G.flags["b6.base"] || 0))} of 3.`, gold: 3, pay: "Three hounds fewer. The road feels safer. Here you go." },
   };
   T("paleGate").quartermaster = async F => { await M.board(F, "quartermaster", ["bounty4", "bounty5", "bounty6"], BQ, "The bounty board at Pale Gate"); };
 })();
@@ -310,7 +310,7 @@
     F.music("provinces"); F.quest("salt", 0);
     await stage(async c => {
       c.tint("#1c2430", 0.12, 300);
-      await c.say([["narr", "A paved road above grey cliffs, olive and salt-bush on the slopes, signal towers every mile. The sea is on the east, flat and pale. Down the road a line of wagons crawls north, with soldiers walking beside them out of step."], ["hero", "(Armies eat. A road is a throat.)"]]);
+      await c.say([["narr", "A paved road above grey cliffs, olive and salt-bush on the slopes, signal towers every mile. The sea is on the east, flat and pale. Down the road a line of wagons crawls north, with soldiers walking beside them out of step."], ["hero", "(Armies need to eat, and this road feeds them. Cut it and they choke.)"]]);
       c.tint("#1c2430", 0, 500); c.follow();
     }, { music: "provinces" });
   };
@@ -328,16 +328,16 @@
         const h = c.hero; c.tint("#202a34", 0.2, 400);
         M3.actors(c, [["gd", "npcLegionGuard", 160, -30, { name: "Toll-clerk", flip: true }]]);
         await c.pan(h.x + 110, h.y - 10, 900);
-        await c.say([["narr", "A tollbooth of pale stone in the middle of the road, a bar across it, a ledger on a stand. At the bar a creature stands in harness with a gold wire collar, a sun-wheel hung on its chest like a medal. A line of carts waits behind it, and no one in the line is looking at it."], ["guard", "By the authority of the Throne, the toll is one kakal a wheel and one question a traveller."]]);
+        await c.say([["narr", "A tollbooth of pale stone in the middle of the road, a bar across it, a ledger on a stand. At the bar a creature stands in harness with a gold wire collar, a sun-wheel hung on its chest like a medal. A line of carts waits behind it, and no one in the line is looking at it."], ["guard", "By the authority of the Throne, the toll is one kakal a wheel and one question per traveller."]]);
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(400); c.remove("gd"); c.follow();
-      }, after: ["(The bar is up. The road is open. It does not feel like a victory.)"] });
+      }, after: ["(The bar is up and the road is open. It doesn't feel like a victory.)"] });
     if (!ok) return;
     F.set("ch8.s13");
     await S.m2.stage(async c => {
       const h = c.hero, p = { x: h.x + 150, y: h.y - 6 };
       [["d1", "supplyWagon", 60, 40], ["d2", "supplyWagon", 150, 70], ["d3", "supplyWagon", 240, 40]].forEach(([id, art, dx, dy]) => c.actor(id, { art, x: h.x + dx, y: h.y + dy, flip: true }));
       await c.pan(p.x, p.y, 700); c.sfx("woodDoor"); c.shake(1, 500); c.fx("dust", p.x, p.y, { ms: 1600, r: 40 }); await c.wait(900);
-      await c.say([["narr", "The bar swings up and stays up. The carts in the line stand where they are, drivers looking at each other, then at the road north."]]);
+      await c.say([["narr", "The bar swings up and stays up. The carts in the line stay where they are, the drivers looking at each other and then at the road north."]]);
       c.follow(); ["d1", "d2", "d3"].forEach(id => c.remove(id));
     });
   };
@@ -348,7 +348,7 @@
     await UI.say([["narr", "A cairn of grey stones, half buried in salt, a sun-wheel scratched into the top one. A flat stone has been shifted aside. Under it, a supply chest wrapped in oilcloth and a banner-pole, snapped. Somebody hid this from the legion that lost it."]]);
   }, "tg");
   S.chest.flatsCache = async F => {
-    if (!F.f("l6.done") && !F.f("ninth.cairn")) { await UI.say([["narr", "The chest is under the cairn. You have not found the cairn."]]); return false; }
+    if (!F.f("l6.done") && !F.f("ninth.cairn")) { await UI.say([["narr", "The chest is under the cairn, and you haven't found the cairn yet."]]); return false; }
     return M2.loot("c.flats8", [["sunwater", 4]], 500, "The lost Ninth Legion's supply chest: four Sunwater Flasks, and a purse of old kakal with a sun-wheel on every coin.")(F);
   };
   T("saltFlats").ninthBanner = async F => {
@@ -357,38 +357,38 @@
   };
 
   // ---------- Red Salt Weir ----------
-  M3.talkTown("redSaltWeir", { innLine: "The Crust House. Salt on the sheets, salt in the soup, and a bed that does not complain.", inn: "redSaltWeir", shopLine: "Imperial stock. The Throne sets the price; I set the face I make when I say it.", shop: "weir",
-    beforeShop: F => M.backup(F, "bought.ember", "cinderglassEmber", 10, 1000, "Ten Cinderglass Embers, from a bagman who sells to people who ask no questions. They will light a root."), who: ["miner", "oldwoman", "child"],
-    small: [["Brine gets in your hands, then in your head. We call it the weir.", "The overseers eat first. We eat second. The salt eats last."], ["My mother was born on these pans. She says the sea used to be sweeter.", "If a soldier asks, I never learned to count."], ["Do you want to see a trick? Watch the overseer's hat. Now it is not on his head.", "Mama says do not speak to men in armour. You are in armour."]] });
+  M3.talkTown("redSaltWeir", { innLine: "The Crust House. Salt on the sheets, salt in the soup, and a bed that doesn't complain.", inn: "redSaltWeir", shopLine: "Imperial stock. The Throne sets the price; I set the face I make when I say it.", shop: "weir",
+    beforeShop: F => M.backup(F, "bought.ember", "cinderglassEmber", 10, 1000, "Ten Cinderglass Embers, from a bagman who sells to people who ask no questions. They'll set a root on fire."), who: ["miner", "oldwoman", "child"],
+    small: [["Brine gets in your hands, then in your head. We call it the weir.", "The overseers eat first. We eat second. The salt eats last."], ["My mother was born on these pans. She says the sea used to be sweeter.", "If a soldier asks, I never learned to count."], ["Do you want to see a trick? Watch the overseer's hat. Now it's not on his head.", "Mama says not to talk to men in armour. You're in armour."]] });
   T("redSaltWeir").foremanSalt = async F => {
     if (F.f("ch8.mines")) { await say("foremanSalt", "It is entered in the ledger that the barges are lost, the gangs are scattered, and I am to explain it to a tribune. Do you have any idea what an explanation costs?"); return; }
-    await say("foremanSalt", cycle("hk", ["You are standing in a productive district. Productive districts do not have visitors. Do not touch anything that is white.", "The pans are three days behind quota. The quota is a number the Throne has decided. It is not my fault the sea is not cooperating.", "Move along. The sun sees all work, and you are not doing any."]));
+    await say("foremanSalt", cycle("hk", ["You're standing in a productive district. Productive districts don't have visitors. Don't touch anything that's white.", "The pans are three days behind quota. The quota is a number the Throne decided on. It's not my fault the sea isn't cooperating.", "Move along. The sun sees all work, and you aren't doing any."]));
   };
   T("redSaltWeir").workerLeader = async F => {
-    if (F.f("ch8.mines")) { await say("workerLeader", "We are free. It is strange. My hands do not know what to do. They keep reaching for a rake."); return; }
-    if (F.f("salt.gang1") || F.f("salt.gang2") || F.f("salt.gang3")) { await say("workerLeader", "(a whisper) Tonight. The barges. They load at dusk."); return; }
-    await say("workerLeader", cycle("wl", ["(without looking up, scrubbing a pan) Tonight.", "(a whisper) If a gang goes missing, the rest of us will not see it. We will not see anything. We are very good at not seeing."]));
+    if (F.f("ch8.mines")) { await say("workerLeader", "We're free. It's strange. My hands don't know what to do. They keep reaching for a rake."); return; }
+    if (F.f("salt.gang1") || F.f("salt.gang2") || F.f("salt.gang3")) { await say("workerLeader", "(a whisper) Tonight. The barges load at dusk."); return; }
+    await say("workerLeader", cycle("wl", ["(without looking up, scrubbing a pan) Tonight.", "(a whisper) If a gang goes missing, the rest of us won't see it. We won't see anything. We're very good at not seeing."]));
   };
   T("redSaltWeir").child = async F => { await say("child", cycle("cd8", ["Mama says the barges go to Tzavan, and Tzavan goes to the sun.", "I can hold my breath longer than the overseer. Watch."])); };
 
   // ---------- the Mines: three gangs, then the barges ----------
-  const GANG = [["The first gang is chained to a rail along the brine channel, a dozen of them, hauling a cart that has not moved in an hour. Their overseer sits on the cart with his boots up.", "legionOptio", "overseersHound"], ["A second gang, at the loading ramp, stacking salt-blocks on a wooden sledge. A whip lies coiled on the top block. The overseer is counting.", "legionCenturion", "overseersHound"],
+  const GANG = [["The first gang is chained to a rail along the brine channel, a dozen of them, hauling a cart that hasn't moved in an hour. Their overseer sits on the cart with his boots up.", "legionOptio", "overseersHound"], ["A second gang is stacking salt-blocks on a wooden sledge at the loading ramp. A whip lies coiled on the top block. The overseer is counting.", "legionCenturion", "overseersHound"],
     ["The third gang works a pulley by the rails, singing under their breath so softly it is almost breathing. The overseer is at the end of the line with a stick.", "legionOptio", "overseersHound"]];
   [1, 2, 3].forEach(n => {
     T("redSaltMines")["gang" + n] = async F => {
       if (F.f("salt.gang" + n)) { await UI.say([["narr", "The chains lie in the salt where they were dropped."]]); return; }
       const [text, boss, dog] = GANG[n - 1];
-      await UI.say([["narr", text], ["overseer", ["It is entered in the ledger that this gang's rate has been exceeded. Please do not stop it.", "Move along. You have taken a wrong turn. Wrong turns are punished in the mines.", "Sir, madam, creature, whatever you are: that cart is the property of the Harvest Office."][n - 1]]]);
+      await UI.say([["narr", text], ["overseer", ["It is entered in the ledger that this gang's rate has been exceeded. Please do not stop it.", "Move along. You've taken a wrong turn. Wrong turns are punished in the mines.", "Sir, madam, creature, whatever you are: that cart is the property of the Harvest Office."][n - 1]]]);
       const res = await F.fight([F.mkEnemy(boss, 46), F.mkEnemy(dog, 46, " B"), F.mkEnemy(dog, 46, " C")], { bg: "saltMine", intro: "The overseer calls the hounds!" });
       if (res !== "win") return;
       F.set("salt.gang" + n); F.sfx("door");
-      await UI.say([["narr", ["The overseer drops his boots from the cart. The chains come off with a sound like coins. The gang does not speak: they hold each other by the forearm in turn, one by one, and go up the ramp towards the light.", "The whip goes into the brine. Nobody touches it. They file out past you with their eyes on the floor, and at the top one of them turns and nods, once, as if tipping a hat.", "The song stops. The last man in the line says only: \"Dusk. The barges.\" Then they are gone up the rails."][n - 1]]]);
+      await UI.say([["narr", ["The overseer drops his boots from the cart. The chains come off with a sound like coins. The gang does not speak. One by one they grip each other's forearms and go up the ramp towards the light.", "The whip goes into the brine. Nobody touches it. They file out past you with their eyes on the floor, and at the top one of them turns and nods, once, as if tipping a hat.", "The song stops. The last man in the line says only: \"Dusk. The barges.\" Then they are gone up the rails."][n - 1]]]);
     };
   });
   S.done.barges = F => F.f("ch8.mines");
   S.trigger.barges = async F => {
     if (F.f("ch8.mines")) return;
-    if (!hub() && !(F.f("salt.gang1") && F.f("salt.gang2") && F.f("salt.gang3"))) { await UI.say([["narr", "The barge dock is shuttered, and the gangs are still on their chains."]]); return; }
+    if (!hub() && !(F.f("salt.gang1") && F.f("salt.gang2") && F.f("salt.gang3"))) { await UI.say([["narr", "The barge dock is shuttered, and the gangs are still in chains."]]); return; }
     F.music("tension");
     await stage(async c => {
       const h = c.hero; c.tint("#2a1a10", 0.25, 400);
@@ -398,7 +398,7 @@
       for (let i = 0; i < 5; i++) c.walk("mn" + i, h.x + 140 + i * 24, h.y + (i - 2) * 28, 1500);
       await c.wait(1000); c.sfx("break"); c.fx("fire", h.x + 190, h.y - 10, { ms: 3000 }); c.fx("embers", h.x + 190, h.y - 30, { ms: 3000 }); c.shake(3, 700);
       c.fx("fire", h.x + 230, h.y + 20, { ms: 3000 }); c.flash("#ffb060", 400); await c.wait(1100);
-      await c.say([["narr", "The first barge catches with a whump. Then the second. The white blocks glow orange from inside and begin to crack. A man laughs, once, in a high voice, and then they are all laughing, quietly, with their hands over their mouths."], ["workerLeader", "That is a year of the Throne's salt. Go, quickly. We will say it was the lamp."]]);
+      await c.say([["narr", "The first barge catches with a whump. Then the second. The white blocks glow orange from inside and begin to crack. A man laughs, once, in a high voice, and then they are all laughing, quietly, with their hands over their mouths."], ["workerLeader", "That's a year of the Throne's salt. Go, quickly. We'll say it was the lamp."]]);
       for (let i = 0; i < 5; i++) c.remove("mn" + i);
       c.tint("#2a1a10", 0, 700); c.follow();
     }, { music: "mines" });
@@ -414,32 +414,32 @@
   const hub = M.hub;
 
   // ---------- Tuk Orchard and the hidden granary ----------
-  M3.talkTown("tukOrchard", { innLine: "The Green Husk. Cacao in the soup, cacao in the bread, and a bed that smells of it. You will dream sweet.", inn: "tukOrchard", shopLine: "The press-shop. Imperial prices, imperial manners. We use the back door, you understand.", shop: "tuk",
-    who: ["orchardhand", "farmer", "child"], small: [["Under every tree a root, over every root a tax.", "My mother says the pods are sweet because of what is under them."], ["The cultists on the ridge buy the best of the crop and pay with a sack of coin and a stare.", "If the governor smiles at you, count your fingers."], ["There is a ghost in the press room. It sings. Nobody has told it to stop.", "A woman gave me a pod today and cried. I did not do anything."]] });
+  M3.talkTown("tukOrchard", { innLine: "The Green Husk. Cacao in the soup, cacao in the bread, and a bed that smells of it. You'll dream sweet.", inn: "tukOrchard", shopLine: "The press-shop. Imperial prices, imperial manners. We use the back door, you understand.", shop: "tuk",
+    who: ["orchardhand", "farmer", "child"], small: [["Under every tree a root, over every root a tax.", "My mother says the pods are sweet because of what is under them."], ["The cultists on the ridge buy the best of the crop and pay with a sack of coin and a stare.", "If the governor smiles at you, count your fingers."], ["There is a ghost in the press room. It sings. Nobody has told it to stop.", "A woman gave me a pod today and cried. I didn't do anything."]] });
   T("tukOrchard").widow = async F => {
     const st = F.qstep("granary");
-    if (st === "done") { await say("widow", cycle("wd", ["The children are eating. I will not say more than that. It is enough.", "My husband would have put his hat on the table and gone quiet. I have done it for him."])); return; }
+    if (st === "done") { await say("widow", cycle("wd", ["The children are eating. I won't say more than that. It's enough.", "My husband would have put his hat on the table and gone quiet. I've done it for him."])); return; }
     if (st === undefined) {
-      await say("widow", "My husband built a granary before the overseers came, behind a wall in the hills. He told me where on the night he died, and I was so tired I did not listen. The children are hungry. Do you understand?");
-      await say("widow", "Ask the pressman. He carried the last load up the hill. He will not tell me, because he thinks I would go.");
+      await say("widow", "My husband built a granary before the overseers came, behind a wall in the hills. He told me where on the night he died, and I was so tired I didn't listen. The children are hungry. Do you understand?");
+      await say("widow", "Ask the pressman. He carried the last load up the hill. He won't tell me, because he thinks I'd go there myself.");
       F.quest("granary", 0); return;
     }
-    await say("widow", st === 0 ? "The pressman. He knows. He is a stubborn man; ask him as if you already knew." : "A stone arch under vines, in the south-east corner of the hills. Find it, and bring back what you can. I will not be able to thank you properly.");
+    await say("widow", st === 0 ? "The pressman. He knows. He's a stubborn man, so ask him as if you already knew." : "A stone arch under vines, in the south-east corner of the hills. Find it, and bring back what you can. I won't be able to thank you properly.");
   };
   T("tukOrchard").pressman = async F => {
     const st = F.qstep("granary");
     if (st === 0) {
-      await say("pressman", "The widow sent you. She would. ...Go up into the hills and east along the lowest terrace, to the far south-east corner, where the overseers never walk. A stone arch gone green with vines, and a stone in it with a notch. Not the low flowering terrace walls. Behind the notch, the door.");
-      await say("pressman", "I carried the last sack up it myself. I have not been back. Every time I think of it, I smell the grain.");
+      await say("pressman", "The widow sent you. She would. ...Go up into the hills and east along the lowest terrace, to the far south-east corner, where the overseers never walk. Look for a stone arch gone green with vines, with a notched stone in it. Not the low flowering terrace walls. The door is behind the notch.");
+      await say("pressman", "I carried the last sack up it myself. I haven't been back. Every time I think of it, I smell the grain.");
       F.quest("granary", 1); return;
     }
-    await say("pressman", cycle("pr", ["The press is slow. The pods are sweet. That is all I have to say about pods.", "If a man tells you he has no secrets, he is selling something.", "Careful on the hill roads. The Governor's dogs are loose."]));
+    await say("pressman", cycle("pr", ["The press is slow. The pods are sweet. That's all I have to say about pods.", "If a man tells you he has no secrets, he is selling something.", "Careful on the hill roads. The Governor's dogs are loose."]));
   };
   S.gather.granaryDoor = async F => {
     if (F.f("granary.done")) { await UI.say([["narr", "The vine wall stands open. The granary behind it is nearly empty, and swept."]]); return false; }
-    if (F.qstep("granary") !== 1) { await UI.say([["narr", "A hillside wall hung with vines, as green as any other. A notch in one stone, if you look. Nothing happens."]]); return false; }
+    if (F.qstep("granary") !== 1) { await UI.say([["narr", "A hillside wall hung with vines, like any other. If you look closely, there's a notch in one stone. Nothing happens."]]); return false; }
     F.set("granary.done"); F.sfx("door"); F.give("sunwater", 6); F.give("ember", 6); F.gold(800, true); UI.toast("+800 kakal", 2400);
-    await UI.say([["narr", "The notched stone turns. The vines swing back like a curtain, and behind them a dry stone room, cool and full of the smell of grain. Sacks to the roof. Jars of dried fruit. At the back, a box of flasks and embers wrapped in oilcloth, with a child's drawing of a sun pinned over it."]]);
+    await UI.say([["narr", "The notched stone turns. The vines swing back like a curtain, and behind them is a dry stone room, cool and full of the smell of grain. Sacks to the roof. Jars of dried fruit. At the back, a box of flasks and embers wrapped in oilcloth, with a child's drawing of a sun pinned over it."]]);
     F.questDone("granary");
   };
   Q(S.done, { granaryDoor: F => F.f("granary.done") });
@@ -455,21 +455,21 @@
   S.trigger.s14Fight = async F => {
     if (F.f("ch8.s14")) return;
     F.music("tension");
-    const ok = await M.general(F, 14, { level: 47, soldiers: [["sunmawCultist", 46, " B"], ["sunmawCultist", 46, " C"]], bg: "pyramid", title: "The Cracked Collar", place: "the summit altar of the Sunmaw pyramid", where: "It went down the back stair, and the cultists did not stop it.", fx: 130, fy: -4,
+    const ok = await M.general(F, 14, { level: 47, soldiers: [["sunmawCultist", 46, " B"], ["sunmawCultist", 46, " C"]], bg: "pyramid", title: "The Cracked Collar", place: "the summit altar of the Sunmaw pyramid", where: "It went down the back stairs, and the cultists didn't stop it.", fx: 130, fy: -4,
       setup: async c => {
         const h = c.hero; c.tint("#2c0c08", 0.3, 400);
         M3.actors(c, [["pr", "npcAcolyte", 170, -40, { name: "Acolyte", flip: true }], ["pr2", "npcAcolyte", 220, 10, { name: "Acolyte", flip: true }]]);
         await c.pan(h.x + 120, h.y - 10, 900);
         await c.say([["narr", "The summit: a platform of black-red stone, steps dark with something that has been washed and never quite clean. A ring of collar altars, and at the centre the oldest, with a crack across its face as long as an arm. The creature chained to it is looking at the crack."], ["priest", "The altar is cracked! Hold the line! The sun sees it! The sun SEES it!"]]);
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(300); c.remove("pr"); c.remove("pr2"); c.follow();
-      }, after: ["(It spoke to me before the cultists stopped it. In its own voice. Through the crack.)"] });
+      }, after: ["(It spoke to me through the crack, in its own voice, before the cultists stopped it.)"] });
     if (!ok) return;
     F.set("ch8.s14"); F.sfx("door");
     await S.m2.stage(async c => {
       const h = c.hero, ids = [];
       for (let i = 0; i < 4; i++) { ids.push("cu" + i); c.actor("cu" + i, { art: "npcAcolyte", x: h.x + 110 + (i % 2) * 40, y: h.y - 50 + i * 30, flip: true }); }
       c.tint("#2c0c08", 0.22, 300); c.sfx("chainBreak"); ids.forEach(id => c.emote(id, "!")); await c.wait(500);
-      await c.say([["narr", "The altar goes dark. The cultists drop their knives and run down the stair in a body, shouting about the weather. At the back of the platform, a chest has been standing open all along."]]);
+      await c.say([["narr", "The altar goes dark. The cultists drop their knives and run down the stairs together, shouting about the weather. At the back of the platform, a chest has been standing open all along."]]);
       await Promise.all(ids.map((id, i) => c.walk(id, h.x - 360 - i * 24, h.y + 40 + i * 12, 1800 + i * 120))); ids.forEach(id => c.remove(id)); c.tint("#2c0c08", 0, 400);
     });
     UI.toast("Sunmaw stops harvesting for a season.", 3600);
@@ -479,14 +479,14 @@
   // ---------- the Governor's Villa (S15) ----------
   T("governorsVilla").cook = async F => {
     if (!F.f("vil.cook")) {
-      await UI.say([["cook", "You are the bread-and-thyme boy. I knew from the boots. Imela's loaf, Tuesdays, in the laundry basket: I have sent her one for eleven years."], ["hero", "She is out. She is safe."],
-        ["cook", "(her hands stop) ...Good. Then I do not have to be brave on Tuesdays. Back stair, past the songbirds. The library is the long room with the lamps. Do not let the steward see you; he counts the spoons."]]);
+      await UI.say([["cook", "You're the bread-and-thyme boy. I knew from the boots. Imela's loaf, Tuesdays, in the laundry basket: I've been sending her one for eleven years."], ["hero", "She's out. She's safe."],
+        ["cook", "(her hands stop) ...Good. Then I don't have to be brave on Tuesdays. Take the back stairs, past the songbirds. The library is the long room with the lamps. Don't let the steward see you. He counts the spoons."]]);
       F.set("vil.cook"); return;
     }
-    await say("cook", cycle("ck", ["The governor takes his tea at the fourth bell. The steward takes his at the third. I have never once brought them the same pot.", "Mind the dogs. They are lazy and they love me. They do not love you.", "If you see a spoon on the floor, leave it. It is a message."]));
+    await say("cook", cycle("ck", ["The governor takes his tea at the fourth bell. The steward takes his at the third. I've never once brought them the same pot.", "Mind the dogs. They're lazy and they love me. They don't love you.", "If you see a spoon on the floor, leave it. It's a message."]));
   };
   S.gather.ledgerLibrary = async F => {
-    if (!F.f("vil.cook") && !hub()) { await UI.say([["narr", "The library door is locked from the inside. A servant would know the back stair."]]); return false; }
+    if (!F.f("vil.cook") && !hub()) { await UI.say([["narr", "The library door is locked from the inside. A servant would know the back stairs."]]); return false; }
     if (!once(F, "vil.ledger")) { await UI.say([["narr", "The ledgers are exactly where the cook said. You have what you need."]]); return false; }
     F.give("ledgerLots", 1, true); F.sfx("coin");
     await UI.say([["narr", "A long room of lamps and shelves. The ledgers are bound in green cloth, thirty years of them, each page ruled in red. Lots, prices, destinations, the same clean hand all the way down. You copy the last page and the one before it into the Field Journal."],
@@ -496,7 +496,7 @@
   S.done.s15Fight = F => F.f("ch8.s15");
   S.trigger.s15Fight = async F => {
     if (F.f("ch8.s15")) return;
-    if (!F.f("vil.cook") && !hub()) { await UI.say([["narr", "The strongroom door is behind a corridor of steward's guards. A servant's stair might get you round."]]); return; }
+    if (!F.f("vil.cook") && !hub()) { await UI.say([["narr", "The strongroom door is behind a corridor of steward's guards. A servant's staircase might get you round."]]); return; }
     F.music("tension");
     const ok = await M.general(F, 15, { level: 49, soldiers: [["aquilaBearer", 48, " B"]], bg: "villa", title: "The Governor's Strongroom", place: "the Governor's strongroom", where: "It went out through the songbird garden, and the cages sprang open behind it.", fx: 130, fy: -4,
       setup: async c => {
@@ -514,7 +514,7 @@
       await c.say([["governor", "The Throne will hear of this."], ["hero", "I hope so."]]);
       await c.walk("gv", h.x + 380, h.y - 70, 1500); c.sfx("door"); c.remove("gv");
       await c.say([["narr", "He leaves by the garden door at a trot, holding his silk up like a woman crossing a stream. The pen on his desk is still wet. Beside it lies an open ledger, ruled in red, and the last entry is underlined in another hand."],
-        ["narr", "\"Cell 9, Black Mirror: one creature, Ahuacan palace lot, to be kept alive.\""], ["hero", "(That is where it is.)"]]);
+        ["narr", "\"Cell 9, Black Mirror: one creature, Ahuacan palace lot, to be kept alive.\""], ["hero", "(So that's where it is.)"]]);
       c.tint("#2a1c10", 0, 500); c.follow();
     });
     F.set("ch8.s15"); F.quest("m_prison", 0); F.give("ledgerLots", 1, true);
@@ -539,7 +539,7 @@
     F.music("crypt"); F.quest("m_k6", 0);
     await stage(async c => {
       c.tint("#0c2a1c", 0.28, 400);
-      await c.say([["narr", "Green glass tanks in the dark, shafts of light falling through cracks in the roof, a lake of still water without a ripple. Statues of people stand frozen mid-step among the pillars, hands out, mouths a little open. On stands of polished bronze, mirrors, turned every way."], ["hero", "(Do not stand where they are looking.)"]]);
+      await c.say([["narr", "The cistern is full of green glass tanks in the dark, with shafts of light falling through cracks in the roof onto a lake of still water without a ripple. Statues of people stand frozen mid-step among the pillars, hands out, mouths a little open. Mirrors on stands of polished bronze are turned every which way."], ["hero", "(Don't stand where they're looking.)"]]);
       c.tint("#0c2a1c", 0.1, 600); c.follow();
     }, { music: "crypt" });
     await F.banter("cistern");
@@ -563,11 +563,11 @@
   S.done.cisternGuardian = F => F.f("k6.done");
   S.trigger.cisternGuardian = async F => {
     if (F.f("k6.done")) return;
-    if (!hub() && !F.f("cis.solved") && !F.f("cis.open")) { await UI.say([["narr", "The sealed door will not open to a hand. It wants the light."]]); return; }
+    if (!hub() && !F.f("cis.solved") && !F.f("cis.open")) { await UI.say([["narr", "The sealed door won't open by hand. It needs the light."]]); return; }
     const ok = await M3.keyBoss(F, { id: "veiledCisternGuardian", level: 49, k: "k6", key: "keyK6", name: "The Veiled Guardian", title: "Keeper of the Glass Cistern", bg: "glassCistern", fx: "sparkle", end: "fade",
       lines: [["narr", "The veil lifts without a hand on it. Behind it, a figure of grey cloth stands in the middle of the lake, its face a smooth oval of glass in which you see yourself looking back, and slightly behind you, someone else."], ["hero", "(It is wearing every face it has ever looked at.)"]],
       stage: async c => { c.tint("#0c2a1c", 0.3, 500); c.sfx("encounter"); c.fx("sparkle", c.hero.x + 100, c.hero.y - 20, { ms: 2000 }); await c.say([["narr", "The water of the lake goes flat as a plate. Every statue in the cistern has turned its head toward the door."]]); },
-      after: [["narr", "The veil falls in on itself like a held breath let go, and settles on the water. On a dais where it stood there lies a key of green glass, as cold as the cistern."], ["hero", "(Whatever it kept, someone paid for it to be kept.)"]] });
+      after: [["narr", "The veil falls in on itself like a held breath let go, and settles on the water. On the dais where it stood lies a key of green glass, as cold as the cistern."], ["hero", "(Whatever it was guarding, someone paid to have it guarded.)"]] });
     if (!ok) return;
     F.questDone("cistern"); await UI.say([["narr", "At the foot of the dais a chest has risen out of the water, hung with weed and bound in bronze."]]);
   };
@@ -579,8 +579,8 @@
     const u = F.mk("mothmara", Math.max(3, F.avgLevel() - 1)); G.collection.push(u); G.best.mothmara = G.best.mothmara || { seen: 1, beaten: 0 }; F.sfx("door");
     await M.stage(async c => {
       c.tint("#1a1030", 0.2, 400);
-      await c.cageOut("mm", "mothmara", { before: [["dunmar", "A cage of green glass. Careful, lad. She does not like a lamp held too close."]], desc: [["narr", "The cage door opens on its own. A nightmare-horse, black as a well, a veil of small snakes lifting about her head like hair in water, steps down onto the wagon boards and does not look at anyone's eyes."]] });
-      await c.say([["mothmara", "I have asked many questions in the dark. I would like to ask a kind one."], ["dunmar", "She was used to question prisoners, lad. She carries it."], ["mothmara", "Forgive me. I remember what I saw in them. ...May I walk with you?"]]);
+      await c.cageOut("mm", "mothmara", { before: [["dunmar", "A cage of green glass. Careful, lad. She doesn't like a lamp held too close."]], desc: [["narr", "The cage door opens on its own. A nightmare-horse, black as a well, a veil of small snakes lifting about her head like hair in water, steps down onto the wagon boards and does not look at anyone's eyes."]] });
+      await c.say([["mothmara", "I have asked many questions in the dark. I would like to ask a kind one."], ["dunmar", "They used her to question prisoners, lad. She still carries it."], ["mothmara", "Forgive me. I remember what I saw in them. ...May I walk with you?"]]);
       await c.cageBack("mm"); c.tint("#1a1030", 0, 500);
     });
     UI.toast("Mothmara joins the collection.", 3200);
@@ -622,7 +622,7 @@
   Q(D.CUPS.iron, { n: "Iron Cup", ch: 8, gear: "G2", note: "Three fights, then the Spear Twins.",
     fights: [{ n: "Shield line", foes: ["legionCenturion", "legionShieldbearer", "legionShieldbearer"], lv: 44 }, { n: "Knives of the sun", foes: ["sunmawCultist", "sunmawCultist", "legionArcher"], lv: 45 }, { n: "The beast pen", foes: ["lionWolf", "boarBull", "lionWolf"], lv: 46 }],
     champion: { n: "The Spear Twins", foes: ["spearTwinA", "spearTwinB"], lv: 47, intro: "Two spearmen walk out in step. When one lunges, so does the other.",
-      cinema: () => Cinema.boss({ id: "spearTwinA", name: "The Spear Twins", title: "Champions of the Iron Cup", bg: "colosseum", music: "arenaChampion", lines: [["narr", "Two spearmen come out of the south gate in step: one in sun-gold, one in river-blue. They stop at the same moment, and they plant their spears at the same moment, and the crowd, which has been shouting all day, goes quiet."], ["hero", "(They are not two men. They are one man in two places.)"]] }) } });
+      cinema: () => Cinema.boss({ id: "spearTwinA", name: "The Spear Twins", title: "Champions of the Iron Cup", bg: "colosseum", music: "arenaChampion", lines: [["narr", "Two spearmen come out of the south gate in step: one in sun-gold, one in river-blue. They stop at the same moment, and they plant their spears at the same moment, and the crowd, which has been shouting all day, goes quiet."], ["hero", "(They aren't two men. They're one man in two places.)"]] }) } });
 
   // ---------- Story.finish[8] (dbg.jump: the end of chapter 8) ----------
   S.finish[8] = (F, G) => {
@@ -630,7 +630,7 @@
       "gen.freed.13", "gen.freed.14", "gen.freed.15", "ch9.start"].forEach(k => (G.flags[k] = true));
     delete G.flags["ch9.start"]; G.flags["ch8.supply"] = 3;
     ["m_pale", "m_ops", "salt"].forEach(q => (G.quests[q] = "done")); G.quests.m_prison = 0;
-    [13, 14, 15].forEach(n => { const g = S.generalFor(n); if (g) S.noteGeneral(g.id, ["Freed at the Tzavan coast tollbooth. It went out along the cliff, where the road runs out of stone.", "Freed at the Sunmaw summit. It went down the back stair, and the cultists did not stop it.", "Freed in the Governor's strongroom. It went out through the songbird garden, and the cages sprang open behind it."][n - 13]); });
+    [13, 14, 15].forEach(n => { const g = S.generalFor(n); if (g) S.noteGeneral(g.id, ["Freed at the Tzavan coast tollbooth. It went out along the cliff, where the road runs out of stone.", "Freed at the Sunmaw summit. It went down the back stairs, and the cultists didn't stop it.", "Freed in the Governor's strongroom. It went out through the songbird garden, and the cages sprang open behind it."][n - 13]); });
     F.giveGear("G13", 3, true); G.items.ledgerLots = 1; G.flags["wagon.at"] = "ashfeatherCamp"; G.gold += 2000; G.ch = 8; G.lastTown = "paleGate";
     if (window.Systems) Systems.guestJoin("emberwick", { level: F.avgLevel(), name: "Emberwick" });
   };
@@ -643,5 +643,5 @@
   Object.assign(D.BOOK, { bitterRue: { n: "Bitter Rue", mat: "orchardRue", need: 5, d: "2 MP. Removes up to 2 statuses or lowered stats from an ally.", move: "bitterRue" } });
   add("orchardSatyr", ["orchardRue", 0.3]); add("sunmawCultist", ["orchardRue", 0.15]);
   M2.bookSpot("orchardHills", "orchardRue1", "A hedgerow of grey rue", "g.rue1", "orchardRue", 5, "Along the hedge between two terraces grows a low grey herb with a smell that makes your eyes water. The pickers chew it against the fever. You pull five sprigs and your tongue goes numb just from holding them.", "Bitter Rue");
-  M2.bookSpot("orchardHills", "orchardRue2", "Rue by the ditch", "g.rue2", "orchardRue", 5, "Rue grows thick where the irrigation ditch leaks. Nobody picks it for the press, so nobody has touched it. Five more sprigs.", "Bitter Rue");
+  M2.bookSpot("orchardHills", "orchardRue2", "Rue by the ditch", "g.rue2", "orchardRue", 5, "Rue grows thick where the irrigation ditch leaks. Nobody picks it for the press, so nobody has touched it. You pull five more sprigs.", "Bitter Rue");
 })();

@@ -39,7 +39,7 @@
   // ---------- items, goods, quests ----------
   const key = (n, d) => ({ n, d, key: true });
   Q(D.ITEMS, {
-    lowstepToken: key("Ranna's Pass", "A scrap of dyed cloth with a laundry mark. Servants at the palace doors look at it, then at the wall."),
+    lowstepToken: key("Ranna's Pass", "A scrap of dyed cloth with a laundry mark. Servants at the palace doors glance at it, then look away and let you through."),
     palaceKeyA: key("Court Gate Key", "A gilt key with a sun-wheel bow. It fits the servants' door in the west gallery."),
     palaceKeyB: key("Garden Gate Key", "A key of jade and brass, warm from a hundred hands."),
     palaceKeyC: key("East Wing Key", "A plain iron key. The only plain thing in the palace."),
@@ -57,7 +57,7 @@
     gildedPlume: ["Gilded Helm Plume", 48], eagleFletch: ["Eagle Fletching", 42], sunSeal: ["Court Sun-Seal", 56], houndTag: ["Temple-Hound Tag", 40], nagaHide: ["Sewer-Naga Hide", 44], ratTail: ["Rat-King's Tail", 36], wraithChain: ["Wraith Chain Link", 46],
   });
   Q(D.QUESTS, {
-    m_rescue: { t: "The Rescue", main: true, ch: 7, steps: ["Get your mother out of the palace. Ranna's cell has a way in under the city."] },
+    m_rescue: { t: "The Rescue", main: true, ch: 7, steps: ["Get your mother out of the palace. Ranna's group knows a way in under the city."] },
     m_sail: { t: "To the Ship", main: true, ch: 7, steps: ["Get her to the ship. The Salt Heron waits at the Lowstep dock."] },
   });
 
@@ -68,18 +68,18 @@
   M.BAS = BAS; M.CURES = CURES; M.BOMBS = BOMBS; M.WARDS = WARDS; M.disc = disc;
   Q(D.INNS, { lowstep: { n: "The Mender's Corner", mult: 1.5 } });
   Q(D.SHOPS, { lowstep: { n: "Lowstep market", who: "merchant", stock: IMP, disc: disc(IMP, 1.2), buys: 0.8 } });
-  M3.rumours("lowstep", ["The emperor leaves the palace once a decade, for a triumph. This week there is no triumph.", "The lady in the east wing never speaks of her homeland.", "Something in the roots of Tolcan woke two moons ago. It has been chewing since."],
+  M3.rumours("lowstep", ["The emperor leaves the palace once a decade, for a triumph. But there is no triumph this week.", "The lady in the east wing never speaks of her homeland.", "Something in the roots of Tolcan woke up two moons ago, and it has been chewing ever since."],
     [M3.clue(10, 0), M3.clue(11, 0), M3.clue(12, 0)]);
 
   // ---------- bestiary and drops: the palace and the sewers ----------
   Q(D.BEST, {
-    sewerNaga: "A water-snake as thick as a drain, in the black water. Its coil holds one of you helpless. Lightning in the water goes a long way.",
-    ratChimera: "Rats fused into one mass, all teeth and tails. It swarms. Fire clears the nest.",
-    drownedSlaveWraith: "A chained ghost, dragging its chain. Its pull slows you down. Fire reaches it; blades do not.",
-    palaceGuard: "Gilded helmet, tower shield. Sturdy. Lightning finds the gaps.",
-    eagleCohortArcher: "An archer on the gallery wall. He fires at whoever is lowest on health. Shock drops him.",
-    courtPriest: "A soft-voiced priest of the sun. He mends the guards and blesses them. Take him first; cold unsettles him.",
-    templeHound: "A dog-man trained to hunt, quick, and its bite keeps bleeding. Cold slows it.",
+    sewerNaga: "A water snake as thick as a drain pipe, living in the black water. Its coils can hold one of you helpless. Lightning travels a long way through water.",
+    ratChimera: "A mass of rats fused together, all teeth and tails. It attacks in swarms, and fire clears out the nest.",
+    drownedSlaveWraith: "A chained ghost that drags its chain behind it. Its pull slows you down. Fire can hurt it, but blades pass through.",
+    palaceGuard: "A guard in a gilded helmet with a tower shield. He is sturdy, but lightning finds the gaps in his armour.",
+    eagleCohortArcher: "An archer on the gallery wall. He shoots whoever has the least health. Shock brings him down.",
+    courtPriest: "A soft-spoken priest of the sun who heals and blesses the guards. Take him out first. Cold throws him off.",
+    templeHound: "A dog-man trained to hunt. It is quick, and its bites keep bleeding. Cold slows it.",
   });
   Q(D.DROPS, {
     sewerNaga: [["nagaHide", 0.45]], ratChimera: [["ratTail", 0.5]], drownedSlaveWraith: [["wraithChain", 0.45]], palaceGuard: [["gildedPlume", 0.45], ["legionCoin", 0.5]],
@@ -126,13 +126,13 @@
     await stage(async c => {
       c.tint("#241c34", 0.25, 300);
       M3.actors(c, [["ranna", "npcRanna", 170, -10, { name: "Ranna", flip: true }]]);
-      await c.say([["narr", "Night at the foot of the Great Pyramid. A stair of lamps climbs the dark hill, and the pyramid blots out half the sky above it. The air smells of dye and lamp-smoke and fried dough."]]);
+      await c.say([["narr", "Night at the foot of the Great Pyramid. A long stairway of lamps climbs the dark hill, and the pyramid blots out half the sky above it. The air smells of dye and lamp-smoke and fried dough."]]);
       c.emote("ranna", "!");
       await c.walk("ranna", c.hero.x + 70, c.hero.y - 4, 900);
-      await c.say([["ranna", "You are late and you are the right height. Ask nicely and I will get you through any door."], ["hero", "Where is she?"],
-        ["ranna", "Ask rudely and I will get you through a better one. Sit. Eat first."]]);
+      await c.say([["ranna", "You're late, but you're the right height. Ask nicely and I'll get you through any door."], ["hero", "Where is she?"],
+        ["ranna", "Ask rudely and I'll get you through a better one. Sit down and eat first."]]);
       c.sfx("door"); c.tint("#241c34", 0.1, 600);
-      await c.say([["narr", "A dye-works with the shutters down. Three people at a table under a hanging rack of sun-yellow cloth: a hand with stained arms, a dyer, a washerwoman folding a sheet in thirds. Nobody asks who you are. A bowl is put in front of you."]]);
+      await c.say([["narr", "The dye-works has its shutters down. Three people sit at a table under a rack of sun-yellow cloth: a worker with stained arms, a dyer, and a washerwoman folding a sheet in thirds. Nobody asks who you are. Someone puts a bowl in front of you."]]);
       c.remove("ranna"); c.follow();
     }, { music: "capital" });
     F.quest("m_rescue", 0);
@@ -143,43 +143,43 @@
     await stage(async c => {
       M3.actors(c, [["ranna", "npcRanna", 60, -8, { name: "Ranna", flip: true }]]);
       c.tint("#2a2030", 0.18, 300);
-      await c.say([["narr", "Ranna kneels on the dye-works floor with a stub of chalk. A stair for the sewers. A square for the court. A square inside it, for the garden. A long thin box for the east wing. A line over the top of all of it."],
-        ["ranna", "Sewers, court, garden, east wing, roofs. It is one long walk and there are no beds in it. Sleep at the Mender's first."],
-        ["ranna", "The emperor does not meet guests. He does not leave either. Tonight is not a good night to count on that."],
-        ["hero", "How many guards?"], ["ranna", "Enough to be bored. Bored guards are the worst: they are looking for something to do."],
-        ["ranna", "Pavo knows the drains. He will tell you he knows all of them. He knows most."]]);
+      await c.say([["narr", "Ranna kneels on the dye-works floor and draws with a stub of chalk: a staircase for the sewers, a square for the court, a smaller square inside it for the garden, a long thin box for the east wing, and a line over the top of all of it."],
+        ["ranna", "Sewers, court, garden, east wing, roofs. It's one long walk with no beds along the way, so sleep at the Mender's first."],
+        ["ranna", "The emperor doesn't receive guests, and he doesn't leave the palace either. But don't count on that tonight."],
+        ["hero", "How many guards?"], ["ranna", "Enough that they're bored. Bored guards are the worst, because they're looking for something to do."],
+        ["ranna", "Pavo knows the drains. He'll tell you he knows all of them, but he only knows most."]]);
       c.remove("ranna"); c.follow();
     });
     F.set("ch7.briefed"); F.give("lowstepToken", 1, true); UI.toast("Ranna's pass received.", 2600);
   };
   S.done.planBriefing = F => F.f("ch7.briefed");
   // blocked exits (the world maps run these when a gated exit is walked into)
-  S.trigger.lowstepGrateShut = async F => { await UI.say([["hero", "(An iron grate behind the vats, a new chain through the bars. The boy sitting beside it watches me and keeps his hands in his lap.)"]]); };
-  S.trigger.sewerGratingShut = async F => { await UI.say([["hero", "(The grating up into the court is under water. The current holds it shut.)"]]); };
+  S.trigger.lowstepGrateShut = async F => { await UI.say([["hero", "(There's an iron grate behind the vats with a new chain through the bars. The boy sitting beside it watches me and keeps his hands in his lap.)"]]); };
+  S.trigger.sewerGratingShut = async F => { await UI.say([["hero", "(The grating up into the court is under water, and the current is holding it shut.)"]]); };
   S.trigger.innerGateSealed = async F => { await UI.say([["hero", "(The inner gate is barred, and the collar altar on its lintel is humming.)"]]); };
   S.trigger.trellisGateShut = async F => { await UI.say([["hero", "(The trellis gate to the East Wing is chained. The sundial's shadow lies across the lock.)"]]); };
-  S.trigger.roofStairShut = async F => { await UI.say([["hero", "(The roof stair is shut behind a third court. There is a lamp lit in that window.)"]]); };
-  S.trigger.ropeBridgeShut = async F => { await UI.say([["hero", "(The rope bridge is hauled up on the far side. Before it, the last gate of the roofs is still shut.)"]]); };
-  S.trigger.seaLowstepShut = async F => { await UI.say([["hero", "(Lamps climbing a black hill, and a chain boom across the dock. No pilot would bring a ship in there for me.)"]]); };
-  M3.talkTown("lowstep", { innLine: F => F.f("ch7.helm") ? "The Mender's Corner. A bed, a bowl, and nobody's business." : "The Mender's Corner. A bed, a bowl, and no questions about who you were before.", inn: "lowstep",
-    shopLine: "Imperial stock, imperial prices. The Throne's tax is in the cheese.", shop: "lowstep", who: ["porter", "oldwoman", "child"] });
+  S.trigger.roofStairShut = async F => { await UI.say([["hero", "(The stairs to the roof are shut away behind a third court. There's a lamp lit in that window.)"]]); };
+  S.trigger.ropeBridgeShut = async F => { await UI.say([["hero", "(The rope bridge has been hauled up on the far side, and the last gate of the roofs is still shut.)"]]); };
+  S.trigger.seaLowstepShut = async F => { await UI.say([["hero", "(Lamps climb a black hill, and a chain boom is stretched across the dock. No pilot would bring a ship in there for me.)"]]); };
+  M3.talkTown("lowstep", { innLine: F => F.f("ch7.helm") ? "The Mender's Corner. A bed, a bowl, and nobody minds your business." : "The Mender's Corner. A bed, a bowl, and no questions about who you were before.", inn: "lowstep",
+    shopLine: "Imperial goods at imperial prices. Even the cheese has the Throne's tax in it.", shop: "lowstep", who: ["porter", "oldwoman", "child"] });
   T("lowstep").mender = T("lowstep").innkeeper;
   T("lowstep").ranna = async F => {
     if (!F.f("ch7.briefed")) { await say("ranna", "The chalk is on the floor by the vats. Come and look at it before you start asking me things."); return; }
-    if (!F.f("ch7.sewers")) { await say("ranna", cycle("rn7.a", ["Pavo is at the drain grate behind the dye-works. He talks. Let him talk; a boy who talks is a boy who is not afraid.", "Sleep first, then the drain. I mean it. I have buried people who did it the other way round.", "Bread, thyme and a window left open. That is the whole plan, if you need it short."])); return; }
-    if (F.f("ch7.done")) { await say("ranna", cycle("rn7.c", ["The red cloth came down. We folded it corner to corner and put it away. It is a good cloth; it will keep for the next time.", "Imela folds like that. You know that now. Go on, your mother is waiting somewhere better than a laundry.", "The palace sends its washing again. Same sheets. Different hands. We notice."])); return; }   // after chapter 7 (2026-11-01 audit)
-    await say("ranna", cycle("rn7.b", ["The washerwomen are watching the palace stairs. If something happens, they will hang the red cloth.", "You are up late. Good. So is the palace.", "Go. I will be here. Someone should be."]));
+    if (!F.f("ch7.sewers")) { await say("ranna", cycle("rn7.a", ["Pavo is at the drain grate behind the dye-works. He talks a lot, but let him. A boy who talks isn't afraid.", "Sleep first, then the drain. I mean it. I've buried people who did it the other way round.", "Bread, thyme and a window left open. That's the whole plan, if you need it short."])); return; }
+    if (F.f("ch7.done")) { await say("ranna", cycle("rn7.c", ["The red cloth has come down. We folded it corner to corner and put it away. It's a good cloth, and it'll keep until we need it again.", "That's how Imela folds. You know that now. Go on, your mother is waiting somewhere better than a laundry.", "The palace is sending its washing out again. Same sheets, different hands. We notice."])); return; }   // after chapter 7 (2026-11-01 audit)
+    await say("ranna", cycle("rn7.b", ["The washerwomen are watching the palace stairs. If something happens, they'll hang the red cloth.", "You're up late. Good. So is the palace.", "Go. I'll be here. Someone has to be."]));
   };
   T("lowstep").pavo = async F => {
-    if (!F.f("ch7.briefed")) { await say("pavo", "I know a thousand drains. Nine hundred are lies. Ranna says I am to take you, when you have eaten. Have you eaten?"); return; }
-    await say("pavo", "I know a thousand drains. Nine hundred are lies. Come on; keep your lantern low and your feet in the middle. The walls have opinions.");
+    if (!F.f("ch7.briefed")) { await say("pavo", "I know a thousand drains. Nine hundred of those are lies, though. Ranna says I'm to take you once you've eaten. Have you eaten?"); return; }
+    await say("pavo", "I know a thousand drains. Nine hundred of those are lies, though. Come on, keep your lantern low and your feet in the middle. The walls drip on people they don't like.");
     await thought("(He is perhaps fourteen. He walks into the drain like a boy walking into his own kitchen.)");
     if (!hub()) F.go("ahuacanSewers", "from_lowstep");
   };
   T("lowstep").cell1 = async F => { await say("cell1", cycle("cl1", ["Ranna says the laundry goes into the east wing every second morning. Don't ask me what comes out.", "My hands are blue to the elbow. I was born with them this colour, I tell the guards."])); };
-  T("lowstep").cell2 = async F => { await say("cell2", cycle("cl2", ["Sun-yellow takes twelve days and a good fire. The palace wants it by the dozen. We send them orange and they say thank you.", "I dyed the banner on the Court gate. It is slightly the wrong yellow. Nobody has noticed in six years."])); };
-  T("lowstep").cell3 = async F => { await say("cell3", cycle("cl3", ["The sheets from that wing come back folded corner to corner. Only one woman in the palace folds like that. We knew whose it was before anybody told us.", "Eat. You are thin under that tin, and your mother will say so."])); };
-  T("lowstep").laundress = async F => { await say("laundress", cycle("lw7", ["Hang it where the lamplight cannot find it. That is the whole trade.", "The gold leaf on the Court gate comes off on the washing. We have enough to buy a goat, some years."])); };
+  T("lowstep").cell2 = async F => { await say("cell2", cycle("cl2", ["Sun-yellow takes twelve days and a good fire. The palace wants it by the dozen. We send them orange and they say thank you.", "I dyed the banner on the Court gate. It's slightly the wrong yellow, and nobody has noticed in six years."])); };
+  T("lowstep").cell3 = async F => { await say("cell3", cycle("cl3", ["The sheets from that wing come back folded corner to corner. Only one woman in the palace folds like that. We knew whose it was before anybody told us.", "Eat. You're thin under that tin armour, and your mother will say so."])); };
+  T("lowstep").laundress = async F => { await say("laundress", cycle("lw7", ["In this trade, you hang things where the lamplight can't find them.", "The gold leaf on the Court gate comes off on the washing. Some years we scrape off enough to buy a goat."])); };
   ["cell1", "cell2", "cell3"].forEach(id => { if (!UI.PEOPLE[id]) UI.person(id, id === "cell1" ? "Dye-works hand" : id === "cell2" ? "Dyer" : "Washerwoman", ["assets/portraits/" + id + ".png", "assets/face_scholar.png"]); });
 
   // ---------- 4.B The sewers ----------
@@ -188,8 +188,8 @@
     F.music("sewer");
     await stage(async c => {
       M3.actors(c, [["pavo", "npcPavo", 50, -8, { name: "Pavo", flip: true }]]); c.tint("#0a1814", 0.3, 400);
-      await c.say([["narr", "Brick tunnels under the city, black water to the ankle, light coming down through grates in thin white bars. Somewhere above, a cart goes over the street, and the whole tunnel hums."],
-        ["pavo", "That one leads to the tannery. That one leads to a very angry man. That one leads to where you want to go, but it is under water. Valves. Three of them."]]);
+      await c.say([["narr", "The brick tunnels run under the city, with black water up to your ankles and light coming down through the grates in thin white bars. Somewhere above, a cart rolls over the street and the whole tunnel hums."],
+        ["pavo", "That one leads to the tannery. That one leads to a very angry man. That one leads to where you want to go, but it's under water. We have to drain it with the valves. There are three."]]);
       c.remove("pavo"); c.follow();
     }, { music: "sewer" });
   };
@@ -201,23 +201,23 @@
     S.trigger["valve" + n] = async F => {
       if (F.f("sw.v" + n)) return; F.set("sw.v" + n);
       await S.m2.gate([["narr", VALVE[n - 1]]], { dx: 100, dy: 10, sfx: "waterRush", fx: "splash", fx2: n === 3 ? "smoke" : undefined, shake: n === 3 ? 3 : 1, tint: "#0a1814" });
-      if (F.f("sw.v1") && F.f("sw.v2") && F.f("sw.v3")) await say("pavo", "That is all three. The grating is out of the water. Nine hundred lies and one true drain.");
+      if (F.f("sw.v1") && F.f("sw.v2") && F.f("sw.v3")) await say("pavo", "That's all three. The grating is out of the water now. Nine hundred lies and one true drain.");
     };
   });
   T("ahuacanSewers").pavo = async F => {
     const n = [1, 2, 3].filter(k => F.f("sw.v" + k)).length;
-    if (F.f("ch7.sewers")) { await say("pavo", "Up is the court. I do not go up. A boy with sewer on his boots in a gilded corridor is a very short story."); return; }
-    await say("pavo", n === 0 ? "Wheels, three of them. Rusty, slimy and the one with the lamp. Do not ask what the lamp is for." : n < 3 ? "Good. " + (3 - n) + " more. Do not let the rat-nests see your light; they take it personally." : "The grating. Go and look at it, I will watch the corridor.");
+    if (F.f("ch7.sewers")) { await say("pavo", "Up there is the court. I don't go up. A boy with sewer on his boots in a gilded corridor wouldn't last long."); return; }
+    await say("pavo", n === 0 ? "There are three wheels: the rusty one, the slimy one and the one with the lamp. Don't ask what the lamp is for." : n < 3 ? "Good. " + (3 - n) + " more to go. Don't let the rat nests see your light. They take it personally." : "The grating is clear now. Go and look at it, and I'll watch the corridor.");
   };
-  S.chest.sewerChest = M2.loot("c.sewer", [["sunwater", 3]], 300, "A builder's cistern, dry on its rim, and a chest somebody has hidden in it. Three Sunwater Flasks and a purse that clinks. Whoever stashed it did it in a hurry and did not come back.");
+  S.chest.sewerChest = M2.loot("c.sewer", [["sunwater", 3]], 300, "A builder's cistern, dry on its rim, with a chest somebody has hidden in it. Inside are three Sunwater Flasks and a purse that clinks. Whoever stashed it did it in a hurry and never came back.");
   S.done.sewerEnd = F => F.f("ch7.sewers");
   S.trigger.sewerEnd = async F => {
     if (F.f("ch7.sewers")) return;
-    if (!hub() && ![1, 2, 3].every(n => F.f("sw.v" + n)) && !F.f("ch7.valves")) { await UI.say([["narr", "The grating is under a hand's depth of black water. The wheels must be turned first."]]); return; }
+    if (!hub() && ![1, 2, 3].every(n => F.f("sw.v" + n)) && !F.f("ch7.valves")) { await UI.say([["narr", "The grating is under a hand's depth of black water. You need to turn the wheels first."]]); return; }
     F.set("ch7.sewers"); F.sfx("door");
     await stage(async c => {
       M3.actors(c, [["pavo", "npcPavo", -50, 0, { name: "Pavo" }]]);
-      await c.say([["narr", "The grating swings up on a hinge somebody greased this spring. Above it, a shaft of gold light, and the smell of beeswax and warm stone."], ["pavo", "That is the court. I stay here. If I hear boots I will bang the pipe three times."], ["hero", "And if you don't hear boots?"], ["pavo", "Then I will be eating. Go on."]]);
+      await c.say([["narr", "The grating swings up on a hinge that somebody greased this spring. A shaft of gold light falls into the tunnel from above, with the smell of beeswax and warm stone."], ["pavo", "That's the court. I'll stay here. If I hear boots, I'll bang on the pipe three times."], ["hero", "And if you don't hear boots?"], ["pavo", "Then I'll be eating. Go on."]]);
       c.remove("pavo"); c.follow();
     });
   };
@@ -228,7 +228,7 @@
     F.music("palace");
     await stage(async c => {
       c.tint("#3a2c14", 0.15, 400);
-      await c.say([["narr", "The outer court of the Gilded Palace: white stone and gold leaf, banners of the sun calendar, galleries where guards walk slowly in pairs. A fountain keeps its own time. Servants cross the court with trays, and nobody looks at their faces."], ["hero", "(Nineteen years. She has been behind these walls for nineteen years.)"]]);
+      await c.say([["narr", "This is the outer court of the Gilded Palace: white stone and gold leaf, banners of the sun calendar, and galleries where guards walk slowly in pairs. A fountain splashes in the middle. Servants cross the court with trays, and nobody looks at their faces."], ["hero", "(Nineteen years. She has been behind these walls for nineteen years.)"]]);
       c.tint("#3a2c14", 0, 500); c.follow();
     }, { music: "palace" });
     await F.banter("palace");
@@ -236,7 +236,7 @@
   S.done.courtEnter = F => F.f("crt.seen");
   S.trigger.courtWatch = async F => {
     if (!once(F, "ch7.watch")) return;
-    await UI.say([["narr", "A servants' passage runs behind the gallery wall, low and plain, smelling of soap. A washerwoman at the far end sees Ranna's cloth, then looks carefully at the wall until you have gone by."], ["hero", "(Nobody notices a servant. Nobody notices a servant carrying a tray.)"]]);
+    await UI.say([["narr", "A servants' passage runs behind the gallery wall, low and plain, smelling of soap. A washerwoman at the far end sees Ranna's cloth, then deliberately looks at the wall until you have gone by."], ["hero", "(Nobody notices a servant, least of all one carrying a tray.)"]]);
   };
   S.trigger.westGallery = async F => {
     if (F.f("ch7.courtKey")) return;
@@ -244,7 +244,7 @@
     const res = await F.fight([F.mkEnemy("courtPriest", 40), F.mkEnemy("palaceGuard", 40, " B")], { bg: "palace", intro: "The court priest calls the guard!" });
     if (res !== "win") return;
     F.set("ch7.courtKey"); F.give("palaceKeyA", 1, true); F.sfx("coin");
-    await UI.say([["narr", "On the priest's ring, one gilt key with a sun-wheel bow. It fits a servant door at the end of the gallery, behind a tapestry of the harvest."]]);
+    await UI.say([["narr", "One key on the priest's ring is gilt, with a sun-wheel bow. It fits a servants' door at the end of the gallery, behind a harvest tapestry."]]);
   };
   S.done.westGallery = F => F.f("ch7.courtKey");
   S.chest.g43_sunstoneRegalia = M.gearChest("g43_sunstoneRegalia", "G43", "ch7.courtKey", "The treasury is behind a servant door with a gilt lock. The keys are in the west gallery.");
@@ -257,9 +257,9 @@
         const h = c.hero; c.tint("#2a1a08", 0.25, 400);
         M3.actors(c, [["gd", "npcGuard", 150, -40, { name: "Gate-guard", flip: true }]]);
         await c.pan(h.x + 120, h.y - 20, 900);
-        await c.say([["narr", "The inner gate stands under a gilded arch. On a dais before it a collar altar of black stone, and a creature kneeling in gold harness as if it were being dressed for a feast. The guards on either side do not look at it. It does not look at them."], ["guard", "By the authority of the Throne, the inner gate is closed to the unregistered."]]);
+        await c.say([["narr", "The inner gate stands under a gilded arch. On a dais in front of it stand a collar altar of black stone and a creature kneeling in gold harness, as if it were being dressed for a feast. The guards on either side don't look at it, and it doesn't look at them."], ["guard", "By the authority of the Throne, the inner gate is closed to the unregistered."]]);
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(400); c.remove("gd"); c.follow();
-      }, after: ["(The gate is open. I do not want to walk through it.)"] });
+      }, after: ["(The gate is open, but I don't want to walk through it.)"] });
     if (!ok) return;
     F.set("ch7.s10");
     await S.m2.gate([["narr", "The collar-altar goes dark. The gate stands open, and a long white corridor runs under banners to the Garden. Nobody has come yet."]], { dx: 190, dy: -20, sfx: "door", fx: "dust", fx2: "sparkle", shake: 2 });
@@ -280,17 +280,17 @@
     F.music("palace");
     await stage(async c => {
       const h = c.hero; c.tint("#2c2418", 0.14, 400);
-      await c.say([["narr", "Terraced gardens of cacao and jasmine under a glass roof, caged birds in every arbour. From the balcony you can see down into the court. A horn sounds, twice, short."]]);
+      await c.say([["narr", "Terraced gardens of cacao and jasmine lie under a glass roof, with caged birds in every arbour. From the balcony you can see down into the court. A horn sounds twice, short and sharp."]]);
       M3.actors(c, [["msg", "npcCourier", 130, 60, { name: "Courier", flip: true }]]);
       c.emote("msg", "!");
       await c.say([["messenger", "Lord, a creature the size of a hill has been found in Rootdeep. The roots have moved."]]);
       await c.wait(600); c.sfx("encounter");
-      await c.say([["davichi", "Prepare the guard. I will see it myself."]]);
+      await c.say([["davichi", "Prepare the guard. I'll see it myself."]]);
       c.remove("msg");
       M3.actors(c, [["em", "npcDavichi", 300, 80, { name: "", flip: true }]]);
       await c.say([["narr", "Through a lattice of gilt wood you see a man in plain dark robes cross the court below, with his back to you: lean, unhurried, hands folded behind him. Forty guards fall in around him without a word. He never turns his head."]]);
       await c.walk("em", h.x + 640, h.y + 90, 3200); c.remove("em");
-      await c.say([["hero", "(That is him. He is walking away.)"]]);
+      await c.say([["hero", "(That's him. He's walking away.)"]]);
       c.tint("#2c2418", 0, 600); c.follow();
     }, { music: "tension" });
     UI.toast("The palace patrols thin.", 2600);
@@ -305,19 +305,19 @@
         const h = c.hero; c.tint("#14260e", 0.22, 400);
         M3.actors(c, [["gd", "npcPriest", 170, -30, { name: "Court Priest", flip: true }]]);
         await c.pan(h.x + 110, h.y - 10, 900);
-        await c.say([["narr", "At the centre of the garden a sun-dial of white stone, and at its foot a creature curled round it like a gardener's dog, a collar of gold wire on its neck and a chain running to a stake in the soil. The caged birds have all gone quiet at once."], ["priest", "The Keeper does not care for visitors. The jasmine is in bloom. It is entered in the ledger that you were warned."]]);
+        await c.say([["narr", "At the centre of the garden stands a sun-dial of white stone. A creature is curled round its foot like a gardener's dog, with a collar of gold wire on its neck and a chain running to a stake in the soil. All the caged birds have suddenly gone quiet."], ["priest", "The Keeper does not care for visitors. The jasmine is in bloom. It is entered in the ledger that you were warned."]]);
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(400); c.remove("gd"); c.follow();
-      }, after: ["(Every bird in this garden is singing. They know something I do not.)"] });
+      }, after: ["(Every bird in this garden is singing. They know something I don't.)"] });
     if (!ok) return;
     F.set("ch7.s11"); F.set("ch7.garden");
-    await S.m2.gate([["narr", "The gold wire falls out of the jasmine like a dropped necklace. Beyond the hedge wall, a little gate stands ajar toward the East Wing."]], { dx: 200, dy: 10, sfx: "door", fx: "leaves", fx2: "sparkle", shake: 1 });
+    await S.m2.gate([["narr", "The gold wire falls out of the jasmine like a dropped necklace. Beyond the hedge wall, a little gate stands ajar, leading to the East Wing."]], { dx: 200, dy: 10, sfx: "door", fx: "leaves", fx2: "sparkle", shake: 1 });
   };
   M3.spot("palaceGarden", "hiddenShrine", async F => {
-    if (!once(F, "ch7.shrine")) { await UI.say([["narr", "The hedge-shrine is small and grey. A feather inside a star. The mirrored lines beside it have not changed."]]); return; }
+    if (!once(F, "ch7.shrine")) { await UI.say([["narr", "The hedge shrine is small and grey, with a feather inside a star. The mirrored lines beside it haven't changed."]]); return; }
     F.give("starwardenMark", 1, true); F.set("lore.starwarden");
-    await UI.say([["narr", "A gap in the hedge wall, grown over, as if it had been trimmed round for a hundred years by gardeners who did not know why. Behind it, a shrine no taller than a child: grey stone, a candle stub, and in the stone a feather inside a star."],
-      ["narr", "Beside it, cut with a knife-point over older builder carving, mirrored lines in builder script. Backwards. Someone wrote this so it could only be read in a pool of water, or a mirror, or a polished shield."], ["narr", "THE COUNT IS SHORT."],
-      ["hero", "(The same mark. It is on my strap. It is on a wall in the emperor's own garden.)"], ["hero", "(Someone stood here, with a knife, in a hurry. Someone who could write backwards.)"]]);
+    await UI.say([["narr", "There is a gap in the hedge wall, grown over. It looks as if gardeners have trimmed round it for a hundred years without knowing why. Behind it is a shrine no taller than a child: grey stone, a candle stub, and a feather inside a star carved into the stone."],
+      ["narr", "Beside it, cut with a knife point over older builder carving, are lines in builder script, written backwards. Someone wrote this so that it could only be read in a pool of water, a mirror or a polished shield."], ["narr", "THE COUNT IS SHORT."],
+      ["hero", "(The same mark. It's on my strap, and now it's on a wall in the emperor's own garden.)"], ["hero", "(Someone stood here with a knife, in a hurry. Someone who could write backwards.)"]]);
     UI.toast("Journal: the Feather-in-Star mark.", 3000);
   }, "tgc");
   S.done.hiddenShrine = F => F.f("ch7.shrine");
@@ -332,7 +332,7 @@
         const h = c.hero; c.tint("#2a1c18", 0.22, 400);
         M3.actors(c, [["gl", "npcOverseer", 160, -30, { name: "The Gaoler", flip: true }]]);
         await c.pan(h.x + 110, h.y - 10, 900);
-        await c.say([["narr", "A herb court, quiet as a held breath. A window box of rosemary, a well-swept path. At the arch to the third court a creature lies across the threshold, and over it a heavy woman with a ring of keys at her belt stands as still as the creature does."],
+        await c.say([["narr", "The herb court is quiet as a held breath, with a window box of rosemary and a well-swept path. At the arch to the third court a creature lies across the threshold, and a heavy woman with a ring of keys at her belt stands over it, as still as the creature."],
           ["gaoler", "By the authority of the Throne, the lady is not to be disturbed. I have kept this arch for nineteen years. It is entered in the ledger that no one has ever come."]]);
         c.shake(2, 500); c.sfx("hitHeavy"); await c.wait(400); c.follow();
       }, after: ["(Nineteen years at that threshold. And it never once let her through.)"] });
@@ -340,22 +340,22 @@
     F.set("ch7.s12");
     await stage(async c => {
       M3.actors(c, [["gl", "npcOverseer", 60, -6, { name: "The Gaoler" }]]);
-      await c.say([["gaoler", "The keys. Take them. They are for show. That door has never been locked."], ["hero", "Never?"], ["gaoler", "She has never once tried it. Not in nineteen years. She knew what the door was for, and what it was not for."],
+      await c.say([["gaoler", "Take the keys. They're only for show. That door has never been locked."], ["hero", "Never?"], ["gaoler", "She has never once tried it, not in nineteen years. She understood what that door was really for."],
         ["gaoler", "The third court is on your left. Mind the thyme."]]);
       c.remove("gl"); c.follow();
     });
     F.give("palaceKeyC", 1, true);
   };
   M3.spot("palaceEastWing", "thymeBox", async F => {
-    await UI.say([["narr", "A window box of thyme, cut back hard, and a few stems twisted into a ring and hung from the nail. Bread, thyme and a window left open."]]);
-    if (once(F, "ch7.thyme")) await thought("(She grows it here. Nineteen years, and she planted the same thing.)");
+    await UI.say([["narr", "A window box of thyme, cut back hard, with a few stems twisted into a ring and hung from a nail. Bread, thyme and a window left open."]]);
+    if (once(F, "ch7.thyme")) await thought("(She grows it here too. Nineteen years, and she still plants the same thing.)");
   }, "tgc");
 
   // ---------- 4.D Imela (imelaRoom) ----------
   M.noteScene = async F => {
     F.give("davichiNote", 1, true); F.set("ch7.note");
     await UI.say([["narr", "A folded note on the table, under a plate of bread. A courtly hand, with every letter finished."], ["hero", "\"To Imela's son. She is yours, if you can carry her out. The door is open. Come again. Use the door this time. - D.\""], ["imela", "Hm."],
-      ["narr", "It is a whole sentence. You have heard her say it twice and you already know it."]]);
+      ["narr", "From her, that is a whole sentence. You have heard her say it twice now, and you already know what it means."]]);
   };
   S.done.imelaRoom = F => F.f("ch7.helm");
   S.trigger.imelaRoom = async F => {
@@ -365,24 +365,24 @@
     await stage(async c => {
       const h = c.hero; c.tint("#3a2c14", 0.2, 500);
       M3.actors(c, [["im", "npcImela", 90, -6, { name: "Imela", flip: true }]]);
-      await c.say([["narr", "The third court. A lamp in a high window. A window box of thyme. A woman of about forty at a loom, her back to the door, passing the shuttle through without looking at it."]]);
+      await c.say([["narr", "The third court has a lamp in a high window and a window box of thyme. A woman of about forty sits at a loom with her back to the door, passing the shuttle through without looking at it."]]);
       await c.wait(900);
-      await c.say([["imela", "You are late for dinner."]]);
+      await c.say([["imela", "You're late for dinner."]]);
       await c.say([["hero", "..."]]);
-      await c.say([["imela", "Sit. Eat first. Questions keep."], ["hero", "(I cannot make a sound come out. I have written this in my head a hundred times and every one of them was wrong.)"]]);
+      await c.say([["imela", "Sit down and eat first. Your questions can wait."], ["hero", "(I can't make a sound come out. I've written this scene in my head a hundred times, and every version was wrong.)"]]);
       c.face("im", "right"); c.emote("im", "heart"); await c.wait(800);
-      await c.say([["imela", "You have my father's chin. Take that thing off your head, sparrow. I want to see it."]]);
+      await c.say([["imela", "You have my father's chin. Take that thing off your head, sparrow. I want to see your face."]]);
       c.tint("#3a2c14", 0, 400);
     }, { music: "letters" });
     // prompt for cinema/m4_helm.png (panel.mjs): "a young man of 18 lifting off a black-and-purple great helm in lamp light, brown skin, his mother's face, tired eyes, a thyme box in the window, style B"
-    await Cinema.panels([{ img: "assets/cinema/m4_helm.png", text: "The helm comes off in both hands. Under it a young man of eighteen, brown-skinned, tired, with her face.", pan: "inup" }], { music: "letters" });
+    await Cinema.panels([{ img: "assets/cinema/m4_helm.png", text: "The helm comes off in both hands. Under it is a young man of eighteen, brown-skinned and tired, with her face.", pan: "inup" }], { music: "letters" });
     F.set("ch7.helm"); F.set("hero.unmasked"); M.syncHero();
-    await UI.say([["imela", "There. ...Hm."], ["imela", "The old fox gave you the armour. Of course he did. They would have known my face in yours in any market."], ["hero", "He said it was for protection."], ["imela", "It was. From me, as it turns out."],
-      ["narr", "She laughs, quietly, in a way that is not a laugh."], ["imela", "Hands. Show me. ...Calloused in the wrong places. We will fix that. Later. Sit."]]);
+    await UI.say([["imela", "There. ...Hm."], ["imela", "The old fox gave you the armour. Of course he did. They would have recognised my face in yours in any market."], ["hero", "He said it was for protection."], ["imela", "It was. From me, as it turns out."],
+      ["narr", "She laughs quietly, though it is not quite a laugh."], ["imela", "Show me your hands. ...Calloused in the wrong places. We'll fix that later. Sit."]]);
     await thought("(She smells of thyme. I had forgotten that I knew that.)");
-    await UI.say([["imela", "There is a note on the table. It came with the bread. I have not opened it; I know the hand."]]);
+    await UI.say([["imela", "There's a note on the table. It came with the bread. I haven't opened it, because I know the handwriting."]]);
     await M.noteScene(F);
-    await UI.say([["imela", "He leaves the door open and counts how long you take to use it. Nineteen years, I have watched him do it. Get me my shawl, sparrow. It is on the nail."]]);
+    await UI.say([["imela", "He leaves the door open and counts how long you take to use it. I've watched him do it for nineteen years. Get me my shawl, sparrow. It's on the nail."]]);
     F.give("imelaShawl", 1, true);
     F.questDone("m_rescue"); F.quest("m_sail", 0); F.save(true);
     UI.toast("Imela walks with you.", 3000);
@@ -401,7 +401,7 @@
   // ---------- 4.0 start: the voyage ----------
   S.begin[7] = async F => {
     G.ch = 7; F.set("ch7.start"); F.music("voyage");
-    await Cinema.voyage({ from: "kharamOasis", to: "lowstep", text: "East, along the black coast, past Tzavan's lights.", mood: "night" });
+    await Cinema.voyage({ from: "kharamOasis", to: "lowstep", text: "You sail east along the black coast, past Tzavan's lights.", mood: "night" });
     await Cinema.title("Chapter 7", "The Rescue");
     await F.banter("voyage2");
     F.music("capital"); F.save(true);
@@ -417,12 +417,12 @@
     await stage(async c => {
       const h = c.hero; c.tint("#4a2a10", 0.2, 300);
       M3.actors(c, [["im", "npcImela", -50, 10, { name: "Imela" }]]);
-      await c.say([["narr", "Dawn over the Gilded Palace. Gold tile, chimneys, stairs that go nowhere, a rope bridge in the distance to the Lowstep wall. A bell begins to ring in the court below, and then a second, and then the whole palace."]]);
+      await c.say([["narr", "Dawn breaks over the Gilded Palace: gold tiles, chimneys, stairs that go nowhere, and in the distance a rope bridge to the Lowstep wall. A bell begins to ring in the court below, then a second, and then the whole palace."]]);
       c.sfx("encounter"); c.shake(2, 500); c.emote("im", "!");
-      await c.say([["imela", "That is the north bell. They have found the Gaoler's keys on the floor. Which way, sparrow?"], ["hero", "The bridge."], ["imela", "Then walk like you mean it, and not like you are carrying me."]]);
+      await c.say([["imela", "That's the north bell. They've found the Gaoler's keys on the floor. Which way, sparrow?"], ["hero", "The bridge."], ["imela", "Then walk like you mean it, not like you're carrying me."]]);
       c.follow();
     }, { music: "tension" });
-    await UI.say([["narr", "Boots on the tiles behind you. The patrols have seen the roofs."]]);
+    await UI.say([["narr", "You hear boots on the tiles behind you. The patrols have started searching the roofs."]]);
   };
   S.done.sacrificeGate = F => F.f("ch7.sacrifice");
 
@@ -434,12 +434,12 @@
       const h = c.hero; c.tint("#3a1c0c", 0.25, 400);
       M3.actors(c, [["im", "npcImela", -40, 8, { name: "Imela" }]]);
       [[200, -30], [240, 10], [280, -10]].forEach(([dx, dy], i) => c.actor("gs" + i, { art: "npcLegionGuard", x: h.x + dx, y: h.y + dy, flip: true }));
-      await c.say([["narr", "The last gate of the roofs is a slab of stone on a track, a shutter cut into the stair-head. It will come down if someone leans on it from this side. It will not hold if someone is not leaning."]]);
+      await c.say([["narr", "The last gate of the roofs is a slab of stone on a track, a shutter set into the head of the stairs. It will come down if someone leans on it from this side, but it won't hold unless someone keeps leaning on it."]]);
       c.shake(3, 600); c.sfx("hitHeavy"); c.fx("dust", h.x + 120, h.y + 10);
-      await c.say([["imela", "The shutter will not hold alone."], ["narr", "Behind you the tiles are shaking under a run of boots. A horn. Another."]]);
+      await c.say([["imela", "The shutter won't hold by itself."], ["narr", "Behind you the tiles shake under running boots. A horn sounds, then another."]]);
       c.follow();
     }, { music: "sacrifice" });
-    const i = await F.ask("The gate will not hold. Someone has to stay.", party.map(u => ({ label: u.name })), { top: "32%" });
+    const i = await F.ask("The gate won't hold by itself. Someone has to stay.", party.map(u => ({ label: u.name })), { top: "32%" });
     const u = party[Math.max(0, i)], mates = party.filter(x => x !== u), L = D.SACRIFICE[u.id] || D.SACRIFICE_FALLBACK;
     F.checkpoint();
     await stage(async c => {
@@ -453,7 +453,7 @@
       c.sfx("hitHeavy"); c.shake(4, 700);
       await c.walk("st", h.x + 150, h.y + 4, 900); c.face("st", "right");
       c.fx("dust", h.x + 150, h.y + 10);
-      await c.say([["narr", "It turns. It puts its shoulder to the shutter and plants its feet in the stair, and does not look back. The first of the guards reaches it and it does not move. The second reaches it."]]);
+      await c.say([["narr", "It turns. It puts its shoulder to the shutter and plants its feet on the stairs, and does not look back. The first of the guards reaches it, and it does not move. Then the second reaches it."]]);
       c.shake(6, 900); c.flash("#ffe8c0", 300); c.sfx("break");
       await c.wait(500);
       await c.say([["hero", u.name.toUpperCase() + "!"]]);
@@ -462,7 +462,7 @@
     }, { music: "sacrifice" });
     Systems.sacrifice(u.id);
     F.set("ch7.sacrifice"); G.flags["sacrifice.id"] = u.id; F.save(true);
-    await UI.say([["narr", "The shutter comes down with a sound you feel in your teeth. Then it is quiet. You can hear a single chain, a long way off, going the other way."]]);
+    await UI.say([["narr", "The shutter comes down with a sound you feel in your teeth. Then it goes quiet. Far off, you can hear a single chain being dragged away in the other direction."]]);
     UI.toast(u.name + " stayed behind.", 4000);
   };
   S.trigger.sacrificeGate = async F => {
@@ -473,7 +473,7 @@
       const h = c.hero; c.tint("#2a1608", 0.2, 400);
       M3.actors(c, [["im", "npcImela", -30, 4, { name: "Imela" }]]);
       c.emote("im", "..."); await c.wait(500);
-      await c.say([["imela", "Do not turn round. If you turn round you will go back."], ["hero", "(She has her hand on my arm. It is shaking. She is holding on very steadily.)"]]);
+      await c.say([["imela", "Don't turn round. If you turn round, you'll go back."], ["hero", "(Her hand on my arm is shaking, but she is holding on very firmly.)"]]);
       await c.walk("im", h.x + 120, h.y + 6, 1800); await c.walkHero(h.x + 150, h.y + 6, 1800);
       await c.say([["narr", "The rope bridge sways over the street. Beneath it the washerwomen of Lowstep have hung red cloth from every line. The bell behind you stops."]]);
       c.tint("#2a1608", 0, 500); c.follow();
@@ -488,21 +488,21 @@
     await stage(async c => {
       const h = c.hero; c.tint("#241c34", 0.22, 300);
       M3.actors(c, [["ranna", "npcRanna", 130, 2, { name: "Ranna", flip: true }], ["im", "npcImela", -36, 6, { name: "Imela" }]]);
-      await c.say([["narr", "The dock stairs of Lowstep, in grey early light. Red cloth on every line. Ranna waits at the bottom step with her arms folded and a laundry basket at her feet, and she looks at you, and then past you."]]);
+      await c.say([["narr", "It is grey early light at the dock stairs of Lowstep, with red cloth on every line. Ranna waits at the bottom step with her arms folded and a laundry basket at her feet. She looks at you, and then past you."]]);
       c.emote("ranna", "?"); await c.wait(400);
-      await c.say([["narr", "She counts. She does not say it. She puts one hand flat to her chest, and takes it away."]]);
-      await c.say([["ranna", "The Salt Heron is two piers down. Your Captain has been asking for you every hour. And your mother has not stopped talking, in case you wondered."], ["imela", "I have said eleven words."], ["ranna", "Eleven is a lot, for you."]]);
+      await c.say([["narr", "She counts your party and sees that someone is missing. She says nothing. She puts one hand flat on her chest, then takes it away."]]);
+      await c.say([["ranna", "The Salt Heron is two piers down. Your Captain has been asking for you every hour. And your mother hasn't stopped talking, in case you were wondering."], ["imela", "I've said eleven words."], ["ranna", "Eleven is a lot, for you."]]);
       await c.say([["imela", "You folded my sheets corner to corner for a year and never once asked why they were different. Thank you, Ranna."], ["ranna", "...Go. Before I do something unprofessional."]]);
       c.remove("ranna"); c.remove("im");
     }, { music: "farewell" });
     await stage(async c => {
       const h = c.hero; c.tint("#10182c", 0.35, 600);
       M3.actors(c, [["br", "npcBrisk", 140, 0, { name: "Captain Brisk", flip: true }], ["im", "npcImela", -30, 8, { name: "Imela" }]]);
-      await c.say([["narr", "The Salt Heron, with her lanterns shaded. The deck smells of tar and the sea."], ["captain", "Madam."], ["imela", "Captain. You are the one who does not sail through wars. Good. I am the one who has been in one for nineteen years."], ["captain", "...I like her, friend. I do not know if that is wise."]]);
+      await c.say([["narr", "The Salt Heron has her lanterns shaded. The deck smells of tar and the sea."], ["captain", "Madam."], ["imela", "Captain. You're the one who doesn't sail through wars. Good. I'm the one who's been in one for nineteen years."], ["captain", "...I like her, friend. I don't know if that's wise."]]);
       c.remove("br");
-      await c.say([["narr", "Night on deck. The lamp swings. Imela sits on a coil of rope with your gauntlets in her lap, cleaning each finger with a rag and a little oil, and does not speak."]]);
+      await c.say([["narr", "It is night on deck, and the lamp swings. Imela sits on a coil of rope with your gauntlets in her lap, cleaning each finger with a rag and a little oil. She does not speak."]]);
       await c.wait(1400);
-      await c.say([["hero", "I could not turn round."], ["imela", "No. That is why it worked."]]);
+      await c.say([["hero", "I couldn't turn round."], ["imela", "No. That's why it worked."]]);
       c.remove("im"); c.tint("#10182c", 0, 600);
     }, { music: "farewell" });
     F.set("ch7.done"); F.questDone("m_sail"); G.lastTown = "lowstep"; F.save(true);

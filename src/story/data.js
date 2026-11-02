@@ -6,7 +6,7 @@ const Data = (() => {
     { id: "vanguard",  n: "The Vanguard",   ids: ["horncinder", "shellmund", "kitsuneva"],   line: "The lab's first trio. They act like a small family." },
     { id: "sprint",    n: "Blood Sprint",   ids: ["skarnwolf", "vespera", "glimmerkoi"],     line: "Three escape artists. One still drags a broken chain." },
     { id: "venom",     n: "Slow Venom",     ids: ["mossmaw", "nightveil", "emberlamb"],      line: "Patient and a little sad. They sat through the long experiments." },
-    { id: "tempest",   n: "Tempest",        ids: ["skyrend", "volthorn", "brinegrave"],      line: "Caught in the same storm at sea. They have not stopped bickering." },
+    { id: "tempest",   n: "Tempest",        ids: ["skyrend", "volthorn", "brinegrave"],      line: "Caught in the same storm at sea. They haven't stopped bickering." },
     { id: "ironward",  n: "The Iron Ward",  ids: ["bulwyrm", "rotfang", "stillgaze"],        line: "Judged too dangerous and kept apart. They trust nobody." },
     { id: "breakers",  n: "Breakers",       ids: ["crushjaw", "zephyrra", "duskcoil"],       line: "Hunting partners and best friends. They compete at everything." },
     { id: "bastion",   n: "Deep Bastion",   ids: ["atlacrab", "solenne", "kappadeep"],       line: "The calm old guard of the lab." },
@@ -24,9 +24,9 @@ const Data = (() => {
     vanguard: {
       tut:    [["horncinder", "Again? I can smash that slug in my sleep!"], ["shellmund", "Slowly, young bull. Watch the pipe-drip. Learn."], ["kitsuneva", "Good, dear. Breathe. We have all day."]],
       choose: [["horncinder", "You picked us! Course you did. Best pen in the vault!"], ["kitsuneva", "Hush, bull. Come close, dear. Stay close."], ["shellmund", "...Home is behind us now. Walk on."]],
-      flee:   [["horncinder", "I hear them behind us! Let me turn and fight!"], ["shellmund", "No. We keep moving. They are many."], ["kitsuneva", "The others, I counted. Eight pens. I hear them crying."]],
+      flee:   [["horncinder", "I hear them behind us! Let me turn and fight!"], ["shellmund", "No. We keep moving. They are many."], ["kitsuneva", "I counted the others. Eight pens. I can hear them crying."]],
       rest:   [["kitsuneva", "Eat something, dear. Then sleep. I'll keep watch."], ["horncinder", "I'm not tired. I'm... loud-tired. Is that a thing?"], ["shellmund", "It is. It passes."]],
-      karvan: [["horncinder", "A man in a shell of steel! My favourite kind!"], ["shellmund", "Spells. His shield turns the horns."], ["kitsuneva", "I am right behind you all. Go."]],
+      karvan: [["horncinder", "A man in a shell of steel! My favourite kind!"], ["shellmund", "Use spells. His shield turns the horns."], ["kitsuneva", "I am right behind you all. Go."]],
       wagon:  [["horncinder", "Look at all those cages. Who are they?"], ["shellmund", "Cousins. Strangers. We were all kept so."], ["kitsuneva", "We will open them, one by one. I promise."]],
       bearer: [["horncinder", "A giant! Oh, the stories I'll tell!"], ["shellmund", "Carrying a star on its back. Think before you charge."], ["kitsuneva", "Together, then. As always."]],
       boat:   [["horncinder", "Sea! Wide, wet, wobbly sea!"], ["shellmund", "I have crossed worse waters. In the old shell."], ["kitsuneva", "Home is behind us, dear. We make a new one."]],
@@ -41,7 +41,7 @@ const Data = (() => {
       karvan: [["skarnwolf", "Soldiers hunt in lines. I hunt better."], ["vespera", "Let me at him. I'll be gone before he blinks."], ["glimmerkoi", "How thick is a tower shield, exactly? Asking for tactics."]],
       wagon:  [["skarnwolf", "Cages. ...I know that smell. The metal."], ["vespera", "Disgusting. Open them, quickly."], ["glimmerkoi", "How many are there? Do they have names? May I read the tags?"]],
       bearer: [["skarnwolf", "Big thing, big mistake. Don't stop moving."], ["vespera", "A statue that walks. How uncouth."], ["glimmerkoi", "A star on its back! Is that where they fall? Does it hurt?"]],
-      boat:   [["skarnwolf", "Water again. We came from the sea, once. Near enough."], ["vespera", "If I'm seasick, no one speaks of it."], ["glimmerkoi", "Where does the horizon end? Please, someone say."]],
+      boat:   [["skarnwolf", "Water again. We came from the sea once, or near enough."], ["vespera", "If I'm seasick, no one speaks of it."], ["glimmerkoi", "Where does the horizon end? Please, someone say."]],
       idle:   [["skarnwolf", "Someone is watching us. Always someone."], ["vespera", "That scarf is a crime. Remove it."], ["glimmerkoi", "Do all towns smell of dates?"]],
       lab:    [["skarnwolf", "We almost made it out together. The wall. Remember the wall?"], ["vespera", "You were the only one who ever said please."], ["glimmerkoi", "I've got so many questions. Starting with: why?"]],
     },
@@ -88,7 +88,7 @@ const Data = (() => {
       rest:   [["crushjaw", "Dates! Rolls! A whole roast bird! Thank you!"], ["zephyrra", "I can't sleep, I'm too excited. Tell me a story."], ["duskcoil", "Do you know what the innkeeper hides under the bed?"]],
       karvan: [["crushjaw", "Armoured meat. I mean, opponent."], ["zephyrra", "Race you to the first hit, Crushjaw!"], ["duskcoil", "He is afraid of failing someone. Use it."]],
       wagon:  [["crushjaw", "Cages. Whoever did this owes me dinner."], ["zephyrra", "Hello, hello, hello, I'm Zephyrra, you'll like me!"], ["duskcoil", "These ones know secrets. Delicious."]],
-      bearer: [["crushjaw", "It is HUGE. I want to bite it."], ["zephyrra", "Look at its stone! Oh, we hit it twice. I know it!"], ["duskcoil", "They say it cracks. They always say that."]],
+      bearer: [["crushjaw", "It is HUGE. I want to bite it."], ["zephyrra", "Look at its stone! If we hit it twice, I just know it'll crack!"], ["duskcoil", "They say it cracks. They always say that."]],
       boat:   [["crushjaw", "Snacks for the voyage? I packed two."], ["zephyrra", "Waves! I'll fly ahead and see! Don't wait!"], ["duskcoil", "Everyone on that boat has a secret. Fun!"]],
       idle:   [["crushjaw", "Is that a stew? Oh the smell!"], ["zephyrra", "Look at that banner! I want one!"], ["duskcoil", "Did you know the baker's son..."]],
       lab:    [["crushjaw", "We ate all the keepers' bread. Good old days!"], ["zephyrra", "We always won together. Together, remember?"], ["duskcoil", "I know every secret in that lab. Except yours."]],
@@ -378,7 +378,7 @@ const Data = (() => {
 
   // ---------- quests ----------
   const QUESTS = {
-    m_lessons:  { t: "Lessons in the Undercroft", main: true, steps: ["Speak to Old Dunmar at the lab.", "Go down to the Undercroft and finish the three lessons.", "Go down the stair behind the old lab door to the creature vault, and choose your team."] },
+    m_lessons:  { t: "Lessons in the Undercroft", main: true, steps: ["Speak to Old Dunmar at the lab.", "Go down to the Undercroft and finish the three lessons.", "Go down the stairs behind the old lab door to the creature vault, and choose your team."] },
     m_escape:   { t: "Out of the Burning City", main: true, steps: ["Reach Sandpiper Rest across the dunes."] },
     m_cistern:  { t: "Through the Burnt Gate", main: true, steps: ["Follow the marked route into the Cistern of the Burnt Gate and come out the other side."] },
     m_research: { t: "Field Research", main: true, steps: ["Find Old Dunmar's wagon in Amber Wells.", "Master Ithiel wants the Hollow of the Sky-Stone recorded. Reach it through Saltgate."] },
@@ -393,9 +393,9 @@ const Data = (() => {
   // ---------- rumours (heard by talking to townsfolk) ----------
   const RUMOURS = {
     orun: ["\"The new apprentices pick their teams today. They say no two teams play alike.\"", "\"The empire buys scholars. Not many go willingly.\"", "\"Old Dunmar keeps a cage no one is allowed to ask about.\""],
-    sandpiper: ["\"A hound made of whispers walks the dunes at dusk. Those who see it keep their luck for a month.\"", "\"Scorpion shells from the Quarry are so hard they can be made into a ramming boot.\"", "\"The legions came in tower shields like a wall. I did not see one fall.\""],
-    amber: ["\"The Bearer carries its stone on its back and guards its front with it. Strike the stone twice in a breath and it splits.\"", "\"Old Mazeheart under the oasis keeps a locked cage. A traveller says a bull bellows in the walls.\"", "\"A scholar owes everyone money. His red robe is the best cut in the city.\""],
-    saltgate: ["\"The empire's tax ships dock at the north pier. They never unload anything.\"", "\"A kite maker says the jungle's feathers make slow cloth.\"", "\"The Quarry's ember slag burns clean. A fire-master from the jungle would pay for it.\""],
+    sandpiper: ["\"A hound made of whispers walks the dunes at dusk. Those who see it keep their luck for a month.\"", "\"Scorpion shells from the Quarry are so hard they can be made into a ramming boot.\"", "\"The legion came in a wall of tower shields. I didn't see a single one fall.\""],
+    amber: ["\"The Bearer carries its stone on its back and guards its front with it. Strike the stone twice in one breath and it splits.\"", "\"Old Mazeheart under the oasis keeps a locked cage. A traveller says a bull bellows in the walls.\"", "\"A scholar owes everyone money. His red robe is the best cut in the city.\""],
+    saltgate: ["\"The empire's tax ships dock at the north pier. They never unload anything.\"", "\"A kite maker says the jungle's feathers make a cloth that slows the wind.\"", "\"The Quarry's ember slag burns clean. A fire-master from the jungle would pay for it.\""],
   };
   const LORE = {
     bearerBreak: "The Dune Bearer's stone guards its front. Two heavy impact blows in a row crack it (Amber Wells rumour).",
@@ -403,13 +403,13 @@ const Data = (() => {
 
   // ---------- bestiary text (short, in the apprentice's voice) ----------
   const BEST = {
-    pipeSlug: "A pale slug with a crab claw. Slow. Spits goo.", inkImp: "Born of spilled lab ink. Fires blots.", cellarRatKing: "Three rats knotted together. Acts as a swarm.", dustWisp: "A dry spark in a jar. Weak to water.", gelatinCubeMimic: "A specimen box that grew legs. Hates fire.",
-    sandstitchJackal: "A jackal with a scarab shell. Circles you and bites for bleed.", glassAdder: "Clear-hooded viper. Poison bite, then it hides in the sand.", dustwingImp: "Throws sand to lower Speed.", mirageCat: "Hits and flickers like heat haze.",
-    raidShieldbearer: "Tower shield: takes less physical damage. Use spells.", raidSlinger: "Stays back and hits whoever is weakest.", raidTorchbearer: "Burns what it touches.", raidSpearman: "Reach attack: hits the front creature.", raidArcher: "Shoots the lowest-HP creature.",
+    pipeSlug: "A pale slug with a crab claw. It's slow and spits goo.", inkImp: "Born of spilled lab ink. It fires blots.", cellarRatKing: "Three rats knotted together. It acts as a swarm.", dustWisp: "A dry spark in a jar. Weak to water.", gelatinCubeMimic: "A specimen box that grew legs. It hates fire.",
+    sandstitchJackal: "A jackal with a scarab shell. It circles you and bites to cause bleed.", glassAdder: "A viper with a clear hood. Its bite is poisonous, and then it hides in the sand.", dustwingImp: "Throws sand to lower your Speed.", mirageCat: "It hits you, then flickers like heat haze.",
+    raidShieldbearer: "Carries a tower shield and takes less physical damage. Use spells.", raidSlinger: "Stays back and hits whoever is weakest.", raidTorchbearer: "Burns what it touches.", raidSpearman: "Reach attack: hits the front creature.", raidArcher: "Shoots the lowest-HP creature.",
     dripWraith: "A water ghost in the cistern.", boneCrab: "A skeleton crab. Brittle but hard.", cisternEel: "A fish with human teeth.", mossGolem: "A small golem of moss and stone.",
-    raidOptioKarvan: "An imperial officer. Two shieldbearers at his side. Spells slip past the shields.",
-    cinderlizardHound: "Salamander with a hound's head. Burns.", duneScorpionKnight: "Ram-skull shell. Slow and heavy. Drops Duneclaw Shards.", sunScarabSwarm: "Golden beetles that act together. Area spells.", saltHarpy: "Salt-crusted harpy. Fast, bleeds.", dustSphinxCub: "Asks riddles. Begins with a free Weaken.",
-    quarryboundGargoyle: "Stone watcher of the Quarry.", slagImp: "Small and hot.", basaltSkin: "A little golem.", mirrorBeetle: "Reflects light spells.", mazeBat: "Flits through the bone walls.", boneBullCalf: "A young bone-bull. Charges.", emberScorpion: "Burning scorpion. Drops Cinderglass Embers.",
+    raidOptioKarvan: "An imperial officer with two shieldbearers at his side. Spells slip past the shields.",
+    cinderlizardHound: "A salamander with a hound's head. It burns you.", duneScorpionKnight: "Has a shell shaped like a ram's skull. Slow and heavy. Drops Duneclaw Shards.", sunScarabSwarm: "Golden beetles that act together. Use area spells.", saltHarpy: "A salt-crusted harpy. It's fast and causes bleed.", dustSphinxCub: "Asks riddles. It starts the fight with a free Weaken.",
+    quarryboundGargoyle: "Stone watcher of the Quarry.", slagImp: "Small and hot.", basaltSkin: "A little golem.", mirrorBeetle: "Reflects light spells.", mazeBat: "Flits through the bone walls.", boneBullCalf: "A young bone-bull that charges at you.", emberScorpion: "A burning scorpion. Drops Cinderglass Embers.",
     duneWhisperer: "A hound of wind and sand with a mouth full of voices. It repeats what you said last night.", mazeGuardian: "A great bone-bull guarding the heart of the Maze. Break it with two heavy blows in a row.",
     duneBearer: "A builder Titan holding up a fallen sky-stone. The stone shields its front.",
   };
@@ -448,7 +448,7 @@ const Data = (() => {
       things: [], autos: ["orun.start", "orun.vaultAuto"] },
     orunVault: { n: "The Creature Vault", bg: "bg_ruins", arena: "ruins", music: "packChoice", fields: false, autos: ["vault.arrive"],
       npcs: [["oldDunmar", "Old Dunmar"], ["mentor", "Master Ithiel"]].concat([0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => ["pen" + i, "Pen " + (i + 1), s => s.f["vault.seen"] && !s.f["pro.packed"]])),
-      exits: [["orun", "Back up the stair", s => !s.f["pro.packed"]]], things: [] },
+      exits: [["orun", "Back up the stairs", s => !s.f["pro.packed"]]], things: [] },
     undercroft:{ n: "Orun Undercroft", bg: "bg_ruins", arena: "ruins", music: "dungeon", table: "undercroft", fields: false,
       exits: [["lesson", "Go deeper (next lesson)", s => !s.f["pro.lessons"], "trigger"], ["orun", "Back up to Orun", s => true]], things: [["undercroftChest", "A dusty chest", s => !s.f["c.under"], "chest"]] },
     dunes:     { n: "Whisperglass Dunes", bg: "bg_desert", arena: "desert", music: "dunes", table: "dunes", fields: true,
@@ -462,7 +462,7 @@ const Data = (() => {
       things: [["g5_bullringBronze", "A sunk chest", s => true, "chest"]] },
     amberWells:{ n: "Amber Wells", bg: "bg_desert", arena: "desert", music: "oasis", town: "amber", inn: "amber",
       npcs: [["innkeeper", "The Seventh Date"], ["merchant", "Market"], ["oldDunmar", "Old Dunmar's wagon", s => !s.f["ch3.landed"]], ["redScholar", "Man in a red robe"], ["guildMaster", "Guild master"], ["r1", "Market gossip"], ["r2", "Old woman"], ["r3", "Labourer"]],
-      exits: [["basin", "The basin road", s => true], ["maze", "The stair down to the Bone Maze", s => true]], autos: ["amber.arrive"] },
+      exits: [["basin", "The basin road", s => true], ["maze", "The stairs down to the Bone Maze", s => true]], autos: ["amber.arrive"] },
     basin:     { n: "Amber Wells Basin", bg: "bg_desert", arena: "desert", music: "desert", table: "basin", fields: true,
       exits: [["amberWells", "South to Amber Wells", s => true], ["dunes", "West to the dunes", s => true], ["quarry", "Scorpion Quarry", s => s.f["am.wagon"]], ["flats", "Cinderglass Flats", s => s.f["am.wagon"]], ["saltgate", "North to Saltgate", s => s.f["am.wagon"]], ["hollow", "The Hollow of the Sky-Stone", s => s.f["am.wagon"]]], things: [] },
     quarry:    { n: "Scorpion Quarry", bg: "bg_ruins", arena: "ruins", music: "dungeon", table: "quarry", fields: true,
