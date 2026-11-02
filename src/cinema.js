@@ -127,7 +127,7 @@
 
   class Stage {
     constructor(sc, o) {
-      this.sc = sc; this.o = o || {}; this.actors = new Map(); this.pending = []; this.objs = []; this.timers = []; this.lights = []; this.dead = false;
+      this.sc = sc; this.o = o || {}; this.actors = new Map(); this.pending = []; this.objs = []; this.timers = []; this.lights = []; this.dead = false; this.hidFol = [];
       this.black = false; this.panned = false; this.zoomed = false; this.fxTex = false;
     }
     get dry() { return !this.sc; }
@@ -158,6 +158,7 @@
         for (const t of this.timers) try { t.remove(false); } catch (e) { /* ignore */ }
         for (const o of this.objs) try { o.destroy(); } catch (e) { /* ignore */ }
         for (const a of this.actors.values()) this._destroyActor(a);
+        for (const f of this.hidFol) try { f.s.setVisible(true); if (f.sh) f.sh.setVisible(true); } catch (e) { /* ignore */ }
         if (sc.tempLights) for (const l of this.lights) { const i = sc.tempLights.indexOf(l); if (i >= 0) sc.tempLights.splice(i, 1); }
         if (live) {
           try { if (this.panned || this.zoomed) { sc.follow(); sc.cameras.main.zoomTo(1, instant() ? 1 : 450, "Sine.easeInOut", true); } } catch (e) { /* ignore */ }
@@ -229,6 +230,9 @@
         a.faceR = o.face ? o.face === "right" : !!o.flip === !a.nativeRight;   // flip = mirror the art: native-left art then faces right
         if (o.alpha !== undefined) a.s.setAlpha(o.alpha);
         this.actors.set(id, a);
+        // a party creature on stage: its follower steps out for the scene, or it stands there twice (Danny 2026-11-02); back in _end
+        const fol = (sc.followers || []).find(f => f && f.id === a.art && f.s && f.s.visible);
+        if (fol) { fol.s.setVisible(false); if (fol.sh) fol.sh.setVisible(false); this.hidFol.push(fol); }
         if (o.light) { a.lamp = [a.x, a.y - 24, o.light, 0.9]; sc.tempLights = sc.tempLights || []; sc.tempLights.push(a.lamp); this.lights.push(a.lamp); }
         this.pending.push(this._loadArt(a, o));
         return a;

@@ -490,7 +490,7 @@
         const src = this.textures.exists("cr_" + id) ? "cr_" + id : this.textures.exists("crx_" + id) ? "crx_" + id : null; if (!src) { console.warn("World: no art for creature", id); return null; }
         const tk = "pf_" + id; if (!this.textures.exists(tk)) { const im = this.textures.get(src).getSourceImage(), sc = FOLLOW_H / im.height, w = Math.max(1, Math.round(im.width * sc)), c = makeCanvas(w, FOLLOW_H), ctx = c.getContext("2d"); ctx.imageSmoothingEnabled = false; ctx.drawImage(im, 0, 0, w, FOLLOW_H); this.textures.addCanvas(tk, c); }
         const sh = this.add.image(sx, sy, "shadow").setScale(0.9, 0.8).setAlpha(0.9), s = this.add.image(sx, sy + 6 + i, tk).setOrigin(0.5, 1);
-        return { s, sh, gap: [40, 76, 110][i], x: sx, y: sy + 6 + i, phase: i * 1.7, flip: false, moving: false };
+        return { id, s, sh, gap: [40, 76, 110][i], x: sx, y: sy + 6 + i, phase: i * 1.7, flip: false, moving: false };
       }).filter(Boolean);
     }
     updateFollowers(time, dt) {
