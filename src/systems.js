@@ -39,16 +39,16 @@ const Systems = (() => {
 
   // ---------- items registered here (key items for the charms, Respec Stone) ----------
   const regItem = (k, o) => { if (!Data.ITEMS[k]) Data.ITEMS[k] = o; };
-  regItem("lureBanner", { n: "Lure Banner", d: "A charm: doubles the fight rate for good.", key: true });
+  regItem("lureBanner", { n: "Lure Banner", d: "A charm: wild fights happen twice as often, for good.", key: true });
   regItem("quietSigil", { n: "Quiet Sigil", d: "A charm: fights far below your team's level never start.", key: true });
   regItem("respecStone", { n: "Respec Stone", d: "Takes back every stat point one creature spent, free. Gone after one use.", use: "respec" });
   regItem("soulDew", { n: "Soul Dew", d: "Brings one fallen creature back at full HP, once per fight.", f: 0 });
-  Data.ITEMS.wardstone.d = "A charm: halves the fight rate for good.";
+  Data.ITEMS.wardstone.d = "A charm: wild fights happen half as often, for good.";
 
   // ---------- charms ----------
   const CHARMS = {
-    wardstone: { n: "Wardstone", mult: 0.5, d: "Halves the fight rate." },
-    lureBanner: { n: "Lure Banner", mult: 2, d: "Doubles the fight rate." },
+    wardstone: { n: "Wardstone", mult: 0.5, d: "Wild fights happen half as often." },
+    lureBanner: { n: "Lure Banner", mult: 2, d: "Wild fights happen twice as often." },
     quietSigil: { n: "Quiet Sigil", mult: 1, skip: 8, d: "Fights eight or more levels below your team never start." },
   };
   S.CHARMS = CHARMS;

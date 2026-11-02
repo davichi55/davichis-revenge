@@ -219,9 +219,9 @@
   U.charmsHtml = () => {
     const own = S.ownedCharms(); if (!own.length) return "";
     const act = S.activeCharm(), t = S.timedCharm();
-    return `<h3 style="margin-top:12px">Charms</h3><div style="color:#b7a58a;margin-bottom:6px">One charm works at a time. A lit Incense or Lure Candle beats it while it burns.${t ? ` (${t.kind === "incense" ? "Incense" : "Lure Candle"} is burning now.)` : ""}</div>`
+    return `<h3 style="margin-top:12px">Charms</h3><div style="color:#b7a58a;margin-bottom:6px">Only one charm works at a time. While an Incense or Lure Candle burns, it counts instead of your charm.${t ? ` (${t.kind === "incense" ? "Incense" : "Lure Candle"} is burning now.)` : ""}</div>`
       + own.map(k => `<div class="row"><div class="g">${esc(S.CHARMS[k].n)}<small>${esc(S.CHARMS[k].d)}</small></div>${act === k ? `<b style="color:#7ee081">Active</b>` : `<button class="b" data-charm="${k}">Use</button>`}</div>`).join("")
-      + `<div class="row"><div class="g">No charm<small>Normal fight rate.</small></div>${act === null ? `<b style="color:#7ee081">Active</b>` : `<button class="b" data-charm="none">Use</button>`}</div>`;
+      + `<div class="row"><div class="g">No charm<small>Wild fights happen at the normal rate.</small></div>${act === null ? `<b style="color:#7ee081">Active</b>` : `<button class="b" data-charm="none">Use</button>`}</div>`;
   };
   U.charmClick = k => { S.setCharm(k === "none" ? null : k); F.sfx("menuOk"); return k === "none" ? "No charm is active." : S.CHARMS[k].n + " is active."; };
 })();

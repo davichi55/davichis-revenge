@@ -138,8 +138,8 @@ const Data = (() => {
     antidote: { n: "Reed Antidote",   d: "Clears poison and bleed from one creature.", f: 1.25 },   // was a full cleanse for 5 kal (Danny 2026-11-01); the Clearwater Tonic is the full cleanse
     tonic:    { n: "Clearwater Tonic", d: "Cures every status, Wet included, and every lowered stat on one creature.", f: 1.5 },
     ember:    { n: "Ashen Ember",     d: "Revives a fallen creature at 30% HP, in a fight or from the menu.", f: 4, use: "revive" },
-    incense:  { n: "Wayfarer's Incense", d: "Halves the fight rate for about 5 minutes of walking.", f: 2, use: "charm" },
-    candle:   { n: "Lure Candle",     d: "Doubles the fight rate for about 5 minutes.", f: 1, use: "charm" },
+    incense:  { n: "Wayfarer's Incense", d: "Wild fights happen half as often for about 5 minutes of walking.", f: 2, use: "charm" },
+    candle:   { n: "Lure Candle",     d: "Wild fights happen twice as often for about 5 minutes.", f: 1, use: "charm" },
     cinderBomb: { n: "Cinder Bomb", d: "Fire damage, adds burn. Never counts toward a break.", f: 1.8 },
     rimeFlask:  { n: "Rime Flask",  d: "Ice damage, adds chill. Never counts toward a break.", f: 1.8 },
     soakJar:    { n: "Soak Jar",    d: "Makes an enemy Wet. Never counts toward a break.", f: 1.8 },
@@ -151,7 +151,7 @@ const Data = (() => {
     venomWard:  { n: "Venom-Ward",  d: "One creature takes 25% less poison damage for 3 turns.", f: 1.5 },
     soulDew:    { n: "Soul Dew",    d: "Revives a fallen creature at full HP. Once per fight. Not sold.", f: 0, key: false },
     keyK1:      { n: "Bone Maze Key", d: "Opens a cell in the Menagerie Wagon.", key: true },
-    wardstone:  { n: "Wardstone", d: "A charm: halves the fight rate for good.", key: true },
+    wardstone:  { n: "Wardstone", d: "A charm: wild fights happen half as often, for good.", key: true },
     journal:    { n: "Field Journal", d: "Your satchel of notes. Everything you see goes in.", key: true },
   };
   // trade goods (sellable, no other use) and skill-book materials
