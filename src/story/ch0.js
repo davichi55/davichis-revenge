@@ -170,19 +170,24 @@
   // between lessons the loaners are patched up (Danny: the old "cool pool in the wall" line pointed at a pool nobody could see)
   const heal = async F => {
     F.healAll();
-    await S.stage(async c => {
+    // the scene's creatures stand in for the party followers (Danny 2026-11-02: the followers stayed visible, 6 creatures on screen)
+    const fol = (World.scene && World.scene.followers) || [], show = on => fol.forEach(f => { if (f && f.s) f.s.setVisible(on); if (f && f.sh) f.sh.setVisible(on); });
+    try { await S.stage(async c => {
       const h = c.hero, ids = (G.party || []).map(u => u.id).slice(0, 3);
-      ids.forEach((id, i) => c.actor("hl" + i, { art: id, x: h.x + 56 + i * 36, y: h.y + 14 + (i % 2) * 14, scale: 0.9 }));
+      show(false);
+      const at = ids.map((id, i) => fol[i] ? { x: fol[i].x, y: fol[i].y } : { x: h.x + 56 + i * 36, y: h.y + 14 + (i % 2) * 14 });
+      ids.forEach((id, i) => c.actor("hl" + i, { art: id, x: at[i].x, y: at[i].y, scale: 0.9, exact: !!fol[i] }));
+      const cx = at.reduce((t, p) => t + p.x, 0) / (at.length || 1) || h.x + 90, cy = at.reduce((t, p) => t + p.y, 0) / (at.length || 1) || h.y + 24;
       c.actor("hlD", { art: "npcDunmar", x: h.x - 170, y: h.y - 6, alpha: 0 });
       await c.anim("hlD", "fadeIn", { ms: 300 });
       await S.rush(c, "hlD", h.x + 12, h.y - 8, 150);
-      c.sfx("splash"); c.fx("splash", h.x + 90, h.y + 24, { scale: 1.6 }); c.fx("sparkle", h.x + 90, h.y - 10, { r: 50, ms: 1400 });
+      c.sfx("splash"); c.fx("splash", cx, cy, { scale: 1.6 }); c.fx("sparkle", cx, cy - 34, { r: 50, ms: 1400 });
       await Promise.all(ids.map((id, i) => c.anim("hl" + i, "shake", { ms: 350 })));
       c.sfx("heal");
       await Promise.all(ids.map((id, i) => c.anim("hl" + i, "hop")));
       await c.say([["narr", "Old Dunmar tips a bucket of spring water over the creatures. They shake it off, good as new."]]);
       await c.anim("hlD", "fadeOut", { ms: 400 });
-    });
+    }); } finally { show(true); }
   };
   const lessonN = F => (F.f("pro.l1") ? (F.f("pro.l2") ? 3 : 2) : 1);
   S.trigger.cellarTutorial = async F => { if (!F.f("pro.dunmar")) return; if (!F.f("pro.l1")) await S.trigger.lesson(F); if (F.f("pro.l1") && !F.f("pro.l2")) await S.trigger.lesson(F); };
