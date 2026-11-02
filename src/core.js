@@ -1748,10 +1748,11 @@
     const dup = {}; ids.forEach(i => (dup[i] = (dup[i] || 0) + 1)); const seen = {};
     return ids.map(i => { seen[i] = (seen[i] || 0) + 1; return makeEnemy(i, level, dup[i] > 1 ? " " + "ABC"[seen[i] - 1] : ""); });
   }
-  function rollEncounterSpec(tableId) {
+  function rollEncounterSpec(tableId, pick) {   // pick(tab) = another way to choose the entry (the story layer's Hunt)
     const tab = ENCOUNTERS[tableId]; if (!tab) return null;
     let r = rnd() * sum(tab.map(e => e.weight)), e = tab[0];
-    for (const x of tab) { r -= x.weight; if (r <= 0) { e = x; break; } }
+    if (pick) e = pick(tab) || e;
+    else for (const x of tab) { r -= x.weight; if (r <= 0) { e = x; break; } }
     return { foes: e.foes.slice(), level: e.level[0] + Math.floor(rnd() * (e.level[1] - e.level[0] + 1)) };
   }
   function rollEncounter(tableId) { const s = rollEncounterSpec(tableId); return s ? makeFoes(s.foes, s.level) : []; }

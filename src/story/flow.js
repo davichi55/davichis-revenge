@@ -192,6 +192,10 @@ const Flow = (() => {
   // ---------- encounters ----------
   const pickW = list => { const t = list.reduce((s, x) => s + (x.w || x.weight || 1), 0); let r = Math.random() * t; for (const x of list) { r -= (x.w || x.weight || 1); if (r <= 0) return x; } return list[0]; };
   const lvOf = (lv, d) => { const r = lv || d || [3, 4]; if (typeof r === "number") return r; return r[0] + Math.floor(Math.random() * (r[1] - r[0] + 1)); };
+  // Hunt (Danny 2026-11-02): the kind chosen in the bestiary (G.hunt) is in at least half of the fights of a table that has it
+  F.HUNT_P = 0.5;
+  F.pickEntry = list => { const h = G.hunt; if (h && Math.random() < F.HUNT_P) { const hits = list.filter(x => [].concat(x.foes || []).includes(h)); if (hits.length) return pickW(hits); } return pickW(list); };
+  F.huntable = id => Object.values(Core.ENCOUNTERS || {}).some(t => Array.isArray(t) && t.some(x => x && [].concat(x.foes || []).includes(id)));
   F.rollEncounter = tableId => {
     let ids = null, lvR = null, entry = null, tbl = null;
     try { tbl = Core.ENCOUNTERS && Core.ENCOUNTERS[tableId]; } catch (e) {}
@@ -199,7 +203,7 @@ const Flow = (() => {
     if (tbl) {
       const arr = Array.isArray(tbl) ? tbl : (tbl.groups || tbl.list || tbl.table || tbl.entries || []);
       if (arr.length) {
-        entry = (window.Systems && Systems.takePending && Systems.takePending(tableId)) || pickW(arr.map(x => (typeof x === "string" ? { foes: [x] } : Array.isArray(x) ? { foes: x } : x)));   // pending = the roll the Quiet Sigil already looked at
+        entry = (window.Systems && Systems.takePending && Systems.takePending(tableId)) || F.pickEntry(arr.map(x => (typeof x === "string" ? { foes: [x] } : Array.isArray(x) ? { foes: x } : x)));   // pending = the roll the Quiet Sigil already looked at
         ids = [].concat(entry.foes || entry.enemies || entry.group || entry.units || entry.id || []);
         lvR = entry.lv || entry.level || entry.levels || tbl.lv || tbl.level || tbl.levels;
         ids = ids.map(x => (typeof x === "string" ? x : x && x.id)).filter(Boolean);

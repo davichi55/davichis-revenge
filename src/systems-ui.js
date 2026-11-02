@@ -56,7 +56,7 @@
     const dl = (Data.DROPS[id] || c.drops || []).filter(([k]) => !/^G\d+$/.test(k));
     const dName = k => (Data.MATS[k] || Data.GOODS[k] || [Data.ITEMS[k] ? Data.ITEMS[k].n : pretty(k)])[0];
     const dropLine = dl.length ? `<small>Drops: ${b.beaten ? dl.map(([k, p]) => esc(dName(k)) + ` (${p >= 0.3 ? "common" : p >= 0.15 ? "uncommon" : "rare"}${bookMat[k] ? ", skill book: " + esc(bookMat[k]) : ""})`).join(", ") : "unknown until you beat one"}</small>` : "";
-    return `<div class="row"><div style="width:62px;height:54px;display:grid;place-items:center">${UI.art(c.art || id)}</div><div class="g"><b style="font-weight:400">${esc(nm)}</b> <small style="display:inline;color:#8a6a3a">${esc(cat === "All" ? "" : cat)}</small><small>${esc(Data.BEST[id] || "No notes yet.")}</small><small>Met ${b.seen || 0}x · beaten ${b.beaten || 0}x${lv ? " · " + lv : ""}${where ? " · " + esc(where) : ""}${b.ch !== undefined ? " · chapter " + b.ch : ""}</small>${dropLine}${breakLine}</div></div>`;
+    return `<div class="row"><div style="width:62px;height:54px;display:grid;place-items:center">${UI.art(c.art || id)}</div><div class="g"><b style="font-weight:400">${esc(nm)}</b> <small style="display:inline;color:#8a6a3a">${esc(cat === "All" ? "" : cat)}</small><small>${esc(Data.BEST[id] || "No notes yet.")}</small><small>Met ${b.seen || 0}x · beaten ${b.beaten || 0}x${lv ? " · " + lv : ""}${where ? " · " + esc(where) : ""}${b.ch !== undefined ? " · chapter " + b.ch : ""}</small>${dropLine}${breakLine}</div>${G.hunt === id ? `<button class="b" data-sj="hunt:">Stop</button>` : !isBoss && F.huntable(id) ? `<button class="b" data-sj="hunt:${id}">Hunt</button>` : ""}</div>`;
   };
   const pager = (total, key) => {
     const pages = Math.max(1, Math.ceil(total / PER)); U.page = Math.min(U.page, pages - 1);
@@ -180,6 +180,7 @@
         const wall = (S.state().arena || {}).wall || [];
         h += wall.length ? wall.map(w => `<div class="row"><div class="g"><b style="font-weight:400">${esc(w.n)}</b><small>${esc((Data.CUPS[w.cup] || {}).n || "")} champion · Level ${w.lv} · beaten in chapter ${w.ch}</small></div></div>`).join("") : `<div class="row"><div class="g">Nobody on the wall yet. Win a cup in Tzavan.</div></div>`;
       } else {
+        if (G.hunt) { const c = (Core.ENEMIES && Core.ENEMIES[G.hunt]) || {}; h += `<div class="row"><div class="g">Hunting: ${esc(c.name || pretty(G.hunt))}<small>Shows up in at least half of the fights where it lives.</small></div><button class="b" data-sj="hunt:">Stop</button></div>`; }
         h += all.length ? all.slice(U.page * PER, U.page * PER + PER).map(entry).join("") + pager(all.length, "b") : `<div class="row"><div class="g">Nothing here yet.</div></div>`;
       }
     } else if (U.jt === 4) {
@@ -201,6 +202,7 @@
     const [k, v] = String(d).split(":");
     if (k === "tab") { U.jt = +v; U.page = 0; }
     else if (k === "cat") { U.cat = v; U.page = 0; }
+    else if (k === "hunt") { G.hunt = v || null; F.sfx("menuOk"); }
     else if (k === "b" || k === "q" || k === "r") U.page = Math.max(0, U.page + (v === "next" ? 1 : -1));
     return true;
   };

@@ -69,7 +69,7 @@ const Systems = (() => {
   S.skipFight = table => {
     S.pending = null;
     if (S.activeCharm() !== "quietSigil" || !Core.rollEncounterSpec) return false;
-    let spec = null; try { spec = Core.rollEncounterSpec(table); } catch (e) { spec = null; }
+    let spec = null; try { spec = Core.rollEncounterSpec(table, F.pickEntry); } catch (e) { spec = null; }
     if (!spec) return false;
     if (spec.level <= F.avgLevel() - CHARMS.quietSigil.skip) return true;
     S.pending = { table, foes: spec.foes, level: [spec.level, spec.level], weight: 1 }; return false;
