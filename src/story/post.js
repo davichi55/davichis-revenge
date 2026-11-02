@@ -95,7 +95,7 @@
     lanternBead: Q(key("Lantern Bead", "Cosmetic. A glass bead from Lantern Deep that glows when the room is dark. It does nothing and is very hard to put down."), { f: 25 }),
   });
   Q(D.QUESTS, {
-    m_starhaven: { t: "Starhaven", ch: 12, steps: ["The old Academy scholars have a camp on a star-metal island beyond the storm belt, north-east on the Weeping Sea, east of the Maelstrom. They have been sending kites."] },
+    m_starhaven: { t: "Starhaven", ch: 12, steps: ["The old Academy scholars have a camp on a star-metal island beyond the storm belt, north-east on the Weeping Sea, east of the Maelstrom and a short sail west of Dawnwatch. They have been sending kites."] },
     m_crater: { t: "The Crater Garden", ch: 12, steps: ["In the Starfall Isles there is a crater full of glass flowers, and something sleeps in it."] },
     m_drowned: { t: "The Drowned Capital", ch: 12, steps: ["A builder city lies under the sea. A diving bell goes down from a buoy off the east coast, between Lowstep and Tzavan, beside two lantern buoys and a wreck."] },
     m_deep: { t: "Lantern Deep", ch: 12, steps: ["A lightless trench lies below three lantern buoys in the open sea, east of the Maelstrom and south of the diving bell. Follow the creatures that glow."] },

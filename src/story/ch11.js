@@ -386,7 +386,7 @@
     await stage(async c => {
       M3.actors(c, [["davichi", "npcDavichi", 130, -10, { flip: true }]]);
       c.tint("#2a1c08", 0.3, 500);
-      await c.say([["narr", "This is a round gold hall at the pyramid's heart. It holds a desk with a ledger on it and a single lamp, and the gold floor glows from beneath, as if something under it were breathing out. In the middle of the ceiling is a great round grate, and through it shines a light that is not the sun. A man at the desk is reading, and he does not look up."]]);
+      await c.say([["narr", "This is a round gold hall at the pyramid's heart. It holds a desk with a ledger on it and a single lamp, and the gold floor glows from beneath, as if something under it were breathing out. In the middle of the floor is a great round grate, and up through it shines a light that is not the sun. A man at the desk is reading, and he does not look up."]]);
       await c.walkHero(c.hero.x + 60, c.hero.y, 1100);
       await c.say([["davichi", "Sit. You have walked a long way. It is entered in the ledger."], ["hero", "I'll stand."], ["davichi", "You will. You have your mother's way of refusing a chair."]]);
       c.emote("davichi", "..."); await c.wait(500);
@@ -396,7 +396,7 @@
       if (F.f("arena.licence")) await c.say([["davichi", "The arena has been generous this year. Your name is in it. Every victor is entered, and every entry is a yield."]]);
       await c.say([["davichi", "I will not beg. It is bad accounting."]]);
       c.shake(2, 600); c.sfx("hitHeavy"); c.tint("#2a1c08", 0.1, 400);
-      await c.say([["narr", "He closes the ledger. He rises. The gold floor brightens under his boots, and the light through the grate comes down on him like a hand on a shoulder."]]);
+      await c.say([["narr", "He closes the ledger. He rises. The gold floor brightens under his boots, and the light rising through the grate settles on him like a hand on a shoulder."]]);
     }, { music: "emperor" });
     const res = await M3.boss(F, { id: "emperorDavichi", level: 69, name: "Emperor Davichi", title: "Founder of the Company, Lord of the Dominion", bg: "sunCore", music: "emperor",
       lines: [["davichi", "Let us settle the account."], ["hero", "(He sounds like a man reading the weather.)"]] });
