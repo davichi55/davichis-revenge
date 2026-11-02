@@ -158,7 +158,7 @@ const UI = (() => {
       else if (pos === "right") Object.assign(pan.style, { right: "3vw", top: "8vh", width: "min(420px,92vw)" });
       else Object.assign(pan.style, { left: "50%", top: o.top || "34%", transform: "translateX(-50%)", width: o.width || "min(540px,92vw)" });
       ovl.appendChild(pan);
-      let sel = Math.max(0, options.findIndex(x => !x.disabled)); const m = {};
+      let sel = o.sel >= 0 && options[o.sel] && !options[o.sel].disabled ? o.sel : Math.max(0, options.findIndex(x => !x.disabled)); const m = {};   // o.sel: start on this option
       const finish = v => { const k = stack.indexOf(m); if (k >= 0) stack.splice(k, 1); ovl.remove(); resolve(v); };
       const draw = () => {
         pan.innerHTML = `${title ? `<h4>${esc(title)}</h4>` : ""}${options.map((x, i) => `<button class="opt${i === sel ? " sel" : ""}${x.disabled ? " off" : ""}" data-i="${i}">${esc(x.label)}</button>`).join("")}<div class="info">${esc((options[sel] && options[sel].info) || "")}</div>`;

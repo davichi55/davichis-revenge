@@ -84,10 +84,18 @@ const Menus = (() => {
   };
 
   // ---------- helpers: pick a creature ----------
-  const pickCreature = (title, filter) => {
-    const list = Flow.allCreatures().filter(filter || (() => true));
-    if (!list.length) return Promise.resolve(null);
-    return UI.choose(title, list.map(u => ({ label: `${u.name}  Lv${u.level}  ${u.hp}/${u.maxHp}${u.alive ? "" : "  (fallen)"}` })), { back: true }).then(i => (i < 0 ? null : list[i]));
+  // Use an item on creatures again and again (Danny 2026-11-02): the picker stays open after each use until Done / Esc, the item runs out or nobody is left.
+  // ok(c) = the item would work on c; use(c) applies it and returns the message line. Returns the last message, "" when backed out at once, or none (nobody to use it on).
+  const useRepeat = async (title, k, ok, use, none, api, say) => {
+    let msg = "", sel = -1;
+    for (;;) {
+      const list = Flow.allCreatures(), left = (G.items[k] || 0);
+      if (!left || !list.some(ok)) return msg || none;
+      const opts = list.map(u => ({ label: `${u.name}  Lv${u.level}  ${u.hp}/${u.maxHp}${u.alive ? "" : "  (fallen)"}`, disabled: !ok(u) })).concat({ label: "Done" });
+      const i = await UI.choose(`${title} (${left} left)`, opts, { back: true, sel });
+      if (i < 0 || i >= list.length) return msg;
+      msg = use(list[i]); Flow.take(k); Flow.sfx("potion"); sel = i; say(msg); api.redraw();
+    }
   };
 
   // ---------- main menu ----------
@@ -163,8 +171,8 @@ const Menus = (() => {
         }
         if (d.use !== undefined) {
           const k = d.use;
-          if (k === "sunwater") { const u = await pickCreature("Heal who?", c => c.alive && c.hp < c.maxHp); if (u) { const h = Math.round(u.maxHp * 0.25); u.hp = Math.min(u.maxHp, u.hp + h); Flow.take(k); msg = `${u.name} recovers ${h} HP.`; Flow.sfx("potion"); } else msg = "Nobody needs healing."; }
-          else if (k === "ember") { const u = await pickCreature("Revive who?", c => !c.alive); if (u) { u.alive = true; u.hp = Math.max(1, Math.round(u.maxHp * 0.3)); Flow.take(k); msg = `${u.name} is back on its feet.`; Flow.sfx("potion"); } else msg = "Nobody has fallen."; }
+          if (k === "sunwater") msg = await useRepeat("Heal who?", k, c => c.alive && c.hp < c.maxHp, u => { const h = Math.min(u.maxHp - u.hp, Math.round(u.maxHp * 0.25)); u.hp += h; return `${u.name} recovers ${h} HP.`; }, "Nobody needs healing.", api, m => (msg = m));
+          else if (k === "ember") msg = await useRepeat("Revive who?", k, c => !c.alive, u => { u.alive = true; u.hp = Math.max(1, Math.round(u.maxHp * 0.3)); return `${u.name} is back on its feet.`; }, "Nobody has fallen.", api, m => (msg = m));
           else if (k === "respecStone") { msg = await Systems.useRespecStone() || ""; }
           else if (k === "incense" || k === "candle") { G.charm = { kind: k, until: Date.now() + 5 * 60 * 1000 }; Flow.take(k); msg = k === "incense" ? "Fights are rarer for five minutes." : "Fights come twice as often for five minutes."; }
           return api.redraw();
