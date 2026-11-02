@@ -309,7 +309,11 @@
     G.party = pk.ids.map(id => { const u = F.mk(id, 3); try { u.stats = Core.makeCreature(id, 1).stats; u.maxHp = Core.maxHpOf(u.stats, u.level); u.hp = u.maxHp; u.points = (u.points || 0) + 6; } catch (e) {} return u; }); G.collection = [];
     G.items.sunwater = (G.items.sunwater || 0);
     F.set("pro.packed"); F.questDone("m_lessons");
-    await S.stage(async c => {
+    // Danny 2026-11-02: the loaner followers stayed on screen and the pen figures came back (the map re-applies their "vault.out<i>" hide flag), so the pack showed twice
+    F.set("vault.out" + pick);
+    const fol = (World.scene && World.scene.followers) || [], show = on => fol.forEach(f => { if (f && f.s) f.s.setVisible(on); if (f && f.sh) f.sh.setVisible(on); });
+    show(false);
+    try { await S.stage(async c => {
       const sc = World.scene, V = World.VAULT, h = c.hero, ids = pk.ids;
       const figs = sc && sc.figures ? sc.figures.filter(f => f.d.id && f.d.id.indexOf("pen" + pick + "_") === 0) : [];
       const gate = V && sc ? sc.children.list.find(o => o.texture && o.texture.key === "ironFence" && Math.abs(o.x - V.penX(pick)) < 6) : null;
@@ -355,7 +359,7 @@
       const ms = Math.max(1200, Math.min(3200, Math.hypot(bs.x - h.x, bs.y - h.y) / 0.45));
       await Promise.all([c.walk("hero", bs.x - 40, bs.y, ms), ...ids.map((id, i) => c.walk("pc" + i, bs.x - 90 - i * 30, bs.y + spots[i][1] - 20, ms, { exact: true }))]);
       c.sfx("woodDoor"); await c.wait(300);
-    });
+    }); } finally { show(true); }
     F.give("journal", 1, true); F.give("sunwater", 4, true);
     UI.toast("You received the Field Journal and 4 Sunwater Flasks.");
     F.quest("m_escape", 0);
